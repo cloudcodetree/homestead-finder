@@ -1,0 +1,212 @@
+[
+  {
+    "id": "landwatch_101",
+    "title": "80 Acres with Year-Round Creek, Montana",
+    "price": 38000,
+    "acreage": 80,
+    "pricePerAcre": 475,
+    "location": {
+      "lat": 46.3224,
+      "lng": -112.9211,
+      "state": "MT",
+      "county": "Deer Lodge",
+      "address": "Near Warm Springs, MT"
+    },
+    "features": ["water_creek", "road_dirt", "timber", "hunting", "no_hoa"],
+    "source": "landwatch",
+    "url": "https://www.landwatch.com/listing/101",
+    "dateFound": "2024-01-10",
+    "dealScore": 87,
+    "description": "Stunning 80-acre parcel with a year-round creek running through the northwest corner. Heavily timbered with mixed ponderosa pine and fir. Dirt road access to the property. No HOA or covenants. Incredible hunting — elk, deer, and turkey. This is a rare find at this price per acre.",
+    "daysOnMarket": 142
+  },
+  {
+    "id": "landwatch_205",
+    "title": "40 Acres — Water Well, Power, Owner Financing",
+    "price": 55000,
+    "acreage": 40,
+    "pricePerAcre": 1375,
+    "location": {
+      "lat": 43.8791,
+      "lng": -114.2359,
+      "state": "ID",
+      "county": "Custer",
+      "address": "Near Mackay, ID"
+    },
+    "features": ["water_well", "electric", "owner_financing", "road_dirt", "pasture", "no_hoa"],
+    "source": "landwatch",
+    "url": "https://www.landwatch.com/listing/205",
+    "dateFound": "2024-01-08",
+    "dealScore": 82,
+    "description": "40 acres of flat to gently rolling pasture land with existing water well and power to the property line. Owner will finance with 20% down at 6% for qualified buyers. Stunning views of the Lost River Range. Ideal for livestock or building a homestead.",
+    "daysOnMarket": 95
+  },
+  {
+    "id": "county_tax_MT_304",
+    "title": "Tax Deed Sale — 120 Acres, Broadwater County MT",
+    "price": 72000,
+    "acreage": 120,
+    "pricePerAcre": 600,
+    "location": {
+      "lat": 46.4455,
+      "lng": -111.2341,
+      "state": "MT",
+      "county": "Broadwater",
+      "address": "Broadwater County, MT"
+    },
+    "features": ["water_creek", "timber", "mineral_rights", "hunting", "road_dirt"],
+    "source": "county_tax",
+    "url": "https://broadwatercounty.mt.gov/tax-sales/304",
+    "dateFound": "2024-01-12",
+    "dealScore": 91,
+    "description": "County tax deed sale. 120 acres with seasonal creek, mixed timber, and included mineral rights. Borders National Forest on two sides. Access via county-maintained dirt road. Bidding starts at $72,000 — significantly below assessed value of $145,000.",
+    "daysOnMarket": 30
+  },
+  {
+    "id": "lands_of_america_507",
+    "title": "55 Acres with Pond and Structures, Oklahoma",
+    "price": 132000,
+    "acreage": 55,
+    "pricePerAcre": 2400,
+    "location": {
+      "lat": 35.6528,
+      "lng": -96.4108,
+      "state": "OK",
+      "county": "Creek",
+      "address": "Near Bristow, OK"
+    },
+    "features": ["water_pond", "electric", "septic", "structures", "pasture", "road_paved"],
+    "source": "lands_of_america",
+    "url": "https://www.landsofamerica.com/property/507",
+    "dateFound": "2024-01-09",
+    "dealScore": 74,
+    "description": "55 acres of prime Oklahoma pasture with a 3-acre stocked pond. Existing structures include a metal hay barn (40x60), equipment shed, and an older farmhouse needing renovation. Paved road frontage. Rural electric and septic already in place.",
+    "daysOnMarket": 67
+  },
+  {
+    "id": "zillow_land_889",
+    "title": "5 Acres — Mountain View, Off-Grid Ready, Colorado",
+    "price": 42000,
+    "acreage": 5,
+    "pricePerAcre": 8400,
+    "location": {
+      "lat": 37.2753,
+      "lng": -105.0197,
+      "state": "CO",
+      "county": "Costilla",
+      "address": "San Luis Valley, CO"
+    },
+    "features": ["road_dirt", "off_grid_ready", "no_hoa"],
+    "source": "zillow",
+    "url": "https://www.zillow.com/homes/889",
+    "dateFound": "2024-01-11",
+    "dealScore": 52,
+    "description": "5 acres in the San Luis Valley with 360-degree mountain views. Off-grid subdivision — solar and propane are typical utilities. Dirt road access maintained by HOA. Popular area for tiny homes and yurts. Year-round access.",
+    "daysOnMarket": 14
+  },
+  {
+    "id": "blm_wy_012",
+    "title": "BLM Adjacent — 160 Acres, Sweetwater County WY",
+    "price": 64000,
+    "acreage": 160,
+    "pricePerAcre": 400,
+    "location": {
+      "lat": 41.6567,
+      "lng": -108.2021,
+      "state": "WY",
+      "county": "Sweetwater",
+      "address": "Near Rock Springs, WY"
+    },
+    "features": ["hunting", "mineral_rights", "road_dirt", "no_hoa"],
+    "source": "blm",
+    "url": "https://www.blm.gov/sale/wy-012",
+    "dateFound": "2024-01-07",
+    "dealScore": 78,
+    "description": "160-acre parcel adjacent to 50,000+ acres of BLM land. Effectively private with unlimited access to public land. Prong horn and mule deer hunting. Mineral rights included. This is as remote as it gets — 30 miles from nearest town. Seller financing available.",
+    "daysOnMarket": 210
+  },
+  {
+    "id": "realtor_mn_441",
+    "title": "87 Acres Timber Land with Cabin, Northern Minnesota",
+    "price": 198000,
+    "acreage": 87,
+    "pricePerAcre": 2276,
+    "location": {
+      "lat": 47.9832,
+      "lng": -93.4043,
+      "state": "MN",
+      "county": "Itasca",
+      "address": "Near Bigfork, MN"
+    },
+    "features": ["structures", "water_well", "electric", "timber", "water_pond", "hunting", "road_paved"],
+    "source": "realtor",
+    "url": "https://www.realtor.com/realestateandhomes-detail/441",
+    "dateFound": "2024-01-06",
+    "dealScore": 68,
+    "description": "87 acres of prime northwoods timber with a 2-bed 1-bath cabin, drilled well, and electric. 3-acre bass pond stocked annually. Paved road to property. Adjacent to state forest. Cabin needs some updating but is liveable year-round. Wood heat plus electric baseboard.",
+    "daysOnMarket": 88
+  },
+  {
+    "id": "auction_hubzu_223",
+    "title": "Foreclosure Auction — 320 Acres, Texas Panhandle",
+    "price": 85000,
+    "acreage": 320,
+    "pricePerAcre": 266,
+    "location": {
+      "lat": 35.1803,
+      "lng": -100.2741,
+      "state": "TX",
+      "county": "Wheeler",
+      "address": "Wheeler County, TX"
+    },
+    "features": ["pasture", "road_dirt", "mineral_rights", "hunting"],
+    "source": "auction",
+    "url": "https://www.hubzu.com/property/223",
+    "dateFound": "2024-01-13",
+    "dealScore": 85,
+    "description": "Bank-owned foreclosure auction. 320 acres of native grassland in the Texas Panhandle. Historically used for cattle grazing. Mineral rights included. Low per-acre price reflects remote location and lack of improvements. Great long-term hold. Auction ends Jan 25.",
+    "daysOnMarket": 45
+  },
+  {
+    "id": "landwatch_667",
+    "title": "25 Acres with Creek and Road Access, Tennessee",
+    "price": 89000,
+    "acreage": 25,
+    "pricePerAcre": 3560,
+    "location": {
+      "lat": 35.7965,
+      "lng": -84.9875,
+      "state": "TN",
+      "county": "Meigs",
+      "address": "Near Decatur, TN"
+    },
+    "features": ["water_creek", "road_paved", "timber", "no_hoa", "hunting"],
+    "source": "landwatch",
+    "url": "https://www.landwatch.com/listing/667",
+    "dateFound": "2024-01-05",
+    "dealScore": 63,
+    "description": "25 acres in the rolling hills of East Tennessee. Year-round creek, mixed hardwood timber, and paved road frontage. Surveyed and perc tested. No restrictions. Ideal homestead site — mild climate, good rainfall, close to Chattanooga.",
+    "daysOnMarket": 55
+  },
+  {
+    "id": "landwatch_891",
+    "title": "640 Acres — Remote Ranch, New Mexico",
+    "price": 320000,
+    "acreage": 640,
+    "pricePerAcre": 500,
+    "location": {
+      "lat": 33.4921,
+      "lng": -108.5432,
+      "state": "NM",
+      "county": "Catron",
+      "address": "Near Reserve, NM"
+    },
+    "features": ["water_well", "road_dirt", "hunting", "mineral_rights", "structures", "off_grid_ready"],
+    "source": "landwatch",
+    "url": "https://www.landwatch.com/listing/891",
+    "dateFound": "2024-01-03",
+    "dealScore": 79,
+    "description": "640 acres (1 section) of remote New Mexico ranch land in the Gila country. Existing water well, small cabin structure, and solar setup. Borders Gila National Forest. Excellent elk, deer, and bear hunting. Very remote — 40 miles from Reserve. Owner has held 30+ years.",
+    "daysOnMarket": 178
+  }
+]

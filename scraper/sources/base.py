@@ -1,0 +1,126 @@
+"""Base scraper class — all source scrapers extend this."""
+from __future__ import annotations
+
+import random
+import time
+from abc import ABC, abstractmethod
+from dataclasses import dataclass, field
+from datetime import date
+from typing import Any
+
+import requests
+from bs4 import BeautifulSoup
+
+from config import USER_AGENT, DEFAULT_RATE_LIMIT
+
+
+@dataclass
+class RawListing:
+    """Intermediate normalized form before final Property schema."""
+    external_id: str
+    title: str
+    price: float
+    acreage: float
+    state: str
+    county: str
+    url: str
+    lat: float | None = None
+    lng: float | None = None
+    features: list[str] = field(default_factory=list)
+    description: str = ""
+    days_on_market: int | None = None
+    raw: dict[str, Any] = field(default_factory=dict)
+
+
+class BaseScraper(ABC):
+    """Abstract base class for all property listing scrapers."""
+
+    SOURCE_NAME: str = ""
+    BASE_URL: str = ""
+    RATE_LIMIT_SECONDS: float = DEFAULT_RATE_LIMIT
+
+    def __init__(self, config: dict[str, Any]) -> None:
+        self.config = config
+        self._last_request: float = 0.0
+        self.session = requests.Session()
+        self.session.headers.update({
+            "User-Agent": USER_AGENT,
+            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+            "Accept-Language": "en-US,en;q=0.5",
+            "Accept-Encoding": "gzip, deflate, br",
+            "Connection": "keep-alive",
+        })
+
+    def sleep(self) -> None:
+        """Respect rate limit with jitter."""
+        elapsed = time.monotonic() - self._last_request
+        delay = self.RATE_LIMIT_SECONDS + random.uniform(0.1, 0.5)
+        if elapsed < delay:
+            time.sleep(delay - elapsed)
+        self._last_request = time.monotonic()
+
+    def get(self, url: str, **kwargs: Any) -> requests.Response:
+        """Rate-limited GET request."""
+        self.sleep()
+        response = self.session.get(url, timeout=15, **kwargs)
+        response.raise_for_status()
+        return response
+
+    def parse_html(self, html: str) -> BeautifulSoup:
+        """Parse HTML with lxml."""
+        return BeautifulSoup(html, "lxml")
+
+    def to_property(self, raw: RawListing) -> dict[str, Any]:
+        """Convert RawListing to the standard Property schema."""
+        price_per_acre = raw.price / raw.acreage if raw.acreage > 0 else 0
+        return {
+            "id": f"{self.SOURCE_NAME}_{raw.external_id}",
+            "title": raw.title,
+            "price": round(raw.price, 2),
+            "acreage": round(raw.acreage, 2),
+            "pricePerAcre": round(price_per_acre, 2),
+            "location": {
+                "lat": raw.lat or 0.0,
+                "lng": raw.lng or 0.0,
+                "state": raw.state.upper(),
+                "county": raw.county,
+            },
+            "features": raw.features,
+            "source": self.SOURCE_NAME,
+            "url": raw.url,
+            "dateFound": date.today().isoformat(),
+            "dealScore": 0,  # Set by scoring engine after normalization
+            "description": raw.description,
+            "daysOnMarket": raw.days_on_market,
+        }
+
+    @abstractmethod
+    def fetch(self, state: str, max_pages: int = 5) -> list[dict[str, Any]]:
+        """Fetch raw listing data from the source for a given state."""
+        ...
+
+    @abstractmethod
+    def parse(self, raw: dict[str, Any]) -> RawListing | None:
+        """Parse a single raw listing dict into a RawListing. Return None to skip."""
+        ...
+
+    def normalize(self, raw_listing: RawListing) -> dict[str, Any]:
+        """Convert a RawListing to the standard Property schema."""
+        return self.to_property(raw_listing)
+
+    def scrape(self, states: list[str], max_pages: int = 5) -> list[dict[str, Any]]:
+        """Main entry point: scrape all target states and return normalized properties."""
+        results: list[dict[str, Any]] = []
+        for state in states:
+            try:
+                raw_items = self.fetch(state, max_pages=max_pages)
+                for item in raw_items:
+                    try:
+                        raw_listing = self.parse(item)
+                        if raw_listing is not None:
+                            results.append(self.normalize(raw_listing))
+                    except Exception as e:
+                        print(f"  [{self.SOURCE_NAME}] Parse error for item: {e}")
+            except Exception as e:
+                print(f"  [{self.SOURCE_NAME}] Fetch error for {state}: {e}")
+        return results

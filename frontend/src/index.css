@@ -1,0 +1,9 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Leaflet map takes full height of its container */
+.leaflet-container {
+  height: 100%;
+  width: 100%;
+}
