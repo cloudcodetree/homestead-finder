@@ -22,7 +22,8 @@
         "charliermarsh.ruff",
         "bradlc.vscode-tailwindcss",
         "formulahendry.auto-rename-tag",
-        "christian-kohler.path-intellisense"
+        "christian-kohler.path-intellisense",
+        "anthropic.claude-code"
       ],
       "settings": {
         "editor.formatOnSave": true,
@@ -36,7 +37,7 @@
     }
   },
 
-  "postCreateCommand": "cd frontend && npm install && cd ../scraper && pip install -r requirements.txt",
+  "postCreateCommand": "cd frontend && npm install && cd ../scraper && pip install -r requirements.txt && npm install -g @anthropic/claude-code",
 
   "remoteEnv": {
     "NODE_ENV": "development"
