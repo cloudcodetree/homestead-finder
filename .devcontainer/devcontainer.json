@@ -37,7 +37,7 @@
     }
   },
 
-  "postCreateCommand": "cd frontend && npm install && cd ../scraper && pip install -r requirements.txt && npm install -g @anthropic/claude-code",
+  "postCreateCommand": "cd frontend && npm install && cd ../scraper && pip install -r requirements.txt && npm install -g @anthropic-ai/claude-code",
 
   "remoteEnv": {
     "NODE_ENV": "development"
