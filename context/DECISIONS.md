@@ -114,6 +114,87 @@ Claude's `.claude/CLAUDE.md` instructs it to read/update these files each sessio
 
 ---
 
+## ADR-007: Playwright Over Selenium for Browser Strategy
+
+**Date:** 2026-04-05
+**Status:** Accepted
+
+**Context:** Need a headless browser to render JS-heavy sites and bypass simple bot detection. Selenium was already in requirements.txt but required a system Chrome install and ChromeDriver version matching.
+
+**Decision:** Use Playwright as the browser automation layer instead of Selenium.
+
+**Consequences:**
+- (+) Playwright's `install --with-deps` handles both browser binary and system libs
+- (+) Better anti-detection out of the box (patches `navigator.webdriver`)
+- (+) Headless shell works in containers/Codespaces without full Chrome
+- (+) Faster than Selenium for page rendering
+- (-) Additional 110MB download for Chromium binary
+- (?) Selenium still in requirements.txt for backward compat — remove if never used
+
+---
+
+## ADR-008: AI Learning Pipeline with Cached Selectors
+
+**Date:** 2026-04-05
+**Status:** Accepted
+
+**Context:** All 5 scraper sources fail (403, 404, DNS errors). Hardcoded CSS selectors break when sites change HTML. Need a system that adapts without manual maintenance.
+
+**Decision:** Build a 3-tier AI learning pipeline:
+1. Try cached "learned selectors" (free, from prior AI runs)
+2. Use Claude to discover new selectors from raw HTML (paid once, cached for future)
+3. Use Claude for direct listing extraction (paid per page, last resort)
+
+Learned selectors are stored in `data/learned_selectors/<source>.json` and committed to git.
+
+**Consequences:**
+- (+) Self-healing: system adapts when sites change HTML without code changes
+- (+) Cost-efficient: AI pays once to learn, selectors reused for free on subsequent runs
+- (+) Gradual degradation: each tier is a fallback, not a hard dependency
+- (-) Adds complexity to BaseScraper
+- (-) Learned selectors in git feels odd, but works for Tier 0
+- (?) Monitor selector longevity — if sites change weekly, AI costs add up
+
+---
+
+## ADR-009: Model Escalation Chain (Haiku → Sonnet → Opus)
+
+**Date:** 2026-04-05
+**Status:** Accepted
+
+**Context:** Using Claude API for scraping tasks — need to balance cost vs. capability.
+
+**Decision:** Start each AI task with the cheapest model that can handle it, escalate only on failure:
+- Listing extraction: Haiku (start) → Sonnet (max)
+- Selector discovery: Sonnet (start) → Opus (max)
+- Data validation: Haiku only
+
+Daily budget cap: $1.00/run. Cost tracked in `data/ai_costs.json`.
+
+**Consequences:**
+- (+) Typical daily run costs $0-0.05 (Haiku + cached selectors)
+- (+) Opus only used for genuinely hard cases (~$0.60/call)
+- (-) Model escalation adds latency on failure paths
+- (?) Haiku may be good enough for everything — monitor escalation frequency
+
+---
+
+## ADR-010: Structured Logging System
+
+**Date:** 2026-04-05
+**Status:** Accepted
+
+**Context:** Scraper runs in GitHub Actions — need to debug failures after the fact without watching stdout live.
+
+**Decision:** Use Python's `logging` module with dual output: stdout (INFO) + file (`data/scraper.log`, DEBUG). All components use `from logger import get_logger` with hierarchical names (e.g., `scraper.landwatch`, `ai.learning`).
+
+**Consequences:**
+- (+) Timestamps, log levels, and structured context on every line
+- (+) `data/scraper.log` available as git artifact for debugging
+- (-) Slightly more verbose than bare `print()` calls
+
+---
+
 ## Template for New ADRs
 
 ```markdown

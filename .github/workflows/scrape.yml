@@ -35,6 +35,11 @@ jobs:
           cache: 'pip'
           cache-dependency-path: scraper/requirements.txt
 
+      - name: Set up Chrome for Selenium
+        uses: browser-actions/setup-chrome@v1
+        with:
+          chrome-version: stable
+
       - name: Install dependencies
         run: pip install -r scraper/requirements.txt
 
@@ -42,6 +47,9 @@ jobs:
         env:
           SENDGRID_API_KEY: ${{ secrets.SENDGRID_API_KEY }}
           NOTIFICATION_EMAIL: ${{ secrets.NOTIFICATION_EMAIL }}
+          FIRECRAWL_API_KEY: ${{ secrets.FIRECRAWL_API_KEY }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          SELENIUM_HEADLESS: 'true'
           TARGET_STATES: ${{ github.event.inputs.states || 'MT,ID,WY,CO,NM,OR,TX,TN,MN,ME' }}
         run: |
           cd scraper
@@ -54,6 +62,14 @@ jobs:
           fi
           python main.py $ARGS
 
+      - name: Upload AI cost log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ai-costs
+          path: data/ai_costs.json
+          if-no-files-found: ignore
+
       - name: Commit updated listings
         if: ${{ github.event.inputs.dry_run != 'true' }}
         run: |
@@ -64,10 +80,7 @@ jobs:
 
       - name: Push changes
         if: ${{ github.event.inputs.dry_run != 'true' }}
-        uses: ad-hoc/push@v1
-        continue-on-error: true
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+        run: git push
 
       - name: Trigger Pages deploy
         if: ${{ github.event.inputs.dry_run != 'true' }}

@@ -1,0 +1,85 @@
+{
+  "state": "TX",
+  "state_name": "Texas",
+  "sale_type": "tax_deed",
+  "notes": "Tax deed state. 254 counties, sales on first Tuesday of every month. Fragmented across platforms. MVBA law firm publishes monthly lists.",
+  "last_updated": "2026-04-05",
+  "state_sources": [
+    {
+      "id": "TX-glo-land-sale",
+      "type": "state_land_sale",
+      "name": "Texas General Land Office — Land for Sale",
+      "url": "https://www.glo.texas.gov/land/state-lands/land-for-sale/index.html",
+      "platform": "state_website",
+      "notes": "13M acres managed. Periodic state land sales.",
+      "status": "active",
+      "last_verified": "2026-04-05"
+    },
+    {
+      "id": "TX-glo-veterans",
+      "type": "state_land_sale",
+      "name": "Texas GLO Veterans Land Sale",
+      "url": "https://www.glo.texas.gov/veterans/land-sale/public",
+      "platform": "state_website",
+      "notes": "Veterans program, also open to public for some parcels",
+      "status": "active",
+      "last_verified": "2026-04-05"
+    },
+    {
+      "id": "TX-mvba-tax-sales",
+      "type": "tax_deed_sale",
+      "name": "MVBA Law Firm — Monthly Tax Sale Lists",
+      "url": "https://mvbalaw.com/tax-sales/",
+      "platform": "county_website",
+      "notes": "Aggregates tax sale listings for many TX counties. Great single source.",
+      "status": "active",
+      "last_verified": "2026-04-05"
+    }
+  ],
+  "county_sources": [
+    {
+      "id": "TX-harris-tax-deed",
+      "county": "Harris",
+      "type": "tax_deed_sale",
+      "url": "https://www.hctax.net/Property/listings/taxsalelisting",
+      "platform": "county_website",
+      "frequency": "monthly",
+      "notes": "Largest TX county. Monthly sales, online listings.",
+      "status": "active",
+      "last_verified": "2026-04-05"
+    },
+    {
+      "id": "TX-travis-tax-deed",
+      "county": "Travis",
+      "type": "tax_deed_sale",
+      "url": "https://tax-office.traviscountytx.gov/properties/foreclosed/upcoming-sales",
+      "platform": "realauction",
+      "frequency": "monthly",
+      "notes": "Austin. Uses RealAuction for online bidding.",
+      "status": "active",
+      "last_verified": "2026-04-05"
+    },
+    {
+      "id": "TX-hudspeth-tax-deed",
+      "county": "Hudspeth",
+      "type": "tax_deed_sale",
+      "url": "",
+      "platform": "none",
+      "frequency": "monthly",
+      "notes": "3rd largest TX county. Very cheap land, high delinquency. Contact sheriff.",
+      "status": "unverified",
+      "last_verified": "2026-04-05"
+    },
+    {
+      "id": "TX-brewster-tax-deed",
+      "county": "Brewster",
+      "type": "tax_deed_sale",
+      "url": "",
+      "platform": "none",
+      "frequency": "monthly",
+      "notes": "Largest TX county (6,193 sq mi). Big Bend region, remote desert land.",
+      "status": "unverified",
+      "last_verified": "2026-04-05"
+    }
+  ]
+}

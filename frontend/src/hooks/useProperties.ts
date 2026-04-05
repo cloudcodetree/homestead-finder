@@ -2,14 +2,14 @@ import { useState, useEffect, useMemo } from 'react';
 import { Property, FilterState } from '../types/property';
 
 const applyFilters = (properties: Property[], filters: FilterState): Property[] => {
-  return properties.filter(p => {
+  return properties.filter((p) => {
     if (p.price < filters.minPrice || p.price > filters.maxPrice) return false;
     if (p.acreage < filters.minAcreage || p.acreage > filters.maxAcreage) return false;
     if (p.pricePerAcre > filters.maxPricePerAcre) return false;
     if (p.dealScore < filters.minDealScore) return false;
     if (filters.states.length > 0 && !filters.states.includes(p.location.state)) return false;
     if (filters.features.length > 0) {
-      const hasAll = filters.features.every(f => p.features.includes(f));
+      const hasAll = filters.features.every((f) => p.features.includes(f));
       if (!hasAll) return false;
     }
     if (filters.sources.length > 0 && !filters.sources.includes(p.source)) return false;
@@ -46,24 +46,24 @@ export const useProperties = (filters: FilterState) => {
     fetchData();
   }, []);
 
-  const filtered = useMemo(
-    () => applyFilters(allProperties, filters),
-    [allProperties, filters]
-  );
+  const filtered = useMemo(() => applyFilters(allProperties, filters), [allProperties, filters]);
 
-  const sorted = useMemo(
-    () => [...filtered].sort((a, b) => b.dealScore - a.dealScore),
-    [filtered]
-  );
+  const sorted = useMemo(() => [...filtered].sort((a, b) => b.dealScore - a.dealScore), [filtered]);
 
-  const stats = useMemo(() => ({
-    total: allProperties.length,
-    filtered: filtered.length,
-    hotDeals: allProperties.filter(p => p.dealScore >= 80).length,
-    avgScore: allProperties.length > 0
-      ? Math.round(allProperties.reduce((sum, p) => sum + p.dealScore, 0) / allProperties.length)
-      : 0,
-  }), [allProperties, filtered]);
+  const stats = useMemo(
+    () => ({
+      total: allProperties.length,
+      filtered: filtered.length,
+      hotDeals: allProperties.filter((p) => p.dealScore >= 80).length,
+      avgScore:
+        allProperties.length > 0
+          ? Math.round(
+              allProperties.reduce((sum, p) => sum + p.dealScore, 0) / allProperties.length
+            )
+          : 0,
+    }),
+    [allProperties, filtered]
+  );
 
   return { properties: sorted, loading, error, stats };
 };

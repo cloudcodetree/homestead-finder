@@ -1,28 +1,4 @@
 {
-  "hooks": {
-    "PreCommit": [
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash .claude/hooks/pre-commit.sh"
-          }
-        ]
-      }
-    ],
-    "PostCommit": [
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash .claude/hooks/post-commit.sh"
-          }
-        ]
-      }
-    ]
-  },
   "permissions": {
     "allow": [
       "Read",
@@ -48,7 +24,45 @@
       "Bash(tsc *)",
       "Bash(vite *)",
       "Bash(pytest *)",
-      "Bash(scrapy *)"
+      "Bash(scrapy *)",
+      "Bash(cp /workspaces/homestead-finder/.claude/hooks/pre-commit.sh /workspaces/homestead-finder/.git/hooks/pre-commit)",
+      "Bash(chmod +x /workspaces/homestead-finder/.git/hooks/pre-commit)",
+      "Bash(cp /workspaces/homestead-finder/.claude/hooks/post-commit.sh /workspaces/homestead-finder/.git/hooks/post-commit)",
+      "Bash(chmod +x /workspaces/homestead-finder/.git/hooks/post-commit)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:5173/)",
+      "Bash(chromium-browser --version)",
+      "Bash(sudo apt-get:*)",
+      "Bash(chromium --version)",
+      "Bash(sudo /usr/local/python/current/bin/python -m playwright install-deps chromium)",
+      "WebFetch(domain:www.landwatch.com)",
+      "WebFetch(domain:www.landsofamerica.com)",
+      "WebFetch(domain:www.blm.gov)",
+      "WebFetch(domain:www.hubzu.com)",
+      "WebFetch(domain:www.zillow.com)",
+      "WebFetch(domain:www.realtor.com)",
+      "WebFetch(domain:www.usa.gov)",
+      "WebSearch",
+      "WebFetch(domain:www.govdeals.com)",
+      "WebFetch(domain:www.bid4assets.com)",
+      "WebFetch(domain:www.realauction.com)",
+      "WebFetch(domain:www.govease.com)",
+      "WebFetch(domain:www.auction.com)",
+      "WebFetch(domain:www.civicsource.com)",
+      "WebFetch(domain:www.grantstreet.com)",
+      "WebFetch(domain:sriservices.com)",
+      "WebFetch(domain:www.tax-sale.info)",
+      "WebFetch(domain:www.tillamookcounty.gov)",
+      "WebFetch(domain:featured.govdeals.com)",
+      "WebFetch(domain:liveauctions.govease.com)",
+      "Bash(mkdir -p /workspaces/homestead-finder/frontend/public/data)",
+      "Bash(cp /workspaces/homestead-finder/data/listings.json /workspaces/homestead-finder/frontend/public/data/listings.json)",
+      "Bash(curl -s http://localhost:5173/data/listings.json)",
+      "Read(//home/vscode/.claude/**)"
+    ],
+    "additionalDirectories": [
+      "/workspaces/homestead-finder/data/source_registry",
+      "/workspaces/homestead-finder"
     ]
-  }
+  },
+  "hooks": {}
 }

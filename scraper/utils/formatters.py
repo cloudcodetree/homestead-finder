@@ -1,4 +1,5 @@
 """Formatting utilities shared between scraper and notifier."""
+
 from __future__ import annotations
 
 

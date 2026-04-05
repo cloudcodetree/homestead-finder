@@ -15,7 +15,8 @@ L.Icon.Default.mergeOptions({
 });
 
 const createScoreIcon = (score: number) => {
-  const color = score >= 80 ? '#22c55e' : score >= 65 ? '#eab308' : score >= 50 ? '#f97316' : '#9ca3af';
+  const color =
+    score >= 80 ? '#22c55e' : score >= 65 ? '#eab308' : score >= 50 ? '#f97316' : '#9ca3af';
   return L.divIcon({
     className: '',
     html: `<div style="
@@ -41,7 +42,7 @@ const FitBounds = ({ properties }: FitBoundsProps) => {
   const map = useMap();
   useEffect(() => {
     if (properties.length === 0) return;
-    const bounds = L.latLngBounds(properties.map(p => [p.location.lat, p.location.lng]));
+    const bounds = L.latLngBounds(properties.map((p) => [p.location.lat, p.location.lng]));
     map.fitBounds(bounds, { padding: [40, 40], maxZoom: 10 });
   }, [properties, map]);
   return null;
@@ -53,20 +54,15 @@ interface MapViewProps {
   onSelectProperty: (id: string) => void;
 }
 
-export const MapView = ({ properties, selectedId, onSelectProperty }: MapViewProps) => {
+export const MapView = ({ properties, onSelectProperty }: MapViewProps) => {
   return (
-    <MapContainer
-      center={[39.5, -98.35]}
-      zoom={4}
-      className="h-full w-full"
-      scrollWheelZoom={true}
-    >
+    <MapContainer center={[39.5, -98.35]} zoom={4} className="h-full w-full" scrollWheelZoom={true}>
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
       <FitBounds properties={properties} />
-      {properties.map(property => (
+      {properties.map((property) => (
         <Marker
           key={property.id}
           position={[property.location.lat, property.location.lng]}
@@ -81,8 +77,8 @@ export const MapView = ({ properties, selectedId, onSelectProperty }: MapViewPro
               </p>
               <p className="text-gray-500 text-xs">{formatPricePerAcre(property.pricePerAcre)}</p>
               <p className="mt-1 text-xs">
-                <span className="font-medium">Score: {property.dealScore}</span>
-                {' '}— {getDealScoreLabel(property.dealScore)}
+                <span className="font-medium">Score: {property.dealScore}</span> —{' '}
+                {getDealScoreLabel(property.dealScore)}
               </p>
               <a
                 href={property.url}

@@ -1,0 +1,93 @@
+{
+  "state": "MN",
+  "state_name": "Minnesota",
+  "sale_type": "tax_forfeiture",
+  "notes": "Tax forfeiture state. Properties forfeit to state, counties sell. Most counties use PublicSurplus.com. DNR sells state land via MNBid.",
+  "last_updated": "2026-04-05",
+  "state_sources": [
+    {
+      "id": "MN-dnr-land-sale",
+      "type": "state_land_sale",
+      "name": "MN DNR Land for Sale",
+      "url": "https://www.dnr.state.mn.us/lands_minerals/landsale/index.html",
+      "platform": "mnbid",
+      "notes": "5.6M acres managed. Annual auctions via MNBid.",
+      "status": "active",
+      "last_verified": "2026-04-05"
+    },
+    {
+      "id": "MN-dnr-land-map",
+      "type": "state_land_sale",
+      "name": "MN DNR Land Sale Map",
+      "url": "https://www.dnr.state.mn.us/lands_minerals/landsale/map.html",
+      "platform": "state_website",
+      "notes": "Interactive map of available parcels",
+      "status": "active",
+      "last_verified": "2026-04-05"
+    },
+    {
+      "id": "MN-mnbid",
+      "type": "state_land_sale",
+      "name": "MNBid Auction Portal",
+      "url": "https://mnbid.mn.gov",
+      "platform": "mnbid",
+      "notes": "State online auction site for DNR land",
+      "status": "active",
+      "last_verified": "2026-04-05"
+    }
+  ],
+  "county_sources": [
+    {
+      "id": "MN-st-louis-tax-forfeiture",
+      "county": "St. Louis",
+      "type": "tax_forfeiture",
+      "url": "https://www.stlouiscountymn.gov/departments-a-z/land-minerals/sales-and-contracts/tax-forfeited-land-sales",
+      "platform": "publicsurplus",
+      "frequency": "periodic",
+      "notes": "Largest MN county (6,860 sq mi). Timber and lake land.",
+      "status": "active",
+      "last_verified": "2026-04-05"
+    },
+    {
+      "id": "MN-crow-wing-tax-forfeiture",
+      "county": "Crow Wing",
+      "type": "tax_forfeiture",
+      "url": "https://www.crowwing.gov/269/Land-Sales",
+      "platform": "publicsurplus",
+      "frequency": "periodic",
+      "notes": "Lake country. Auctions Mar-Apr on PublicSurplus.",
+      "status": "active",
+      "last_verified": "2026-04-05"
+    },
+    {
+      "id": "MN-otter-tail-tax-forfeiture",
+      "county": "Otter Tail",
+      "type": "tax_forfeiture",
+      "url": "https://ottertailcounty.gov",
+      "platform": "publicsurplus",
+      "frequency": "periodic",
+      "status": "active",
+      "last_verified": "2026-04-05"
+    },
+    {
+      "id": "MN-mille-lacs-tax-forfeiture",
+      "county": "Mille Lacs",
+      "type": "tax_forfeiture",
+      "url": "https://www.millelacs.mn.gov/2700/Tax-Forfeited-Property",
+      "platform": "publicsurplus",
+      "frequency": "periodic",
+      "status": "active",
+      "last_verified": "2026-04-05"
+    },
+    {
+      "id": "MN-blue-earth-tax-forfeiture",
+      "county": "Blue Earth",
+      "type": "tax_forfeiture",
+      "url": "https://www.blueearthcountymn.gov/463/Tax-Forfeiture",
+      "platform": "publicsurplus",
+      "frequency": "periodic",
+      "status": "active",
+      "last_verified": "2026-04-05"
+    }
+  ]
+}

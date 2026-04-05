@@ -1,0 +1,65 @@
+{
+  "state": "ID",
+  "state_name": "Idaho",
+  "sale_type": "tax_deed",
+  "notes": "Tax deed state. Mostly in-person. Kootenai County uses RealAuction (only online county found).",
+  "last_updated": "2026-04-05",
+  "state_sources": [
+    {
+      "id": "ID-idl-land-sale",
+      "type": "state_land_sale",
+      "name": "Idaho Dept of Lands — Land for Sale",
+      "url": "https://www.idl.idaho.gov/real-estate/state-land-for-sale/",
+      "platform": "state_website",
+      "notes": "Endowment trust land auctions. Advertised 4+ weeks prior.",
+      "status": "active",
+      "last_verified": "2026-04-05"
+    }
+  ],
+  "county_sources": [
+    {
+      "id": "ID-kootenai-tax-deed",
+      "county": "Kootenai",
+      "type": "tax_deed_sale",
+      "url": "https://kootenai.id.realforeclose.com",
+      "platform": "realauction",
+      "frequency": "annual",
+      "typical_month": "September",
+      "notes": "Only confirmed online tax sale in Idaho.",
+      "status": "active",
+      "last_verified": "2026-04-05"
+    },
+    {
+      "id": "ID-bonner-tax-deed",
+      "county": "Bonner",
+      "type": "tax_deed_sale",
+      "url": "https://www.bonnercountyid.gov/TaxDeedandSaleInformation",
+      "platform": "county_website",
+      "frequency": "annual",
+      "notes": "Sandpoint area. Publishes info online.",
+      "status": "active",
+      "last_verified": "2026-04-05"
+    },
+    {
+      "id": "ID-bonneville-tax-deed",
+      "county": "Bonneville",
+      "type": "tax_deed_sale",
+      "url": "https://www.bonnevillecountyidaho.gov/page/tax-deed-and-estate-sales",
+      "platform": "county_website",
+      "frequency": "annual",
+      "notes": "Idaho Falls area.",
+      "status": "active",
+      "last_verified": "2026-04-05"
+    },
+    {
+      "id": "ID-canyon-tax-deed",
+      "county": "Canyon",
+      "type": "tax_deed_sale",
+      "url": "https://www.canyoncounty.id.gov/elected-officials/treasurer/tax-deed/",
+      "platform": "county_website",
+      "frequency": "annual",
+      "status": "active",
+      "last_verified": "2026-04-05"
+    }
+  ]
+}

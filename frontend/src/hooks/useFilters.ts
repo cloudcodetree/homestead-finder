@@ -4,27 +4,24 @@ import { FilterState, DEFAULT_FILTERS, PropertyFeature } from '../types/property
 export const useFilters = () => {
   const [filters, setFilters] = useState<FilterState>(DEFAULT_FILTERS);
 
-  const updateFilter = useCallback(<K extends keyof FilterState>(
-    key: K,
-    value: FilterState[K]
-  ) => {
-    setFilters(prev => ({ ...prev, [key]: value }));
+  const updateFilter = useCallback(<K extends keyof FilterState>(key: K, value: FilterState[K]) => {
+    setFilters((prev) => ({ ...prev, [key]: value }));
   }, []);
 
   const toggleState = useCallback((state: string) => {
-    setFilters(prev => ({
+    setFilters((prev) => ({
       ...prev,
       states: prev.states.includes(state)
-        ? prev.states.filter(s => s !== state)
+        ? prev.states.filter((s) => s !== state)
         : [...prev.states, state],
     }));
   }, []);
 
   const toggleFeature = useCallback((feature: PropertyFeature) => {
-    setFilters(prev => ({
+    setFilters((prev) => ({
       ...prev,
       features: prev.features.includes(feature)
-        ? prev.features.filter(f => f !== feature)
+        ? prev.features.filter((f) => f !== feature)
         : [...prev.features, feature],
     }));
   }, []);
@@ -33,7 +30,7 @@ export const useFilters = () => {
     setFilters(DEFAULT_FILTERS);
   }, []);
 
-  const hasActiveFilters = (
+  const hasActiveFilters =
     filters.states.length > 0 ||
     filters.features.length > 0 ||
     filters.minDealScore > 0 ||
@@ -41,8 +38,7 @@ export const useFilters = () => {
     filters.maxPrice < DEFAULT_FILTERS.maxPrice ||
     filters.minAcreage > DEFAULT_FILTERS.minAcreage ||
     filters.maxAcreage < DEFAULT_FILTERS.maxAcreage ||
-    filters.maxPricePerAcre < DEFAULT_FILTERS.maxPricePerAcre
-  );
+    filters.maxPricePerAcre < DEFAULT_FILTERS.maxPricePerAcre;
 
   return { filters, updateFilter, toggleState, toggleFeature, resetFilters, hasActiveFilters };
 };

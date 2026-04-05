@@ -9,19 +9,22 @@ import { useFilters } from '../hooks/useFilters';
 import { getDealScoreColor } from '../utils/scoring';
 import { formatPrice, formatAcreage } from '../utils/formatters';
 
-const MapView = lazy(() => import('./MapView').then(m => ({ default: m.MapView })));
+const MapView = lazy(() => import('./MapView').then((m) => ({ default: m.MapView })));
 
 type ViewMode = 'list' | 'map';
 
 export const Dashboard = () => {
-  const { filters, updateFilter, toggleState, toggleFeature, resetFilters, hasActiveFilters } = useFilters();
+  const { filters, updateFilter, toggleState, toggleFeature, resetFilters, hasActiveFilters } =
+    useFilters();
   const { properties, loading, error, stats } = useProperties(filters);
   const [viewMode, setViewMode] = useState<ViewMode>('list');
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [showNotifications, setShowNotifications] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
 
-  const selectedProperty = selectedId ? properties.find((p: Property) => p.id === selectedId) ?? null : null;
+  const selectedProperty = selectedId
+    ? (properties.find((p: Property) => p.id === selectedId) ?? null)
+    : null;
 
   return (
     <div className="flex flex-col h-screen bg-gray-50">
@@ -51,7 +54,9 @@ export const Dashboard = () => {
             <button
               onClick={() => setViewMode('list')}
               className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
-                viewMode === 'list' ? 'bg-white shadow text-gray-900' : 'text-gray-500 hover:text-gray-700'
+                viewMode === 'list'
+                  ? 'bg-white shadow text-gray-900'
+                  : 'text-gray-500 hover:text-gray-700'
               }`}
             >
               List
@@ -59,7 +64,9 @@ export const Dashboard = () => {
             <button
               onClick={() => setViewMode('map')}
               className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
-                viewMode === 'map' ? 'bg-white shadow text-gray-900' : 'text-gray-500 hover:text-gray-700'
+                viewMode === 'map'
+                  ? 'bg-white shadow text-gray-900'
+                  : 'text-gray-500 hover:text-gray-700'
               }`}
             >
               Map
@@ -87,14 +94,19 @@ export const Dashboard = () => {
       {/* Main layout */}
       <div className="flex flex-1 overflow-hidden">
         {/* Sidebar filters — desktop always visible, mobile via toggle */}
-        <aside className={`
+        <aside
+          className={`
           ${showFilters ? 'block' : 'hidden'} lg:block
           w-72 flex-shrink-0 overflow-y-auto
           ${showFilters ? 'absolute inset-0 z-40 bg-white' : ''}
-        `}>
+        `}
+        >
           {showFilters && (
             <div className="lg:hidden sticky top-0 bg-white border-b border-gray-200 p-3 flex justify-end">
-              <button onClick={() => setShowFilters(false)} className="text-gray-500 hover:text-gray-700">
+              <button
+                onClick={() => setShowFilters(false)}
+                className="text-gray-500 hover:text-gray-700"
+              >
                 Close ✕
               </button>
             </div>
@@ -159,11 +171,13 @@ export const Dashboard = () => {
           )}
 
           {!loading && !error && viewMode === 'map' && (
-            <Suspense fallback={
-              <div className="flex items-center justify-center h-full">
-                <p className="text-gray-500">Loading map...</p>
-              </div>
-            }>
+            <Suspense
+              fallback={
+                <div className="flex items-center justify-center h-full">
+                  <p className="text-gray-500">Loading map...</p>
+                </div>
+              }
+            >
               <MapView
                 properties={properties}
                 selectedId={selectedId}
@@ -176,31 +190,29 @@ export const Dashboard = () => {
 
       {/* Property detail modal */}
       {selectedProperty && (
-        <PropertyDetail
-          property={selectedProperty}
-          onClose={() => setSelectedId(null)}
-        />
+        <PropertyDetail property={selectedProperty} onClose={() => setSelectedId(null)} />
       )}
 
       {/* Notification settings modal */}
-      {showNotifications && (
-        <NotificationSettings onClose={() => setShowNotifications(false)} />
-      )}
+      {showNotifications && <NotificationSettings onClose={() => setShowNotifications(false)} />}
 
       {/* Quick peek bar when map is open and property selected */}
-      {viewMode === 'map' && selectedProperty && !selectedProperty && (
+      {viewMode === 'map' && selectedProperty && (
         <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-3 flex items-center gap-3">
-          <div className={`rounded-full w-10 h-10 flex items-center justify-center text-xs font-bold flex-shrink-0 ${getDealScoreColor(selectedProperty.dealScore)}`}>
+          <div
+            className={`rounded-full w-10 h-10 flex items-center justify-center text-xs font-bold flex-shrink-0 ${getDealScoreColor(selectedProperty.dealScore)}`}
+          >
             {selectedProperty.dealScore}
           </div>
           <div className="flex-1 min-w-0">
             <p className="font-semibold text-sm text-gray-900 truncate">{selectedProperty.title}</p>
             <p className="text-xs text-gray-500">
-              {formatPrice(selectedProperty.price)} &middot; {formatAcreage(selectedProperty.acreage)}
+              {formatPrice(selectedProperty.price)} &middot;{' '}
+              {formatAcreage(selectedProperty.acreage)}
             </p>
           </div>
           <button
-            onClick={() => {/* handled by map popup */}}
+            onClick={() => setSelectedId(selectedProperty.id)}
             className="text-green-600 text-sm font-medium"
           >
             Details →

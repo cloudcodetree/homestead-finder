@@ -1,4 +1,5 @@
 """Lands of America scraper — https://www.landsofamerica.com"""
+
 from __future__ import annotations
 
 import re
@@ -6,6 +7,10 @@ from typing import Any
 
 from .base import BaseScraper, RawListing
 from .landwatch import extract_features
+
+from logger import get_logger
+
+log = get_logger("scraper.lands_of_america")
 
 
 class LandsOfAmericaScraper(BaseScraper):
@@ -15,6 +20,13 @@ class LandsOfAmericaScraper(BaseScraper):
     BASE_URL = "https://www.landsofamerica.com"
     RATE_LIMIT_SECONDS = 2.0
 
+    def get_page_urls(self, state: str, max_pages: int = 5) -> list[str]:
+        """Return search URLs for AI fallback."""
+        return [
+            f"{self.BASE_URL}/property/search/?st={state}&t=0&page={p}"
+            for p in range(1, max_pages + 1)
+        ]
+
     def fetch(self, state: str, max_pages: int = 5) -> list[dict[str, Any]]:
         """Fetch land listings for a state."""
         results = []
@@ -22,14 +34,16 @@ class LandsOfAmericaScraper(BaseScraper):
             url = f"{self.BASE_URL}/property/search/"
             params = {
                 "st": state,
-                "t": "0",   # Type: land
+                "t": "0",  # Type: land
                 "page": page,
             }
             try:
                 response = self.get(url, params=params)
                 soup = self.parse_html(response.text)
 
-                cards = soup.select(".propCard, .property-card, [class*='PropertyCard']")
+                cards = soup.select(
+                    ".propCard, .property-card, [class*='PropertyCard']"
+                )
                 if not cards:
                     break
 
@@ -38,7 +52,7 @@ class LandsOfAmericaScraper(BaseScraper):
                     if data:
                         results.append(data)
             except Exception as e:
-                print(f"  [lands_of_america] Error for {state} page {page}: {e}")
+                log.info(f"[lands_of_america] Error for {state} page {page}: {e}")
                 break
 
         return results

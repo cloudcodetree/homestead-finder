@@ -1,0 +1,45 @@
+{
+  "state": "ME",
+  "state_name": "Maine",
+  "sale_type": "tax_lien",
+  "notes": "Tax lien state. Municipal-level (not county). 2024 law requires listing tax-acquired property with licensed realtors. Unorganized Territory managed by state.",
+  "last_updated": "2026-04-05",
+  "state_sources": [
+    {
+      "id": "ME-revenue-unorganized",
+      "type": "tax_deed_sale",
+      "name": "Maine Revenue Services — Unorganized Territory Tax-Acquired Property",
+      "url": "https://www.maine.gov/revenue/taxes/property-tax/unorganized-territory/tax-acquired-property",
+      "platform": "state_website",
+      "notes": "~400 townships. Best centralized source for rural ME land. Listed via On Point Realty.",
+      "status": "active",
+      "last_verified": "2026-04-05"
+    }
+  ],
+  "county_sources": [
+    {
+      "id": "ME-ellsworth-tax-acquired",
+      "county": "Hancock",
+      "municipality": "Ellsworth",
+      "type": "tax_deed_sale",
+      "url": "https://www.ellsworthmaine.gov/tax-acquired-property-for-auction/",
+      "platform": "county_website",
+      "frequency": "periodic",
+      "notes": "One of few ME municipalities with online auction listings",
+      "status": "active",
+      "last_verified": "2026-04-05"
+    },
+    {
+      "id": "ME-portland-tax-acquired",
+      "county": "Cumberland",
+      "municipality": "Portland",
+      "type": "tax_deed_sale",
+      "url": "https://www.portlandmaine.gov/1448/City-Owned-and-Tax-Acquired-Property",
+      "platform": "county_website",
+      "frequency": "periodic",
+      "notes": "City-owned and tax-acquired property listings",
+      "status": "active",
+      "last_verified": "2026-04-05"
+    }
+  ]
+}

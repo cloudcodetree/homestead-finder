@@ -1,4 +1,5 @@
 """Auction site scraper — Hubzu, Auction.com, etc."""
+
 from __future__ import annotations
 
 import re
@@ -6,6 +7,10 @@ from typing import Any
 
 from .base import BaseScraper, RawListing
 from .landwatch import extract_features
+
+from logger import get_logger
+
+log = get_logger("scraper.auction")
 
 
 class AuctionScraper(BaseScraper):
@@ -29,14 +34,16 @@ class AuctionScraper(BaseScraper):
             response = self.get(url, params=params)
             soup = self.parse_html(response.text)
 
-            cards = soup.select(".property-listing, .listing-card, [class*='PropertyCard']")
+            cards = soup.select(
+                ".property-listing, .listing-card, [class*='PropertyCard']"
+            )
             for card in cards:
                 data = self._parse_card(card, state)
                 if data:
                     results.append(data)
 
         except Exception as e:
-            print(f"  [auction] Error for {state}: {e}")
+            log.info(f"[auction] Error for {state}: {e}")
 
         return results
 
@@ -44,7 +51,9 @@ class AuctionScraper(BaseScraper):
         """Parse a single auction listing card."""
         try:
             title_el = card.select_one("h2, h3, .property-title, .address")
-            price_el = card.select_one(".current-bid, .starting-bid, .price, [class*='price']")
+            price_el = card.select_one(
+                ".current-bid, .starting-bid, .price, [class*='price']"
+            )
             link_el = card.select_one("a[href]")
 
             if not link_el:

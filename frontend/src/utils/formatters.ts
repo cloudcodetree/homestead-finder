@@ -9,10 +9,12 @@ export const formatPrice = (price: number): string => {
 };
 
 export const formatPricePerAcre = (pricePerAcre: number): string => {
+  if (pricePerAcre <= 0) return '';
   return `$${Math.round(pricePerAcre).toLocaleString()}/ac`;
 };
 
 export const formatAcreage = (acreage: number): string => {
+  if (acreage <= 0) return '';
   if (acreage >= 1000) {
     return `${(acreage / 1000).toFixed(1)}k acres`;
   }
@@ -40,6 +42,7 @@ export const formatSourceName = (source: string): string => {
     zillow: 'Zillow',
     realtor: 'Realtor.com',
     county_tax: 'County Tax Sale',
+    govease: 'GovEase Tax Sale',
     auction: 'Auction',
     blm: 'BLM/USDA',
   };

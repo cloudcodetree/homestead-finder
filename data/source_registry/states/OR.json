@@ -1,0 +1,84 @@
+{
+  "state": "OR",
+  "state_name": "Oregon",
+  "sale_type": "tax_deed",
+  "notes": "Tax deed state. County-by-county foreclosure. Tillamook County maintains master list of all county land sale URLs.",
+  "last_updated": "2026-04-05",
+  "state_sources": [
+    {
+      "id": "OR-dsl-land-sales",
+      "type": "state_land_sale",
+      "name": "Dept of State Lands — Land Sales",
+      "url": "https://www.oregon.gov/dsl/lands/pages/land-sales.aspx",
+      "platform": "state_website",
+      "notes": "1.5M acres managed. Sales require State Land Board approval.",
+      "status": "active",
+      "last_verified": "2026-04-05"
+    },
+    {
+      "id": "OR-county-master-list",
+      "type": "tax_deed_sale",
+      "name": "Oregon County Land Sale Websites (Master List)",
+      "url": "https://www.tillamookcounty.gov/assessment/page/oregon-county-land-sale-websites",
+      "platform": "state_website",
+      "notes": "Links to 18+ county land sale pages. Best single starting point.",
+      "status": "active",
+      "last_verified": "2026-04-05"
+    }
+  ],
+  "county_sources": [
+    {
+      "id": "OR-douglas-tax-deed",
+      "county": "Douglas",
+      "type": "tax_deed_sale",
+      "url": "https://www.douglascountyor.gov/614/Tax-Foreclosed-Properties",
+      "platform": "county_website",
+      "frequency": "annual",
+      "status": "active",
+      "last_verified": "2026-04-05"
+    },
+    {
+      "id": "OR-jackson-tax-deed",
+      "county": "Jackson",
+      "type": "tax_deed_sale",
+      "url": "https://jacksoncountyor.org/finance/Property-Management/Annual-Real-Property-Sale",
+      "platform": "county_website",
+      "frequency": "annual",
+      "status": "active",
+      "last_verified": "2026-04-05"
+    },
+    {
+      "id": "OR-klamath-tax-deed",
+      "county": "Klamath",
+      "type": "tax_deed_sale",
+      "url": "http://www.klamathcounty.org/265/Property-Sales",
+      "platform": "county_website",
+      "frequency": "annual",
+      "notes": "Eastern Oregon rangeland",
+      "status": "active",
+      "last_verified": "2026-04-05"
+    },
+    {
+      "id": "OR-lake-tax-deed",
+      "county": "Lake",
+      "type": "tax_deed_sale",
+      "url": "https://www.lakecountyor.org/government/property_management.php",
+      "platform": "county_website",
+      "frequency": "periodic",
+      "notes": "8,358 sq mi, large rural county",
+      "status": "active",
+      "last_verified": "2026-04-05"
+    },
+    {
+      "id": "OR-linn-tax-deed",
+      "county": "Linn",
+      "type": "tax_deed_sale",
+      "url": "https://www.linncountyor.gov/property/page/buy-property",
+      "platform": "county_website",
+      "frequency": "periodic",
+      "notes": "Central valley, ag and timber land",
+      "status": "active",
+      "last_verified": "2026-04-05"
+    }
+  ]
+}

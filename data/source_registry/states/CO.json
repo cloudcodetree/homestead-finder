@@ -1,0 +1,73 @@
+{
+  "state": "CO",
+  "state_name": "Colorado",
+  "sale_type": "tax_lien",
+  "notes": "Tax lien state. 2024 law (HB24-1056) changed Treasurer's Deed to public auction. CCTPTA maintains statewide list.",
+  "last_updated": "2026-04-05",
+  "state_sources": [
+    {
+      "id": "CO-state-land-board",
+      "type": "state_land_sale",
+      "name": "Colorado State Land Board",
+      "url": "https://slb.colorado.gov/buy-sell",
+      "platform": "state_website",
+      "notes": "2.8M acres. Public bid process for disposals.",
+      "status": "active",
+      "last_verified": "2026-04-05"
+    },
+    {
+      "id": "CO-cctpta-lien-sales",
+      "type": "tax_lien_sale",
+      "name": "CCTPTA — All County Tax Lien Sale Dates",
+      "url": "https://cctpta.org/tax-lien-sales/",
+      "platform": "state_website",
+      "notes": "Master list of all 64 county sale dates and links",
+      "status": "active",
+      "last_verified": "2026-04-05"
+    },
+    {
+      "id": "CO-cctpta-deed-sales",
+      "type": "tax_deed_sale",
+      "name": "CCTPTA — Treasurer's Deed Auction Dates",
+      "url": "https://cctpta.org/tax-deed-sales/",
+      "platform": "state_website",
+      "notes": "New 2024 public auction process for deed sales",
+      "status": "active",
+      "last_verified": "2026-04-05"
+    }
+  ],
+  "county_sources": [
+    {
+      "id": "CO-el-paso-tax-lien",
+      "county": "El Paso",
+      "type": "tax_lien_sale",
+      "url": "https://elpaso.coloradotaxsale.com/",
+      "platform": "realauction",
+      "frequency": "annual",
+      "typical_month": "October",
+      "status": "active",
+      "last_verified": "2026-04-05"
+    },
+    {
+      "id": "CO-garfield-tax-lien",
+      "county": "Garfield",
+      "type": "tax_lien_sale",
+      "url": "https://garfield.coloradotaxsale.com/",
+      "platform": "realauction",
+      "frequency": "annual",
+      "typical_month": "November",
+      "status": "active",
+      "last_verified": "2026-04-05"
+    },
+    {
+      "id": "CO-douglas-tax-lien",
+      "county": "Douglas",
+      "type": "tax_lien_sale",
+      "url": "https://zeusauction.com",
+      "platform": "govease",
+      "frequency": "annual",
+      "status": "active",
+      "last_verified": "2026-04-05"
+    }
+  ]
+}

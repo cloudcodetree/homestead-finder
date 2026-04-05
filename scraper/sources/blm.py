@@ -1,4 +1,5 @@
 """BLM/USDA land listing scraper — uses public data downloads."""
+
 from __future__ import annotations
 
 import csv
@@ -8,9 +9,15 @@ from typing import Any
 from .base import BaseScraper, RawListing
 from .landwatch import extract_features
 
+from logger import get_logger
+
+log = get_logger("scraper.blm")
+
 # BLM land sale notices are published at:
 # https://www.blm.gov/programs/lands-and-realty/land-disposal/land-sales
-BLM_NOTICE_URL = "https://www.blm.gov/programs/lands-and-realty/land-disposal/land-sales"
+BLM_NOTICE_URL = (
+    "https://www.blm.gov/programs/lands-and-realty/land-disposal/land-sales"
+)
 
 # State office URLs for BLM land sales
 BLM_STATE_OFFICES: dict[str, str] = {
@@ -32,6 +39,14 @@ class BLMScraper(BaseScraper):
     SOURCE_NAME = "blm"
     RATE_LIMIT_SECONDS = 2.0
 
+    def get_page_urls(self, state: str, max_pages: int = 5) -> list[str]:
+        """Return BLM URLs for AI fallback."""
+        urls = [BLM_NOTICE_URL]
+        office_url = BLM_STATE_OFFICES.get(state.upper())
+        if office_url:
+            urls.append(office_url)
+        return urls
+
     def fetch(self, state: str, max_pages: int = 5) -> list[dict[str, Any]]:
         """Fetch BLM land sale notices for a state."""
         results = []
@@ -44,7 +59,9 @@ class BLMScraper(BaseScraper):
             soup = self.parse_html(response.text)
 
             # Look for links to CSV or PDF downloads, or sale notices
-            sale_links = soup.select("a[href*='sale'], a[href*='land-disposal'], a[href*='.csv']")
+            sale_links = soup.select(
+                "a[href*='sale'], a[href*='land-disposal'], a[href*='.csv']"
+            )
             for link in sale_links:
                 href = link.get("href", "")
                 if state.upper() in href.upper() or state.lower() in href.lower():
@@ -63,28 +80,43 @@ class BLMScraper(BaseScraper):
 
             for article in state_soup.select("article, .views-row, .field-item"):
                 text = article.get_text(separator=" ", strip=True)
-                if any(kw in text.lower() for kw in ["acre", "land sale", "public land"]):
+                if any(
+                    kw in text.lower() for kw in ["acre", "land sale", "public land"]
+                ):
                     import re
+
                     price_match = re.search(r"\$[\d,]+", text)
-                    acres_match = re.search(r"([\d,]+\.?\d*)\s*acres?", text, re.IGNORECASE)
+                    acres_match = re.search(
+                        r"([\d,]+\.?\d*)\s*acres?", text, re.IGNORECASE
+                    )
                     link_el = article.select_one("a[href]")
 
                     if acres_match:
-                        results.append({
-                            "id": f"blm_{state}_{len(results)}",
-                            "title": article.select_one("h2, h3, .title")
-                                     and article.select_one("h2, h3, .title").get_text(strip=True)
-                                     or f"BLM Land Sale — {state}",
-                            "price": float(re.sub(r"[^\d.]", "", price_match.group())) if price_match else 0,
-                            "acres": float(re.sub(r",", "", acres_match.group(1))),
-                            "state": state,
-                            "county": "",
-                            "url": link_el.get("href", office_url) if link_el else office_url,
-                            "description": text[:500],
-                        })
+                        results.append(
+                            {
+                                "id": f"blm_{state}_{len(results)}",
+                                "title": article.select_one("h2, h3, .title")
+                                and article.select_one("h2, h3, .title").get_text(
+                                    strip=True
+                                )
+                                or f"BLM Land Sale — {state}",
+                                "price": float(
+                                    re.sub(r"[^\d.]", "", price_match.group())
+                                )
+                                if price_match
+                                else 0,
+                                "acres": float(re.sub(r",", "", acres_match.group(1))),
+                                "state": state,
+                                "county": "",
+                                "url": link_el.get("href", office_url)
+                                if link_el
+                                else office_url,
+                                "description": text[:500],
+                            }
+                        )
 
         except Exception as e:
-            print(f"  [blm] Error for {state}: {e}")
+            log.info(f"[blm] Error for {state}: {e}")
 
         return results
 
@@ -99,7 +131,9 @@ class BLMScraper(BaseScraper):
                 return None
 
             description = raw.get("description", raw.get("Description", ""))
-            title = raw.get("title", raw.get("Title", f"BLM Land — {raw.get('state', '')}"))
+            title = raw.get(
+                "title", raw.get("Title", f"BLM Land — {raw.get('state', '')}")
+            )
 
             return RawListing(
                 external_id=str(raw.get("id", raw.get("CaseNumber", ""))),
@@ -108,7 +142,9 @@ class BLMScraper(BaseScraper):
                 acreage=acres,
                 state=raw.get("state", raw.get("State", "")),
                 county=raw.get("county", raw.get("County", "")),
-                features=extract_features(f"{title} {description} mineral rights hunting"),
+                features=extract_features(
+                    f"{title} {description} mineral rights hunting"
+                ),
                 description=description,
                 url=raw.get("url", BLM_NOTICE_URL),
                 raw=raw,

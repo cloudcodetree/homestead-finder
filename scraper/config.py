@@ -1,4 +1,5 @@
 """Scraper configuration — override with environment variables or config_local.py."""
+
 from __future__ import annotations
 
 import os
@@ -12,8 +13,7 @@ DATA_DIR.mkdir(exist_ok=True)
 # ── Target geography ─────────────────────────────────────────────────────────
 # States to scrape. Expand as budget/rate-limit allows.
 TARGET_STATES: list[str] = os.getenv(
-    "TARGET_STATES",
-    "MT,ID,WY,CO,NM,OR,TX,TN,MN,ME"
+    "TARGET_STATES", "MT,ID,WY,CO,NM,OR,WA,TX,TN,MN,ME"
 ).split(",")
 
 # ── Deal criteria ────────────────────────────────────────────────────────────
@@ -45,11 +45,43 @@ USER_AGENT = (
 ENABLED_SOURCES: dict[str, bool] = {
     "landwatch": True,
     "lands_of_america": True,
-    "zillow": False,       # Rate limiting issues — disabled by default
-    "realtor": False,      # Rate limiting issues — disabled by default
+    "zillow": False,  # Rate limiting issues — disabled by default
+    "realtor": False,  # Rate limiting issues — disabled by default
     "county_tax": True,
     "auction": True,
     "blm": True,
+    "govease": True,
+}
+
+# ── Adaptive fetch strategies ────────────────────────────────────────────────
+# API keys for fallback strategies (set via env vars or config_local.py)
+FIRECRAWL_API_KEY: str = os.getenv("FIRECRAWL_API_KEY", "")
+ANTHROPIC_API_KEY: str = os.getenv("ANTHROPIC_API_KEY", "")
+
+# Cost controls
+DAILY_FIRECRAWL_LIMIT: int = int(os.getenv("DAILY_FIRECRAWL_LIMIT", "50"))
+DAILY_CLAUDE_BUDGET_USD: float = float(os.getenv("DAILY_CLAUDE_BUDGET_USD", "1.00"))
+AI_MAX_SPEND_PER_RUN: float = float(os.getenv("AI_MAX_SPEND_PER_RUN", "1.00"))
+AI_CONFIDENCE_THRESHOLD: float = float(os.getenv("AI_CONFIDENCE_THRESHOLD", "0.7"))
+
+# Selenium settings
+SELENIUM_HEADLESS: bool = os.getenv("SELENIUM_HEADLESS", "true").lower() == "true"
+SELENIUM_TIMEOUT: int = int(os.getenv("SELENIUM_TIMEOUT", "15"))
+
+# AI learning
+AI_FALLBACK_ENABLED: bool = os.getenv("AI_FALLBACK_ENABLED", "true").lower() == "true"
+LEARNED_SELECTORS_DIR = DATA_DIR / "learned_selectors"
+
+# Strategy chains per source — tried in order until one succeeds
+STRATEGY_CHAINS: dict[str, list[str]] = {
+    "landwatch": ["http", "selenium", "firecrawl", "firecrawl+claude"],
+    "lands_of_america": ["http", "selenium", "firecrawl", "firecrawl+claude"],
+    "county_tax": ["selenium", "http", "firecrawl"],
+    "auction": ["selenium", "firecrawl+claude"],
+    "blm": ["http", "firecrawl"],
+    "govease": ["http", "selenium"],
+    "zillow": ["http"],
+    "realtor": ["http", "selenium"],
 }
 
 # ── Output ───────────────────────────────────────────────────────────────────

@@ -42,19 +42,29 @@ export const PropertyDetail = ({ property, onClose }: PropertyDetailProps) => {
 
         <div className="p-4 space-y-5">
           {/* Key Stats */}
-          <div className="grid grid-cols-3 gap-3">
+          <div className={`grid gap-3 ${property.acreage > 0 ? 'grid-cols-3' : 'grid-cols-1'}`}>
             <div className="bg-gray-50 rounded-lg p-3 text-center">
               <p className="text-xl font-bold text-gray-900">{formatPrice(property.price)}</p>
-              <p className="text-xs text-gray-500 mt-0.5">Asking Price</p>
+              <p className="text-xs text-gray-500 mt-0.5">
+                {property.acreage > 0 ? 'Asking Price' : 'Face Value'}
+              </p>
             </div>
-            <div className="bg-gray-50 rounded-lg p-3 text-center">
-              <p className="text-xl font-bold text-gray-900">{formatAcreage(property.acreage)}</p>
-              <p className="text-xs text-gray-500 mt-0.5">Total Acreage</p>
-            </div>
-            <div className="bg-gray-50 rounded-lg p-3 text-center">
-              <p className="text-xl font-bold text-gray-900">{formatPricePerAcre(property.pricePerAcre)}</p>
-              <p className="text-xs text-gray-500 mt-0.5">Price / Acre</p>
-            </div>
+            {property.acreage > 0 && (
+              <>
+                <div className="bg-gray-50 rounded-lg p-3 text-center">
+                  <p className="text-xl font-bold text-gray-900">
+                    {formatAcreage(property.acreage)}
+                  </p>
+                  <p className="text-xs text-gray-500 mt-0.5">Total Acreage</p>
+                </div>
+                <div className="bg-gray-50 rounded-lg p-3 text-center">
+                  <p className="text-xl font-bold text-gray-900">
+                    {formatPricePerAcre(property.pricePerAcre)}
+                  </p>
+                  <p className="text-xs text-gray-500 mt-0.5">Price / Acre</p>
+                </div>
+              </>
+            )}
           </div>
 
           {/* Description */}
@@ -70,7 +80,7 @@ export const PropertyDetail = ({ property, onClose }: PropertyDetailProps) => {
             <div>
               <h3 className="text-sm font-semibold text-gray-700 mb-2">Features</h3>
               <div className="flex flex-wrap gap-2">
-                {property.features.map(feature => (
+                {property.features.map((feature) => (
                   <span
                     key={feature}
                     className="rounded-full bg-green-50 border border-green-200 px-3 py-1 text-sm text-green-700 font-medium"
@@ -98,10 +108,14 @@ export const PropertyDetail = ({ property, onClose }: PropertyDetailProps) => {
                 <p className="text-gray-800 font-medium">{property.daysOnMarket} days</p>
               </div>
             )}
-            <div>
-              <p className="text-gray-500 text-xs">Location</p>
-              <p className="text-gray-800 font-medium">{property.location.lat.toFixed(4)}, {property.location.lng.toFixed(4)}</p>
-            </div>
+            {(property.location.lat !== 0 || property.location.lng !== 0) && (
+              <div>
+                <p className="text-gray-500 text-xs">Location</p>
+                <p className="text-gray-800 font-medium">
+                  {property.location.lat.toFixed(4)}, {property.location.lng.toFixed(4)}
+                </p>
+              </div>
+            )}
           </div>
 
           {/* CTA */}

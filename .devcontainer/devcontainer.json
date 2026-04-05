@@ -31,13 +31,13 @@
         "[python]": {
           "editor.defaultFormatter": "charliermarsh.ruff"
         },
-        "python.defaultInterpreterPath": "/usr/local/bin/python",
+        "python.defaultInterpreterPath": "/usr/local/python/current/bin/python",
         "eslint.workingDirectories": ["frontend"]
       }
     }
   },
 
-  "postCreateCommand": "cd frontend && npm install && cd ../scraper && pip install -r requirements.txt && npm install -g @anthropic-ai/claude-code",
+  "postCreateCommand": "cd frontend && npm install && cd ../scraper && pip install -r requirements.txt && python -m playwright install --with-deps chromium && npm install -g @anthropic-ai/claude-code",
 
   "remoteEnv": {
     "NODE_ENV": "development"

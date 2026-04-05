@@ -1,0 +1,65 @@
+{
+  "state": "WY",
+  "state_name": "Wyoming",
+  "sale_type": "tax_lien",
+  "notes": "Tax lien state (lien first, deed after 4-6 years). Almost entirely in-person. Hardest state to scrape.",
+  "last_updated": "2026-04-05",
+  "state_sources": [
+    {
+      "id": "WY-state-lands",
+      "type": "state_land_sale",
+      "name": "Wyoming Office of State Lands",
+      "url": "https://lands.wyo.gov/trust-land-management/land-transactions",
+      "platform": "state_website",
+      "notes": "Trust land sales and oil/gas lease auctions",
+      "status": "active",
+      "last_verified": "2026-04-05"
+    }
+  ],
+  "county_sources": [
+    {
+      "id": "WY-natrona-tax-lien",
+      "county": "Natrona",
+      "type": "tax_lien_sale",
+      "url": "https://www.natronacounty-wy.gov/804/Tax-Sale",
+      "platform": "county_website",
+      "frequency": "annual",
+      "notes": "Casper. Registration opens September.",
+      "status": "active",
+      "last_verified": "2026-04-05"
+    },
+    {
+      "id": "WY-laramie-tax-lien",
+      "county": "Laramie",
+      "type": "tax_lien_sale",
+      "url": "https://www.laramiecountywy.gov/County-Government/Elected-Officials/County-Treasurer/Tax-Sale",
+      "platform": "county_website",
+      "frequency": "annual",
+      "typical_month": "July",
+      "notes": "Cheyenne. Sale after Frontier Days.",
+      "status": "active",
+      "last_verified": "2026-04-05"
+    },
+    {
+      "id": "WY-sweetwater-tax-lien",
+      "county": "Sweetwater",
+      "type": "tax_lien_sale",
+      "url": "https://www.sweetwatercountywy.gov/departments/treasurer/tax_sales_and_redemptions.php",
+      "platform": "county_website",
+      "frequency": "annual",
+      "status": "active",
+      "last_verified": "2026-04-05"
+    },
+    {
+      "id": "WY-campbell-tax-lien",
+      "county": "Campbell",
+      "type": "tax_lien_sale",
+      "url": "https://www.campbellcountywy.gov/2267/Tax-Sale-Info",
+      "platform": "county_website",
+      "frequency": "annual",
+      "notes": "Gillette. Energy county.",
+      "status": "active",
+      "last_verified": "2026-04-05"
+    }
+  ]
+}

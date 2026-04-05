@@ -1,0 +1,141 @@
+{
+  "version": 1,
+  "last_updated": "2026-04-05",
+  "target_states": ["MT", "ID", "WY", "CO", "NM", "OR", "WA", "TX", "TN", "MN", "ME"],
+  "platforms": {
+    "govease": {
+      "name": "GovEase",
+      "url": "https://www.govease.com",
+      "robots_txt_ok": true,
+      "sale_types": ["tax_lien_sale", "tax_deed_sale"],
+      "coverage": "~100+ counties (AL, CO, IN, TX, TN, MS, others)",
+      "scraper_priority": 1
+    },
+    "publicsurplus": {
+      "name": "PublicSurplus",
+      "url": "https://www.publicsurplus.com",
+      "robots_txt_ok": true,
+      "sale_types": ["tax_forfeiture"],
+      "coverage": "Most MN counties, some other states",
+      "scraper_priority": 2
+    },
+    "grantstreet": {
+      "name": "Grant Street Group",
+      "url": "https://www.grantstreet.com",
+      "robots_txt_ok": true,
+      "sale_types": ["tax_lien_sale", "tax_deed_sale"],
+      "coverage": "~30 jurisdictions (CA, FL)",
+      "scraper_priority": 3
+    },
+    "bid4assets": {
+      "name": "Bid4Assets",
+      "url": "https://www.bid4assets.com",
+      "robots_txt_ok": false,
+      "sale_types": ["tax_deed_sale", "sheriff_sale"],
+      "coverage": "100+ counties, 30+ states. Dominant in WA (~11 counties) and TX.",
+      "scraper_priority": 3,
+      "notes": "Cloudflare-protected but high coverage of our target states"
+    },
+    "realauction": {
+      "name": "RealAuction",
+      "url": "https://www.realauction.com",
+      "robots_txt_ok": false,
+      "sale_types": ["tax_lien_sale", "tax_deed_sale", "sheriff_sale"],
+      "coverage": "11 states, dominant in FL. Also CO, ID",
+      "scraper_priority": 4
+    },
+    "govdeals": {
+      "name": "GovDeals",
+      "url": "https://www.govdeals.com",
+      "robots_txt_ok": false,
+      "sale_types": ["state_surplus"],
+      "coverage": "15,000+ sellers, 33 state govts",
+      "scraper_priority": 7,
+      "notes": "Surplus only — not tax sales"
+    },
+    "mnbid": {
+      "name": "MNBid",
+      "url": "https://mnbid.mn.gov",
+      "robots_txt_ok": true,
+      "sale_types": ["state_land_sale"],
+      "coverage": "Minnesota DNR land (5.6M acres)",
+      "scraper_priority": 2
+    },
+    "civicsource": {
+      "name": "CivicSource",
+      "url": "https://www.civicsource.com",
+      "robots_txt_ok": true,
+      "sale_types": ["tax_lien_sale", "tax_deed_sale"],
+      "coverage": "Louisiana parishes primarily",
+      "scraper_priority": 6
+    }
+  },
+  "state_portals": {
+    "CO": {
+      "name": "CCTPTA (Colorado County Treasurers)",
+      "url": "https://cctpta.org/tax-lien-sales/",
+      "type": "aggregator",
+      "notes": "Lists all county sale dates and links statewide"
+    },
+    "NM": {
+      "name": "NM Taxation & Revenue — Delinquent Property Tax Auctions",
+      "url": "https://www.tax.newmexico.gov/businesses/property-tax-overview/delinquent-property-tax-auctions/",
+      "type": "centralized",
+      "notes": "State runs all county tax sales. PDF auction lists."
+    },
+    "MN": {
+      "name": "MN DNR Land for Sale",
+      "url": "https://www.dnr.state.mn.us/lands_minerals/landsale/index.html",
+      "type": "state_land",
+      "notes": "Annual DNR land sales via MNBid. 5.6M acres managed."
+    },
+    "MT": {
+      "name": "DNRC Trust Lands Catalog",
+      "url": "https://trustlandscatalog.dnrc.mt.gov/",
+      "type": "state_land",
+      "notes": "Searchable catalog of MT state trust lands for sale"
+    },
+    "TX": {
+      "name": "Texas GLO — State Land for Sale",
+      "url": "https://www.glo.texas.gov/land/state-lands/land-for-sale/index.html",
+      "type": "state_land",
+      "notes": "13M acres managed. Also veterans land program."
+    },
+    "OR": {
+      "name": "Oregon County Land Sale Websites (Master List)",
+      "url": "https://www.tillamookcounty.gov/assessment/page/oregon-county-land-sale-websites",
+      "type": "aggregator",
+      "notes": "Tillamook County maintains links to 18+ county land sale pages"
+    },
+    "ID": {
+      "name": "Idaho Dept of Lands — Land for Sale",
+      "url": "https://www.idl.idaho.gov/real-estate/state-land-for-sale/",
+      "type": "state_land",
+      "notes": "Endowment trust land sales, cottage sites"
+    },
+    "WY": {
+      "name": "Wyoming Office of State Lands",
+      "url": "https://lands.wyo.gov/trust-land-management/land-transactions",
+      "type": "state_land",
+      "notes": "Trust land sales and oil/gas lease auctions"
+    },
+    "WA": {
+      "name": "WA Dept of Revenue — County Directory",
+      "url": "https://dor.wa.gov/taxes-rates/property-tax/county-assessor-and-treasurer-websites",
+      "type": "reference",
+      "notes": "Master list of all 39 county treasurer websites. Bid4Assets covers ~11 WA counties."
+    },
+    "ME": {
+      "name": "Maine Revenue Services — Unorganized Territory",
+      "url": "https://www.maine.gov/revenue/taxes/property-tax/unorganized-territory/tax-acquired-property",
+      "type": "centralized",
+      "notes": "State manages tax-acquired property for ~400 unorganized townships"
+    },
+    "TN": {
+      "name": "TN STREAM — Surplus Real Estate",
+      "url": "https://www.tn.gov/generalservices/stream/stream/surplus-real-estate/real-estate-for-sale.html",
+      "type": "state_surplus",
+      "notes": "State surplus properties approved by State Building Commission"
+    }
+  }
+}

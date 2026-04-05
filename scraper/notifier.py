@@ -1,4 +1,5 @@
 """Email notification sender using SendGrid."""
+
 from __future__ import annotations
 
 from typing import Any
@@ -7,14 +8,15 @@ import sendgrid
 from sendgrid.helpers.mail import Mail
 
 from config import SENDGRID_API_KEY, NOTIFICATION_EMAIL, NOTIFICATION_SCORE_THRESHOLD
-from scoring import ScoringEngine
 from utils.formatters import format_price, format_acreage, format_price_per_acre
 
 
 def send_deal_alert(hot_deals: list[dict[str, Any]]) -> bool:
     """Send email notification for hot deals. Returns True on success."""
     if not SENDGRID_API_KEY or not NOTIFICATION_EMAIL:
-        print("  [notifier] No SendGrid API key or email configured — skipping notification")
+        print(
+            "  [notifier] No SendGrid API key or email configured — skipping notification"
+        )
         return False
 
     if not hot_deals:
@@ -33,7 +35,9 @@ def send_deal_alert(hot_deals: list[dict[str, Any]]) -> bool:
         )
         response = sg.client.mail.send.post(request_body=message.get())
         if response.status_code in (200, 202):
-            print(f"  [notifier] Alert sent for {len(hot_deals)} deals → {NOTIFICATION_EMAIL}")
+            print(
+                f"  [notifier] Alert sent for {len(hot_deals)} deals → {NOTIFICATION_EMAIL}"
+            )
             return True
         else:
             print(f"  [notifier] SendGrid error: {response.status_code}")
@@ -51,7 +55,9 @@ def _build_email_body(deals: list[dict[str, Any]]) -> str:
         state = loc.get("state", "")
         county = loc.get("county", "")
         score = deal.get("dealScore", 0)
-        score_color = "#22c55e" if score >= 80 else "#eab308" if score >= 65 else "#f97316"
+        score_color = (
+            "#22c55e" if score >= 80 else "#eab308" if score >= 65 else "#f97316"
+        )
 
         rows += f"""
         <tr style="border-bottom:1px solid #e5e7eb;">
@@ -122,7 +128,7 @@ def filter_hot_deals(
     if previously_seen is None:
         previously_seen = set()
     return [
-        p for p in properties
-        if p.get("dealScore", 0) >= threshold
-        and p.get("id", "") not in previously_seen
+        p
+        for p in properties
+        if p.get("dealScore", 0) >= threshold and p.get("id", "") not in previously_seen
     ]

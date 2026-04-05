@@ -1,22 +1,25 @@
 """Main scraper orchestrator — runs all enabled sources and outputs listings.json."""
+
 from __future__ import annotations
 
 import argparse
 import json
-import sys
 from datetime import date
-from pathlib import Path
 
 import config
-from scoring import ScoringEngine
+from logger import get_logger
 from notifier import send_deal_alert, filter_hot_deals
-from sources.landwatch import LandWatchScraper
-from sources.lands_of_america import LandsOfAmericaScraper
-from sources.zillow import ZillowScraper
-from sources.realtor import RealtorScraper
-from sources.county_tax import CountyTaxScraper
+from scoring import ScoringEngine
 from sources.auction import AuctionScraper
 from sources.blm import BLMScraper
+from sources.county_tax import CountyTaxScraper
+from sources.govease import GovEaseScraper
+from sources.lands_of_america import LandsOfAmericaScraper
+from sources.landwatch import LandWatchScraper
+from sources.realtor import RealtorScraper
+from sources.zillow import ZillowScraper
+
+log = get_logger("main")
 
 # Registry of all scrapers
 ALL_SCRAPERS = {
@@ -27,6 +30,7 @@ ALL_SCRAPERS = {
     "county_tax": CountyTaxScraper,
     "auction": AuctionScraper,
     "blm": BLMScraper,
+    "govease": GovEaseScraper,
 }
 
 
@@ -70,7 +74,9 @@ def run(
         print("No scrapers enabled. Check config.ENABLED_SOURCES.")
         return []
 
-    print(f"Running {len(active_scrapers)} scrapers across {len(target_states)} states...")
+    print(
+        f"Running {len(active_scrapers)} scrapers across {len(target_states)} states..."
+    )
     print(f"Target states: {', '.join(target_states)}")
     print()
 
@@ -102,14 +108,16 @@ def run(
     scored.sort(key=lambda p: p.get("dealScore", 0), reverse=True)
 
     # Print top deals
-    print(f"\n  Top deals:")
+    print("\n  Top deals:")
     for p in scored[:5]:
         loc = p.get("location", {})
-        print(f"    Score {p.get('dealScore'):3d} | "
-              f"{p.get('acreage', 0):.0f} acres, "
-              f"${p.get('price', 0):,.0f} | "
-              f"{loc.get('county', '')} County, {loc.get('state', '')} | "
-              f"${p.get('pricePerAcre', 0):,.0f}/acre")
+        print(
+            f"    Score {p.get('dealScore'):3d} | "
+            f"{p.get('acreage', 0):.0f} acres, "
+            f"${p.get('price', 0):,.0f} | "
+            f"{loc.get('county', '')} County, {loc.get('state', '')} | "
+            f"${p.get('pricePerAcre', 0):,.0f}/acre"
+        )
 
     if dry_run:
         print("\n  [dry-run] Not writing output files.")
@@ -141,13 +149,87 @@ def run(
     return scored
 
 
+def validate_selectors() -> None:
+    """Validate all learned selectors against live pages."""
+    from ai.selectors import load_selectors
+
+    selectors_dir = config.LEARNED_SELECTORS_DIR
+    if not selectors_dir.exists():
+        print("No learned selectors directory found.")
+        return
+
+    print("Learned Selector Validation Report")
+    print("=" * 40)
+    for path in sorted(selectors_dir.glob("*.json")):
+        source = path.stem
+        data = load_selectors(source)
+        if data is None:
+            print(f"  {source}: ERROR (could not load)")
+            continue
+        streak = data.get("validation_streak", 0)
+        confidence = data.get("confidence", 0)
+        version = data.get("version", "?")
+        last = data.get("last_validated", "never")
+        print(
+            f"  {source}: v{version} | confidence: {confidence:.2f} | "
+            f"streak: {streak} | last validated: {last}"
+        )
+
+
+def print_cost_summary() -> None:
+    """Print AI cost summary for the run."""
+    try:
+        from strategies.cost_tracker import get_summary
+
+        summary = get_summary()
+        if summary["today_calls"] > 0:
+            print(
+                f"\n  AI costs: ${summary['today_spend']:.4f} today "
+                f"({summary['today_calls']} calls), "
+                f"${summary['lifetime_spend']:.4f} lifetime"
+            )
+    except Exception:
+        pass
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="Homestead Finder scraper")
-    parser.add_argument("--dry-run", action="store_true", help="Fetch but don't write output")
+    parser.add_argument(
+        "--dry-run", action="store_true", help="Fetch but don't write output"
+    )
     parser.add_argument("--source", help="Run only this source (e.g. landwatch)")
-    parser.add_argument("--states", help="Comma-separated states to target (e.g. MT,ID,WY)")
+    parser.add_argument(
+        "--states", help="Comma-separated states to target (e.g. MT,ID,WY)"
+    )
     parser.add_argument("--max-pages", type=int, help="Max pages per source per state")
+    parser.add_argument(
+        "--no-ai", action="store_true", help="Disable AI fallback for this run"
+    )
+    parser.add_argument(
+        "--ai-max-tier",
+        type=int,
+        choices=[1, 2, 3],
+        help="Max AI model tier (1=Haiku, 2=Sonnet, 3=Opus)",
+    )
+    parser.add_argument(
+        "--validate-selectors",
+        action="store_true",
+        help="Validate learned selectors and exit",
+    )
     args = parser.parse_args()
+
+    if args.validate_selectors:
+        validate_selectors()
+        return
+
+    # Override AI settings if flags provided
+    if args.no_ai:
+        config.AI_FALLBACK_ENABLED = False
+    if args.ai_max_tier is not None:
+        from ai.config import TASK_MODEL_DEFAULTS
+
+        for task in TASK_MODEL_DEFAULTS.values():
+            task["max_tier"] = min(task["max_tier"], args.ai_max_tier)
 
     states = args.states.split(",") if args.states else None
 
@@ -157,6 +239,7 @@ def main() -> None:
         states=states,
         max_pages=args.max_pages,
     )
+    print_cost_summary()
     print(f"\nDone. {len(results)} total listings.")
 
 

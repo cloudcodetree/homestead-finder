@@ -1,0 +1,64 @@
+{
+  "state": "MT",
+  "state_name": "Montana",
+  "sale_type": "tax_deed",
+  "notes": "Tax deed state. County-by-county, mostly in-person auctions. DNRC Trust Lands catalog is the best online source.",
+  "last_updated": "2026-04-05",
+  "state_sources": [
+    {
+      "id": "MT-dnrc-trust-lands",
+      "type": "state_land_sale",
+      "name": "DNRC Trust Lands Catalog",
+      "url": "https://trustlandscatalog.dnrc.mt.gov/",
+      "platform": "state_website",
+      "notes": "Searchable catalog of state trust lands for sale",
+      "status": "active",
+      "last_verified": "2026-04-05"
+    },
+    {
+      "id": "MT-dnrc-land-banking",
+      "type": "state_land_sale",
+      "name": "DNRC Land Banking — State Lands for Sale",
+      "url": "http://dnrc.mt.gov/divisions/trust/real-estate/land-banking/state-lands-for-sale",
+      "platform": "state_website",
+      "notes": "Periodic disposals. Cabin/home site auctions.",
+      "status": "active",
+      "last_verified": "2026-04-05"
+    }
+  ],
+  "county_sources": [
+    {
+      "id": "MT-yellowstone-tax-deed",
+      "county": "Yellowstone",
+      "type": "tax_deed_sale",
+      "url": "https://www.yellowstonecountymt.gov/treasurer/TaxSales.asp",
+      "platform": "county_website",
+      "frequency": "annual",
+      "notes": "Largest county by population. Publishes tax sale lists online.",
+      "status": "active",
+      "last_verified": "2026-04-05"
+    },
+    {
+      "id": "MT-silver-bow-tax-deed",
+      "county": "Butte-Silver Bow",
+      "type": "tax_deed_sale",
+      "url": "https://co.silverbow.mt.us/2185/Tax-Deed-Auction",
+      "platform": "county_website",
+      "frequency": "annual",
+      "typical_month": "August",
+      "status": "active",
+      "last_verified": "2026-04-05"
+    },
+    {
+      "id": "MT-cascade-tax-deed",
+      "county": "Cascade",
+      "type": "tax_deed_sale",
+      "url": "https://www.cascadecountymt.gov/302/Treasurers-Office",
+      "platform": "county_website",
+      "frequency": "annual",
+      "notes": "Great Falls. Contact treasurer for sale list.",
+      "status": "active",
+      "last_verified": "2026-04-05"
+    }
+  ]
+}

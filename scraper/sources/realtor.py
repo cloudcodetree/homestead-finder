@@ -1,4 +1,5 @@
 """Realtor.com land scraper."""
+
 from __future__ import annotations
 
 import json
@@ -7,6 +8,10 @@ from typing import Any
 
 from .base import BaseScraper, RawListing
 from .landwatch import extract_features
+
+from logger import get_logger
+
+log = get_logger("scraper.realtor")
 
 
 class RealtorScraper(BaseScraper):
@@ -39,7 +44,7 @@ class RealtorScraper(BaseScraper):
                     break
 
         except Exception as e:
-            print(f"  [realtor] Error for {state}: {e}")
+            log.info(f"[realtor] Error for {state}: {e}")
 
         return results
 
@@ -64,7 +69,8 @@ class RealtorScraper(BaseScraper):
 
             return RawListing(
                 external_id=str(listing_id),
-                title=raw.get("list_price_last_change_amount") or f"{round(acreage)} Acres in {county}, {state}",
+                title=raw.get("list_price_last_change_amount")
+                or f"{round(acreage)} Acres in {county}, {state}",
                 price=float(price),
                 acreage=round(float(acreage), 2),
                 state=state,

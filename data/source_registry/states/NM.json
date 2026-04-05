@@ -1,0 +1,63 @@
+{
+  "state": "NM",
+  "state_name": "New Mexico",
+  "sale_type": "tax_deed",
+  "notes": "State-administered tax deed sales. NM Taxation & Revenue runs all auctions statewide — unique centralized system.",
+  "last_updated": "2026-04-05",
+  "state_sources": [
+    {
+      "id": "NM-ptd-auctions",
+      "type": "tax_deed_sale",
+      "name": "NM Property Tax Division — Delinquent Property Auctions",
+      "url": "https://www.tax.newmexico.gov/businesses/property-tax-overview/delinquent-property-tax-auctions/",
+      "platform": "state_website",
+      "notes": "Centralized state portal. Publishes PDF auction lists 25+ days before sale.",
+      "status": "active",
+      "last_verified": "2026-04-05"
+    },
+    {
+      "id": "NM-state-land-office",
+      "type": "state_land_sale",
+      "name": "NM State Land Office — Public Auctions",
+      "url": "https://www.nmstatelands.org/open-public-auctions/",
+      "platform": "state_website",
+      "notes": "9M surface acres, 13M mineral acres. Primarily leases, not sales.",
+      "status": "active",
+      "last_verified": "2026-04-05"
+    }
+  ],
+  "county_sources": [
+    {
+      "id": "NM-dona-ana-tax-deed",
+      "county": "Dona Ana",
+      "type": "tax_deed_sale",
+      "url": "https://www.donaana.gov/departments/elected_officials/treasurers_office/delinquent_property_tax_auctions.php",
+      "platform": "state_website",
+      "frequency": "annual",
+      "notes": "State-run auction at County Commission Chambers",
+      "status": "active",
+      "last_verified": "2026-04-05"
+    },
+    {
+      "id": "NM-valencia-tax-deed",
+      "county": "Valencia",
+      "type": "tax_deed_sale",
+      "url": "https://co.valencia.nm.us/226/Treasurer",
+      "platform": "bid4assets",
+      "frequency": "annual",
+      "notes": "Uses Bid4Assets for some sales",
+      "status": "active",
+      "last_verified": "2026-04-05"
+    },
+    {
+      "id": "NM-sandoval-tax-deed",
+      "county": "Sandoval",
+      "type": "tax_deed_sale",
+      "url": "https://www.sandovalcountynm.gov/elected-officials/county-treasurer/property-sales/",
+      "platform": "county_website",
+      "frequency": "annual",
+      "status": "active",
+      "last_verified": "2026-04-05"
+    }
+  ]
+}

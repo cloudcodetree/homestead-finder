@@ -1,4 +1,5 @@
 """County tax lien/deed sale scraper — uses Selenium for JS-heavy county sites."""
+
 from __future__ import annotations
 
 import re
@@ -7,11 +8,18 @@ from typing import Any
 from .base import BaseScraper, RawListing
 from .landwatch import extract_features
 
+from logger import get_logger
+
+log = get_logger("scraper.county_tax")
+
 # Counties known to post tax sale listings online
 # Extend this list as new counties are verified
 COUNTY_TAX_SALE_URLS: dict[str, list[dict[str, str]]] = {
     "MT": [
-        {"county": "Broadwater", "url": "https://broadwatercounty.mt.gov/treasurer/tax-sale"},
+        {
+            "county": "Broadwater",
+            "url": "https://broadwatercounty.mt.gov/treasurer/tax-sale",
+        },
         {"county": "Meagher", "url": "https://www.meaghercounty.org/treasurer"},
     ],
     "ID": [
@@ -54,22 +62,28 @@ class CountyTaxScraper(BaseScraper):
                             text = " ".join(c.get_text(strip=True) for c in cells)
                             # Look for price-like and acreage-like patterns
                             price_match = re.search(r"\$[\d,]+", text)
-                            acres_match = re.search(r"([\d.]+)\s*acres?", text, re.IGNORECASE)
+                            acres_match = re.search(
+                                r"([\d.]+)\s*acres?", text, re.IGNORECASE
+                            )
                             if price_match and acres_match:
-                                results.append({
-                                    "id": f"{county}_{len(results)}",
-                                    "title": f"Tax Sale — {county} County {state}",
-                                    "price": float(re.sub(r"[^\d.]", "", price_match.group())),
-                                    "acres": float(acres_match.group(1)),
-                                    "state": state,
-                                    "county": county,
-                                    "url": url,
-                                    "description": text[:500],
-                                    "source": "county_tax",
-                                })
+                                results.append(
+                                    {
+                                        "id": f"{county}_{len(results)}",
+                                        "title": f"Tax Sale — {county} County {state}",
+                                        "price": float(
+                                            re.sub(r"[^\d.]", "", price_match.group())
+                                        ),
+                                        "acres": float(acres_match.group(1)),
+                                        "state": state,
+                                        "county": county,
+                                        "url": url,
+                                        "description": text[:500],
+                                        "source": "county_tax",
+                                    }
+                                )
 
             except Exception as e:
-                print(f"  [county_tax] Error for {county}, {state}: {e}")
+                log.info(f"[county_tax] Error for {county}, {state}: {e}")
 
         return results
 

@@ -1,0 +1,160 @@
+{
+  "state": "WA",
+  "state_name": "Washington",
+  "sale_type": "tax_deed",
+  "notes": "Tax deed state (Treasurer's Deed). No lien certificates. 3 years delinquency triggers foreclosure. Bid4Assets is dominant platform (~11 counties). Some rural counties use GovEase or in-person.",
+  "last_updated": "2026-04-05",
+  "state_sources": [
+    {
+      "id": "WA-dnr-land-transactions",
+      "type": "state_land_sale",
+      "name": "WA DNR Land Transactions",
+      "url": "https://dnr.wa.gov/land-transactions",
+      "platform": "state_website",
+      "notes": "5.6M acres. Trust Land Transfer + Urban Transition programs. Infrequent, legislature-driven.",
+      "status": "active",
+      "last_verified": "2026-04-05"
+    },
+    {
+      "id": "WA-des-surplus",
+      "type": "state_surplus",
+      "name": "Dept of Enterprise Services — Properties for Sale",
+      "url": "https://des.wa.gov/services/real-estate/properties-sale",
+      "platform": "state_website",
+      "notes": "State surplus real property. Offered to govt entities first, then public.",
+      "status": "active",
+      "last_verified": "2026-04-05"
+    },
+    {
+      "id": "WA-wsdot-surplus",
+      "type": "state_surplus",
+      "name": "WSDOT Surplus Right-of-Way",
+      "url": "https://wsdot.wa.gov/business-wsdot/real-estate-services/current-sales-and-auctions",
+      "platform": "state_website",
+      "notes": "Small remnant parcels from highway projects. Auction map at wsdot.wa.gov/realestate/auction/map/",
+      "status": "active",
+      "last_verified": "2026-04-05"
+    },
+    {
+      "id": "WA-publicsurplus",
+      "type": "state_surplus",
+      "name": "WA State Surplus on PublicSurplus",
+      "url": "https://www.publicsurplus.com/sms/state,wa/browse/home",
+      "platform": "publicsurplus",
+      "notes": "WSAC partners with PublicSurplus for county surplus sales.",
+      "status": "active",
+      "last_verified": "2026-04-05"
+    },
+    {
+      "id": "WA-dor-county-directory",
+      "type": "reference",
+      "name": "WA Dept of Revenue — County Assessor & Treasurer Directory",
+      "url": "https://dor.wa.gov/taxes-rates/property-tax/county-assessor-and-treasurer-websites",
+      "platform": "state_website",
+      "notes": "Master list of all 39 county treasurer websites. Useful for discovery.",
+      "status": "active",
+      "last_verified": "2026-04-05"
+    }
+  ],
+  "county_sources": [
+    {
+      "id": "WA-yakima-tax-deed",
+      "county": "Yakima",
+      "type": "tax_deed_sale",
+      "url": "https://www.yakimacounty.us/345/ForeclosureDistraint",
+      "platform": "bid4assets",
+      "frequency": "annual",
+      "notes": "4,296 sq mi. Large agricultural county.",
+      "status": "active",
+      "last_verified": "2026-04-05"
+    },
+    {
+      "id": "WA-kittitas-tax-deed",
+      "county": "Kittitas",
+      "type": "tax_deed_sale",
+      "url": "https://www.co.kittitas.wa.us/treasurer/foreclosures.aspx",
+      "platform": "bid4assets",
+      "frequency": "annual",
+      "notes": "2,297 sq mi. Ellensburg area, ranching land.",
+      "status": "active",
+      "last_verified": "2026-04-05"
+    },
+    {
+      "id": "WA-okanogan-tax-deed",
+      "county": "Okanogan",
+      "type": "tax_deed_sale",
+      "url": "https://www.okanogancounty.gov/538/Foreclosure-Surplus-Tax-Title",
+      "platform": "county_website",
+      "frequency": "annual",
+      "notes": "Largest WA county (5,268 sq mi). Remote, rural.",
+      "status": "active",
+      "last_verified": "2026-04-05"
+    },
+    {
+      "id": "WA-stevens-tax-deed",
+      "county": "Stevens",
+      "type": "tax_deed_sale",
+      "url": "https://www.stevenscountywa.gov/pview.aspx?id=21023&catid=0",
+      "platform": "county_website",
+      "frequency": "annual",
+      "notes": "2,478 sq mi. NE Washington, forested.",
+      "status": "active",
+      "last_verified": "2026-04-05"
+    },
+    {
+      "id": "WA-klickitat-tax-deed",
+      "county": "Klickitat",
+      "type": "tax_deed_sale",
+      "url": "http://www.klickitatcountytreasurer.org/auctions.aspx",
+      "platform": "county_website",
+      "frequency": "annual",
+      "notes": "1,872 sq mi. Columbia River Gorge area.",
+      "status": "active",
+      "last_verified": "2026-04-05"
+    },
+    {
+      "id": "WA-lewis-tax-deed",
+      "county": "Lewis",
+      "type": "tax_deed_sale",
+      "url": "https://lewiscountywa.gov/offices/treasurer/tax-foreclosure-sale-information/",
+      "platform": "county_website",
+      "frequency": "annual",
+      "notes": "2,403 sq mi. Centralia/Chehalis area.",
+      "status": "active",
+      "last_verified": "2026-04-05"
+    },
+    {
+      "id": "WA-franklin-tax-deed",
+      "county": "Franklin",
+      "type": "tax_deed_sale",
+      "url": "https://www.franklincountywa.gov/411/Tax-Foreclosure-Sales",
+      "platform": "govease",
+      "frequency": "annual",
+      "notes": "Online via GovEase.",
+      "status": "active",
+      "last_verified": "2026-04-05"
+    },
+    {
+      "id": "WA-columbia-tax-deed",
+      "county": "Columbia",
+      "type": "tax_deed_sale",
+      "url": "https://www.columbiaco.com/531/Foreclosure",
+      "platform": "govease",
+      "frequency": "annual",
+      "notes": "Online via GovEase. Small rural county.",
+      "status": "active",
+      "last_verified": "2026-04-05"
+    },
+    {
+      "id": "WA-spokane-tax-deed",
+      "county": "Spokane",
+      "type": "tax_deed_sale",
+      "url": "https://www.spokanecounty.org/4162/Foreclosure-FAQs",
+      "platform": "bid4assets",
+      "frequency": "annual",
+      "notes": "Second largest WA city. High volume.",
+      "status": "active",
+      "last_verified": "2026-04-05"
+    }
+  ]
+}

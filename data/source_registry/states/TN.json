@@ -1,0 +1,65 @@
+{
+  "state": "TN",
+  "state_name": "Tennessee",
+  "sale_type": "redeemable_tax_deed",
+  "notes": "Redeemable tax deed state. Sales via Chancery Court Clerk and Master. GovEase handles many counties online.",
+  "last_updated": "2026-04-05",
+  "state_sources": [
+    {
+      "id": "TN-stream-surplus",
+      "type": "state_surplus",
+      "name": "STREAM — State Surplus Real Estate",
+      "url": "https://www.tn.gov/generalservices/stream/stream/surplus-real-estate/real-estate-for-sale.html",
+      "platform": "state_website",
+      "notes": "State surplus properties approved by Building Commission",
+      "status": "active",
+      "last_verified": "2026-04-05"
+    }
+  ],
+  "county_sources": [
+    {
+      "id": "TN-shelby-tax-deed",
+      "county": "Shelby",
+      "type": "tax_deed_sale",
+      "url": "https://www.shelbycountytrustee.com/108/Tax-Sale",
+      "platform": "county_website",
+      "frequency": "annual",
+      "notes": "Memphis. Largest TN county. Large volume of delinquent properties.",
+      "status": "active",
+      "last_verified": "2026-04-05"
+    },
+    {
+      "id": "TN-knox-tax-deed",
+      "county": "Knox",
+      "type": "tax_deed_sale",
+      "url": "https://www.knoxcounty.org/trustee/tax_sale.php",
+      "platform": "county_website",
+      "frequency": "annual",
+      "notes": "Knoxville. Online auction via Clerk and Master.",
+      "status": "active",
+      "last_verified": "2026-04-05"
+    },
+    {
+      "id": "TN-davidson-tax-deed",
+      "county": "Davidson",
+      "type": "tax_deed_sale",
+      "url": "https://chanceryclerkandmaster.nashville.gov/fees/delinquent-tax-sales/",
+      "platform": "county_website",
+      "frequency": "annual",
+      "notes": "Nashville metro delinquent tax sales",
+      "status": "active",
+      "last_verified": "2026-04-05"
+    },
+    {
+      "id": "TN-hamilton-tax-deed",
+      "county": "Hamilton",
+      "type": "tax_deed_sale",
+      "url": "https://www.hamiltontn.gov/Department_RealPropertyOffice.aspx",
+      "platform": "county_website",
+      "frequency": "periodic",
+      "notes": "Chattanooga. Real Property Office handles surplus/back-tax sales.",
+      "status": "active",
+      "last_verified": "2026-04-05"
+    }
+  ]
+}

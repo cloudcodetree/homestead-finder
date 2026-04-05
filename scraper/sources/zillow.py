@@ -1,4 +1,5 @@
 """Zillow land/lot scraper — rate-limited, use sparingly."""
+
 from __future__ import annotations
 
 import json
@@ -7,6 +8,10 @@ from typing import Any
 
 from .base import BaseScraper, RawListing
 from .landwatch import extract_features
+
+from logger import get_logger
+
+log = get_logger("scraper.zillow")
 
 
 class ZillowScraper(BaseScraper):
@@ -43,11 +48,14 @@ class ZillowScraper(BaseScraper):
 
             for item in search_results:
                 # Only land/lots
-                if item.get("hdpData", {}).get("homeInfo", {}).get("homeType") in ("LOT", "LAND"):
+                if item.get("hdpData", {}).get("homeInfo", {}).get("homeType") in (
+                    "LOT",
+                    "LAND",
+                ):
                     results.append(item)
 
         except Exception as e:
-            print(f"  [zillow] Error for {state}: {e}")
+            log.info(f"[zillow] Error for {state}: {e}")
 
         return results
 
@@ -70,7 +78,11 @@ class ZillowScraper(BaseScraper):
                 return None
 
             detail_url = raw.get("detailUrl", "")
-            full_url = detail_url if detail_url.startswith("http") else f"{self.BASE_URL}{detail_url}"
+            full_url = (
+                detail_url
+                if detail_url.startswith("http")
+                else f"{self.BASE_URL}{detail_url}"
+            )
             description = raw.get("statusText", "") + " " + raw.get("address", "")
 
             return RawListing(

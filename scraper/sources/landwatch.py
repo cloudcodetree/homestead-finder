@@ -1,10 +1,15 @@
 """LandWatch scraper — https://www.landwatch.com"""
+
 from __future__ import annotations
 
 import re
 from typing import Any
 
 from .base import BaseScraper, RawListing
+
+from logger import get_logger
+
+log = get_logger("scraper.landwatch")
 
 
 FEATURE_KEYWORDS: dict[str, list[str]] = {
@@ -22,7 +27,12 @@ FEATURE_KEYWORDS: dict[str, list[str]] = {
     "mineral_rights": ["mineral rights", "minerals included"],
     "no_hoa": ["no hoa", "no covenants", "no restrictions", "unrestricted"],
     "off_grid_ready": ["off-grid", "off grid", "solar", "self-sufficient"],
-    "owner_financing": ["owner financing", "owner will carry", "seller financing", "land contract"],
+    "owner_financing": [
+        "owner financing",
+        "owner will carry",
+        "seller financing",
+        "land contract",
+    ],
 }
 
 
@@ -43,6 +53,14 @@ class LandWatchScraper(BaseScraper):
     BASE_URL = "https://www.landwatch.com"
     RATE_LIMIT_SECONDS = 2.5
 
+    def get_page_urls(self, state: str, max_pages: int = 5) -> list[str]:
+        """Return search URLs for AI fallback."""
+        state_lower = state.lower()
+        return [
+            f"{self.BASE_URL}/land-for-sale/{state_lower}-land?page={p}&type=Land&pricemin=1000&acresmin=5"
+            for p in range(1, max_pages + 1)
+        ]
+
     def fetch(self, state: str, max_pages: int = 5) -> list[dict[str, Any]]:
         """Fetch land listings for a state via LandWatch search."""
         results = []
@@ -61,17 +79,23 @@ class LandWatchScraper(BaseScraper):
                 soup = self.parse_html(response.text)
 
                 # Parse listing cards from the page
-                cards = soup.select("[data-testid='property-card'], .property-card, article.listing")
+                cards = soup.select(
+                    "[data-testid='property-card'], .property-card, article.listing"
+                )
                 if not cards:
                     # Try JSON-LD structured data
                     import json
+
                     scripts = soup.find_all("script", type="application/ld+json")
                     for script in scripts:
                         try:
                             data = json.loads(script.string or "")
                             if isinstance(data, list):
                                 results.extend(data)
-                            elif isinstance(data, dict) and data.get("@type") == "ItemList":
+                            elif (
+                                isinstance(data, dict)
+                                and data.get("@type") == "ItemList"
+                            ):
                                 results.extend(data.get("itemListElement", []))
                         except (json.JSONDecodeError, AttributeError):
                             pass
@@ -83,7 +107,7 @@ class LandWatchScraper(BaseScraper):
                         results.append(listing)
 
             except Exception as e:
-                print(f"  [landwatch] Page {page} error for {state}: {e}")
+                log.info(f"[landwatch] Page {page} error for {state}: {e}")
                 break
 
         return results
@@ -91,11 +115,15 @@ class LandWatchScraper(BaseScraper):
     def _extract_card_data(self, card: Any, state: str) -> dict[str, Any] | None:
         """Extract data from a listing card element."""
         try:
-            title_el = card.select_one("h2, h3, .property-title, [data-testid='property-title']")
+            title_el = card.select_one(
+                "h2, h3, .property-title, [data-testid='property-title']"
+            )
             price_el = card.select_one(".price, [data-testid='price'], .listing-price")
             acres_el = card.select_one(".acres, [data-testid='acres'], .acreage")
             link_el = card.select_one("a[href]")
-            location_el = card.select_one(".location, .county, [data-testid='location']")
+            location_el = card.select_one(
+                ".location, .county, [data-testid='location']"
+            )
 
             if not (title_el and price_el and link_el):
                 return None

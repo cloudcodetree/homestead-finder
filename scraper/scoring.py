@@ -1,4 +1,5 @@
 """Deal scoring engine for homestead property listings."""
+
 from __future__ import annotations
 
 from typing import Any
@@ -6,13 +7,32 @@ from typing import Any
 # Regional median price per acre (USD) — update from USDA/NASS data annually
 # Source: USDA NASS Land Values Summary
 REGIONAL_MEDIANS: dict[str, float] = {
-    "MT": 450, "ID": 850, "WY": 500, "CO": 1200,
-    "NM": 600, "AZ": 800, "UT": 1100, "NV": 350,
-    "OR": 1500, "WA": 2000, "CA": 5000,
-    "TX": 2500, "OK": 1800, "KS": 2200, "NE": 3000,
-    "SD": 1500, "ND": 2000, "MN": 3500, "WI": 3000,
-    "MI": 2800, "ME": 1200, "VT": 2500, "NH": 3000,
-    "NY": 3000, "PA": 4000, "TN": 3000,
+    "MT": 450,
+    "ID": 850,
+    "WY": 500,
+    "CO": 1200,
+    "NM": 600,
+    "AZ": 800,
+    "UT": 1100,
+    "NV": 350,
+    "OR": 1500,
+    "WA": 2000,
+    "CA": 5000,
+    "TX": 2500,
+    "OK": 1800,
+    "KS": 2200,
+    "NE": 3000,
+    "SD": 1500,
+    "ND": 2000,
+    "MN": 3500,
+    "WI": 3000,
+    "MI": 2800,
+    "ME": 1200,
+    "VT": 2500,
+    "NH": 3000,
+    "NY": 3000,
+    "PA": 4000,
+    "TN": 3000,
     "__default__": 2000,
 }
 
@@ -38,6 +58,7 @@ FEATURE_VALUES: dict[str, int] = {
 # Source reliability / deal potential scores (max 10)
 SOURCE_SCORES: dict[str, int] = {
     "county_tax": 10,
+    "govease": 10,
     "auction": 9,
     "blm": 8,
     "landwatch": 6,
@@ -63,7 +84,27 @@ class ScoringEngine:
     def _price_score(self, property: dict[str, Any]) -> float:
         """Price per acre vs. regional median (0–40 points)."""
         price_per_acre = property.get("pricePerAcre", 0)
-        if price_per_acre <= 0:
+        acreage = property.get("acreage", 0)
+
+        # If acreage is unknown (0), score based on absolute price instead
+        # Tax sale listings often don't include acreage
+        if price_per_acre <= 0 or acreage <= 0:
+            price = property.get("price", 0)
+            if price <= 0:
+                return 0
+            # Low absolute price = likely good deal for tax sales
+            if price <= 500:
+                return 30
+            if price <= 2000:
+                return 25
+            if price <= 5000:
+                return 20
+            if price <= 15000:
+                return 15
+            if price <= 50000:
+                return 10
+            if price <= 100000:
+                return 5
             return 0
 
         state = property.get("location", {}).get("state", "__default__")

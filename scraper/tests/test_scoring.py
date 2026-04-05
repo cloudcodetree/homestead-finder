@@ -1,8 +1,10 @@
 """Tests for the deal scoring engine."""
+
 from __future__ import annotations
 
 import sys
 import os
+
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 import pytest
@@ -78,9 +80,20 @@ class TestFeatureScore:
         assert score == 8 + 4 + 2  # 14
 
     def test_feature_score_capped_at_30(self, engine: ScoringEngine) -> None:
-        prop = make_property(features=list(["water_well", "water_creek", "owner_financing",
-                                            "electric", "mineral_rights", "road_paved",
-                                            "structures", "off_grid_ready"]))
+        prop = make_property(
+            features=list(
+                [
+                    "water_well",
+                    "water_creek",
+                    "owner_financing",
+                    "electric",
+                    "mineral_rights",
+                    "road_paved",
+                    "structures",
+                    "off_grid_ready",
+                ]
+            )
+        )
         score = engine._feature_score(prop)
         assert score == 30
 
@@ -136,7 +149,7 @@ class TestScoreAll:
     def test_excellent_deal_scores_high(self, engine: ScoringEngine) -> None:
         """County tax sale, well below median, lots of features, long DOM."""
         prop = make_property(
-            price=450 * 0.20 * 120,   # 80% below MT median, 120 acres
+            price=450 * 0.20 * 120,  # 80% below MT median, 120 acres
             acreage=120,
             state="MT",
             features=["water_well", "water_creek", "timber", "hunting", "no_hoa"],
@@ -149,7 +162,7 @@ class TestScoreAll:
     def test_overpriced_deal_scores_low(self, engine: ScoringEngine) -> None:
         """Zillow listing 3x over median with no features."""
         prop = make_property(
-            price=450 * 3.0 * 5,   # 3x MT median, only 5 acres
+            price=450 * 3.0 * 5,  # 3x MT median, only 5 acres
             acreage=5,
             state="MT",
             features=[],

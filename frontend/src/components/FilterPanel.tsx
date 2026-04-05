@@ -1,4 +1,4 @@
-import { FilterState, PropertyFeature, FEATURE_LABELS, US_STATES } from '../types/property';
+import { FilterState, PropertyFeature, FEATURE_LABELS } from '../types/property';
 
 interface FilterPanelProps {
   filters: FilterState;
@@ -10,7 +10,24 @@ interface FilterPanelProps {
   resultCount: number;
 }
 
-const TARGET_STATES = ['MT', 'ID', 'WY', 'CO', 'NM', 'AZ', 'UT', 'OR', 'WA', 'TX', 'OK', 'TN', 'MN', 'WI', 'ME'];
+const TARGET_STATES = [
+  'AL',
+  'AZ',
+  'CO',
+  'ID',
+  'ME',
+  'MN',
+  'MT',
+  'NM',
+  'OK',
+  'OR',
+  'TN',
+  'TX',
+  'UT',
+  'WA',
+  'WI',
+  'WY',
+];
 
 export const FilterPanel = ({
   filters,
@@ -50,7 +67,7 @@ export const FilterPanel = ({
             max={100}
             step={5}
             value={filters.minDealScore}
-            onChange={e => onUpdateFilter('minDealScore', Number(e.target.value))}
+            onChange={(e) => onUpdateFilter('minDealScore', Number(e.target.value))}
             className="w-full accent-green-600"
           />
           <div className="flex justify-between text-xs text-gray-400 mt-1">
@@ -72,7 +89,7 @@ export const FilterPanel = ({
                 max={filters.maxPrice}
                 step={10000}
                 value={filters.minPrice}
-                onChange={e => onUpdateFilter('minPrice', Number(e.target.value))}
+                onChange={(e) => onUpdateFilter('minPrice', Number(e.target.value))}
                 className="w-full border border-gray-300 rounded px-2 py-1 text-sm mt-1 focus:ring-1 focus:ring-green-500 focus:outline-none"
                 placeholder="$0"
               />
@@ -84,7 +101,7 @@ export const FilterPanel = ({
                 min={filters.minPrice}
                 step={10000}
                 value={filters.maxPrice}
-                onChange={e => onUpdateFilter('maxPrice', Number(e.target.value))}
+                onChange={(e) => onUpdateFilter('maxPrice', Number(e.target.value))}
                 className="w-full border border-gray-300 rounded px-2 py-1 text-sm mt-1 focus:ring-1 focus:ring-green-500 focus:outline-none"
                 placeholder="$2M"
               />
@@ -100,7 +117,7 @@ export const FilterPanel = ({
               type="number"
               min={0}
               value={filters.minAcreage}
-              onChange={e => onUpdateFilter('minAcreage', Number(e.target.value))}
+              onChange={(e) => onUpdateFilter('minAcreage', Number(e.target.value))}
               className="w-full border border-gray-300 rounded px-2 py-1 text-sm focus:ring-1 focus:ring-green-500 focus:outline-none"
               placeholder="Min acres"
             />
@@ -109,7 +126,7 @@ export const FilterPanel = ({
               type="number"
               min={0}
               value={filters.maxAcreage}
-              onChange={e => onUpdateFilter('maxAcreage', Number(e.target.value))}
+              onChange={(e) => onUpdateFilter('maxAcreage', Number(e.target.value))}
               className="w-full border border-gray-300 rounded px-2 py-1 text-sm focus:ring-1 focus:ring-green-500 focus:outline-none"
               placeholder="Max acres"
             />
@@ -119,7 +136,8 @@ export const FilterPanel = ({
         {/* Max Price Per Acre */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
-            Max Price/Acre: <span className="text-green-600">${filters.maxPricePerAcre.toLocaleString()}</span>
+            Max Price/Acre:{' '}
+            <span className="text-green-600">${filters.maxPricePerAcre.toLocaleString()}</span>
           </label>
           <input
             type="range"
@@ -127,7 +145,7 @@ export const FilterPanel = ({
             max={10000}
             step={100}
             value={filters.maxPricePerAcre}
-            onChange={e => onUpdateFilter('maxPricePerAcre', Number(e.target.value))}
+            onChange={(e) => onUpdateFilter('maxPricePerAcre', Number(e.target.value))}
             className="w-full accent-green-600"
           />
           <div className="flex justify-between text-xs text-gray-400 mt-1">
@@ -141,7 +159,7 @@ export const FilterPanel = ({
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">States</label>
           <div className="flex flex-wrap gap-1.5">
-            {TARGET_STATES.map(state => (
+            {TARGET_STATES.map((state) => (
               <button
                 key={state}
                 onClick={() => onToggleState(state)}
@@ -159,9 +177,11 @@ export const FilterPanel = ({
 
         {/* Features */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">Features (must have all)</label>
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            Features (must have all)
+          </label>
           <div className="space-y-1.5">
-            {(Object.keys(FEATURE_LABELS) as PropertyFeature[]).map(feature => (
+            {(Object.keys(FEATURE_LABELS) as PropertyFeature[]).map((feature) => (
               <label key={feature} className="flex items-center gap-2 cursor-pointer">
                 <input
                   type="checkbox"

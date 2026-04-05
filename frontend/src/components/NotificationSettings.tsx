@@ -38,7 +38,9 @@ export const NotificationSettings = ({ onClose }: NotificationSettingsProps) => 
       <div className="bg-white rounded-xl shadow-2xl w-full max-w-md">
         <div className="p-5 border-b border-gray-100 flex items-center justify-between">
           <h2 className="font-bold text-gray-900">Deal Notifications</h2>
-          <button onClick={onClose} className="text-gray-400 hover:text-gray-600 text-xl">✕</button>
+          <button onClick={onClose} className="text-gray-400 hover:text-gray-600 text-xl">
+            ✕
+          </button>
         </div>
 
         <div className="p-5 space-y-4">
@@ -48,7 +50,7 @@ export const NotificationSettings = ({ onClose }: NotificationSettingsProps) => 
               <p className="text-sm text-gray-500">Get notified when hot deals appear</p>
             </div>
             <button
-              onClick={() => setPrefs(p => ({ ...p, enabled: !p.enabled }))}
+              onClick={() => setPrefs((p) => ({ ...p, enabled: !p.enabled }))}
               className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
                 prefs.enabled ? 'bg-green-600' : 'bg-gray-200'
               }`}
@@ -64,11 +66,13 @@ export const NotificationSettings = ({ onClose }: NotificationSettingsProps) => 
           {prefs.enabled && (
             <>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Email Address
+                </label>
                 <input
                   type="email"
                   value={prefs.email}
-                  onChange={e => setPrefs(p => ({ ...p, email: e.target.value }))}
+                  onChange={(e) => setPrefs((p) => ({ ...p, email: e.target.value }))}
                   placeholder="you@example.com"
                   className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-green-500 focus:outline-none"
                 />
@@ -84,7 +88,7 @@ export const NotificationSettings = ({ onClose }: NotificationSettingsProps) => 
                   max={100}
                   step={5}
                   value={prefs.minScore}
-                  onChange={e => setPrefs(p => ({ ...p, minScore: Number(e.target.value) }))}
+                  onChange={(e) => setPrefs((p) => ({ ...p, minScore: Number(e.target.value) }))}
                   className="w-full accent-green-600"
                 />
                 <div className="flex justify-between text-xs text-gray-400 mt-1">
@@ -97,8 +101,9 @@ export const NotificationSettings = ({ onClose }: NotificationSettingsProps) => 
           )}
 
           <p className="text-xs text-gray-400 bg-gray-50 rounded p-3">
-            Notifications are sent via the GitHub Actions scraper. Your email is stored locally
-            and must also be configured as the <code>NOTIFICATION_EMAIL</code> secret in the GitHub repo.
+            Notifications are sent via the GitHub Actions scraper. Your email is stored locally and
+            must also be configured as the <code>NOTIFICATION_EMAIL</code> secret in the GitHub
+            repo.
           </p>
         </div>
 
