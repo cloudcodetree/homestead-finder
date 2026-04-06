@@ -10,7 +10,10 @@ A tool that periodically scrapes land and property listings nationwide, scores t
 
 - **Multi-source scraping** — LandWatch, Lands of America, county tax sales, BLM, auction sites
 - **Deal scoring** — 0–100 score based on price vs. regional median, features, days on market
-- **Interactive dashboard** — Map view + list view with filters (price, acreage, state, features)
+- **Interactive dashboard** — Map view + list view with collapsible filters (price, acreage, state, features)
+- **Sort listings** — By deal score, price, price/acre, acreage, or recency
+- **Validation status** — Each listing shows a Verified / Unverified / Expired badge; URL is displayed with a copy button
+- **Mobile-friendly** — Filter drawer slides in from the left; floating "Filters (N)" button shows active filter count
 - **Email alerts** — Notified via SendGrid when new deals score ≥ 75
 - **Automated** — GitHub Actions runs the scraper daily at 6am UTC
 

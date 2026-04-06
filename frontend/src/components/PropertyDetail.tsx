@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Property, FEATURE_LABELS } from '../types/property';
 import {
   formatPrice,
@@ -13,8 +14,39 @@ interface PropertyDetailProps {
   onClose: () => void;
 }
 
+const ValidationBadge = ({ status }: { status?: Property['status'] }) => {
+  const s = status ?? 'unverified';
+  if (s === 'active') {
+    return (
+      <span className="inline-flex items-center gap-1 rounded-full bg-green-50 border border-green-200 px-2 py-0.5 text-xs font-medium text-green-700">
+        ✓ Verified
+      </span>
+    );
+  }
+  if (s === 'expired') {
+    return (
+      <span className="inline-flex items-center gap-1 rounded-full bg-red-50 border border-red-200 px-2 py-0.5 text-xs font-medium text-red-600">
+        ✗ Expired
+      </span>
+    );
+  }
+  return (
+    <span className="inline-flex items-center gap-1 rounded-full bg-yellow-50 border border-yellow-200 px-2 py-0.5 text-xs font-medium text-yellow-700">
+      ⚠ Unverified
+    </span>
+  );
+};
+
 export const PropertyDetail = ({ property, onClose }: PropertyDetailProps) => {
   const scoreColor = getDealScoreColor(property.dealScore);
+  const [copied, setCopied] = useState(false);
+
+  const copyUrl = () => {
+    navigator.clipboard.writeText(property.url).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    });
+  };
 
   return (
     <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black/50">
@@ -28,6 +60,7 @@ export const PropertyDetail = ({ property, onClose }: PropertyDetailProps) => {
             </p>
           </div>
           <div className="flex items-center gap-2 flex-shrink-0">
+            <ValidationBadge status={property.status} />
             <div className={`rounded-full px-3 py-1 text-sm font-bold ${scoreColor}`}>
               {property.dealScore} — {getDealScoreLabel(property.dealScore)}
             </div>
@@ -118,15 +151,61 @@ export const PropertyDetail = ({ property, onClose }: PropertyDetailProps) => {
             )}
           </div>
 
+          {/* Listing URL */}
+          <div className="border-t border-gray-100 pt-4">
+            <p className="text-gray-500 text-xs mb-1">Listing URL</p>
+            <div className="flex items-center gap-2 min-w-0">
+              <a
+                href={property.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                title={property.url}
+                className="text-blue-600 hover:underline text-sm truncate min-w-0 flex-1"
+              >
+                {property.url}
+              </a>
+              <button
+                onClick={copyUrl}
+                title="Copy URL"
+                className="flex-shrink-0 text-gray-400 hover:text-gray-600 transition-colors"
+              >
+                {copied ? (
+                  <span className="text-xs text-green-600 font-medium whitespace-nowrap">Copied!</span>
+                ) : (
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                  </svg>
+                )}
+              </button>
+            </div>
+          </div>
+
           {/* CTA */}
-          <a
-            href={property.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="block w-full text-center bg-green-600 hover:bg-green-700 text-white font-semibold py-3 rounded-lg transition-colors"
-          >
-            View Full Listing →
-          </a>
+          <div>
+            {property.status === 'unverified' && (
+              <p className="text-xs text-yellow-700 text-center mb-2">
+                ⚠ Sample listing — link may not work
+              </p>
+            )}
+            {property.status === 'expired' && (
+              <p className="text-xs text-red-600 text-center mb-2">
+                ✗ This listing has expired or is no longer available
+              </p>
+            )}
+            <a
+              href={property.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={`block w-full text-center font-semibold py-3 rounded-lg transition-colors ${
+                property.status === 'expired'
+                  ? 'bg-gray-200 text-gray-500'
+                  : 'bg-green-600 hover:bg-green-700 text-white'
+              }`}
+            >
+              View Full Listing →
+            </a>
+          </div>
         </div>
       </div>
     </div>

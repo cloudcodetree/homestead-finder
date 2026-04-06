@@ -8,6 +8,8 @@ interface FilterPanelProps {
   onReset: () => void;
   hasActiveFilters: boolean;
   resultCount: number;
+  /** When true, the panel's built-in header is suppressed (parent renders its own) */
+  hideHeader?: boolean;
 }
 
 const TARGET_STATES = [
@@ -37,23 +39,26 @@ export const FilterPanel = ({
   onReset,
   hasActiveFilters,
   resultCount,
+  hideHeader = false,
 }: FilterPanelProps) => {
   return (
-    <div className="bg-white border-r border-gray-200 h-full overflow-y-auto">
-      <div className="p-4 border-b border-gray-100 flex items-center justify-between sticky top-0 bg-white z-10">
-        <div>
-          <h2 className="font-semibold text-gray-900">Filters</h2>
-          <p className="text-xs text-gray-500">{resultCount} properties</p>
+    <div className="bg-white h-full">
+      {!hideHeader && (
+        <div className="p-4 border-b border-gray-100 flex items-center justify-between sticky top-0 bg-white z-10">
+          <div>
+            <h2 className="font-semibold text-gray-900">Filters</h2>
+            <p className="text-xs text-gray-500">{resultCount} properties</p>
+          </div>
+          {hasActiveFilters && (
+            <button
+              onClick={onReset}
+              className="text-xs text-green-600 hover:text-green-700 font-medium"
+            >
+              Clear all
+            </button>
+          )}
         </div>
-        {hasActiveFilters && (
-          <button
-            onClick={onReset}
-            className="text-xs text-green-600 hover:text-green-700 font-medium"
-          >
-            Clear all
-          </button>
-        )}
-      </div>
+      )}
 
       <div className="p-4 space-y-6">
         {/* Deal Score */}

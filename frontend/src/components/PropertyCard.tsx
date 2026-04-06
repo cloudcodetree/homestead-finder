@@ -1,11 +1,5 @@
 import { Property, FEATURE_LABELS } from '../types/property';
-import {
-  formatPrice,
-  formatAcreage,
-  formatPricePerAcre,
-  formatDaysAgo,
-  formatSourceName,
-} from '../utils/formatters';
+import { formatPrice, formatAcreage, formatPricePerAcre, formatDaysAgo, formatSourceName } from '../utils/formatters';
 import { getDealScoreColor, getDealScoreLabel, getDealScoreBorderColor } from '../utils/scoring';
 
 interface PropertyCardProps {
@@ -14,28 +8,32 @@ interface PropertyCardProps {
   isSelected?: boolean;
 }
 
-const extractFromDescription = (description: string, field: string): string => {
-  const match = description.match(new RegExp(`${field}:\\s*([^.]+)`));
-  return match ? match[1].trim() : '';
-};
-
-const getSaleTypeBadge = (description: string): { label: string; className: string } | null => {
-  const type = extractFromDescription(description, 'Type');
-  if (!type) return null;
-  if (type.toLowerCase().includes('lien'))
-    return { label: 'Tax Lien', className: 'bg-blue-50 text-blue-700 border-blue-200' };
-  if (type.toLowerCase().includes('deed'))
-    return { label: 'Tax Deed', className: 'bg-purple-50 text-purple-700 border-purple-200' };
-  if (type.toLowerCase().includes('foreclosure'))
-    return { label: 'Foreclosure', className: 'bg-red-50 text-red-700 border-red-200' };
-  return { label: type, className: 'bg-gray-50 text-gray-700 border-gray-200' };
+const ValidationBadge = ({ status }: { status?: Property['status'] }) => {
+  const s = status ?? 'unverified';
+  if (s === 'active') {
+    return (
+      <span className="inline-flex items-center gap-0.5 rounded-full bg-green-50 border border-green-200 px-1.5 py-0.5 text-xs font-medium text-green-700">
+        ✓ Verified
+      </span>
+    );
+  }
+  if (s === 'expired') {
+    return (
+      <span className="inline-flex items-center gap-0.5 rounded-full bg-red-50 border border-red-200 px-1.5 py-0.5 text-xs font-medium text-red-600">
+        ✗ Expired
+      </span>
+    );
+  }
+  return (
+    <span className="inline-flex items-center gap-0.5 rounded-full bg-yellow-50 border border-yellow-200 px-1.5 py-0.5 text-xs font-medium text-yellow-700">
+      ⚠ Unverified
+    </span>
+  );
 };
 
 export const PropertyCard = ({ property, onClick, isSelected = false }: PropertyCardProps) => {
   const scoreColor = getDealScoreColor(property.dealScore);
   const scoreBorder = getDealScoreBorderColor(property.dealScore);
-  const parcel = extractFromDescription(property.description ?? '', 'Parcel');
-  const saleType = getSaleTypeBadge(property.description ?? '');
 
   return (
     <div
@@ -50,62 +48,46 @@ export const PropertyCard = ({ property, onClick, isSelected = false }: Property
             {property.title}
           </h3>
           <p className="text-xs text-gray-500 mt-0.5">
-            {property.location.county} County, {property.location.state} &middot;{' '}
-            {formatSourceName(property.source)}
+            {property.location.county} County, {property.location.state} &middot; {formatSourceName(property.source)}
           </p>
-          {parcel && (
-            <p className="text-xs text-gray-400 mt-0.5 font-mono truncate">Parcel: {parcel}</p>
-          )}
         </div>
-        <div className={`flex-shrink-0 rounded-full px-2 py-1 text-xs font-bold ${scoreColor}`}>
-          {property.dealScore}
+        <div className="flex flex-col items-end gap-1 flex-shrink-0">
+          <div className={`rounded-full px-2 py-1 text-xs font-bold ${scoreColor}`}>
+            {property.dealScore}
+          </div>
+          <ValidationBadge status={property.status} />
         </div>
       </div>
 
       <div className="mt-3 flex items-center gap-4">
         <div>
           <p className="text-lg font-bold text-gray-900">{formatPrice(property.price)}</p>
-          <p className="text-xs text-gray-500">
-            {formatPricePerAcre(property.pricePerAcre) || 'Face value'}
-          </p>
+          <p className="text-xs text-gray-500">{formatPricePerAcre(property.pricePerAcre)}</p>
         </div>
-        {property.acreage > 0 && (
-          <>
-            <div className="text-gray-300">|</div>
-            <div>
-              <p className="text-base font-semibold text-gray-700">
-                {formatAcreage(property.acreage)}
-              </p>
-            </div>
-          </>
-        )}
-        <div className="ml-auto">
+        <div className="text-gray-300">|</div>
+        <div>
+          <p className="text-base font-semibold text-gray-700">{formatAcreage(property.acreage)}</p>
           <p className="text-xs text-gray-500">{getDealScoreLabel(property.dealScore)}</p>
         </div>
       </div>
 
-      <div className="mt-2 flex flex-wrap gap-1">
-        {saleType && (
-          <span
-            className={`inline-block rounded px-1.5 py-0.5 text-xs border font-medium ${saleType.className}`}
-          >
-            {saleType.label}
-          </span>
-        )}
-        {property.features.slice(0, 3).map((feature) => (
-          <span
-            key={feature}
-            className="inline-block rounded bg-green-50 px-1.5 py-0.5 text-xs text-green-700 border border-green-200"
-          >
-            {FEATURE_LABELS[feature]}
-          </span>
-        ))}
-        {property.features.length > 3 && (
-          <span className="inline-block rounded bg-gray-100 px-1.5 py-0.5 text-xs text-gray-500">
-            +{property.features.length - 3}
-          </span>
-        )}
-      </div>
+      {property.features.length > 0 && (
+        <div className="mt-2 flex flex-wrap gap-1">
+          {property.features.slice(0, 4).map(feature => (
+            <span
+              key={feature}
+              className="inline-block rounded bg-green-50 px-1.5 py-0.5 text-xs text-green-700 border border-green-200"
+            >
+              {FEATURE_LABELS[feature]}
+            </span>
+          ))}
+          {property.features.length > 4 && (
+            <span className="inline-block rounded bg-gray-100 px-1.5 py-0.5 text-xs text-gray-500">
+              +{property.features.length - 4}
+            </span>
+          )}
+        </div>
+      )}
 
       <p className="mt-2 text-xs text-gray-400">{formatDaysAgo(property.dateFound)}</p>
     </div>

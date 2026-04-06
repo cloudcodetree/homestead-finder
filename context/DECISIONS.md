@@ -195,6 +195,29 @@ Daily budget cap: $1.00/run. Cost tracked in `data/ai_costs.json`.
 
 ---
 
+## ADR-011: Client-Side Validation Badges, Server-Side URL Checking
+
+**Date:** 2026-04-06
+**Status:** Accepted
+
+**Context:** Users need to know whether a listing URL is still live (active), has gone 404 (expired), or hasn't been checked yet (unverified). The React frontend is static (GitHub Pages) and cannot make cross-origin HTTP requests to arbitrary listing URLs due to browser CORS policy. A proxy or serverless function would add infrastructure complexity.
+
+**Decision:** Split the validation concern in two:
+
+1. **Frontend (done now):** Display-only status badges on each card and in the detail view. The `Property` type gains `validated?: boolean`, `validatedAt?: string`, and `status?: "active" | "expired" | "unverified"`. The `validateListingUrl()` utility in `frontend/src/utils/validation.ts` is a documented stub — it exists for the future but does nothing client-side.
+
+2. **Backend (future):** The Python scraper (`scraper/utils/validator.py`, not yet built) will issue HTTP HEAD requests against each listing URL and write `validated`, `validatedAt`, and `status` back to `listings.json` as part of the daily scrape run.
+
+**Consequences:**
+- (+) Zero added infrastructure — validation piggybacks on the existing GitHub Actions scraper
+- (+) Frontend already has the full UI ready to consume validation data
+- (+) No CORS issues — scraper runs server-side in GitHub Actions
+- (-) Validation data is at most 24 hours fresh (only updated on scrape runs)
+- (-) New listings start as `unverified` until the next scrape cycle validates them
+- (?) May want configurable re-validation interval (e.g., check active listings every 7 days, expired ones monthly)
+
+---
+
 ## Template for New ADRs
 
 ```markdown

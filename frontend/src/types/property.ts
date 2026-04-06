@@ -38,6 +38,9 @@ export interface Property {
   description?: string;
   daysOnMarket?: number;
   imageUrl?: string;
+  validated?: boolean;
+  validatedAt?: string;
+  status?: 'active' | 'expired' | 'unverified';
 }
 
 export interface FilterState {

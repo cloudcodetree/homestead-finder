@@ -17,6 +17,7 @@
     "url": "https://www.landwatch.com/listing/101",
     "dateFound": "2024-01-10",
     "dealScore": 87,
+    "status": "unverified",
     "description": "Stunning 80-acre parcel with a year-round creek running through the northwest corner. Heavily timbered with mixed ponderosa pine and fir. Dirt road access to the property. No HOA or covenants. Incredible hunting — elk, deer, and turkey. This is a rare find at this price per acre.",
     "daysOnMarket": 142
   },
@@ -38,6 +39,7 @@
     "url": "https://www.landwatch.com/listing/205",
     "dateFound": "2024-01-08",
     "dealScore": 82,
+    "status": "unverified",
     "description": "40 acres of flat to gently rolling pasture land with existing water well and power to the property line. Owner will finance with 20% down at 6% for qualified buyers. Stunning views of the Lost River Range. Ideal for livestock or building a homestead.",
     "daysOnMarket": 95
   },
@@ -59,6 +61,7 @@
     "url": "https://broadwatercounty.mt.gov/tax-sales/304",
     "dateFound": "2024-01-12",
     "dealScore": 91,
+    "status": "unverified",
     "description": "County tax deed sale. 120 acres with seasonal creek, mixed timber, and included mineral rights. Borders National Forest on two sides. Access via county-maintained dirt road. Bidding starts at $72,000 — significantly below assessed value of $145,000.",
     "daysOnMarket": 30
   },
@@ -80,6 +83,7 @@
     "url": "https://www.landsofamerica.com/property/507",
     "dateFound": "2024-01-09",
     "dealScore": 74,
+    "status": "unverified",
     "description": "55 acres of prime Oklahoma pasture with a 3-acre stocked pond. Existing structures include a metal hay barn (40x60), equipment shed, and an older farmhouse needing renovation. Paved road frontage. Rural electric and septic already in place.",
     "daysOnMarket": 67
   },
@@ -101,6 +105,7 @@
     "url": "https://www.zillow.com/homes/889",
     "dateFound": "2024-01-11",
     "dealScore": 52,
+    "status": "unverified",
     "description": "5 acres in the San Luis Valley with 360-degree mountain views. Off-grid subdivision — solar and propane are typical utilities. Dirt road access maintained by HOA. Popular area for tiny homes and yurts. Year-round access.",
     "daysOnMarket": 14
   },
@@ -122,6 +127,7 @@
     "url": "https://www.blm.gov/sale/wy-012",
     "dateFound": "2024-01-07",
     "dealScore": 78,
+    "status": "unverified",
     "description": "160-acre parcel adjacent to 50,000+ acres of BLM land. Effectively private with unlimited access to public land. Prong horn and mule deer hunting. Mineral rights included. This is as remote as it gets — 30 miles from nearest town. Seller financing available.",
     "daysOnMarket": 210
   },
@@ -151,6 +157,7 @@
     "url": "https://www.realtor.com/realestateandhomes-detail/441",
     "dateFound": "2024-01-06",
     "dealScore": 68,
+    "status": "unverified",
     "description": "87 acres of prime northwoods timber with a 2-bed 1-bath cabin, drilled well, and electric. 3-acre bass pond stocked annually. Paved road to property. Adjacent to state forest. Cabin needs some updating but is liveable year-round. Wood heat plus electric baseboard.",
     "daysOnMarket": 88
   },
@@ -172,6 +179,7 @@
     "url": "https://www.hubzu.com/property/223",
     "dateFound": "2024-01-13",
     "dealScore": 85,
+    "status": "unverified",
     "description": "Bank-owned foreclosure auction. 320 acres of native grassland in the Texas Panhandle. Historically used for cattle grazing. Mineral rights included. Low per-acre price reflects remote location and lack of improvements. Great long-term hold. Auction ends Jan 25.",
     "daysOnMarket": 45
   },
@@ -193,6 +201,7 @@
     "url": "https://www.landwatch.com/listing/667",
     "dateFound": "2024-01-05",
     "dealScore": 63,
+    "status": "unverified",
     "description": "25 acres in the rolling hills of East Tennessee. Year-round creek, mixed hardwood timber, and paved road frontage. Surveyed and perc tested. No restrictions. Ideal homestead site — mild climate, good rainfall, close to Chattanooga.",
     "daysOnMarket": 55
   },
@@ -221,6 +230,7 @@
     "url": "https://www.landwatch.com/listing/891",
     "dateFound": "2024-01-03",
     "dealScore": 79,
+    "status": "unverified",
     "description": "640 acres (1 section) of remote New Mexico ranch land in the Gila country. Existing water well, small cabin structure, and solar setup. Borders Gila National Forest. Excellent elk, deer, and bear hunting. Very remote — 40 miles from Reserve. Owner has held 30+ years.",
     "daysOnMarket": 178
   }

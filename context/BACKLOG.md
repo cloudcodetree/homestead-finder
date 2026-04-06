@@ -18,6 +18,13 @@
 
 ## P1 — Next Session
 
+- [ ] **Server-side URL validation in scraper**
+  - Add `scraper/utils/validator.py` — HTTP HEAD requests against listing URLs
+  - Write `validated`, `validatedAt`, `status` fields back to each listing in `listings.json`
+  - Mark new listings as `status: "unverified"` by default
+  - Re-validate existing listings periodically (e.g., every 7 days)
+  - See ADR-007 for architecture rationale
+
 - [ ] **Geocoding for listings without lat/lng**
   - Use Nominatim (free OpenStreetMap geocoder)
   - Add `scraper/utils/geocoder.py`
@@ -98,15 +105,24 @@
 - [ ] AI-generated listing summary/red-flags
 - [ ] Water rights database lookup (state-specific)
 - [ ] Dark mode
+- [ ] Filter by validation status (show only Verified, hide Expired)
 
 ---
 
 ## Completed
 
 - [x] Project scaffolding (2024-01-15)
-- [x] Frontend: Dashboard, Map, List, Filters, PropertyDetail, Notifications
-- [x] Scraper: Base class, 7 sources, scoring engine, notifier
-- [x] GitHub Actions: scrape cron, Pages deploy, test CI
-- [x] Claude Code config: CLAUDE.md, skills, agents, commands, hooks
-- [x] Rolling context system (this file + ROLLING_CONTEXT.md + DECISIONS.md)
-- [x] DevContainer for Codespaces
+- [x] Frontend: Dashboard, Map, List, Filters, PropertyDetail, Notifications (2024-01-15)
+- [x] Scraper: Base class, 7 sources, scoring engine, notifier (2024-01-15)
+- [x] GitHub Actions: scrape cron, Pages deploy, test CI (2024-01-15)
+- [x] Claude Code config: CLAUDE.md, skills, agents, commands, hooks (2024-01-15)
+- [x] Rolling context system (this file + ROLLING_CONTEXT.md + DECISIONS.md) (2024-01-15)
+- [x] DevContainer for Codespaces (2024-01-15)
+- [x] Listing validation system — `validated`, `validatedAt`, `status` fields on Property type (2026-04-06)
+- [x] Validation status badges (Verified / Unverified / Expired) on PropertyCard and PropertyDetail (2026-04-06)
+- [x] URL display on PropertyDetail — clickable link, copy button, tooltip (2026-04-06)
+- [x] `validateListingUrl` utility stub in `frontend/src/utils/validation.ts` (2026-04-06)
+- [x] Sample listings marked `status: "unverified"` (2026-04-06)
+- [x] Collapsible desktop filter sidebar with smooth CSS transition (2026-04-06)
+- [x] Mobile filter drawer (slide-from-left, backdrop, floating FAB button) (2026-04-06)
+- [x] Sort-by dropdown in list view (6 sort options) (2026-04-06)

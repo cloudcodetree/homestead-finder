@@ -11,8 +11,8 @@
 | Item | Status |
 |------|--------|
 | Last Updated | 2026-04-06 |
-| Current Phase | Adaptive scraping system built, testing against live sites |
-| Dashboard | Working locally (Vite dev server), builds clean |
+| Current Phase | UI polish + validation system added on top of adaptive scraping |
+| Dashboard | Working locally; builds clean; validation badges, collapsible filters, sort-by added |
 | Scraper | Adaptive strategy chain built (HTTP→Playwright→Firecrawl→Claude AI) |
 | GitHub Pages | Not yet enabled in repo settings |
 | Data | Sample data only — real scraping blocked by Cloudflare on main sources |
@@ -34,6 +34,13 @@
 - Claude Code config (.claude/ with skills, agents, commands)
 - TypeScript build errors fixed (Dashboard, FilterPanel, MapView)
 - scrape.yml push step fixed (was using placeholder action)
+- **Listing validation UI** — `validated`, `validatedAt`, `status` fields on Property type; status badges (Verified / Unverified / Expired) on PropertyCard and PropertyDetail
+- **URL display on PropertyDetail** — Clickable truncated link, clipboard copy button with "Copied!" feedback, tooltip showing full URL
+- **Validation utility stub** — `frontend/src/utils/validation.ts` with `validateListingUrl()` stub + CORS explanation comment
+- **Collapsible desktop filter sidebar** — `‹/›` toggle, smooth `transition-[width]` CSS animation to 40px strip
+- **Mobile filter drawer** — Slides from left with backdrop overlay; floating green FAB "Filters (N)" button
+- **Sort-by dropdown** — 6 sort options (Best Deal, Price, Price/Acre, Acreage, Newest); persists in state
+- Sample data: all 10 listings marked `status: "unverified"`
 
 ### Not Yet Done
 - [ ] Real listing data flowing (need Firecrawl or Anthropic API key to bypass Cloudflare)
@@ -42,6 +49,7 @@
 - [ ] BLM URLs updated (currently 404 — site restructured)
 - [ ] County tax URLs audited (most are dead)
 - [ ] Geocoding for listings without lat/lng
+- [ ] Real server-side URL validation in scraper (see ADR-011)
 
 ---
 
@@ -59,15 +67,6 @@
 
 ---
 
-## Architecture Decisions Made This Session
-
-- **ADR-007**: Playwright over Selenium for browser strategy (faster, better anti-detection, same binary serves dev + CI)
-- **ADR-008**: AI learning pipeline with cached selectors — AI discovers CSS selectors on first failure, caches them for subsequent runs at zero cost
-- **ADR-009**: Model escalation chain (Haiku→Sonnet→Opus) with per-task tier caps and daily budget limits
-- **ADR-010**: Structured logging via Python `logging` module to both stdout and `data/scraper.log`
-
----
-
 ## Open Questions
 
 1. **API keys needed** — Firecrawl and/or Anthropic API keys to activate fallback strategies
@@ -75,10 +74,37 @@
 3. **BLM URLs** — need to find current blm.gov URL structure
 4. **County tax coverage** — most hardcoded URLs are dead. Consider a different approach (state-level databases?)
 5. **Geocoding** — still needed. Nominatim is free.
+6. **URL validation cadence** — How often should the scraper re-validate existing listing URLs? Daily? Only on scrape runs?
+
+---
+
+## Current Priorities (see BACKLOG.md for full list)
+
+1. **Get real data flowing** — Set up FIRECRAWL_API_KEY or ANTHROPIC_API_KEY in GitHub secrets
+2. **Enable GitHub Pages** — Repo Settings → Pages → Source: GitHub Actions
+3. **Update BLM URLs** — Find current blm.gov land sale URL structure
+4. **Add geocoding** — Most scrapers don't return lat/lng (Nominatim is free)
+5. **Implement server-side URL validation** — Add `scraper/utils/validator.py`, write `validated`/`validatedAt`/`status` back to listings (see ADR-011)
 
 ---
 
 ## Recent Sessions
+
+### Session 4 — 2026-04-06
+**What was done:** UI feature additions — listing validation system, collapsible filters, sort-by.
+- Added `validated`, `validatedAt`, `status` fields to `Property` type
+- All 10 sample listings marked `status: "unverified"`
+- Created `frontend/src/utils/validation.ts` stub with CORS limitation comment
+- Added `ValidationBadge` to `PropertyCard` and `PropertyDetail`
+- Added URL display section to `PropertyDetail` (clickable link, clipboard copy, tooltip)
+- Updated "View Full Listing" CTA: unverified warning, expired gray styling
+- Collapsible desktop sidebar: `‹/›` toggle, smooth CSS width transition to 40px strip
+- Mobile filter drawer: slides from left with backdrop, floating FAB "Filters (N active)"
+- `FilterPanel` gained `hideHeader` prop
+- Sort-by dropdown in list view: 6 options, state-managed, applies immediately
+- Updated BACKLOG, DECISIONS (ADR-011), README
+
+**Decisions made:** ADR-011 — split URL validation between frontend badges (now) and server-side scraper (future, avoids CORS).
 
 ### Session 3 — 2026-04-06
 **What was done:** Debugged "0 listings" on GitHub Pages.
@@ -100,18 +126,6 @@
 - Tested against live sites — Cloudflare blocks HTTP and headless browser on LandWatch
 - Updated CI/CD with Chrome setup, new secrets, cost artifact upload
 
-**Decisions made:**
-- Use Playwright instead of Selenium (better anti-detection, headless shell works in containers)
-- Strategy chain is per-source, configured in config.py
-- AI costs capped at $1/run, learned selectors eliminate repeat AI calls
-- Git-commit state persistence is fine for Tier 0, Supabase for Tier 1
-
-**Next priorities:**
-1. Set up Firecrawl or Anthropic API key to test AI fallback against live LandWatch
-2. Update BLM URLs to current site structure
-3. Investigate LandWatch undocumented API
-4. Enable GitHub Pages
-
 ### Session 1 — 2024-01-15
 **What was done:** Initial project scaffolding. Created all files per spec.
 
@@ -126,3 +140,4 @@
 | County tax URLs dead | Medium | DNS failures, SSL errors on most county sites |
 | Missing lat/lng in most scrapers | Medium | Map shows 0,0 for many listings |
 | No API keys configured | Medium | Need FIRECRAWL_API_KEY and/or ANTHROPIC_API_KEY |
+| URL validation is stub only | Low | Client-side CORS blocks it; needs scraper-side impl (ADR-011) |
