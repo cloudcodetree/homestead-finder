@@ -302,7 +302,7 @@ export const Dashboard = () => {
       )}
 
       {/* Quick peek bar when map is open and property selected */}
-      {viewMode === 'map' && selectedProperty && !selectedProperty && (
+      {viewMode === 'map' && selectedProperty && (
         <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-3 flex items-center gap-3">
           <div className={`rounded-full w-10 h-10 flex items-center justify-center text-xs font-bold flex-shrink-0 ${getDealScoreColor(selectedProperty.dealScore)}`}>
             {selectedProperty.dealScore}
