@@ -51,7 +51,17 @@ export const useProperties = (filters: FilterState) => {
 
   const filtered = useMemo(() => applyFilters(allProperties, filters), [allProperties, filters]);
 
-  const sorted = useMemo(() => [...filtered].sort((a, b) => b.dealScore - a.dealScore), [filtered]);
+  const sorted = useMemo(
+    () => [...filtered].sort((a: Property, b: Property) => {
+      switch (filters.sortBy) {
+        case 'price': return a.price - b.price;
+        case 'acreage': return b.acreage - a.acreage;
+        case 'title': return a.title.localeCompare(b.title);
+        default: return b.dealScore - a.dealScore;
+      }
+    }),
+    [filtered, filters.sortBy]
+  );
 
   const stats = useMemo(
     () => ({

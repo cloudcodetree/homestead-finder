@@ -43,6 +43,15 @@ export interface Property {
   status?: 'active' | 'expired' | 'unverified';
 }
 
+export type SortBy = 'dealScore' | 'price' | 'acreage' | 'title';
+
+export const SORT_LABELS: Record<SortBy, string> = {
+  dealScore: 'Deal Score',
+  price: 'Price',
+  acreage: 'Acreage',
+  title: 'Name',
+};
+
 export interface FilterState {
   minPrice: number;
   maxPrice: number;
@@ -53,6 +62,7 @@ export interface FilterState {
   features: PropertyFeature[];
   minDealScore: number;
   sources: string[];
+  sortBy: SortBy;
 }
 
 export const DEFAULT_FILTERS: FilterState = {
@@ -65,6 +75,7 @@ export const DEFAULT_FILTERS: FilterState = {
   features: [],
   minDealScore: 0,
   sources: [],
+  sortBy: 'dealScore',
 };
 
 export const FEATURE_LABELS: Record<PropertyFeature, string> = {
