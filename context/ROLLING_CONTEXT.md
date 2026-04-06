@@ -10,7 +10,7 @@
 
 | Item | Status |
 |------|--------|
-| Last Updated | 2026-04-05 |
+| Last Updated | 2026-04-06 |
 | Current Phase | Adaptive scraping system built, testing against live sites |
 | Dashboard | Working locally (Vite dev server), builds clean |
 | Scraper | Adaptive strategy chain built (HTTP→Playwright→Firecrawl→Claude AI) |
@@ -79,6 +79,12 @@
 ---
 
 ## Recent Sessions
+
+### Session 3 — 2026-04-06
+**What was done:** Debugged "0 listings" on GitHub Pages.
+**Root cause:** `data/listings.json` in the repo root was `[]` (scraper ran but found no results). The fetch succeeded with an empty array, so the fallback to `sample-listings.json` never triggered. Secondary issue: `fetch('./data/listings.json')` used a relative URL that could misresolve under the `/homestead-finder/` base path.
+**Fix:** `frontend/src/hooks/useProperties.ts` — added `fetched.length === 0` check to trigger sample-data fallback; changed fetch URL to `import.meta.env.BASE_URL + 'data/listings.json'`. Pushed directly to main (commit `f77f3d1`), deploy triggered automatically.
+**Next priority:** Figure out why scrapers return empty data (`[]`) — likely Cloudflare blocks still, need API keys.
 
 ### Session 2 — 2026-04-05
 **What was done:**
