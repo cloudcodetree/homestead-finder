@@ -29,7 +29,7 @@ export const useProperties = (filters: FilterState) => {
         // fall back to sample data for development
         let data: Property[];
         try {
-          const response = await fetch('./data/listings.json');
+          const response = await fetch(`${import.meta.env.BASE_URL}data/listings.json`);
           if (!response.ok) throw new Error('No scraped data yet');
           data = await response.json();
         } catch {
