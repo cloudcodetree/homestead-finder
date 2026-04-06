@@ -1,4 +1,4 @@
-import { FilterState, PropertyFeature, FEATURE_LABELS, US_STATES } from '../types/property';
+import { FilterState, PropertyFeature, FEATURE_LABELS, US_STATES, SortBy, SORT_LABELS } from '../types/property';
 
 interface FilterPanelProps {
   filters: FilterState;
@@ -39,6 +39,26 @@ export const FilterPanel = ({
       </div>
 
       <div className="p-4 space-y-6">
+        {/* Sort By */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Sort By</label>
+          <div className="flex flex-wrap gap-1.5">
+            {(Object.keys(SORT_LABELS) as SortBy[]).map(option => (
+              <button
+                key={option}
+                onClick={() => onUpdateFilter('sortBy', option)}
+                className={`rounded px-2 py-0.5 text-xs font-medium transition-colors ${
+                  filters.sortBy === option
+                    ? 'bg-green-600 text-white'
+                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                }`}
+              >
+                {SORT_LABELS[option]}
+              </button>
+            ))}
+          </div>
+        </div>
+
         {/* Deal Score */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
