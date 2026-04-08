@@ -53,5 +53,7 @@ data/scraper.log
 # Next.js (in web/ subdirectory)
 web/node_modules
 web/.next
+web/.turbo
 web/out
 web/.env.local
+web/tsconfig.tsbuildinfo
