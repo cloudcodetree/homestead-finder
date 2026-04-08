@@ -18,10 +18,32 @@ export function applyFilters(
   properties: Property[],
   filters: FilterState,
 ): Property[] {
-  // TODO(user): Implement the filter predicate.
-  // See the tests in web/__tests__/filters.test.ts for the exact semantics.
-  // The function should use Array.prototype.filter with a single predicate
-  // that checks every filter group (price, acreage, price-per-acre, score,
-  // states, features, sources) and returns true only if ALL pass.
-  return [];
+  return properties.filter((p) => {
+    // Numeric range checks — all inclusive bounds
+    if (p.price < filters.minPrice || p.price > filters.maxPrice) return false;
+    if (p.acreage < filters.minAcreage || p.acreage > filters.maxAcreage) return false;
+    if (p.pricePerAcre > filters.maxPricePerAcre) return false;
+    if (p.dealScore < filters.minDealScore) return false;
+
+    // States — OR match. Empty array means "no state filter, show all".
+    if (filters.states.length > 0 && !filters.states.includes(p.location.state)) {
+      return false;
+    }
+
+    // Features — AND match. Listing must have EVERY selected feature.
+    // Empty array means "no feature filter, show all".
+    if (
+      filters.features.length > 0 &&
+      !filters.features.every((f) => p.features.includes(f))
+    ) {
+      return false;
+    }
+
+    // Sources — OR match. Empty array means "no source filter, show all".
+    if (filters.sources.length > 0 && !filters.sources.includes(p.source)) {
+      return false;
+    }
+
+    return true;
+  });
 }
