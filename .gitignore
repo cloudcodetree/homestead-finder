@@ -49,3 +49,9 @@ npm-debug.log*
 frontend/public/data/
 data/scraper.log
 .superpowers/
+
+# Next.js (in web/ subdirectory)
+web/node_modules
+web/.next
+web/out
+web/.env.local
