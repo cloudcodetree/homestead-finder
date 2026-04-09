@@ -57,3 +57,4 @@ web/.turbo
 web/out
 web/.env.local
 web/tsconfig.tsbuildinfo
+web/data/

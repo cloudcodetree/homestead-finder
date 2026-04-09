@@ -8,7 +8,7 @@ import {
 import type { Property } from '@/types/property';
 
 // Mock the raw data import
-vi.mock('../../data/listings.json', () => ({
+vi.mock('../data/listings.json', () => ({
   default: [
     {
       id: 'test_1',
@@ -50,7 +50,7 @@ describe('loadListings', () => {
     // @/lib/listings with a cleared _cache, and re-mock the data file
     // to simulate an empty listings.json.
     vi.resetModules();
-    vi.doMock('../../data/listings.json', () => ({ default: [] }));
+    vi.doMock('../data/listings.json', () => ({ default: [] }));
     const { loadListings: loadFresh } = await import('@/lib/listings');
     const listings = loadFresh();
     expect(listings.length).toBeGreaterThan(0);

@@ -3,12 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "node scripts/copy-data.mjs && next dev",
+    "prebuild": "node scripts/copy-data.mjs",
     "build": "NODE_ENV=production next build",
     "start": "next start",
     "lint": "eslint",
-    "test": "vitest run",
-    "test:watch": "vitest"
+    "test": "node scripts/copy-data.mjs && vitest run",
+    "test:watch": "node scripts/copy-data.mjs && vitest"
   },
   "dependencies": {
     "next": "16.2.2",

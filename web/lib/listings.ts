@@ -1,8 +1,10 @@
 import type { Property } from '@/types/property';
 import { SAMPLE_LISTINGS } from './sample-listings';
-// The data file is imported at build time. When we migrate to Turso,
-// this single import becomes a DB query.
-import rawListings from '../../data/listings.json';
+// The data file is copied from ../../data/listings.json (repo root) into
+// web/data/ by scripts/copy-data.mjs as a prebuild step. This is required
+// because Next.js/Turbopack blocks imports that escape the project root.
+// When we migrate to Turso, this single import becomes a DB query.
+import rawListings from '../data/listings.json';
 
 // Cached listings — loaded once per process
 let _cache: Property[] | null = null;
