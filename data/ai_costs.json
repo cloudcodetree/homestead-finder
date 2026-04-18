@@ -15401,35 +15401,1156 @@
         }
       ],
       "total_cost_usd": 0.0
+    },
+    "2026-04-18": {
+      "calls": [
+        {
+          "source": "blm",
+          "task": "discover_selectors",
+          "model": "sonnet",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "blm",
+          "task": "discover_selectors",
+          "model": "opus",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "blm",
+          "task": "extract_listings",
+          "model": "haiku",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "blm",
+          "task": "extract_listings",
+          "model": "sonnet",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "blm",
+          "task": "discover_selectors",
+          "model": "sonnet",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "blm",
+          "task": "discover_selectors",
+          "model": "opus",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "blm",
+          "task": "extract_listings",
+          "model": "haiku",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "blm",
+          "task": "extract_listings",
+          "model": "sonnet",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "blm",
+          "task": "discover_selectors",
+          "model": "sonnet",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "blm",
+          "task": "discover_selectors",
+          "model": "opus",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "blm",
+          "task": "extract_listings",
+          "model": "haiku",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "blm",
+          "task": "extract_listings",
+          "model": "sonnet",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "blm",
+          "task": "discover_selectors",
+          "model": "sonnet",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "blm",
+          "task": "discover_selectors",
+          "model": "opus",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "blm",
+          "task": "extract_listings",
+          "model": "haiku",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "blm",
+          "task": "extract_listings",
+          "model": "sonnet",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "discover_selectors",
+          "model": "sonnet",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "discover_selectors",
+          "model": "opus",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "extract_listings",
+          "model": "haiku",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "extract_listings",
+          "model": "sonnet",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "discover_selectors",
+          "model": "sonnet",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "discover_selectors",
+          "model": "opus",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "extract_listings",
+          "model": "haiku",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "extract_listings",
+          "model": "sonnet",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "discover_selectors",
+          "model": "sonnet",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "discover_selectors",
+          "model": "opus",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "extract_listings",
+          "model": "haiku",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "extract_listings",
+          "model": "sonnet",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "discover_selectors",
+          "model": "sonnet",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "discover_selectors",
+          "model": "opus",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "extract_listings",
+          "model": "haiku",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "extract_listings",
+          "model": "sonnet",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "discover_selectors",
+          "model": "sonnet",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "discover_selectors",
+          "model": "opus",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "extract_listings",
+          "model": "haiku",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "extract_listings",
+          "model": "sonnet",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "discover_selectors",
+          "model": "sonnet",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "discover_selectors",
+          "model": "opus",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "extract_listings",
+          "model": "haiku",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "extract_listings",
+          "model": "sonnet",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "discover_selectors",
+          "model": "sonnet",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "discover_selectors",
+          "model": "opus",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "extract_listings",
+          "model": "haiku",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "extract_listings",
+          "model": "sonnet",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "discover_selectors",
+          "model": "sonnet",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "discover_selectors",
+          "model": "opus",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "extract_listings",
+          "model": "haiku",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "extract_listings",
+          "model": "sonnet",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "discover_selectors",
+          "model": "sonnet",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "discover_selectors",
+          "model": "opus",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "extract_listings",
+          "model": "haiku",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "extract_listings",
+          "model": "sonnet",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "discover_selectors",
+          "model": "sonnet",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "discover_selectors",
+          "model": "opus",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "extract_listings",
+          "model": "haiku",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "extract_listings",
+          "model": "sonnet",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "discover_selectors",
+          "model": "sonnet",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "discover_selectors",
+          "model": "opus",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "extract_listings",
+          "model": "haiku",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "extract_listings",
+          "model": "sonnet",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "discover_selectors",
+          "model": "sonnet",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "discover_selectors",
+          "model": "opus",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "extract_listings",
+          "model": "haiku",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "extract_listings",
+          "model": "sonnet",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "discover_selectors",
+          "model": "sonnet",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "discover_selectors",
+          "model": "opus",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "extract_listings",
+          "model": "haiku",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "extract_listings",
+          "model": "sonnet",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "discover_selectors",
+          "model": "sonnet",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "discover_selectors",
+          "model": "opus",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "extract_listings",
+          "model": "haiku",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "extract_listings",
+          "model": "sonnet",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "discover_selectors",
+          "model": "sonnet",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "discover_selectors",
+          "model": "opus",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "extract_listings",
+          "model": "haiku",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "extract_listings",
+          "model": "sonnet",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "discover_selectors",
+          "model": "sonnet",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "discover_selectors",
+          "model": "opus",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "extract_listings",
+          "model": "haiku",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "extract_listings",
+          "model": "sonnet",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "discover_selectors",
+          "model": "sonnet",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "discover_selectors",
+          "model": "opus",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "extract_listings",
+          "model": "haiku",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "extract_listings",
+          "model": "sonnet",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "discover_selectors",
+          "model": "sonnet",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "discover_selectors",
+          "model": "opus",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "extract_listings",
+          "model": "haiku",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "extract_listings",
+          "model": "sonnet",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "discover_selectors",
+          "model": "sonnet",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "discover_selectors",
+          "model": "opus",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "extract_listings",
+          "model": "haiku",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "extract_listings",
+          "model": "sonnet",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "discover_selectors",
+          "model": "sonnet",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "discover_selectors",
+          "model": "opus",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "extract_listings",
+          "model": "haiku",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "extract_listings",
+          "model": "sonnet",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "discover_selectors",
+          "model": "sonnet",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "discover_selectors",
+          "model": "opus",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "extract_listings",
+          "model": "haiku",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "extract_listings",
+          "model": "sonnet",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "discover_selectors",
+          "model": "sonnet",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "discover_selectors",
+          "model": "opus",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "extract_listings",
+          "model": "haiku",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "extract_listings",
+          "model": "sonnet",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "discover_selectors",
+          "model": "sonnet",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "discover_selectors",
+          "model": "opus",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "extract_listings",
+          "model": "haiku",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "extract_listings",
+          "model": "sonnet",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "discover_selectors",
+          "model": "sonnet",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "discover_selectors",
+          "model": "opus",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "extract_listings",
+          "model": "haiku",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "extract_listings",
+          "model": "sonnet",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "discover_selectors",
+          "model": "sonnet",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "discover_selectors",
+          "model": "opus",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "extract_listings",
+          "model": "haiku",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "extract_listings",
+          "model": "sonnet",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "discover_selectors",
+          "model": "sonnet",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "discover_selectors",
+          "model": "opus",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "extract_listings",
+          "model": "haiku",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "extract_listings",
+          "model": "sonnet",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "discover_selectors",
+          "model": "sonnet",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "discover_selectors",
+          "model": "opus",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "extract_listings",
+          "model": "haiku",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "extract_listings",
+          "model": "sonnet",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        }
+      ],
+      "total_cost_usd": 0.0
     }
   },
   "model_stats": {
     "sonnet": {
-      "calls": 852,
+      "calls": 914,
       "successes": 0,
       "total_cost": 0.0
     },
     "opus": {
-      "calls": 426,
+      "calls": 457,
       "successes": 0,
       "total_cost": 0.0
     },
     "haiku": {
-      "calls": 426,
+      "calls": 457,
       "successes": 0,
       "total_cost": 0.0
     }
   },
   "source_stats": {
     "govease": {
-      "ai_calls": 1496,
+      "ai_calls": 1604,
       "learned_selector_hits": 0,
-      "last_ai_call": "2026-04-17"
+      "last_ai_call": "2026-04-18"
     },
     "blm": {
-      "ai_calls": 208,
+      "ai_calls": 224,
       "learned_selector_hits": 0,
-      "last_ai_call": "2026-04-17"
+      "last_ai_call": "2026-04-18"
     }
   }
 }
