@@ -2,8 +2,6 @@
 // `scraper/ai_vocab.json`. DO NOT EDIT by hand — rerun the emit script.
 // See ADR-012 for the single-source-of-truth pipeline.
 
-/* eslint-disable */
-
 // AI tag union — Claude's enrich.py may return only these keys.
 export type AITag =
   | 'paved_access'
