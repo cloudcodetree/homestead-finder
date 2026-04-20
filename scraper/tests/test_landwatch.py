@@ -46,7 +46,7 @@ def test_parse_markdown_parses_price_and_acres_correctly() -> None:
     """Check a known listing with a distinctive price/acreage."""
     md = FIXTURE.read_text()
     listings = parse_markdown_listings(md, "MT")
-    by_id = {l["id"]: l for l in listings}
+    by_id = {item["id"]: item for item in listings}
 
     # "Beartooth Creek Legacy" — $4,200,000, 122 acres, Carbon County
     assert "426385876" in by_id
@@ -73,7 +73,7 @@ def test_parse_markdown_handles_listings_without_beds_baths() -> None:
     md = FIXTURE.read_text()
     listings = parse_markdown_listings(md, "MT")
     # Our fixture has a known no-beds listing at PID 420912348 (Last Best Line Creek Ranch)
-    by_id = {l["id"]: l for l in listings}
+    by_id = {item["id"]: item for item in listings}
     assert "420912348" in by_id
     assert by_id["420912348"]["acres"] == 872.0
 
