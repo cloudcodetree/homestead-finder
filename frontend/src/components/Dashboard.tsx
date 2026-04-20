@@ -5,9 +5,11 @@ import { FilterPanel } from './FilterPanel';
 import { PropertyDetail } from './PropertyDetail';
 import { NotificationSettings } from './NotificationSettings';
 import { TopPicks } from './TopPicks';
+import { AskClaude } from './AskClaude';
 import { useProperties } from '../hooks/useProperties';
 import { useFilters } from '../hooks/useFilters';
 import { useCurated } from '../hooks/useCurated';
+import { QueryResponse } from '../hooks/useQueryServer';
 import { getDealScoreColor } from '../utils/scoring';
 import { formatPrice, formatAcreage } from '../utils/formatters';
 
@@ -26,6 +28,7 @@ export const Dashboard = () => {
   const [showFilters, setShowFilters] = useState(false); // mobile drawer
   const [sidebarOpen, setSidebarOpen] = useState(true); // desktop collapse
   const [sortBy, setSortBy] = useState<SortOption>('score');
+  const [queryResult, setQueryResult] = useState<QueryResponse | null>(null);
 
   const selectedProperty = selectedId ? properties.find((p: Property) => p.id === selectedId) ?? null : null;
 
@@ -235,50 +238,106 @@ export const Dashboard = () => {
 
           {!loading && !error && viewMode === 'list' && (
             <div className="h-full overflow-y-auto p-4">
-              {/* Sort + count bar */}
-              <div className="flex items-center justify-between mb-4 max-w-6xl mx-auto">
-                <p className="text-sm text-gray-500">{sortedProperties.length} properties</p>
-                <div className="flex items-center gap-2">
-                  <label className="text-sm text-gray-600 hidden sm:block" htmlFor="sort-select">Sort:</label>
-                  <select
-                    id="sort-select"
-                    value={sortBy}
-                    onChange={e => setSortBy(e.target.value as SortOption)}
-                    className="border border-gray-200 rounded-lg px-3 py-1.5 text-sm bg-white focus:ring-1 focus:ring-green-500 focus:outline-none"
-                  >
-                    <option value="score">Best Deal (Score)</option>
-                    <option value="fit">Homestead Fit (AI)</option>
-                    <option value="price_asc">Price: Low to High</option>
-                    <option value="price_desc">Price: High to Low</option>
-                    <option value="ppa_asc">Price/Acre: Low to High</option>
-                    <option value="acreage_desc">Acreage: Most</option>
-                    <option value="newest">Newest First</option>
-                  </select>
-                </div>
-              </div>
+              <AskClaude
+                onResult={setQueryResult}
+                activeQuestion={queryResult?.question ?? null}
+              />
 
-              {sortedProperties.length === 0 ? (
-                <div className="flex flex-col items-center justify-center h-64 text-center">
-                  <p className="text-4xl mb-3">🌾</p>
-                  <p className="text-gray-600 font-medium">No properties match your filters</p>
-                  <button
-                    onClick={resetFilters}
-                    className="mt-3 text-green-600 hover:text-green-700 text-sm font-medium"
-                  >
-                    Clear filters
-                  </button>
+              {queryResult ? (
+                // Query results mode: show Claude's matches in ranked order
+                // with inline reasons, ignoring filters/sort.
+                <div className="max-w-6xl mx-auto">
+                  <p className="text-sm text-gray-500 mb-3">
+                    {queryResult.matches.length} match
+                    {queryResult.matches.length === 1 ? '' : 'es'} for{' '}
+                    <em className="text-gray-700">&ldquo;{queryResult.question}&rdquo;</em>{' '}
+                    · considered {queryResult.totalConsidered} listings
+                  </p>
+                  {queryResult.matches.length === 0 ? (
+                    <div className="flex flex-col items-center justify-center h-64 text-center">
+                      <p className="text-4xl mb-3">🤔</p>
+                      <p className="text-gray-600 font-medium">
+                        No listings matched that query
+                      </p>
+                      <p className="text-sm text-gray-500 mt-1">
+                        Try rephrasing or broadening your criteria.
+                      </p>
+                    </div>
+                  ) : (
+                    <div className="space-y-3">
+                      {queryResult.matches.map((match, i) => {
+                        const p = properties.find((x) => x.id === match.id);
+                        if (!p) return null;
+                        return (
+                          <div key={match.id} className="flex gap-3 items-start">
+                            <div className="flex-shrink-0 w-8 text-center pt-4 text-xs font-bold text-purple-700">
+                              #{i + 1}
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <PropertyCard
+                                property={p}
+                                onClick={setSelectedId}
+                                isSelected={selectedId === p.id}
+                              />
+                              <p className="mt-1 text-xs text-purple-700 bg-purple-50 border border-purple-200 rounded px-2 py-1">
+                                <span className="font-semibold">Claude: </span>
+                                {match.reason}
+                              </p>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
                 </div>
               ) : (
-                <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3 max-w-6xl mx-auto">
-                  {sortedProperties.map((property: Property) => (
-                    <PropertyCard
-                      key={property.id}
-                      property={property}
-                      onClick={setSelectedId}
-                      isSelected={selectedId === property.id}
-                    />
-                  ))}
-                </div>
+                <>
+                  {/* Sort + count bar */}
+                  <div className="flex items-center justify-between mb-4 max-w-6xl mx-auto">
+                    <p className="text-sm text-gray-500">{sortedProperties.length} properties</p>
+                    <div className="flex items-center gap-2">
+                      <label className="text-sm text-gray-600 hidden sm:block" htmlFor="sort-select">Sort:</label>
+                      <select
+                        id="sort-select"
+                        value={sortBy}
+                        onChange={e => setSortBy(e.target.value as SortOption)}
+                        className="border border-gray-200 rounded-lg px-3 py-1.5 text-sm bg-white focus:ring-1 focus:ring-green-500 focus:outline-none"
+                      >
+                        <option value="score">Best Deal (Score)</option>
+                        <option value="fit">Homestead Fit (AI)</option>
+                        <option value="price_asc">Price: Low to High</option>
+                        <option value="price_desc">Price: High to Low</option>
+                        <option value="ppa_asc">Price/Acre: Low to High</option>
+                        <option value="acreage_desc">Acreage: Most</option>
+                        <option value="newest">Newest First</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  {sortedProperties.length === 0 ? (
+                    <div className="flex flex-col items-center justify-center h-64 text-center">
+                      <p className="text-4xl mb-3">🌾</p>
+                      <p className="text-gray-600 font-medium">No properties match your filters</p>
+                      <button
+                        onClick={resetFilters}
+                        className="mt-3 text-green-600 hover:text-green-700 text-sm font-medium"
+                      >
+                        Clear filters
+                      </button>
+                    </div>
+                  ) : (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3 max-w-6xl mx-auto">
+                      {sortedProperties.map((property: Property) => (
+                        <PropertyCard
+                          key={property.id}
+                          property={property}
+                          onClick={setSelectedId}
+                          isSelected={selectedId === property.id}
+                        />
+                      ))}
+                    </div>
+                  )}
+                </>
               )}
             </div>
           )}

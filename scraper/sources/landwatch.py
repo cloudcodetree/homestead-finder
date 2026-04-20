@@ -21,19 +21,56 @@ log = get_logger("scraper.landwatch")
 
 # State abbr → URL slug used by LandWatch
 STATE_SLUGS: dict[str, str] = {
-    "AL": "alabama", "AK": "alaska", "AZ": "arizona", "AR": "arkansas",
-    "CA": "california", "CO": "colorado", "CT": "connecticut", "DE": "delaware",
-    "FL": "florida", "GA": "georgia", "HI": "hawaii", "ID": "idaho",
-    "IL": "illinois", "IN": "indiana", "IA": "iowa", "KS": "kansas",
-    "KY": "kentucky", "LA": "louisiana", "ME": "maine", "MD": "maryland",
-    "MA": "massachusetts", "MI": "michigan", "MN": "minnesota", "MS": "mississippi",
-    "MO": "missouri", "MT": "montana", "NE": "nebraska", "NV": "nevada",
-    "NH": "new-hampshire", "NJ": "new-jersey", "NM": "new-mexico", "NY": "new-york",
-    "NC": "north-carolina", "ND": "north-dakota", "OH": "ohio", "OK": "oklahoma",
-    "OR": "oregon", "PA": "pennsylvania", "RI": "rhode-island", "SC": "south-carolina",
-    "SD": "south-dakota", "TN": "tennessee", "TX": "texas", "UT": "utah",
-    "VT": "vermont", "VA": "virginia", "WA": "washington", "WV": "west-virginia",
-    "WI": "wisconsin", "WY": "wyoming",
+    "AL": "alabama",
+    "AK": "alaska",
+    "AZ": "arizona",
+    "AR": "arkansas",
+    "CA": "california",
+    "CO": "colorado",
+    "CT": "connecticut",
+    "DE": "delaware",
+    "FL": "florida",
+    "GA": "georgia",
+    "HI": "hawaii",
+    "ID": "idaho",
+    "IL": "illinois",
+    "IN": "indiana",
+    "IA": "iowa",
+    "KS": "kansas",
+    "KY": "kentucky",
+    "LA": "louisiana",
+    "ME": "maine",
+    "MD": "maryland",
+    "MA": "massachusetts",
+    "MI": "michigan",
+    "MN": "minnesota",
+    "MS": "mississippi",
+    "MO": "missouri",
+    "MT": "montana",
+    "NE": "nebraska",
+    "NV": "nevada",
+    "NH": "new-hampshire",
+    "NJ": "new-jersey",
+    "NM": "new-mexico",
+    "NY": "new-york",
+    "NC": "north-carolina",
+    "ND": "north-dakota",
+    "OH": "ohio",
+    "OK": "oklahoma",
+    "OR": "oregon",
+    "PA": "pennsylvania",
+    "RI": "rhode-island",
+    "SC": "south-carolina",
+    "SD": "south-dakota",
+    "TN": "tennessee",
+    "TX": "texas",
+    "UT": "utah",
+    "VT": "vermont",
+    "VA": "virginia",
+    "WA": "washington",
+    "WV": "west-virginia",
+    "WI": "wisconsin",
+    "WY": "wyoming",
 }
 
 
@@ -77,9 +114,7 @@ def extract_features(text: str) -> list[str]:
 _MD_LINK_RE = re.compile(
     r"\[([^\]]+)\]\((https?://www\.landwatch\.com/[^)]*?/pid/(\d+))[^)]*\)"
 )
-_PRICE_ACRES_RE = re.compile(
-    r"\$([\d,]+)\s*[•·]\s*([\d,.]+)\s*acres?", re.IGNORECASE
-)
+_PRICE_ACRES_RE = re.compile(r"\$([\d,]+)\s*[•·]\s*([\d,.]+)\s*acres?", re.IGNORECASE)
 _ADDRESS_RE = re.compile(
     r",\s*([A-Z]{2})\s*,\s*\d{5}\s*,\s*([\w\s.-]+?)\s*County", re.IGNORECASE
 )
@@ -196,22 +231,16 @@ def _extract_card_data(card: Any, state: str) -> dict[str, Any] | None:
         title_el = card.select_one(
             "h2, h3, .property-title, [data-testid='property-title']"
         )
-        price_el = card.select_one(
-            ".price, [data-testid='price'], .listing-price"
-        )
+        price_el = card.select_one(".price, [data-testid='price'], .listing-price")
         acres_el = card.select_one(".acres, [data-testid='acres'], .acreage")
         link_el = card.select_one("a[href]")
-        location_el = card.select_one(
-            ".location, .county, [data-testid='location']"
-        )
+        location_el = card.select_one(".location, .county, [data-testid='location']")
 
         if not (title_el and price_el and link_el):
             return None
 
         price_text = re.sub(r"[^\d.]", "", price_el.get_text())
-        acres_text = re.sub(
-            r"[^\d.]", "", acres_el.get_text() if acres_el else "0"
-        )
+        acres_text = re.sub(r"[^\d.]", "", acres_el.get_text() if acres_el else "0")
 
         href = link_el.get("href", "")
         listing_id = re.search(r"/(\d+)/?$", href)
@@ -224,9 +253,7 @@ def _extract_card_data(card: Any, state: str) -> dict[str, Any] | None:
             "state": state,
             "county": location_el.get_text(strip=True) if location_el else "",
             "url": (
-                f"https://www.landwatch.com{href}"
-                if href.startswith("/")
-                else href
+                f"https://www.landwatch.com{href}" if href.startswith("/") else href
             ),
             "description": card.get_text(separator=" ", strip=True)[:500],
         }

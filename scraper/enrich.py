@@ -260,7 +260,7 @@ def enrich_file(
         log.info(
             f"[enrich] {listing.get('id')} "
             f"({processed}/{counters['total'] - counters['skipped']}): "
-            f"{listing.get('title','')[:60]}"
+            f"{listing.get('title', '')[:60]}"
         )
         enrichment = enrich_listing(listing, model=model)
         if enrichment is None:

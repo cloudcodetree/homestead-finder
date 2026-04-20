@@ -62,15 +62,15 @@ def _build_email_body(deals: list[dict[str, Any]]) -> str:
         rows += f"""
         <tr style="border-bottom:1px solid #e5e7eb;">
           <td style="padding:12px 8px;">
-            <strong style="display:block;">{deal.get('title', 'Land Listing')}</strong>
+            <strong style="display:block;">{deal.get("title", "Land Listing")}</strong>
             <span style="color:#6b7280;font-size:13px;">{county} County, {state}</span>
           </td>
           <td style="padding:12px 8px;text-align:right;">
-            <strong>{format_price(deal.get('price', 0))}</strong><br>
-            <span style="color:#6b7280;font-size:13px;">{format_price_per_acre(deal.get('pricePerAcre', 0))}</span>
+            <strong>{format_price(deal.get("price", 0))}</strong><br>
+            <span style="color:#6b7280;font-size:13px;">{format_price_per_acre(deal.get("pricePerAcre", 0))}</span>
           </td>
           <td style="padding:12px 8px;text-align:center;">
-            {format_acreage(deal.get('acreage', 0))}
+            {format_acreage(deal.get("acreage", 0))}
           </td>
           <td style="padding:12px 8px;text-align:center;">
             <span style="background:{score_color};color:white;border-radius:12px;padding:2px 10px;font-weight:bold;">
@@ -78,7 +78,7 @@ def _build_email_body(deals: list[dict[str, Any]]) -> str:
             </span>
           </td>
           <td style="padding:12px 8px;text-align:center;">
-            <a href="{deal.get('url', '#')}"
+            <a href="{deal.get("url", "#")}"
                style="color:#16a34a;font-weight:600;text-decoration:none;">View →</a>
           </td>
         </tr>
@@ -90,7 +90,7 @@ def _build_email_body(deals: list[dict[str, Any]]) -> str:
     <body style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;max-width:700px;margin:0 auto;padding:20px;color:#111827;">
       <h1 style="color:#15803d;margin-bottom:4px;">🌿 Homestead Finder</h1>
       <p style="color:#6b7280;margin-top:0;">
-        {len(deals)} new deal{'s' if len(deals) > 1 else ''} with score ≥ {NOTIFICATION_SCORE_THRESHOLD}
+        {len(deals)} new deal{"s" if len(deals) > 1 else ""} with score ≥ {NOTIFICATION_SCORE_THRESHOLD}
       </p>
 
       <table style="width:100%;border-collapse:collapse;margin-top:16px;">

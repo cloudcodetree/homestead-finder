@@ -218,6 +218,41 @@ Daily budget cap: $1.00/run. Cost tracked in `data/ai_costs.json`.
 
 ---
 
+## ADR-012: Local-Max for AI, CI for Parsing — No API Credits
+
+**Date:** 2026-04-20
+**Status:** Accepted
+
+**Context:** Phase 2 introduced three AI-powered features on top of the scraped listings: (1) per-listing enrichment (aiTags, homesteadFitScore, redFlags, aiSummary); (2) weekly top-picks curation; (3) natural-language query / re-ranking from the dashboard. All three require calls to Claude. There are two billing buckets:
+
+- **Anthropic API credits** (console.anthropic.com) — works anywhere, billed per token
+- **Claude Max subscription** — fixed monthly fee, covers interactive Claude Code usage but only authenticates against `claude login` OAuth on a developer machine; does not work in GitHub Actions
+
+The user has Claude Max and wants to avoid paying for API credits separately.
+
+**Decision:** Split compute by trust boundary. GitHub Actions (CI) only runs the parser-based scraper — no AI calls there. All AI work happens locally on the developer's machine and is billed against the Max subscription via `subprocess.run(["claude", "-p", ...])`.
+
+- `scraper/llm.py` — thin `claude -p` wrapper with on-disk cache.
+- `scraper/enrich.py` — local enrichment pass, idempotent via content hash. Run manually, commit the updated `data/listings.json`.
+- `scraper/curate.py` — local "top picks" generator, writes `data/curated.json`, commit.
+- `scraper/query_server.py` — localhost HTTP proxy for natural-language queries. The frontend pings `/health` on mount and only shows the "Ask Claude" bar when the server is up, so the feature auto-hides in production (GitHub Pages).
+
+Controlled vocabularies for `aiTags` and `redFlags` are duplicated between Python (`scraper/enrich.py`) and TypeScript (`frontend/src/types/property.ts`) — kept in sync by hand, documented in both files.
+
+**Consequences:**
+- (+) No ongoing API cost — Max subscription covers enrichment, curation, and NL query
+- (+) CI stays fast and deterministic; scheduled daily scrapes don't require the `claude` CLI or OAuth state
+- (+) The public GitHub Pages dashboard gracefully degrades: it shows pre-computed AI fields but hides the live "Ask Claude" feature when the local proxy isn't running
+- (+) Cache in `data/cache/llm/` makes re-runs effectively free
+- (-) AI-derived data (aiTags, curated picks) is only refreshed when the developer manually runs the scripts and commits — no automation
+- (-) The local proxy means the NL query feature only works in `npm run dev` mode, not in production
+- (-) Vocabularies must be manually kept in sync across Python and TypeScript
+- (?) If the user eventually wants automated daily enrichment, the path is either (a) add `ANTHROPIC_API_KEY` to GitHub secrets and bypass the local path, or (b) trigger enrichment from a self-hosted runner logged in to Claude
+
+**Migration note:** If the NL query feature later needs to work on the public site, the simplest path is to add API credits and have the server-side call use `ANTHROPIC_API_KEY` as a fallback when OAuth is absent. The `llm.py` wrapper already has the right shape for this — it would just need an auth-mode switch.
+
+---
+
 ## Template for New ADRs
 
 ```markdown

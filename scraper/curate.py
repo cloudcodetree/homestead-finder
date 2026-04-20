@@ -37,7 +37,9 @@ log = get_logger("curate")
 # Default curation parameters
 DEFAULT_CURATED_COUNT = 12
 DEFAULT_CANDIDATE_COUNT = 50
-DEFAULT_MODEL = "sonnet"  # bump up vs. enrich — this is one expensive call, not N cheap ones
+DEFAULT_MODEL = (
+    "sonnet"  # bump up vs. enrich — this is one expensive call, not N cheap ones
+)
 
 
 def _prerank_candidates(
@@ -84,9 +86,7 @@ def _compact_listing(item: dict[str, Any]) -> dict[str, Any]:
     }
 
 
-def _build_curation_prompt(
-    candidates: list[dict[str, Any]], pick_count: int
-) -> str:
+def _build_curation_prompt(candidates: list[dict[str, Any]], pick_count: int) -> str:
     compact = [_compact_listing(c) for c in candidates]
     payload = json.dumps(compact, indent=2)
     return f"""You are a homesteading scout. Pick the {pick_count} best land listings

@@ -81,8 +81,7 @@ def test_parse_markdown_handles_listings_without_beds_baths() -> None:
 def test_state_url_uses_correct_slug() -> None:
     scraper = LandWatchScraper(config={})
     assert (
-        scraper._state_url("MT", 1)
-        == "https://www.landwatch.com/montana-land-for-sale"
+        scraper._state_url("MT", 1) == "https://www.landwatch.com/montana-land-for-sale"
     )
     assert (
         scraper._state_url("MT", 2)
