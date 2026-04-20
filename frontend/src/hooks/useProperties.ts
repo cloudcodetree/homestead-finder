@@ -46,7 +46,10 @@ export const useProperties = (filters: FilterState) => {
     loadFallback: useCallback(loadSample, []),
     isEmpty: isEmptyArray,
   });
-  const allProperties = data ?? [];
+  // Memoize the fallback so `allProperties` has a stable reference when
+  // data hasn't loaded yet — otherwise the useMemo dependencies below
+  // change every render.
+  const allProperties = useMemo(() => data ?? [], [data]);
 
   const filtered = useMemo(
     () => applyFilters(allProperties, filters),
