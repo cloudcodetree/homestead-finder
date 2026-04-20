@@ -126,9 +126,9 @@ def test_parse_markdown_handles_page2_without_title_links() -> None:
     # No listing should have "Listing Details Page" as its title — that's
     # the LandWatch UI link, not a property name.
     for listing in listings:
-        assert "Listing Details Page" not in listing["title"], (
-            f"leaked UI label into title: {listing}"
-        )
+        assert (
+            "Listing Details Page" not in listing["title"]
+        ), f"leaked UI label into title: {listing}"
 
     # At least some listings must fall back to the locality-based title
     # (of the form "<Street or City>, MT"). The presence of this pattern
@@ -136,9 +136,9 @@ def test_parse_markdown_handles_page2_without_title_links() -> None:
     locality_fallbacks = [
         listing for listing in listings if listing["title"].endswith(", MT")
     ]
-    assert len(locality_fallbacks) > 0, (
-        "expected at least one locality-based title fallback on page 2"
-    )
+    assert (
+        len(locality_fallbacks) > 0
+    ), "expected at least one locality-based title fallback on page 2"
 
 
 def test_parse_full_listing_builds_raw_listing() -> None:
