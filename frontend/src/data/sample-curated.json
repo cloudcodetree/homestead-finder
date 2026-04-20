@@ -1,0 +1,38 @@
+{
+  "curatedAt": "2026-04-20T22:29:56.776698+00:00",
+  "model": "haiku",
+  "candidateCount": 10,
+  "pickCount": 5,
+  "picks": [
+    {
+      "id": "landwatch_205",
+      "headline": "Idaho entry-level with well and power installed",
+      "reason": "40 acres with water well and power already in place eliminates the two largest infrastructure barriers. No red flags, solid agricultural suitability for livestock, and $1,375/acre is reasonable for turnkey utilities. Owner financing further reduces barriers.",
+      "rank": 1
+    },
+    {
+      "id": "landwatch_101",
+      "headline": "Montana bargain with year-round creek access",
+      "reason": "80 acres at $475/acre with reliable year-round creek, timber, hunting potential, and zero HOA restrictions. Heavily timbered terrain requires clearing before building, but acreage and water security offset this work. Best price-to-land-value ratio.",
+      "rank": 2
+    },
+    {
+      "id": "realtor_mn_441",
+      "headline": "Minnesota cabin with utilities and year-round water",
+      "reason": "87 acres with functioning cabin, year-round well water, electric power, and paved access\u2014immediately liveable without building. Timber harvest and hunting potential add value. No red flags despite remote location; only concern is poor agricultural suitability.",
+      "rank": 3
+    },
+    {
+      "id": "landwatch_667",
+      "headline": "Tennessee creek property with no restrictions",
+      "reason": "25 acres with year-round creek, paved access, zero HOA restrictions, and confirmed buildability (surveyed and perc-tested). Highest homestead fit score (77) and mild climate support self-sufficient living, though smaller acreage and $3,560/acre pricing limit scale.",
+      "rank": 4
+    },
+    {
+      "id": "landwatch_891",
+      "headline": "New Mexico ranch at exceptional scale and price",
+      "reason": "640 acres at $500/acre with year-round well water, solar/cabin infrastructure, and hunting potential. Extreme isolation (40 miles to town) is the sole red flag\u2014excellent for experienced homesteaders comfortable with genuine remoteness and self-sufficiency.",
+      "rank": 5
+    }
+  ]
+}

@@ -4,19 +4,22 @@ import { PropertyCard } from './PropertyCard';
 import { FilterPanel } from './FilterPanel';
 import { PropertyDetail } from './PropertyDetail';
 import { NotificationSettings } from './NotificationSettings';
+import { TopPicks } from './TopPicks';
 import { useProperties } from '../hooks/useProperties';
 import { useFilters } from '../hooks/useFilters';
+import { useCurated } from '../hooks/useCurated';
 import { getDealScoreColor } from '../utils/scoring';
 import { formatPrice, formatAcreage } from '../utils/formatters';
 
 const MapView = lazy(() => import('./MapView').then(m => ({ default: m.MapView })));
 
-type ViewMode = 'list' | 'map';
+type ViewMode = 'list' | 'map' | 'picks';
 type SortOption = 'score' | 'fit' | 'price_asc' | 'price_desc' | 'ppa_asc' | 'acreage_desc' | 'newest';
 
 export const Dashboard = () => {
   const { filters, updateFilter, toggleState, toggleFeature, toggleAITag, resetFilters, hasActiveFilters } = useFilters();
   const { properties, loading, error, stats } = useProperties(filters);
+  const { curation } = useCurated();
   const [viewMode, setViewMode] = useState<ViewMode>('list');
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [showNotifications, setShowNotifications] = useState(false);
@@ -91,6 +94,20 @@ export const Dashboard = () => {
               }`}
             >
               Map
+            </button>
+            <button
+              onClick={() => setViewMode('picks')}
+              className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors flex items-center gap-1 ${
+                viewMode === 'picks' ? 'bg-white shadow text-gray-900' : 'text-gray-500 hover:text-gray-700'
+              }`}
+              title="AI-curated top picks"
+            >
+              <span>Picks</span>
+              {curation && curation.picks.length > 0 && (
+                <span className="text-[10px] px-1 bg-purple-100 text-purple-700 rounded font-medium">
+                  {curation.picks.length}
+                </span>
+              )}
             </button>
           </div>
 
@@ -278,6 +295,28 @@ export const Dashboard = () => {
                 onSelectProperty={setSelectedId}
               />
             </Suspense>
+          )}
+
+          {!loading && !error && viewMode === 'picks' && (
+            curation ? (
+              <TopPicks
+                picks={curation.picks}
+                properties={properties}
+                curatedAt={curation.curatedAt}
+                model={curation.model}
+                onSelectProperty={setSelectedId}
+              />
+            ) : (
+              <div className="flex items-center justify-center h-full p-6 text-center">
+                <div>
+                  <p className="text-4xl mb-3">✨</p>
+                  <p className="text-gray-600 font-medium">No curated picks yet</p>
+                  <p className="text-sm text-gray-500 mt-1">
+                    Run <code className="px-1.5 py-0.5 bg-gray-100 rounded text-xs">python -m scraper.curate</code> locally to generate top picks.
+                  </p>
+                </div>
+              </div>
+            )
           )}
         </main>
       </div>

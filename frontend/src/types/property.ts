@@ -217,6 +217,21 @@ export const RED_FLAG_LABELS: Record<RedFlag, string> = {
   price_seems_too_good: 'Price Too Good',
 };
 
+export interface CuratedPick {
+  id: string;
+  rank: number;
+  headline: string;
+  reason: string;
+}
+
+export interface CurationResult {
+  curatedAt: string;
+  model: string;
+  candidateCount: number;
+  pickCount: number;
+  picks: CuratedPick[];
+}
+
 export const US_STATES: Record<string, string> = {
   AL: 'Alabama',
   AK: 'Alaska',
