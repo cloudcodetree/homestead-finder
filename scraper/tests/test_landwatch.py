@@ -113,6 +113,34 @@ def test_get_page_urls_respects_max_pages() -> None:
     assert urls[2].endswith("page-3")
 
 
+def test_parse_markdown_handles_page2_without_title_links() -> None:
+    """Pages 2+ of LandWatch often omit the title link entirely, leaving
+    only the price/address/description links. We must fall back to an
+    address-derived locality instead of writing 'Listing Details Page'
+    (a literal link label LandWatch uses for 'see more') or the generic
+    'Land in <STATE>' placeholder."""
+    p2_fixture = Path(__file__).parent / "fixtures" / "landwatch_mt_page2.md"
+    listings = parse_markdown_listings(p2_fixture.read_text(), "MT")
+    assert len(listings) > 0
+
+    # No listing should have "Listing Details Page" as its title — that's
+    # the LandWatch UI link, not a property name.
+    for listing in listings:
+        assert "Listing Details Page" not in listing["title"], (
+            f"leaked UI label into title: {listing}"
+        )
+
+    # At least some listings must fall back to the locality-based title
+    # (of the form "<Street or City>, MT"). The presence of this pattern
+    # confirms the fallback chain fires correctly on title-less clusters.
+    locality_fallbacks = [
+        listing for listing in listings if listing["title"].endswith(", MT")
+    ]
+    assert len(locality_fallbacks) > 0, (
+        "expected at least one locality-based title fallback on page 2"
+    )
+
+
 def test_parse_full_listing_builds_raw_listing() -> None:
     """End-to-end: markdown → dict → RawListing via scraper.parse()."""
     md = FIXTURE.read_text()

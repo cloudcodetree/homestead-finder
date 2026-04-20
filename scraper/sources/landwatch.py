@@ -74,8 +74,22 @@ _ADDRESS_RE = re.compile(
 )
 _BEDS_RE = re.compile(r"\d+\s*beds?\s*[•·]\s*\d+\s*baths?", re.IGNORECASE)
 
-# Noise texts embedded in image-carousel link captions
-_NOISE_FRAGMENTS = ("Loading Results", "Land for sale in", "VIDEOMAP")
+# Noise texts embedded in image-carousel link captions AND generic
+# "click to continue" type labels LandWatch uses on pages 2+ instead of
+# actual property titles ("Listing Details Page" — literally).
+_NOISE_FRAGMENTS = (
+    "Loading Results",
+    "Land for sale in",
+    "VIDEOMAP",
+    "Listing Details Page",
+)
+
+# "123 Main St, Townname, ST, 12345, Foo County" — first piece before the
+# comma is the best short label when a listing has no title link. Matches
+# addresses beginning with either a street number+name or just a city.
+_ADDRESS_LOCALITY_RE = re.compile(
+    r"^([^,]+?),\s*(?:[^,]+,\s*)?[A-Z]{2}\s*,\s*\d{5}", re.IGNORECASE
+)
 
 
 def parse_markdown_listings(markdown: str, state: str) -> list[dict[str, Any]]:
@@ -164,9 +178,20 @@ def _extract_listing_from_cluster(
     if address:
         combined_desc = f"{address} — {combined_desc}".strip(" —")
 
+    # Title fallback chain: real title link > street-or-city from address
+    # > generic "Land in STATE". On pages 2+ LandWatch often omits the
+    # title link entirely, so the address locality is the best label.
+    final_title = title
+    if not final_title and address:
+        loc_match = _ADDRESS_LOCALITY_RE.match(address)
+        if loc_match:
+            final_title = f"{loc_match.group(1).strip()}, {state}"
+    if not final_title:
+        final_title = f"Land in {state}"
+
     return {
         "id": pid,
-        "title": title or f"Land in {state}",
+        "title": final_title,
         "price": price,
         "acres": acres,
         "state": state,
