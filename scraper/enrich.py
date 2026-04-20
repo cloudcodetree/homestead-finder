@@ -22,8 +22,10 @@ import argparse
 import hashlib
 import json
 import sys
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime, timezone
 from pathlib import Path
+from threading import Lock
 from typing import Any
 
 import config
@@ -167,6 +169,9 @@ def enrich_listing(
     return _sanitize_enrichment(raw)
 
 
+DEFAULT_CONCURRENCY = 4
+
+
 def enrich_file(
     input_path: Path,
     output_path: Path,
@@ -174,8 +179,14 @@ def enrich_file(
     model: str = "haiku",
     limit: int | None = None,
     force: bool = False,
+    concurrency: int = DEFAULT_CONCURRENCY,
 ) -> dict[str, int]:
     """Read listings from input_path, enrich them, write back to output_path.
+
+    Runs up to `concurrency` subprocess calls in parallel. `subprocess.run`
+    releases the GIL during exec, so threads are fine. Writes to disk every
+    time a listing finishes so a crash mid-batch loses at most one in-flight
+    call.
 
     Returns a dict of counters for reporting.
     """
@@ -195,33 +206,64 @@ def enrich_file(
         "failed": 0,
     }
 
-    processed = 0
-    for listing in listings:
+    # Select indices that need work; skipped items stay in place untouched.
+    todo: list[int] = []
+    for idx, listing in enumerate(listings):
         if not _needs_enrichment(listing, force=force):
             counters["skipped"] += 1
             continue
-
-        if limit is not None and processed >= limit:
+        if limit is not None and len(todo) >= limit:
             counters["skipped"] += 1
             continue
+        todo.append(idx)
 
-        processed += 1
-        log.info(
-            f"[enrich] {listing.get('id')} "
-            f"({processed}/{counters['total'] - counters['skipped']}): "
-            f"{listing.get('title', '')[:60]}"
-        )
-        enrichment = enrich_listing(listing, model=model)
-        if enrichment is None:
-            counters["failed"] += 1
-            continue
+    if not todo:
+        output_path.write_text(json.dumps(listings, indent=2))
+        return counters
 
-        listing.update(enrichment)
-        listing["enrichedAt"] = datetime.now(timezone.utc).isoformat()
-        listing["_enrichHash"] = _content_hash(listing)
-        counters["enriched"] += 1
+    concurrency = max(1, min(concurrency, len(todo)))
+    log.info(
+        f"[enrich] processing {len(todo)} listings "
+        f"with concurrency={concurrency}, model={model}"
+    )
 
-    output_path.write_text(json.dumps(listings, indent=2))
+    write_lock = Lock()
+    progress = {"done": 0}
+    total_todo = len(todo)
+
+    def _worker(idx: int) -> tuple[int, dict[str, Any] | None]:
+        listing = listings[idx]
+        return idx, enrich_listing(listing, model=model)
+
+    def _persist() -> None:
+        output_path.write_text(json.dumps(listings, indent=2))
+
+    with ThreadPoolExecutor(max_workers=concurrency) as pool:
+        futures = {pool.submit(_worker, idx): idx for idx in todo}
+        for fut in as_completed(futures):
+            idx, enrichment = fut.result()
+            with write_lock:
+                progress["done"] += 1
+                n = progress["done"]
+                listing = listings[idx]
+                log.info(
+                    f"[enrich] {listing.get('id')} "
+                    f"({n}/{total_todo}): "
+                    f"{listing.get('title', '')[:60]}"
+                )
+                if enrichment is None:
+                    counters["failed"] += 1
+                    continue
+                listing.update(enrichment)
+                listing["enrichedAt"] = datetime.now(timezone.utc).isoformat()
+                listing["_enrichHash"] = _content_hash(listing)
+                counters["enriched"] += 1
+                # Persist on every success so a crash/KeyboardInterrupt
+                # doesn't lose completed work.
+                _persist()
+
+    # Final write ensures failures-only runs still touch the file
+    _persist()
     return counters
 
 
@@ -257,6 +299,12 @@ def main() -> int:
         action="store_true",
         help="Re-enrich listings even if their hash matches",
     )
+    parser.add_argument(
+        "--concurrency",
+        type=int,
+        default=DEFAULT_CONCURRENCY,
+        help=f"Parallel subprocess calls (default: {DEFAULT_CONCURRENCY})",
+    )
     args = parser.parse_args()
 
     output_path = args.output or args.input
@@ -268,6 +316,7 @@ def main() -> int:
             model=args.model,
             limit=args.limit,
             force=args.force,
+            concurrency=args.concurrency,
         )
     except LLMUnavailable as e:
         print(f"error: {e}", file=sys.stderr)

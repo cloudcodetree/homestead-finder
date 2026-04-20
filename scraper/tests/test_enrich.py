@@ -297,3 +297,42 @@ def test_enrich_file_rejects_non_array(tmp_path):
         except ValueError:
             return
     raise AssertionError("expected ValueError")
+
+
+def test_enrich_file_concurrency_preserves_listing_order(tmp_path):
+    """With parallelism, completion order != input order, but output order
+    must still match input order (we write back by index)."""
+    listings = [
+        dict(_base_listing(), id=f"id_{i}", title=f"Listing {i}") for i in range(8)
+    ]
+    input_file = tmp_path / "in.json"
+    output_file = tmp_path / "out.json"
+    input_file.write_text(json.dumps(listings))
+
+    with (
+        patch.object(enrich, "is_available", return_value=True),
+        patch.object(enrich, "call_json", side_effect=_good_enrichment_response),
+    ):
+        counters = enrich.enrich_file(input_file, output_file, concurrency=4)
+
+    result = json.loads(output_file.read_text())
+    assert [r["id"] for r in result] == [f"id_{i}" for i in range(8)]
+    assert counters["enriched"] == 8
+
+
+def test_enrich_file_persists_all_completed_work(tmp_path):
+    """All successfully-enriched listings should end up on disk."""
+    listings = [dict(_base_listing(), id=f"id_{i}") for i in range(3)]
+    input_file = tmp_path / "in.json"
+    output_file = tmp_path / "out.json"
+    input_file.write_text(json.dumps(listings))
+
+    with (
+        patch.object(enrich, "is_available", return_value=True),
+        patch.object(enrich, "call_json", side_effect=_good_enrichment_response),
+    ):
+        enrich.enrich_file(input_file, output_file, concurrency=2)
+
+    result = json.loads(output_file.read_text())
+    assert all(item.get("enrichedAt") for item in result)
+    assert len(result) == 3

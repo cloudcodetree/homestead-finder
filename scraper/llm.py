@@ -19,6 +19,7 @@ import shutil
 import subprocess
 import time
 from dataclasses import dataclass
+from pathlib import Path
 from typing import Any
 
 import ai_costs
@@ -30,6 +31,11 @@ log = get_logger("llm")
 
 CACHE_DIR = DATA_DIR / "cache" / "llm"
 CACHE_DIR.mkdir(parents=True, exist_ok=True)
+
+# Cache eviction: delete least-recently-accessed entries when the directory
+# exceeds this size. 200MB accommodates tens of thousands of small enrichment
+# responses without letting the disk grow unbounded.
+CACHE_MAX_BYTES = int(os.environ.get("LLM_CACHE_MAX_BYTES", 200 * 1024 * 1024))
 
 # Default model — Haiku is the cheapest per-listing enrichment option and
 # plenty capable for tag extraction. Override via `model=` kwarg.
@@ -103,6 +109,43 @@ def _claude_path() -> str:
             "`claude login`, or set CLAUDE_CMD=/path/to/claude."
         )
     return found
+
+
+def _evict_cache_if_over_limit(
+    cache_dir: Path = CACHE_DIR, max_bytes: int = CACHE_MAX_BYTES
+) -> None:
+    """Delete least-recently-accessed cache files until total size fits.
+
+    Best-effort — swallows OSError since cache is observational.
+    """
+    try:
+        entries: list[tuple[float, int, Path]] = []
+        total = 0
+        for p in cache_dir.iterdir():
+            if not p.is_file():
+                continue
+            try:
+                stat = p.stat()
+            except OSError:
+                continue
+            entries.append((stat.st_atime, stat.st_size, p))
+            total += stat.st_size
+
+        if total <= max_bytes:
+            return
+
+        # Oldest-accessed first
+        entries.sort(key=lambda e: e[0])
+        for atime, size, path in entries:
+            if total <= max_bytes:
+                break
+            try:
+                path.unlink()
+                total -= size
+            except OSError:
+                continue
+    except OSError:
+        pass
 
 
 def _cache_key(prompt: str, model: str, system: str | None) -> str:
@@ -281,6 +324,7 @@ def call(
                     }
                 )
             )
+            _evict_cache_if_over_limit()
         except OSError as e:
             log.info(f"[llm] cache write failed: {e}")
 

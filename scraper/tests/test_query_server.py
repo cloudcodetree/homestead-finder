@@ -362,6 +362,81 @@ def test_cors_disallowed_origin_not_echoed(tmp_path):
     assert "Access-Control-Allow-Origin: http://evil.example" not in raw
 
 
+def test_rate_limit_returns_429_after_burst(tmp_path, monkeypatch):
+    # Reset the global rate limiter with tight limits for the test
+    limiter = query_server._RateLimiter(max_requests=2, window_seconds=60.0)
+    monkeypatch.setattr(query_server, "_rate_limiter", limiter)
+
+    listings_file = tmp_path / "listings.json"
+    listings_file.write_text(json.dumps([{"id": "a"}]))
+
+    with patch.object(query_server, "call_json", return_value={"matches": []}):
+        # First two requests succeed
+        status1, _ = _invoke(
+            "POST",
+            "/query",
+            body=b'{"question":"q"}',
+            listings_path=listings_file,
+        )
+        status2, _ = _invoke(
+            "POST",
+            "/query",
+            body=b'{"question":"q"}',
+            listings_path=listings_file,
+        )
+        # Third request hits the limit
+        status3, body3 = _invoke(
+            "POST",
+            "/query",
+            body=b'{"question":"q"}',
+            listings_path=listings_file,
+        )
+
+    assert status1 == 200
+    assert status2 == 200
+    assert status3 == 429
+    assert body3["error"] == "rate_limited"
+    assert "retryAfterSeconds" in body3
+
+
+def test_rate_limit_releases_slots_after_window(tmp_path, monkeypatch):
+    """After enough time passes, older timestamps drop out of the window."""
+    current_time = [1000.0]
+    monkeypatch.setattr(query_server.time, "monotonic", lambda: current_time[0])
+    limiter = query_server._RateLimiter(max_requests=1, window_seconds=1.0)
+    monkeypatch.setattr(query_server, "_rate_limiter", limiter)
+
+    listings_file = tmp_path / "listings.json"
+    listings_file.write_text(json.dumps([{"id": "a"}]))
+
+    with patch.object(query_server, "call_json", return_value={"matches": []}):
+        status1, _ = _invoke(
+            "POST",
+            "/query",
+            body=b'{"question":"q"}',
+            listings_path=listings_file,
+        )
+        # Immediately blocked
+        status2, _ = _invoke(
+            "POST",
+            "/query",
+            body=b'{"question":"q"}',
+            listings_path=listings_file,
+        )
+        # Advance time past the window
+        current_time[0] += 2.0
+        status3, _ = _invoke(
+            "POST",
+            "/query",
+            body=b'{"question":"q"}',
+            listings_path=listings_file,
+        )
+
+    assert status1 == 200
+    assert status2 == 429
+    assert status3 == 200
+
+
 def test_options_returns_204_with_cors(tmp_path):
     listings_file = tmp_path / "listings.json"
     listings_file.write_text("[]")

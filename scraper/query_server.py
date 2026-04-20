@@ -27,8 +27,11 @@ from __future__ import annotations
 import argparse
 import json
 import sys
+import time
+from collections import deque
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
+from threading import Lock
 from typing import Any
 from urllib.parse import urlparse
 
@@ -42,6 +45,39 @@ log = get_logger("query_server")
 DEFAULT_PORT = 7799
 DEFAULT_LIMIT = 25
 DEFAULT_MODEL = "sonnet"
+
+# Rate limit: at most RATE_LIMIT_REQUESTS /query calls in any
+# RATE_LIMIT_WINDOW seconds. Protects against a frontend bug hammering the
+# server (which would otherwise burn through Max quota). Generous enough
+# that interactive use is unaffected.
+RATE_LIMIT_REQUESTS = 20
+RATE_LIMIT_WINDOW = 60.0
+
+
+class _RateLimiter:
+    """Fixed-window counter. Thread-safe."""
+
+    def __init__(self, max_requests: int, window_seconds: float) -> None:
+        self.max = max_requests
+        self.window = window_seconds
+        self._times: deque[float] = deque()
+        self._lock = Lock()
+
+    def check(self) -> tuple[bool, float]:
+        """Returns (allowed, seconds_until_slot_frees)."""
+        now = time.monotonic()
+        with self._lock:
+            # Drop timestamps that fell out of the window
+            while self._times and self._times[0] < now - self.window:
+                self._times.popleft()
+            if len(self._times) >= self.max:
+                retry_after = self.window - (now - self._times[0])
+                return False, max(retry_after, 0.0)
+            self._times.append(now)
+            return True, 0.0
+
+
+_rate_limiter = _RateLimiter(RATE_LIMIT_REQUESTS, RATE_LIMIT_WINDOW)
 
 # CORS: allow Vite dev server (5173) and built preview (4173) to POST here.
 # Keep the list short — this is strictly for local dev.
@@ -161,6 +197,20 @@ class QueryHandler(BaseHTTPRequestHandler):
         path = urlparse(self.path).path
         if path != "/query":
             self._send_json(404, {"error": "not_found"})
+            return
+
+        allowed, retry_after = _rate_limiter.check()
+        if not allowed:
+            self.send_response(429)
+            self.send_header("Retry-After", str(int(retry_after) + 1))
+            self._set_cors()
+            self.send_header("Content-Type", "application/json")
+            body = json.dumps(
+                {"error": "rate_limited", "retryAfterSeconds": round(retry_after, 1)}
+            ).encode()
+            self.send_header("Content-Length", str(len(body)))
+            self.end_headers()
+            self.wfile.write(body)
             return
 
         try:

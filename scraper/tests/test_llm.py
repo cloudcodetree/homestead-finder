@@ -346,6 +346,63 @@ def test_call_does_not_retry_envelope_errors(tmp_cache, monkeypatch):
     assert run.call_count == 1
 
 
+# ── Cache eviction ──────────────────────────────────────────────────────────
+
+
+def test_evict_cache_noop_under_limit(tmp_path):
+    for i in range(3):
+        (tmp_path / f"entry_{i}.json").write_text("x")
+    llm._evict_cache_if_over_limit(tmp_path, max_bytes=10_000)
+    # Nothing should be deleted
+    assert len(list(tmp_path.iterdir())) == 3
+
+
+def test_evict_cache_removes_oldest_over_limit(tmp_path):
+    import os
+
+    # Three entries, each 100 bytes. Limit: 200 bytes → must drop 1.
+    paths = []
+    for i in range(3):
+        p = tmp_path / f"entry_{i}.json"
+        p.write_text("x" * 100)
+        paths.append(p)
+    # Set access times so entry_0 is oldest
+    now = 1_000_000_000
+    os.utime(paths[0], (now - 100, now - 100))
+    os.utime(paths[1], (now - 50, now - 50))
+    os.utime(paths[2], (now, now))
+
+    llm._evict_cache_if_over_limit(tmp_path, max_bytes=200)
+
+    remaining = sorted(p.name for p in tmp_path.iterdir())
+    assert "entry_0.json" not in remaining
+    assert "entry_1.json" in remaining
+    assert "entry_2.json" in remaining
+
+
+def test_evict_cache_tolerates_empty_dir(tmp_path):
+    llm._evict_cache_if_over_limit(tmp_path, max_bytes=100)
+    # Should not raise
+
+
+def test_evict_cache_triggered_by_cache_write(tmp_cache, monkeypatch):
+    """After a cache write, eviction is invoked."""
+    called = {"n": 0}
+
+    def fake_evict(*args, **kwargs):
+        called["n"] += 1
+
+    monkeypatch.setattr(llm, "_evict_cache_if_over_limit", fake_evict)
+    with (
+        patch.object(llm, "_claude_path", return_value="/fake/claude"),
+        patch.object(
+            llm.subprocess, "run", return_value=_mock_completed(_fake_envelope("x"))
+        ),
+    ):
+        llm.call("p")
+    assert called["n"] == 1
+
+
 # ── is_available ────────────────────────────────────────────────────────────
 
 

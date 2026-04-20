@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Homestead Finder — How It Works</title>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10.9.1/dist/mermaid.min.js"></script>
+<style>
+  :root {
+    --bg: #0f172a;
+    --panel: #ffffff;
+    --text: #0f172a;
+    --muted: #475569;
+    --accent: #16a34a;
+    --accent-soft: #dcfce7;
+    --border: #e2e8f0;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: #f1f5f9;
+    color: var(--text);
+    line-height: 1.5;
+  }
+  header {
+    background: linear-gradient(135deg, #166534 0%, #14532d 100%);
+    color: white;
+    padding: 2rem 2rem 1.5rem;
+    border-bottom: 4px solid var(--accent);
+  }
+  header h1 { margin: 0 0 0.25rem 0; font-size: 1.8rem; }
+  header p { margin: 0; opacity: 0.85; font-size: 0.95rem; }
+  nav {
+    background: var(--panel);
+    padding: 0.75rem 2rem;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  nav a {
+    color: var(--muted);
+    text-decoration: none;
+    padding: 0.4rem 0.8rem;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    transition: background 0.15s;
+  }
+  nav a:hover { background: var(--accent-soft); color: var(--accent); }
+  main { max-width: 1200px; margin: 0 auto; padding: 2rem; }
+  section {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem 2rem 2rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+  }
+  section h2 {
+    margin: 0 0 0.5rem 0;
+    color: #14532d;
+    font-size: 1.3rem;
+    border-bottom: 2px solid var(--accent-soft);
+    padding-bottom: 0.5rem;
+  }
+  section p.lead { color: var(--muted); margin: 0 0 1.5rem 0; }
+  .mermaid {
+    background: #f8fafc;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.5rem;
+    text-align: center;
+    overflow-x: auto;
+  }
+  .notes {
+    margin-top: 1.25rem;
+    padding: 1rem 1.25rem;
+    background: #f0fdf4;
+    border-left: 3px solid var(--accent);
+    border-radius: 4px;
+    font-size: 0.9rem;
+  }
+  .notes strong { color: #14532d; }
+  .notes ul { margin: 0.5rem 0 0 1.2rem; padding: 0; }
+  .notes li { margin-bottom: 0.3rem; }
+  footer {
+    text-align: center;
+    padding: 2rem;
+    color: var(--muted);
+    font-size: 0.85rem;
+  }
+  code {
+    background: #f1f5f9;
+    padding: 0.1rem 0.35rem;
+    border-radius: 3px;
+    font-size: 0.85em;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  }
+</style>
+</head>
+<body>
+<header>
+  <h1>Homestead Finder — How It Works</h1>
+  <p>Visual reference for the scraper, data pipeline, AI layer, and scoring engine. Generated from the current codebase and ADRs.</p>
+</header>
+<nav>
+  <a href="#arch">1. Architecture &amp; Data Flow</a>
+  <a href="#fetch">2. Adaptive Fetch Chain</a>
+  <a href="#ai">3. Local AI Pipeline</a>
+  <a href="#score">4. Deal Scoring</a>
+</nav>
+<main>
+
+<section id="arch">
+  <h2>1. System Architecture &amp; Daily Data Flow</h2>
+  <p class="lead">The 30-second overview: how a listing gets from a land-sales website onto the dashboard you're looking at.</p>
+  <div class="mermaid">
+flowchart LR
+    classDef ci fill:#fef3c7,stroke:#d97706,color:#78350f
+    classDef data fill:#dbeafe,stroke:#2563eb,color:#1e3a8a
+    classDef web fill:#dcfce7,stroke:#16a34a,color:#14532d
+    classDef ext fill:#f3e8ff,stroke:#9333ea,color:#581c87
+    classDef user fill:#fee2e2,stroke:#dc2626,color:#7f1d1d
+
+    CRON["&#128336; GitHub Actions<br/>scrape.yml (daily 6am UTC)"]:::ci
+    SCRAPER["scraper/main.py<br/>orchestrator"]:::ci
+    SOURCES[("Listing sites<br/>LandWatch, LoA,<br/>BLM, county tax, auctions")]:::ext
+    FC{{"Firecrawl API<br/>(Cloudflare bypass)"}}:::ext
+    SCORE["scoring.py<br/>dealScore 0&#8211;100"]:::ci
+
+    LISTINGS["data/listings.json"]:::data
+    ARCHIVE["data/listings_YYYYMMDD.json"]:::data
+    LOG["data/scraper.log"]:::data
+
+    SG{{"SendGrid<br/>(scores &#8805; 75)"}}:::ext
+    EMAIL["&#9993; Email notifications"]:::user
+
+    DEPLOY["deploy-pages.yml<br/>(on push to main)"]:::ci
+    PAGES["GitHub Pages<br/>static hosting"]:::web
+    REACT["React + Vite<br/>Dashboard"]:::web
+    USER["&#128100; User"]:::user
+
+    CRON --> SCRAPER
+    SCRAPER -->|"fetch strategy chain"| SOURCES
+    SCRAPER -.->|"fallback"| FC
+    FC --> SOURCES
+    SCRAPER --> SCORE
+    SCORE --> LISTINGS
+    SCRAPER --> ARCHIVE
+    SCRAPER --> LOG
+    SCORE -->|"high-score hits"| SG
+    SG --> EMAIL
+
+    LISTINGS -->|"git commit triggers"| DEPLOY
+    DEPLOY --> PAGES
+    PAGES --> REACT
+    LISTINGS -.->|"fetched at runtime"| REACT
+    REACT --> USER
+  </div>
+  <div class="notes">
+    <strong>Key pieces:</strong>
+    <ul>
+      <li><code>scraper/main.py</code> is the entry point the cron job calls. It runs each registered source through the fetch-strategy chain (see next diagram), scores each listing, and writes two JSON files.</li>
+      <li><code>data/listings.json</code> (root) is the live dataset the frontend reads. <code>listings_YYYYMMDD.json</code> is an append-only archive.</li>
+      <li>Scores ≥ 75 get batched into a SendGrid email via <code>notifier.py</code>.</li>
+      <li>Any commit to <code>main</code> (including the daily scrape commit) fires <code>deploy-pages.yml</code>, which builds the Vite bundle and pushes to Pages.</li>
+      <li>The React app doesn't have a backend — it just <code>fetch()</code>s <code>data/listings.json</code> from the same origin at page load.</li>
+    </ul>
+  </div>
+</section>
+
+<section id="fetch">
+  <h2>2. Adaptive Fetch Strategy Chain</h2>
+  <p class="lead">What happens when the scraper tries to pull one page. Each tier is a fallback — we stop as soon as one works.</p>
+  <div class="mermaid">
+flowchart TD
+    classDef tier fill:#e0f2fe,stroke:#0284c7,color:#0c4a6e
+    classDef cheap fill:#dcfce7,stroke:#16a34a,color:#14532d
+    classDef paid fill:#fef9c3,stroke:#ca8a04,color:#713f12
+    classDef fail fill:#fee2e2,stroke:#dc2626,color:#7f1d1d
+    classDef ok fill:#d1fae5,stroke:#059669,color:#064e3b
+
+    START(["BaseScraper.fetch_page(url)"]):::tier
+    T0["Tier 0 &#8211; Cached learned selectors<br/>data/learned_selectors/&lt;source&gt;.json"]:::cheap
+    T1["Tier 1 &#8211; HTTPStrategy<br/>requests.get"]:::cheap
+    T2["Tier 2 &#8211; BrowserStrategy<br/>Playwright + Chromium"]:::cheap
+    T3["Tier 3 &#8211; FirecrawlStrategy<br/>render + markdown"]:::paid
+    T4["Tier 4 &#8211; ClaudeStrategy<br/>direct HTML &#8594; listings"]:::paid
+
+    LEARN{"AI Learning Pipeline<br/>discover selectors"}:::paid
+    SAVE[("learned_selectors/*.json<br/>git-committed")]:::cheap
+    ESC["ModelEscalator<br/>Haiku &#8594; Sonnet &#8594; Opus"]:::paid
+    COST[("data/ai_costs.json<br/>$1/run cap")]:::fail
+
+    PARSE["parse() &#8594; normalize()"]:::ok
+    OUT(["list of Property dicts"]):::ok
+
+    START --> T0
+    T0 -->|"hit"| T1
+    T0 -->|"miss"| LEARN
+    T1 -->|"200 OK"| PARSE
+    T1 -->|"403 / blocked"| T2
+    T2 -->|"content loaded"| PARSE
+    T2 -->|"still blocked<br/>(Cloudflare)"| T3
+    T3 -->|"markdown returned"| PARSE
+    T3 -->|"failed"| T4
+    T4 --> PARSE
+
+    LEARN --> ESC
+    ESC --> SAVE
+    SAVE -.->|"next run"| T0
+    ESC --> COST
+
+    PARSE --> OUT
+  </div>
+  <div class="notes">
+    <strong>Why this design (ADR-008, ADR-009):</strong>
+    <ul>
+      <li><b>Tiers 1 and 2 are free.</b> LandWatch currently blocks both (Cloudflare detects headless Playwright), so real runs fall through to Tier 3.</li>
+      <li><b>Firecrawl</b> is the workhorse for paid runs. <code>FIRECRAWL_API_KEY</code> is in GitHub secrets; parser runs on its markdown output.</li>
+      <li><b>Claude extraction</b> (Tier 4) is last-resort — only triggered when even Firecrawl returns unparseable content. The <i>Model Escalator</i> starts at Haiku and bumps up on failure, capped at $1/run.</li>
+      <li><b>Learned selectors</b> are git-committed so Tier 0 stays cheap over time: pay once for discovery, reuse forever until selectors break.</li>
+      <li>Today, only the LandWatch source has its parser wired up to the markdown output; <code>lands_of_america</code> still needs to be ported (P1 on the backlog).</li>
+    </ul>
+  </div>
+</section>
+
+<section id="ai">
+  <h2>3. Local AI Pipeline (Enrich / Curate / Query)</h2>
+  <p class="lead">How the Claude Max subscription powers per-listing enrichment, Top Picks curation, and the Ask-Claude bar — all without buying API credits (ADR-012).</p>
+  <div class="mermaid">
+flowchart TB
+    classDef local fill:#e0e7ff,stroke:#4f46e5,color:#312e81
+    classDef data fill:#dbeafe,stroke:#2563eb,color:#1e3a8a
+    classDef claude fill:#fde68a,stroke:#d97706,color:#78350f
+    classDef ui fill:#dcfce7,stroke:#16a34a,color:#14532d
+    classDef ci fill:#fef3c7,stroke:#d97706,color:#78350f
+
+    LISTINGS[("data/listings.json<br/>(from CI scrape)")]:::data
+    MAX["&#128100; Developer machine<br/>Claude Max subscription<br/>(via OAuth 'claude login')"]:::local
+    LLM["scraper/llm.py<br/>subprocess: claude -p<br/>+ on-disk cache"]:::local
+    CACHE[("data/cache/llm/<br/>hash(model, system, prompt)")]:::data
+
+    ENRICH["scraper/enrich.py<br/>per-listing, idempotent via<br/>content hash &#8226; default Haiku"]:::local
+    VOCAB[("ai_vocab.json<br/>28 aiTags &#8226; 14 redFlags")]:::data
+    CURATE["scraper/curate.py<br/>pre-rank top 50 &#8594;<br/>one Sonnet call &#8594; top N"]:::local
+    QSERV["scraper/query_server.py<br/>localhost HTTP proxy<br/>/health &#8226; /query"]:::local
+
+    ENRICHED[("data/listings.json<br/>+ aiTags, homesteadFitScore,<br/>redFlags, aiSummary, enrichedAt")]:::data
+    CURATED[("data/curated.json<br/>ranked picks + headlines")]:::data
+
+    DASH["React Dashboard<br/>(Vite dev or Pages)"]:::ui
+    ASKCLAUDE["&#129504; AskClaude bar<br/>(hidden if /health fails)"]:::ui
+    TOPPICKS["Top Picks view<br/>TopPicks.tsx"]:::ui
+    AIUI["AI Insights filters<br/>&#8226; fit-score slider<br/>&#8226; hide red-flags<br/>&#8226; aiTags multi-select"]:::ui
+
+    COMMIT["&#128220; git commit &amp; push"]:::ci
+    PAGES["GitHub Pages<br/>(static)"]:::ui
+
+    LISTINGS --> ENRICH
+    ENRICH --> LLM
+    CURATE --> LLM
+    QSERV --> LLM
+    LLM -->|"cache hit &#8594; free"| CACHE
+    LLM -->|"miss"| MAX
+    MAX --> CACHE
+
+    VOCAB -.-> ENRICH
+    VOCAB -.-> CURATE
+
+    ENRICH --> ENRICHED
+    CURATE --> CURATED
+    ENRICHED --> CURATE
+
+    ENRICHED --> COMMIT
+    CURATED --> COMMIT
+    COMMIT --> PAGES
+    PAGES --> DASH
+
+    DASH --> TOPPICKS
+    DASH --> AIUI
+    DASH -.->|"GET /health"| QSERV
+    QSERV -.->|"200 &#8658; show bar"| ASKCLAUDE
+    ASKCLAUDE -->|"POST /query"| QSERV
+  </div>
+  <div class="notes">
+    <strong>What this buys (and costs):</strong>
+    <ul>
+      <li><b>Zero ongoing API spend.</b> All three AI features bill against the Max flat fee via <code>claude -p</code>. CI stays on parsing only.</li>
+      <li><b>Idempotent enrichment.</b> <code>enrich.py</code> hashes each listing; unchanged listings skip re-enrichment. Re-runs are effectively free thanks to <code>data/cache/llm/</code>.</li>
+      <li><b>Curation is two-stage</b> — a deterministic pre-rank (<code>0.4·dealScore + 0.6·homesteadFit − 5·redFlags</code>) picks the top 50, then one Sonnet call chooses and explains the top N.</li>
+      <li><b>Vocabularies are duplicated</b> between <code>scraper/ai_vocab.py</code> and <code>frontend/src/types/property.ts</code> — kept in sync by hand (see ADR-012). <code>emit_ts_vocab.py</code> is the codegen path if this becomes annoying.</li>
+      <li><b>Ask-Claude only works in <code>npm run dev</code>.</b> The React app pings <code>/health</code>; if the localhost proxy isn't running (as on production Pages), the bar silently hides.</li>
+      <li><b>Tradeoff:</b> AI data only refreshes when the developer manually runs <code>enrich</code> / <code>curate</code> and commits. No automation — that's the price of free.</li>
+    </ul>
+  </div>
+</section>
+
+<section id="score">
+  <h2>4. Deal Scoring Formula</h2>
+  <p class="lead">Every listing gets a <code>dealScore</code> from 0 to 100. Scores ≥ 75 trigger email alerts. Here's the math, straight out of <code>scoring.py</code> (ADR-003).</p>
+  <div class="mermaid">
+flowchart LR
+    classDef input fill:#e0f2fe,stroke:#0284c7,color:#0c4a6e
+    classDef calc fill:#fef9c3,stroke:#ca8a04,color:#713f12
+    classDef total fill:#dcfce7,stroke:#16a34a,color:#14532d
+    classDef alert fill:#fee2e2,stroke:#dc2626,color:#7f1d1d
+
+    L(["Listing"]):::input
+    P["&#128176; Price score (max 40)<br/>price-per-acre vs.<br/>REGIONAL_MEDIANS[state]"]:::calc
+    F["&#127969; Feature score (max 30)<br/>water_well 8 &#8226; creek 7<br/>owner_finance 5 &#8226; electric 4<br/>mineral_rights 4 &#8226; &#8230;"]:::calc
+    D["&#128197; DOM score (max 20)<br/>days-on-market curve<br/>longer listed &#8658; more desperate"]:::calc
+    S["&#127760; Source score (max 10)<br/>county_tax 10 &#8226; govease 10<br/>auction 9 &#8226; blm 8<br/>landwatch 6 &#8226; zillow 4"]:::calc
+
+    SUM(["dealScore = clamp(0, 100,<br/>P + F + D + S)"]):::total
+    LOW(["&lt; 75<br/>dashboard only"]):::input
+    HIGH(["&#8805; 75<br/>SendGrid email"]):::alert
+
+    L --> P
+    L --> F
+    L --> D
+    L --> S
+    P --> SUM
+    F --> SUM
+    D --> SUM
+    S --> SUM
+    SUM -->|"0&#8211;74"| LOW
+    SUM -->|"75&#8211;100"| HIGH
+  </div>
+  <div class="mermaid">
+pie showData title Weight of each factor (max points)
+    "Price vs. regional median" : 40
+    "Homesteading features" : 30
+    "Days on market" : 20
+    "Source reliability" : 10
+  </div>
+  <div class="notes">
+    <strong>Reading the numbers:</strong>
+    <ul>
+      <li><b>Price (40%)</b> — the dominant signal. A $400/acre listing in Montana (median $450) scores near the top; the same price in California (median $5,000) would too, but won't exist.</li>
+      <li><b>Features (30%)</b> — <code>water_well</code> alone is worth 8 points, reflecting how non-negotiable water is for a working homestead. Feature detection depends on listing text quality.</li>
+      <li><b>DOM (20%)</b> — longer on market = more seller flexibility. The curve rewards ~180+ day listings.</li>
+      <li><b>Source (10%)</b> — <code>county_tax</code> and <code>govease</code> top out because tax-sale and government auction lots are where the actual deals hide. MLS feeds (Zillow, Realtor) cap at 4–5 since they're retail-priced.</li>
+      <li><b>ADR-003 says to revisit</b> these weights after 30 days of real data. If too many listings cluster in 40–60, the curve gets adjusted. That review hasn't happened yet because real data only started flowing with the LandWatch Firecrawl fix on 2026-04-20.</li>
+    </ul>
+  </div>
+</section>
+
+</main>
+<footer>
+  Generated from <code>context/ROLLING_CONTEXT.md</code>, <code>DECISIONS.md</code>, and the <code>scraper/</code> source tree.
+  Diagrams rendered with Mermaid.js.
+</footer>
+<script>
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: 'default',
+    securityLevel: 'loose',
+    flowchart: { curve: 'basis', htmlLabels: true, useMaxWidth: true },
+    themeVariables: {
+      fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+      primaryColor: '#dcfce7',
+      primaryTextColor: '#14532d',
+      lineColor: '#475569'
+    }
+  });
+</script>
+</body>
+</html>
