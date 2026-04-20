@@ -39,13 +39,13 @@ def render_ts(vocab: dict) -> str:
     def union(entries: list[dict]) -> str:
         return "\n  | ".join(f"'{e['key']}'" for e in entries)
 
-    def labels(entries: list[dict], ty: str) -> str:
+    def labels(entries: list[dict], const_name: str, key_type: str) -> str:
         lines = [
             f"  {e['key']}: {json.dumps(e['label'])},"  # json.dumps handles quoting
             for e in entries
         ]
         body = "\n".join(lines)
-        return f"export const {ty}: Record<{ty.replace('_LABELS', '')}, string> = {{\n{body}\n}};"
+        return f"export const {const_name}: Record<{key_type}, string> = {{\n{body}\n}};"
 
     out: list[str] = [HEADER.rstrip(), ""]
     out.append("// AI tag union — Claude's enrich.py may return only these keys.")
@@ -56,7 +56,7 @@ def render_ts(vocab: dict) -> str:
         out.append(f"  '{e['key']}',")
     out.append("] as const;")
     out.append("")
-    out.append(labels(tag_entries, "AI_TAG_LABELS"))
+    out.append(labels(tag_entries, "AI_TAG_LABELS", "AITag"))
     out.append("")
     out.append("// Red flag union — Claude's enrich.py may return only these keys.")
     out.append(f"export type RedFlag =\n  | {union(flag_entries)};")
@@ -66,7 +66,7 @@ def render_ts(vocab: dict) -> str:
         out.append(f"  '{e['key']}',")
     out.append("] as const;")
     out.append("")
-    out.append(labels(flag_entries, "RED_FLAG_LABELS"))
+    out.append(labels(flag_entries, "RED_FLAG_LABELS", "RedFlag"))
     out.append("")
     out.append(
         "// Severity 1-5 (higher = worse). Used by UI to prioritize flag display."

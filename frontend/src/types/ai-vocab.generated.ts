@@ -66,7 +66,7 @@ export const AI_TAG_KEYS: readonly AITag[] = [
   'mineral_rights_excluded',
 ] as const;
 
-export const AI_TAG_LABELS: Record<AI_TAG, string> = {
+export const AI_TAG_LABELS: Record<AITag, string> = {
   paved_access: "Paved Access",
   seasonal_access_only: "Seasonal Access",
   remote_access_concerns: "Remote Access",
@@ -131,7 +131,7 @@ export const RED_FLAG_KEYS: readonly RedFlag[] = [
   'price_seems_too_good',
 ] as const;
 
-export const RED_FLAG_LABELS: Record<RED_FLAG, string> = {
+export const RED_FLAG_LABELS: Record<RedFlag, string> = {
   hoa_restrictions: "HOA Restrictions",
   flood_zone_mention: "Flood Zone",
   wetland_restrictions: "Wetland",

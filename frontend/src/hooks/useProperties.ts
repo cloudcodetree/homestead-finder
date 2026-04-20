@@ -31,8 +31,12 @@ const applyFilters = (properties: Property[], filters: FilterState): Property[] 
 };
 
 // Module-scoped so useCallback sees a stable reference and the useJsonAsset
-// effect doesn't re-fire every render.
-const loadSample = () => import('../data/sample-listings.json');
+// effect doesn't re-fire every render. Cast narrows the JSON's inferred
+// literal types to the runtime Property[] shape.
+const loadSample = async () => {
+  const mod = await import('../data/sample-listings.json');
+  return { default: mod.default as unknown as Property[] };
+};
 
 const isEmptyArray = (d: Property[]) => d.length === 0;
 

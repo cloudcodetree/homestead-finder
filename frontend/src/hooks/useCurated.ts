@@ -2,7 +2,10 @@ import { useCallback } from 'react';
 import { CurationResult } from '../types/property';
 import { useJsonAsset } from './useJsonAsset';
 
-const loadSample = () => import('../data/sample-curated.json');
+const loadSample = async () => {
+  const mod = await import('../data/sample-curated.json');
+  return { default: mod.default as unknown as CurationResult };
+};
 
 const isEmpty = (d: CurationResult) => !d.picks || d.picks.length === 0;
 

@@ -28,6 +28,7 @@ from pathlib import Path
 from typing import Any
 
 import config
+from ai_vocab import flag_severities
 from llm import LLMCallFailed, LLMUnavailable, call_json, is_available
 from logger import get_logger
 
@@ -48,17 +49,22 @@ def _prerank_candidates(
     """Pick the top N candidates deterministically before sending to the LLM.
 
     Combined score weights AI fit a bit higher than the rule-based deal
-    score since we're specifically curating for homesteading.
+    score since we're specifically curating for homesteading. Red flags are
+    penalized by their severity (1-5 from ai_vocab.json) rather than a flat
+    count, so `no_water_source` (severity 5) hurts far more than
+    `extreme_remote` (severity 2).
     """
+    severities = flag_severities()
     enriched = [item for item in listings if item.get("enrichedAt")]
 
     def combined_score(item: dict[str, Any]) -> float:
         deal = float(item.get("dealScore", 0) or 0)
         fit = float(item.get("homesteadFitScore", 0) or 0)
-        # Penalize listings with red flags so they compete at a disadvantage
-        # rather than getting filtered out entirely — Claude can still pick
-        # them if it thinks they're worth flagging.
-        penalty = 5 * len(item.get("redFlags", []) or [])
+        flags = item.get("redFlags", []) or []
+        # Each flag subtracts 3 * severity points. A single severity-5 flag
+        # (e.g. no_water_source) costs 15 — enough to push an otherwise
+        # strong listing out of the top few. A severity-2 caveat costs 6.
+        penalty = sum(3 * severities.get(flag, 3) for flag in flags)
         return 0.4 * deal + 0.6 * fit - penalty
 
     return sorted(enriched, key=combined_score, reverse=True)[:limit]
@@ -194,7 +200,7 @@ def curate(
         f"[curate] calling {model} with {len(candidates)} candidates "
         f"for {pick_count} picks ({len(prompt)} chars)"
     )
-    raw = call_json(prompt, model=model, use_cache=use_cache)
+    raw = call_json(prompt, model=model, use_cache=use_cache, tag="curate")
 
     valid_ids = {c["id"] for c in candidates}
     picks = _sanitize_curation(raw, valid_ids, pick_count)

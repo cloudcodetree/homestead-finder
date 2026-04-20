@@ -49,4 +49,5 @@ npm-debug.log*
 frontend/public/data/
 data/scraper.log
 data/cache/
+data/ai_costs.jsonl
 .claude/worktrees/

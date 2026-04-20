@@ -159,7 +159,7 @@ def enrich_listing(
     """
     prompt = _build_prompt(listing)
     try:
-        raw = call_json(prompt, model=model)
+        raw = call_json(prompt, model=model, tag="enrich")
     except LLMCallFailed as e:
         log.info(f"[enrich] LLM call failed for {listing.get('id')}: {e}")
         return None

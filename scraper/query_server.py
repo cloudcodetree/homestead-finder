@@ -217,7 +217,7 @@ class QueryHandler(BaseHTTPRequestHandler):
             f"listings={len(listings)} limit={limit} model={model}"
         )
         try:
-            raw = call_json(prompt, model=model)
+            raw = call_json(prompt, model=model, tag="query")
         except LLMUnavailable as e:
             self._send_json(503, {"error": f"claude_unavailable: {e}"})
             return
