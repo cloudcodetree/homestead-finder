@@ -1,0 +1,38 @@
+{
+  "curatedAt": "2026-04-20T23:26:43.031631+00:00",
+  "model": "sonnet",
+  "candidateCount": 5,
+  "pickCount": 5,
+  "picks": [
+    {
+      "id": "landwatch_417786257",
+      "headline": "Best value Montana creek land under $150k",
+      "reason": "At $8,128/acre for 18.3 acres with year-round creek water, this is the strongest value proposition in the set by a wide margin. Timber and hunting add real self-sufficiency potential. Seasonal access is a genuine concern that needs verification before committing, but no red flags and solid water is a rare combination at this price.",
+      "rank": 1
+    },
+    {
+      "id": "landwatch_425698602",
+      "headline": "Existing cabin with creek and timber rights",
+      "reason": "The existing cabin on 11.5 acres is a significant practical advantage \u2014 avoiding a full build-out lowers the effective entry cost despite the $47,826/acre price tag. Water rights and nearby creek support off-grid viability. Year-round road access and utility details must be confirmed, but no red flags and a livable structure make this immediately actionable.",
+      "rank": 2
+    },
+    {
+      "id": "landwatch_421939072",
+      "headline": "National Forest border with exceptional water access",
+      "reason": "Surrounded by National Forest on a 5-acre parcel gives de facto access to much larger wild land while keeping ownership costs bounded. The listing notes creeks, rivers, and a nearby lake \u2014 unusually strong water access \u2014 plus an existing shop structure. At $44,970/acre it is expensive for the acreage, and well/septic installs are required costs to budget for.",
+      "rank": 3
+    },
+    {
+      "id": "landwatch_416383838",
+      "headline": "Massive ranch with water, wrong scale for one family",
+      "reason": "Nearly 30,000 acres with creek water and grazing infrastructure at $401/acre is extraordinary land economics, but the $12M price makes it commercial territory, not a homestead buy. For a group or cooperative with real capital, the self-sufficiency potential (water rights, timber, hunting, grazing) is unmatched in this set. Ranked 4th because the scale disqualifies it for most individual homesteaders.",
+      "rank": 4
+    },
+    {
+      "id": "landwatch_412254043",
+      "headline": "Mostly leased land, seasonal-only, not homestead viable",
+      "reason": "Only 3,710 of 35,000 acres are actually deeded \u2014 the rest is BLM and State lease that cannot support permanent residence or development. Seasonal-use designation and deed restrictions make year-round self-sufficient living impossible here. It ranks last because the core homesteading requirements (buildability, year-round residence, true land ownership) are fundamentally unmet.",
+      "rank": 5
+    }
+  ]
+}

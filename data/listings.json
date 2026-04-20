@@ -19,7 +19,24 @@
     "dateFound": "2026-04-20",
     "dealScore": 36,
     "description": "Hinsdale, MT, 59241, Valley County \u2014 35,000+/- Total Acres 3,710+/- Deeded Acres 4,680+/- Acres of State Lease 26,610+/- Acres of BLM Lease The Black Ranch offers a unique opportunity to own a large block of land in Northeastern Montana, excellently suited for use as seasonal pasture or",
-    "daysOnMarket": null
+    "daysOnMarket": null,
+    "aiTags": [
+      "seasonal_access_only",
+      "remote_access_concerns",
+      "isolated",
+      "grazing_suitable",
+      "agricultural_potential",
+      "deed_restrictions",
+      "soil_suitable_for_ag"
+    ],
+    "homesteadFitScore": 18,
+    "redFlags": [
+      "extreme_remote",
+      "easement_concerns"
+    ],
+    "aiSummary": "This is a commercial grazing ranch with 89% of acreage under BLM or State lease\u2014not true ownership. Seasonal-use designation and minimal deeded land (3,710 of 35,000 acres) make year-round residence and self-sufficient development impossible. The effective deeded price (~$2,700/acre) is expensive for an investment operation, not a homesteading opportunity.",
+    "enrichedAt": "2026-04-20T23:25:21.873582+00:00",
+    "_enrichHash": "24a220fbbebf1bda"
   },
   {
     "id": "landwatch_416383838",
@@ -42,7 +59,25 @@
     "dateFound": "2026-04-20",
     "dealScore": 35,
     "description": "Little Porcupine Creek Road, Forsyth, MT, 59327, Rosebud County \u2014 Located 31+/- miles north of Forsyth MT on the Little Porcupine Creek Road. This area is part of the \"Big Open\" country and the Devils Dancing ground. Large open areas of range used for summer grazing. Acreage - Total acres 29,936+/-. Deeded 21,807+/",
-    "daysOnMarket": null
+    "daysOnMarket": null,
+    "aiTags": [
+      "remote_access_concerns",
+      "water_rights_present",
+      "agricultural_potential",
+      "grazing_suitable",
+      "isolated",
+      "hunting_viable",
+      "off_grid_viable",
+      "remote_living_viable"
+    ],
+    "homesteadFitScore": 35,
+    "redFlags": [
+      "extreme_remote",
+      "requires_well_drilling"
+    ],
+    "aiSummary": "This 30,000-acre ranch in remote Montana has creek water and strong grazing potential but lacks building infrastructure and is marketed at commercial scale ($12M). The extreme isolation (31+ miles from town) and massive acreage make it unsuitable for typical homesteaders despite water and land availability.",
+    "enrichedAt": "2026-04-20T23:25:28.387442+00:00",
+    "_enrichHash": "3e535494fb8f45db"
   },
   {
     "id": "landwatch_421939072",
@@ -68,7 +103,26 @@
     "dateFound": "2026-04-20",
     "dealScore": 32,
     "description": "Trapper Creek Road, Melrose, MT, 59743, Beaverhead County \u2014 Here are 5 acres for sale surrounded by National Forest with no neighbors, a huge shop, amazing mountain views, trees, elk and deer all near Sappington Creek, Trapper Creek and Trapper Lake and the famed Big Hole River. Here it is. The Montana mounta",
-    "daysOnMarket": null
+    "daysOnMarket": null,
+    "aiTags": [
+      "remote_living_viable",
+      "isolated",
+      "water_rights_present",
+      "year_round_water",
+      "timber_harvestable",
+      "hunting_viable",
+      "off_grid_viable",
+      "buildable_with_work"
+    ],
+    "homesteadFitScore": 72,
+    "redFlags": [
+      "extreme_remote",
+      "requires_well_drilling",
+      "requires_septic_install"
+    ],
+    "aiSummary": "Remote 5-acre Montana mountain property with excellent water access (creeks, rivers, lake) and existing shop infrastructure, well-suited for off-grid homesteading with strong hunting and timber potential. Surrounded by National Forest with no nearby services, making it extremely isolated\u2014typical for serious homesteaders but limits emergency access and supply runs. At $45k/acre and with incomplete listing details, value proposition relies more on lifestyle appeal than deal quality.",
+    "enrichedAt": "2026-04-20T23:25:16.955314+00:00",
+    "_enrichHash": "dd9b2b76b0ed675c"
   },
   {
     "id": "landwatch_425698602",
@@ -93,7 +147,22 @@
     "dateFound": "2026-04-20",
     "dealScore": 28,
     "description": "3925 Little Wolf Creek Road, Wolf Creek, MT, 59648, Lewis and Clark County \u2014 Tucked into the wild, pine-scented beauty of the Helena National Forest, this classic Montana log cabin radiates on 11.5 acres. As you pull in off the gravel road, the first thing you notice is the quiet, the sound of wind moving through the treetops",
-    "daysOnMarket": null
+    "daysOnMarket": null,
+    "aiTags": [
+      "remote_access_concerns",
+      "off_grid_viable",
+      "water_rights_present",
+      "build_ready",
+      "difficult_terrain",
+      "remote_living_viable",
+      "isolated",
+      "no_hoa"
+    ],
+    "homesteadFitScore": 70,
+    "redFlags": [],
+    "aiSummary": "This remote forest property offers an existing cabin on 11.5 acres, suitable for off-grid homesteading with nearby creek and timber/hunting potential. However, the listing lacks critical details about utilities, water rights, and year-round road access, which must be verified. Limited utility infrastructure and agricultural potential make it best for someone prioritizing isolation and self-sufficiency.",
+    "enrichedAt": "2026-04-20T23:26:04.372390+00:00",
+    "_enrichHash": "5413bf5772d465f1"
   },
   {
     "id": "landwatch_417786257",
@@ -118,7 +187,22 @@
     "dateFound": "2026-04-20",
     "dealScore": 27,
     "description": "Butte, MT, 59701, Silver Bow County \u2014 Montana mountain property with a creek bordering BLM Land and with amazing mountain views, hunting, trees, with elk, deer, and moose. This great mountain property is ready to pull your camper in to or build your Montana cabin right out in the forest",
-    "daysOnMarket": null
+    "daysOnMarket": null,
+    "aiTags": [
+      "year_round_water",
+      "off_grid_viable",
+      "buildable_with_work",
+      "timber_harvestable",
+      "hunting_viable",
+      "remote_living_viable",
+      "difficult_terrain",
+      "seasonal_access_only"
+    ],
+    "homesteadFitScore": 67,
+    "redFlags": [],
+    "aiSummary": "This property has genuine off-grid potential with creek water, timber, and hunting on 18.3 acres. Mountain terrain and insufficient information about utilities, well/septic status, and winter road access create significant unknowns. Site inspection is essential before committing to build.",
+    "enrichedAt": "2026-04-20T23:25:57.832951+00:00",
+    "_enrichHash": "d393e397e9832ee9"
   },
   {
     "id": "landwatch_426391923",
