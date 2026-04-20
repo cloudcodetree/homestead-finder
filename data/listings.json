@@ -1,1 +1,2780 @@
-[]
+[
+  {
+    "id": "landwatch_412254043",
+    "title": "Listing Details Page",
+    "price": 10000000.0,
+    "acreage": 35000.0,
+    "pricePerAcre": 285.71,
+    "location": {
+      "lat": 0.0,
+      "lng": 0.0,
+      "state": "MT",
+      "county": "Valley County"
+    },
+    "features": [
+      "pasture"
+    ],
+    "source": "landwatch",
+    "url": "https://www.landwatch.com/valley-county-montana-farms-and-ranches-for-sale/pid/412254043",
+    "dateFound": "2026-04-20",
+    "dealScore": 36,
+    "description": "Hinsdale, MT, 59241, Valley County \u2014 35,000+/- Total Acres 3,710+/- Deeded Acres 4,680+/- Acres of State Lease 26,610+/- Acres of BLM Lease The Black Ranch offers a unique opportunity to own a large block of land in Northeastern Montana, excellently suited for use as seasonal pasture or",
+    "daysOnMarket": null
+  },
+  {
+    "id": "landwatch_416383838",
+    "title": "Listing Details Page",
+    "price": 11999000.0,
+    "acreage": 29936.0,
+    "pricePerAcre": 400.82,
+    "location": {
+      "lat": 0.0,
+      "lng": 0.0,
+      "state": "MT",
+      "county": "Rosebud County"
+    },
+    "features": [
+      "water_creek",
+      "timber"
+    ],
+    "source": "landwatch",
+    "url": "https://www.landwatch.com/rosebud-county-montana-farms-and-ranches-for-sale/pid/416383838",
+    "dateFound": "2026-04-20",
+    "dealScore": 35,
+    "description": "Little Porcupine Creek Road, Forsyth, MT, 59327, Rosebud County \u2014 Located 31+/- miles north of Forsyth MT on the Little Porcupine Creek Road. This area is part of the \"Big Open\" country and the Devils Dancing ground. Large open areas of range used for summer grazing. Acreage - Total acres 29,936+/-. Deeded 21,807+/",
+    "daysOnMarket": null
+  },
+  {
+    "id": "landwatch_421939072",
+    "title": "Listing Details Page",
+    "price": 224850.0,
+    "acreage": 5.0,
+    "pricePerAcre": 44970.0,
+    "location": {
+      "lat": 0.0,
+      "lng": 0.0,
+      "state": "MT",
+      "county": "Beaverhead County"
+    },
+    "features": [
+      "water_creek",
+      "water_pond",
+      "structures",
+      "timber",
+      "hunting"
+    ],
+    "source": "landwatch",
+    "url": "https://www.landwatch.com/beaverhead-county-montana-recreational-property-for-sale/pid/421939072",
+    "dateFound": "2026-04-20",
+    "dealScore": 32,
+    "description": "Trapper Creek Road, Melrose, MT, 59743, Beaverhead County \u2014 Here are 5 acres for sale surrounded by National Forest with no neighbors, a huge shop, amazing mountain views, trees, elk and deer all near Sappington Creek, Trapper Creek and Trapper Lake and the famed Big Hole River. Here it is. The Montana mounta",
+    "daysOnMarket": null
+  },
+  {
+    "id": "landwatch_425698602",
+    "title": "Listing Details Page",
+    "price": 550000.0,
+    "acreage": 11.5,
+    "pricePerAcre": 47826.09,
+    "location": {
+      "lat": 0.0,
+      "lng": 0.0,
+      "state": "MT",
+      "county": "Lewis and Clark County"
+    },
+    "features": [
+      "water_creek",
+      "road_dirt",
+      "structures",
+      "timber"
+    ],
+    "source": "landwatch",
+    "url": "https://www.landwatch.com/lewis-and-clark-county-montana-recreational-property-for-sale/pid/425698602",
+    "dateFound": "2026-04-20",
+    "dealScore": 28,
+    "description": "3925 Little Wolf Creek Road, Wolf Creek, MT, 59648, Lewis and Clark County \u2014 Tucked into the wild, pine-scented beauty of the Helena National Forest, this classic Montana log cabin radiates on 11.5 acres. As you pull in off the gravel road, the first thing you notice is the quiet, the sound of wind moving through the treetops",
+    "daysOnMarket": null
+  },
+  {
+    "id": "landwatch_417786257",
+    "title": "Land in MT",
+    "price": 148750.0,
+    "acreage": 18.3,
+    "pricePerAcre": 8128.42,
+    "location": {
+      "lat": 0.0,
+      "lng": 0.0,
+      "state": "MT",
+      "county": "Silver Bow County"
+    },
+    "features": [
+      "water_creek",
+      "structures",
+      "timber",
+      "hunting"
+    ],
+    "source": "landwatch",
+    "url": "https://www.landwatch.com/silver-bow-county-montana-recreational-property-for-sale/pid/417786257",
+    "dateFound": "2026-04-20",
+    "dealScore": 27,
+    "description": "Butte, MT, 59701, Silver Bow County \u2014 Montana mountain property with a creek bordering BLM Land and with amazing mountain views, hunting, trees, with elk, deer, and moose. This great mountain property is ready to pull your camper in to or build your Montana cabin right out in the forest",
+    "daysOnMarket": null
+  },
+  {
+    "id": "landwatch_426391923",
+    "title": "Listing Details Page",
+    "price": 298000.0,
+    "acreage": 3.0,
+    "pricePerAcre": 99333.33,
+    "location": {
+      "lat": 0.0,
+      "lng": 0.0,
+      "state": "MT",
+      "county": "Madison County"
+    },
+    "features": [
+      "water_creek",
+      "structures",
+      "timber",
+      "hunting"
+    ],
+    "source": "landwatch",
+    "url": "https://www.landwatch.com/madison-county-montana-recreational-property-for-sale/pid/426391923",
+    "dateFound": "2026-04-20",
+    "dealScore": 27,
+    "description": "Mammoth, MT, 59721, Madison County \u2014 Extremely rare recreational property with South Boulder River frontage in the heart of the Tobacco Root Mountains way out in the National Forest land with a leveled cabin site, fishing beyond compare, hunting, and mountain views you have to see to be",
+    "daysOnMarket": null
+  },
+  {
+    "id": "landwatch_425099261",
+    "title": "Listing Details Page",
+    "price": 19816000.0,
+    "acreage": 19816.0,
+    "pricePerAcre": 1000.0,
+    "location": {
+      "lat": 0.0,
+      "lng": 0.0,
+      "state": "MT",
+      "county": "Yellowstone County"
+    },
+    "features": [
+      "water_creek",
+      "road_paved",
+      "pasture"
+    ],
+    "source": "landwatch",
+    "url": "https://www.landwatch.com/yellowstone-county-montana-farms-and-ranches-for-sale/pid/425099261",
+    "dateFound": "2026-04-20",
+    "dealScore": 27,
+    "description": "6031 Musselshell Trail Road, Custer, MT, 59024, Yellowstone County \u2014 Just five miles north of Custer and the Yellowstone River, the S Bar Ranch offers nearly 20,000 acres of highly productive native grassland, excellent water, quality improvements, and outstanding wildlife habitat. With paved access and only an hour t",
+    "daysOnMarket": null
+  },
+  {
+    "id": "landwatch_423613793",
+    "title": "Listing Details Page",
+    "price": 189380.0,
+    "acreage": 18.3,
+    "pricePerAcre": 10348.63,
+    "location": {
+      "lat": 0.0,
+      "lng": 0.0,
+      "state": "MT",
+      "county": "Broadwater County"
+    },
+    "features": [
+      "water_creek",
+      "structures",
+      "timber",
+      "hunting"
+    ],
+    "source": "landwatch",
+    "url": "https://www.landwatch.com/broadwater-county-montana-recreational-property-for-sale/pid/423613793",
+    "dateFound": "2026-04-20",
+    "dealScore": 27,
+    "description": "Indian Creek Road, Townsend, MT, 59644, Broadwater County \u2014 Land in the coveted Elkhorn Mountains of Montana bordering National Forest with a cabin site, elk and deer hunting, bighorn sheep, trees, and views. This great 18 acres of land actually borders National Forest land on the Helena National Forest. I sa",
+    "daysOnMarket": null
+  },
+  {
+    "id": "landwatch_422625802",
+    "title": "Listing Details Page",
+    "price": 459000.0,
+    "acreage": 1.0,
+    "pricePerAcre": 459000.0,
+    "location": {
+      "lat": 0.0,
+      "lng": 0.0,
+      "state": "MT",
+      "county": "Gallatin County"
+    },
+    "features": [
+      "water_creek",
+      "owner_financing"
+    ],
+    "source": "landwatch",
+    "url": "https://www.landwatch.com/gallatin-county-montana-undeveloped-land-for-sale/pid/422625802",
+    "dateFound": "2026-04-20",
+    "dealScore": 26,
+    "description": "Hyalite Canyon Road, Bozeman, MT, 59715, Gallatin County \u2014 Seller financing is possible on this 1 acre lot with Hyalite Creek frontage and mature trees! Appraisal on hand to match list price. This is one of the last buildable lots on Hyalite Creek in South Bozeman. Easy 10 minute drive to Bozeman. This prope",
+    "daysOnMarket": null
+  },
+  {
+    "id": "landwatch_425883705",
+    "title": "Listing Details Page",
+    "price": 2995000.0,
+    "acreage": 85.9,
+    "pricePerAcre": 34866.12,
+    "location": {
+      "lat": 0.0,
+      "lng": 0.0,
+      "state": "MT",
+      "county": "Lake County"
+    },
+    "features": [
+      "water_creek",
+      "water_pond"
+    ],
+    "source": "landwatch",
+    "url": "https://www.landwatch.com/lake-county-montana-recreational-property-for-sale/pid/425883705",
+    "dateFound": "2026-04-20",
+    "dealScore": 26,
+    "description": "22585 Fatty Creek Road, Bigfork, MT, 59911, Lake County \u2014 Potential Owner Finance Option - Rare 85-Acre Swan Valley Sanctuary. Your Montana Legacy Awaits! Discover an extraordinary property in the heart of Montana's Swan Valley, just 30 minutes south of vibrant Bigfork and under 15 minutes from serene Swan",
+    "daysOnMarket": null
+  },
+  {
+    "id": "landwatch_421234287",
+    "title": "Listing Details Page",
+    "price": 1900000.0,
+    "acreage": 18.9,
+    "pricePerAcre": 100529.1,
+    "location": {
+      "lat": 0.0,
+      "lng": 0.0,
+      "state": "MT",
+      "county": "Sweet Grass County"
+    },
+    "features": [
+      "water_creek",
+      "structures",
+      "timber"
+    ],
+    "source": "landwatch",
+    "url": "https://www.landwatch.com/sweet-grass-county-montana-recreational-property-for-sale/pid/421234287",
+    "dateFound": "2026-04-20",
+    "dealScore": 26,
+    "description": "3966 Main Boulder Road, Big Timber, MT, 59052, Sweet Grass County \u2014 Nestled in the breathtaking Absaroka Beartooth Wilderness, The Cabin on the Boulder is a beautifully crafted hand hewn log cabin, located adjacent the upper Boulder River in the Custer Gallatin National Forest. Just minutes from the iconic Natural Br",
+    "daysOnMarket": null
+  },
+  {
+    "id": "landwatch_426374886",
+    "title": "Listing Details Page",
+    "price": 169900.0,
+    "acreage": 20.0,
+    "pricePerAcre": 8495.0,
+    "location": {
+      "lat": 0.0,
+      "lng": 0.0,
+      "state": "MT",
+      "county": "Stillwater County"
+    },
+    "features": [
+      "water_creek",
+      "structures",
+      "timber"
+    ],
+    "source": "landwatch",
+    "url": "https://www.landwatch.com/stillwater-county-montana-recreational-property-for-sale/pid/426374886",
+    "dateFound": "2026-04-20",
+    "dealScore": 26,
+    "description": "NHN Cougar, Columbus, MT, 59019, Stillwater County \u2014 Discover secluded privacy with outstanding recreation and private river access on this 20-acre forested parcel. With two prepared driveways leading to upper and lower building sites, commanding views, and immediate access to extensive BLM lands, the",
+    "daysOnMarket": null
+  },
+  {
+    "id": "landwatch_420587618",
+    "title": "Listing Details Page",
+    "price": 4999000.0,
+    "acreage": 1463.0,
+    "pricePerAcre": 3416.95,
+    "location": {
+      "lat": 0.0,
+      "lng": 0.0,
+      "state": "MT",
+      "county": "Sweet Grass County"
+    },
+    "features": [
+      "water_creek",
+      "timber",
+      "pasture",
+      "hunting"
+    ],
+    "source": "landwatch",
+    "url": "https://www.landwatch.com/sweet-grass-county-montana-recreational-property-for-sale/pid/420587618",
+    "dateFound": "2026-04-20",
+    "dealScore": 26,
+    "description": "126 Upper Deer Creek, Big Timber, MT, 59011, Sweet Grass County \u2014 Welcome to the enchanting expanse of the Cross M Ranch , a sprawling 1460 deeded acre cattle ranch and recreational oasis nestled in the heart of Central Montana\u2019s pristine grassland. Situated majestically amidst the rolling hills and picturesque cou",
+    "daysOnMarket": null
+  },
+  {
+    "id": "landwatch_423614462",
+    "title": "Land in MT",
+    "price": 298850.0,
+    "acreage": 10.0,
+    "pricePerAcre": 29885.0,
+    "location": {
+      "lat": 0.0,
+      "lng": 0.0,
+      "state": "MT",
+      "county": "Chouteau County"
+    },
+    "features": [
+      "water_creek",
+      "structures",
+      "hunting"
+    ],
+    "source": "landwatch",
+    "url": "https://www.landwatch.com/chouteau-county-montana-recreational-property-for-sale/pid/423614462",
+    "dateFound": "2026-04-20",
+    "dealScore": 25,
+    "description": "Highwood, MT, 59450, Chouteau County \u2014 Cabin on the Missouri River with fishing, boating, hunting, and power with Bureau of Land Management (BLM) land across the river out in the country between Great Falls, Montana and Fort Benton, Montana. A cabin on the banks of the Missouri River isnt",
+    "daysOnMarket": null
+  },
+  {
+    "id": "landwatch_423151610",
+    "title": "Land in MT",
+    "price": 5950000.0,
+    "acreage": 140.0,
+    "pricePerAcre": 42500.0,
+    "location": {
+      "lat": 0.0,
+      "lng": 0.0,
+      "state": "MT",
+      "county": "Ravalli County"
+    },
+    "features": [
+      "water_creek",
+      "timber",
+      "pasture"
+    ],
+    "source": "landwatch",
+    "url": "https://www.landwatch.com/ravalli-county-montana-recreational-property-for-sale/pid/423151610",
+    "dateFound": "2026-04-20",
+    "dealScore": 25,
+    "description": "2000 Last Best Pl, Victor, MT, 59875, Ravalli County \u2014 An exceptional 140 acres of timbered forest and open meadows nestled along one mile of Bear Creek prime trout fishing at your doorstep. - 140 Acres of pristine meadows and timber - One mile of Bear Creek frontage for trout fishing - Wildlife galore:",
+    "daysOnMarket": null
+  },
+  {
+    "id": "landwatch_425766649",
+    "title": "Listing Details Page",
+    "price": 343000.0,
+    "acreage": 103.0,
+    "pricePerAcre": 3330.1,
+    "location": {
+      "lat": 0.0,
+      "lng": 0.0,
+      "state": "MT",
+      "county": "Mineral County"
+    },
+    "features": [
+      "water_creek",
+      "road_paved"
+    ],
+    "source": "landwatch",
+    "url": "https://www.landwatch.com/mineral-county-montana-recreational-property-for-sale/pid/425766649",
+    "dateFound": "2026-04-20",
+    "dealScore": 25,
+    "description": "Paved Road Access, Alberton, MT, 59820, Mineral County \u2014 W Mountain Creek 3 is a +/- 103-acre mountain tract tucked into the hills above Alberton, Montana. The property offers exceptional privacy without isolation, providing the perfect escape with modern conveniences off-the-beaten-path. Road Frontage &amp; I",
+    "daysOnMarket": null
+  },
+  {
+    "id": "landwatch_423141243",
+    "title": "Listing Details Page",
+    "price": 899000.0,
+    "acreage": 272.0,
+    "pricePerAcre": 3305.15,
+    "location": {
+      "lat": 0.0,
+      "lng": 0.0,
+      "state": "MT",
+      "county": "Cascade County"
+    },
+    "features": [
+      "water_creek",
+      "timber",
+      "pasture"
+    ],
+    "source": "landwatch",
+    "url": "https://www.landwatch.com/cascade-county-montana-recreational-property-for-sale/pid/423141243",
+    "dateFound": "2026-04-20",
+    "dealScore": 25,
+    "description": "Novak Creek Lane, Cascade, MT, 59421, Cascade County \u2014 Bright yellow wildflowers sway across open meadows, while dramatic rock outcroppings shape fantastic landforms and stunning cliffs. Towering, forested trees frame the horizon, etched against a brilliant blue sky. From the top of this vast 272.19-acre",
+    "daysOnMarket": null
+  },
+  {
+    "id": "landwatch_425296476",
+    "title": "Hangmans Creek Legacy",
+    "price": 7750000.0,
+    "acreage": 3336.0,
+    "pricePerAcre": 2323.14,
+    "location": {
+      "lat": 0.0,
+      "lng": 0.0,
+      "state": "MT",
+      "county": "Sweet Grass County"
+    },
+    "features": [
+      "water_creek",
+      "timber",
+      "hunting"
+    ],
+    "source": "landwatch",
+    "url": "https://www.landwatch.com/sweet-grass-county-montana-farms-and-ranches-for-sale/pid/425296476",
+    "dateFound": "2026-04-20",
+    "dealScore": 24,
+    "description": "858 Lower Sweet Grass Rd, Big Timber, MT, 59011, Sweet Grass County \u2014 A premier ranch blending productive cattle operations with exceptional hunting, fishing, and guest-ready improvements, all set against sweeping mountain views and supported by excellent access and reliable water resources.",
+    "daysOnMarket": null
+  },
+  {
+    "id": "landwatch_423218587",
+    "title": "Land in MT",
+    "price": 895000.0,
+    "acreage": 160.0,
+    "pricePerAcre": 5593.75,
+    "location": {
+      "lat": 0.0,
+      "lng": 0.0,
+      "state": "MT",
+      "county": "Deer Lodge County"
+    },
+    "features": [
+      "water_creek",
+      "timber",
+      "hunting"
+    ],
+    "source": "landwatch",
+    "url": "https://www.landwatch.com/deer-lodge-county-montana-recreational-property-for-sale/pid/423218587",
+    "dateFound": "2026-04-20",
+    "dealScore": 24,
+    "description": "NHN Lost Creek Rd, Anaconda, MT, 59711, Deer Lodge County \u2014 Escape to your own private sanctuary in Montana's breathtaking wilderness. This extraordinary 160-acre estate, cradled by the National Forest, offers unmatched tranquility and limitless potential. Just a 10-minute drive from the charming town of Anac",
+    "daysOnMarket": null
+  },
+  {
+    "id": "landwatch_420353757",
+    "title": "Land in MT",
+    "price": 1955000.0,
+    "acreage": 230.0,
+    "pricePerAcre": 8500.0,
+    "location": {
+      "lat": 0.0,
+      "lng": 0.0,
+      "state": "MT",
+      "county": "Yellowstone County"
+    },
+    "features": [
+      "water_creek",
+      "pasture",
+      "hunting"
+    ],
+    "source": "landwatch",
+    "url": "https://www.landwatch.com/yellowstone-county-montana-farms-and-ranches-for-sale/pid/420353757",
+    "dateFound": "2026-04-20",
+    "dealScore": 24,
+    "description": "Worden, MT, 59088, Yellowstone County \u2014 Yellowstone River Recreation, A 230 acre private end of road sportsman\u2019s getaway. 125 aces irrigated providing income and cover crops for your hunting desires. Cottonwood covered meadows winding through riparian areas home to upland game birds, water",
+    "daysOnMarket": null
+  },
+  {
+    "id": "landwatch_425696345",
+    "title": "Listing Details Page",
+    "price": 675000.0,
+    "acreage": 23.7,
+    "pricePerAcre": 28481.01,
+    "location": {
+      "lat": 0.0,
+      "lng": 0.0,
+      "state": "MT",
+      "county": "Custer County"
+    },
+    "features": [
+      "water_creek",
+      "structures"
+    ],
+    "source": "landwatch",
+    "url": "https://www.landwatch.com/custer-county-montana-recreational-property-for-sale/pid/425696345",
+    "dateFound": "2026-04-20",
+    "dealScore": 24,
+    "description": "99 Sunday Creek Airpark Drive, Miles City, MT, 59301, Custer County \u2014 Once an airplane hangar, this expansive space can effortlessly be transformed into a full-time residence complete with a spacious workshop with over 7900 square feet. This shop was recently remodeled in 2023 with spray foam insulation, insulated gara",
+    "daysOnMarket": null
+  },
+  {
+    "id": "landwatch_424975998",
+    "title": "Listing Details Page",
+    "price": 699000.0,
+    "acreage": 20.0,
+    "pricePerAcre": 34950.0,
+    "location": {
+      "lat": 0.0,
+      "lng": 0.0,
+      "state": "MT",
+      "county": "Beaverhead County"
+    },
+    "features": [
+      "water_creek",
+      "structures"
+    ],
+    "source": "landwatch",
+    "url": "https://www.landwatch.com/beaverhead-county-montana-hunting-property-for-sale/pid/424975998",
+    "dateFound": "2026-04-20",
+    "dealScore": 24,
+    "description": "1624 Steel Creek Road, Wisdom, MT, 59761, Beaverhead County \u2014 Start each day surrounded by mountain peaks and the wide-open calm of Montana\u2019s famed Big Hole Valley. Set on 20\u00b1 acres, 1624 Steel Creek is a modern farmhouse filled with natural light and unobstructed views in every direction. This custom 5-bedroom",
+    "daysOnMarket": null
+  },
+  {
+    "id": "landwatch_423009508",
+    "title": "Land in MT",
+    "price": 7890000.0,
+    "acreage": 1970.0,
+    "pricePerAcre": 4005.08,
+    "location": {
+      "lat": 0.0,
+      "lng": 0.0,
+      "state": "MT",
+      "county": "Sweet Grass County"
+    },
+    "features": [
+      "water_creek",
+      "timber",
+      "hunting"
+    ],
+    "source": "landwatch",
+    "url": "https://www.landwatch.com/sweet-grass-county-montana-recreational-property-for-sale/pid/423009508",
+    "dateFound": "2026-04-20",
+    "dealScore": 24,
+    "description": "TBD, Big Timber, MT, 59011, Sweet Grass County \u2014 Situated among rolling foothills north of the Absaroka Beartooth Wilderness, The Upper Deer Creek Ranch offers diverse vegetation, topography, geology, water resources, and recreational possibilities in an increasingly rare solitude on this 1970 deed",
+    "daysOnMarket": null
+  },
+  {
+    "id": "landwatch_425794575",
+    "title": "Land in MT",
+    "price": 1220000.0,
+    "acreage": 15.4,
+    "pricePerAcre": 79220.78,
+    "location": {
+      "lat": 0.0,
+      "lng": 0.0,
+      "state": "MT",
+      "county": "Flathead County"
+    },
+    "features": [
+      "water_creek",
+      "structures"
+    ],
+    "source": "landwatch",
+    "url": "https://www.landwatch.com/flathead-county-montana-homes-for-sale/pid/425794575",
+    "dateFound": "2026-04-20",
+    "dealScore": 24,
+    "description": "871 Conrad Drive, Kalispell, MT, 59901, Flathead County \u2014 This 15.4+/- acre property features approximately 700 feet of WATER FRONTAGE on the Stillwater River. Although it includes a beautiful 2023-built ranch home, the land is the primary value here! Designed and ready to accommodate future buildings with",
+    "daysOnMarket": null
+  },
+  {
+    "id": "landwatch_420912348",
+    "title": "Last Best Line Creek Ranch",
+    "price": 2500000.0,
+    "acreage": 872.0,
+    "pricePerAcre": 2866.97,
+    "location": {
+      "lat": 0.0,
+      "lng": 0.0,
+      "state": "MT",
+      "county": "Yellowstone County"
+    },
+    "features": [
+      "water_creek",
+      "pasture"
+    ],
+    "source": "landwatch",
+    "url": "https://www.landwatch.com/yellowstone-county-montana-farms-and-ranches-for-sale/pid/420912348",
+    "dateFound": "2026-04-20",
+    "dealScore": 23,
+    "description": "Laurel, MT, 59044, Yellowstone County \u2014 Rolling hills, historic hay fields, and stunning mountain-to-river views make this versatile property perfect for wildlife enthusiasts and investors alike.",
+    "daysOnMarket": null
+  },
+  {
+    "id": "landwatch_423449676",
+    "title": "Land in MT",
+    "price": 4650000.0,
+    "acreage": 600.0,
+    "pricePerAcre": 7750.0,
+    "location": {
+      "lat": 0.0,
+      "lng": 0.0,
+      "state": "MT",
+      "county": "Beaverhead County"
+    },
+    "features": [
+      "water_creek",
+      "pasture"
+    ],
+    "source": "landwatch",
+    "url": "https://www.landwatch.com/beaverhead-county-montana-farms-and-ranches-for-sale/pid/423449676",
+    "dateFound": "2026-04-20",
+    "dealScore": 23,
+    "description": "South Valley Road, Lima, MT, 59739, Beaverhead County \u2014 Situated in the heart of the renowned Centennial Valley, the Jones Creek Ranch represents a unique opportunity for the rancher looking for summer/fall pasture or the conservation-minded buyers and investors seeking to steward one of Montanas most spe",
+    "daysOnMarket": null
+  },
+  {
+    "id": "landwatch_426019536",
+    "title": "Land in MT",
+    "price": 1900000.0,
+    "acreage": 347.0,
+    "pricePerAcre": 5475.5,
+    "location": {
+      "lat": 0.0,
+      "lng": 0.0,
+      "state": "MT",
+      "county": "Yellowstone County"
+    },
+    "features": [
+      "water_creek",
+      "timber"
+    ],
+    "source": "landwatch",
+    "url": "https://www.landwatch.com/yellowstone-county-montana-farms-and-ranches-for-sale/pid/426019536",
+    "dateFound": "2026-04-20",
+    "dealScore": 23,
+    "description": "0000 Mt Hwy 47, Custer, MT, 59024, Yellowstone County \u2014 Nestled in the pine-covered hills above the scenic Bighorn River Valley, the Peterson Ranch \u2013 Bighorn River Unit offers a rare combination of agricultural productivity, remarkable scenery, and exceptional wildlife habitat. Located just a few short mi",
+    "daysOnMarket": null
+  },
+  {
+    "id": "landwatch_425766647",
+    "title": "Listing Details Page",
+    "price": 355000.0,
+    "acreage": 151.0,
+    "pricePerAcre": 2350.99,
+    "location": {
+      "lat": 0.0,
+      "lng": 0.0,
+      "state": "MT",
+      "county": "Mineral County"
+    },
+    "features": [
+      "water_creek",
+      "road_dirt"
+    ],
+    "source": "landwatch",
+    "url": "https://www.landwatch.com/mineral-county-montana-recreational-property-for-sale/pid/425766647",
+    "dateFound": "2026-04-20",
+    "dealScore": 23,
+    "description": "County Road, Alberton, MT, 59820, Mineral County \u2014 W Mountain Creek 1 is a +/-151-acre mountain tract situated just outside Alberton, Montana. The property offers exceptional privacy while maintaining convenient access to essential infrastructure and recreational opportunities. Location &amp; Access Road",
+    "daysOnMarket": null
+  },
+  {
+    "id": "landwatch_426271883",
+    "title": "Listing Details Page",
+    "price": 1220000.0,
+    "acreage": 20.0,
+    "pricePerAcre": 61000.0,
+    "location": {
+      "lat": 0.0,
+      "lng": 0.0,
+      "state": "MT",
+      "county": "Madison County"
+    },
+    "features": [
+      "water_creek",
+      "timber"
+    ],
+    "source": "landwatch",
+    "url": "https://www.landwatch.com/madison-county-montana-homes-for-sale/pid/426271883",
+    "dateFound": "2026-04-20",
+    "dealScore": 23,
+    "description": "36 Dutchman Trail, Cameron, MT, 59720, Madison County \u2014 20 Acres Montana Timbered Retreat \\| Furnished 5BR Home \\| Madison River Access \\| Mountain Views \\| Turnkey Property Own one of the few timbered 20-acre parcels in Madison River Ranches, surrounded by mature aspens and thriving wildlife habitat. Set in",
+    "daysOnMarket": null
+  },
+  {
+    "id": "landwatch_423129436",
+    "title": "Listing Details Page",
+    "price": 14149080.0,
+    "acreage": 7075.0,
+    "pricePerAcre": 1999.87,
+    "location": {
+      "lat": 0.0,
+      "lng": 0.0,
+      "state": "MT",
+      "county": "Chouteau County"
+    },
+    "features": [
+      "water_creek",
+      "pasture"
+    ],
+    "source": "landwatch",
+    "url": "https://www.landwatch.com/chouteau-county-montana-farms-and-ranches-for-sale/pid/423129436",
+    "dateFound": "2026-04-20",
+    "dealScore": 23,
+    "description": "7700 Labarre Rd, Fort Benton, MT, 59442, Chouteau County \u2014 The Lazy K6 Ranch includes 7,000 deeded acres along the Marias River near Fort Benton, Montana. This is a working cattle ranch with productive hay ground and strong recreation value. Located about 90 minutes from Great Falls, the ranch offers scale,",
+    "daysOnMarket": null
+  },
+  {
+    "id": "landwatch_425766648",
+    "title": "Listing Details Page",
+    "price": 575000.0,
+    "acreage": 225.0,
+    "pricePerAcre": 2555.56,
+    "location": {
+      "lat": 0.0,
+      "lng": 0.0,
+      "state": "MT",
+      "county": "Mineral County"
+    },
+    "features": [
+      "water_creek",
+      "road_dirt"
+    ],
+    "source": "landwatch",
+    "url": "https://www.landwatch.com/mineral-county-montana-recreational-property-for-sale/pid/425766648",
+    "dateFound": "2026-04-20",
+    "dealScore": 23,
+    "description": "County Road, Alberton, MT, 59820, Mineral County \u2014 W Mountain Creek 2 is a +/- 225-acre mountain tract located outside the quiet town of Alberton, Montana. The property combines convenient infrastructure access with authentic Northwest Montana character and exceptional privacy. Road Frontage &amp; Infras",
+    "daysOnMarket": null
+  },
+  {
+    "id": "landwatch_422842058",
+    "title": "Land in MT",
+    "price": 5700000.0,
+    "acreage": 141.0,
+    "pricePerAcre": 40425.53,
+    "location": {
+      "lat": 0.0,
+      "lng": 0.0,
+      "state": "MT",
+      "county": "Sweet Grass County"
+    },
+    "features": [
+      "water_creek",
+      "timber"
+    ],
+    "source": "landwatch",
+    "url": "https://www.landwatch.com/sweet-grass-county-montana-farms-and-ranches-for-sale/pid/422842058",
+    "dateFound": "2026-04-20",
+    "dealScore": 23,
+    "description": "Yellowstone Bluff Ranch, Big Timber, MT, 59011, Sweet Grass County \u2014 The Yellowstone Bluff Ranch is a standard bearer for Montana river ranch retreats. The 141+/- acres lie along approximately half of a mile of the north bank of the renowned Yellowstone River, just five miles from the rural ranching and outdoor commun",
+    "daysOnMarket": null
+  },
+  {
+    "id": "landwatch_425784907",
+    "title": "Land in MT",
+    "price": 6800000.0,
+    "acreage": 55.8,
+    "pricePerAcre": 121863.8,
+    "location": {
+      "lat": 0.0,
+      "lng": 0.0,
+      "state": "MT",
+      "county": "Flathead County"
+    },
+    "features": [
+      "water_creek",
+      "timber"
+    ],
+    "source": "landwatch",
+    "url": "https://www.landwatch.com/flathead-county-montana-horse-property-for-sale/pid/425784907",
+    "dateFound": "2026-04-20",
+    "dealScore": 23,
+    "description": "416 & 310 Jossie Lane, Kalispell, MT, 59901, Flathead County \u2014 One-of-a-kind equestrian estate. Two homes sitting on two parcels totaling 55+ acres, this superb location overlooks Northern Pines Golf Course, with Glacier National Park, Whitefish Mountain Resort views in the backdrop, and the Stillwater River mea",
+    "daysOnMarket": null
+  },
+  {
+    "id": "landwatch_418304936",
+    "title": "Land in MT",
+    "price": 12500000.0,
+    "acreage": 12020.0,
+    "pricePerAcre": 1039.93,
+    "location": {
+      "lat": 0.0,
+      "lng": 0.0,
+      "state": "MT",
+      "county": "Powder River County"
+    },
+    "features": [
+      "water_creek",
+      "road_dirt"
+    ],
+    "source": "landwatch",
+    "url": "https://www.landwatch.com/powder-river-county-montana-farms-and-ranches-for-sale/pid/418304936",
+    "dateFound": "2026-04-20",
+    "dealScore": 23,
+    "description": "Powderville West Road, Broadus, MT, 59317, Powder River County \u2014 Located 12 miles north of Broadus, Montana with great access off of a well-maintained county road and consisting of approximately 12,020 total acres the ranch has 10,760 deeded acres, 640 State of Montana acres and 620 BLM lease acres. With 370 acres",
+    "daysOnMarket": null
+  },
+  {
+    "id": "landwatch_424609161",
+    "title": "Land in MT",
+    "price": 1536000.0,
+    "acreage": 640.0,
+    "pricePerAcre": 2400.0,
+    "location": {
+      "lat": 0.0,
+      "lng": 0.0,
+      "state": "MT",
+      "county": "Flathead County"
+    },
+    "features": [
+      "water_creek",
+      "hunting"
+    ],
+    "source": "landwatch",
+    "url": "https://www.landwatch.com/flathead-county-montana-timberland-property-for-sale/pid/424609161",
+    "dateFound": "2026-04-20",
+    "dealScore": 22,
+    "description": "Fish Creek Road, Kalispell, MT, 59925, Flathead County \u2014 Discover the ultimate paradise for outdoor enthusiasts with this extraordinary 640-acre parcel in Kalispell. Embrace a lifestyle of adventure with endless opportunities for hunting, hiking, ATV riding, and more on this heavily treed property. Enjoy b",
+    "daysOnMarket": null
+  },
+  {
+    "id": "landwatch_424434981",
+    "title": "Listing Details Page",
+    "price": 2000000.0,
+    "acreage": 130.0,
+    "pricePerAcre": 15384.62,
+    "location": {
+      "lat": 0.0,
+      "lng": 0.0,
+      "state": "MT",
+      "county": "Yellowstone County"
+    },
+    "features": [
+      "water_creek",
+      "hunting"
+    ],
+    "source": "landwatch",
+    "url": "https://www.landwatch.com/yellowstone-county-montana-farms-and-ranches-for-sale/pid/424434981",
+    "dateFound": "2026-04-20",
+    "dealScore": 22,
+    "description": "2573 North 8th Road, Huntley, MT, 59037, Yellowstone County \u2014 Yellowstone River Farm &amp; Sanctuary Premium Hunting, Productive Farmland, and Riverfront Living in Huntley, Montana Located just outside Huntley, Montana, and only 30 minutes from Billings, Yellowstone River Farm &amp; Sanctuary is a rare offering of rive",
+    "daysOnMarket": null
+  },
+  {
+    "id": "landwatch_425813014",
+    "title": "Listing Details Page",
+    "price": 11775000.0,
+    "acreage": 22456.0,
+    "pricePerAcre": 524.36,
+    "location": {
+      "lat": 0.0,
+      "lng": 0.0,
+      "state": "MT",
+      "county": "Prairie County"
+    },
+    "features": [
+      "timber",
+      "hunting"
+    ],
+    "source": "landwatch",
+    "url": "https://www.landwatch.com/prairie-county-montana-farms-and-ranches-for-sale/pid/425813014",
+    "dateFound": "2026-04-20",
+    "dealScore": 22,
+    "description": "314 Oilfield Road, Fallon, MT, 59326, Prairie County \u2014 Eastern Montana \\| Hunting District 703 Located approximately 30 minutes south of Glendive, Montana, in the scenic Pine Hills region, Rockin CCR Ranch encompasses 22,456 \u00b1 contiguous acres. The ranch includes 10,140 \u00b1 deeded acres, 11,675 \u00b1 acres of B",
+    "daysOnMarket": null
+  },
+  {
+    "id": "landwatch_417207693",
+    "title": "Listing Details Page",
+    "price": 4500000.0,
+    "acreage": 1367.0,
+    "pricePerAcre": 3291.88,
+    "location": {
+      "lat": 0.0,
+      "lng": 0.0,
+      "state": "MT",
+      "county": "Lake County"
+    },
+    "features": [
+      "water_pond",
+      "structures"
+    ],
+    "source": "landwatch",
+    "url": "https://www.landwatch.com/lake-county-montana-farms-and-ranches-for-sale/pid/417207693",
+    "dateFound": "2026-04-20",
+    "dealScore": 22,
+    "description": "45214 Lake Mary Ronan Road, Dayton, MT, 59914, Lake County \u2014 Flathead Lake Overlook sits on 1,367 acres and features an original 1912 farmhouse. The house sits to the west of Flathead Lake overlooking Cromwell Island and the Mission Mountains. Owned by the same family since 1959, the Huckins Ranch as it is loc",
+    "daysOnMarket": null
+  },
+  {
+    "id": "landwatch_426337184",
+    "title": "Listing Details Page",
+    "price": 174000.0,
+    "acreage": 10.2,
+    "pricePerAcre": 17058.82,
+    "location": {
+      "lat": 0.0,
+      "lng": 0.0,
+      "state": "MT",
+      "county": "Chouteau County"
+    },
+    "features": [
+      "water_creek",
+      "hunting"
+    ],
+    "source": "landwatch",
+    "url": "https://www.landwatch.com/chouteau-county-montana-recreational-property-for-sale/pid/426337184",
+    "dateFound": "2026-04-20",
+    "dealScore": 22,
+    "description": "Vernon Road, Highwood, MT, 59450, Chouteau County \u2014 Missouri River frontage with fishing, boating, hunting, and power with BLM land across the river out in the country between Great Falls, Montana and Fort Benton, Montana. Land in Montana on the banks of the Missouri River isnt easy to come by. This i",
+    "daysOnMarket": null
+  },
+  {
+    "id": "landwatch_423745767",
+    "title": "Listing Details Page",
+    "price": 275000.0,
+    "acreage": 22.3,
+    "pricePerAcre": 12331.84,
+    "location": {
+      "lat": 0.0,
+      "lng": 0.0,
+      "state": "MT",
+      "county": "Deer Lodge County"
+    },
+    "features": [
+      "water_creek",
+      "hunting"
+    ],
+    "source": "landwatch",
+    "url": "https://www.landwatch.com/deer-lodge-county-montana-recreational-property-for-sale/pid/423745767",
+    "dateFound": "2026-04-20",
+    "dealScore": 22,
+    "description": "TBD Lot 44 Mill Creek Highway, Anaconda, MT, 59711, Deer Lodge County \u2014 With Mill Creek flowing through the property, this scenic acreage (Lot 44), less than 10 minutes from Anaconda, offers a rare combination of live water, year-round access, and wide-ranging recreational potential. Whether you're looking to build a ful",
+    "daysOnMarket": null
+  },
+  {
+    "id": "landwatch_422148292",
+    "title": "Land in MT",
+    "price": 756000.0,
+    "acreage": 560.0,
+    "pricePerAcre": 1350.0,
+    "location": {
+      "lat": 0.0,
+      "lng": 0.0,
+      "state": "MT",
+      "county": "Lincoln County"
+    },
+    "features": [
+      "water_creek",
+      "hunting"
+    ],
+    "source": "landwatch",
+    "url": "https://www.landwatch.com/lincoln-county-montana-farms-and-ranches-for-sale/pid/422148292",
+    "dateFound": "2026-04-20",
+    "dealScore": 22,
+    "description": "Nhn Vermillion Creek Road, Libby, MT, 59923, Lincoln County \u2014 Escape to a vast 560-acre paradise nestled in the wilderness between Kalispell and Libby, southwest of Happys Inn. This expansive property is a haven for outdoor enthusiasts, offering a plethora of recreational activities including hunting, hiking, A",
+    "daysOnMarket": null
+  },
+  {
+    "id": "landwatch_423176665",
+    "title": "Land in MT",
+    "price": 568495.0,
+    "acreage": 10.4,
+    "pricePerAcre": 54662.98,
+    "location": {
+      "lat": 0.0,
+      "lng": 0.0,
+      "state": "MT",
+      "county": "Ravalli County"
+    },
+    "features": [
+      "structures",
+      "hunting",
+      "off_grid_ready"
+    ],
+    "source": "landwatch",
+    "url": "https://www.landwatch.com/ravalli-county-montana-recreational-property-for-sale/pid/423176665",
+    "dateFound": "2026-04-20",
+    "dealScore": 22,
+    "description": "4000 Going To Sun Road, Lot#WP001, Darby, MT, 59829, Ravalli County \u2014 Escape to your own private retreat with this exceptional 10-acre off-grid property located in the heart of Montanas highly sought-after trophy hunting Unit 270. At its core is a beautifully crafted cabin, perfectly situated to capture panoramic views",
+    "daysOnMarket": null
+  },
+  {
+    "id": "landwatch_426385876",
+    "title": "Beartooth Creek Legacy",
+    "price": 4200000.0,
+    "acreage": 122.0,
+    "pricePerAcre": 34426.23,
+    "location": {
+      "lat": 0.0,
+      "lng": 0.0,
+      "state": "MT",
+      "county": "Carbon County"
+    },
+    "features": [
+      "water_creek"
+    ],
+    "source": "landwatch",
+    "url": "https://www.landwatch.com/carbon-county-montana-farms-and-ranches-for-sale/pid/426385876",
+    "dateFound": "2026-04-20",
+    "dealScore": 21,
+    "description": "104 Running River Way, Absarokee, MT, 59001, Carbon County \u2014 Experience premier creek-front living with immediate fly fishing access, sweeping Beartooth Mountain views, luxury improvements, and a turnkey setup for horses or livestock.",
+    "daysOnMarket": null
+  },
+  {
+    "id": "landwatch_424939440",
+    "title": "Yellowstone River Farm",
+    "price": 2990000.0,
+    "acreage": 275.0,
+    "pricePerAcre": 10872.73,
+    "location": {
+      "lat": 0.0,
+      "lng": 0.0,
+      "state": "MT",
+      "county": "Yellowstone County"
+    },
+    "features": [
+      "water_creek"
+    ],
+    "source": "landwatch",
+    "url": "https://www.landwatch.com/yellowstone-county-montana-farms-and-ranches-for-sale/pid/424939440",
+    "dateFound": "2026-04-20",
+    "dealScore": 21,
+    "description": "Christensen Road, Laurel, MT, 59044, Yellowstone County \u2014 A productive farm offering fertile irrigated ground, exceptional wildlife habitat, and rare river frontage, creating an ideal blend of agriculture and outdoor recreation.",
+    "daysOnMarket": null
+  },
+  {
+    "id": "landwatch_425697431",
+    "title": "Irrigated Glen Ranchette",
+    "price": 417000.0,
+    "acreage": 20.2,
+    "pricePerAcre": 20643.56,
+    "location": {
+      "lat": 0.0,
+      "lng": 0.0,
+      "state": "MT",
+      "county": "Beaverhead County"
+    },
+    "features": [
+      "road_paved",
+      "structures"
+    ],
+    "source": "landwatch",
+    "url": "https://www.landwatch.com/beaverhead-county-montana-farms-and-ranches-for-sale/pid/425697431",
+    "dateFound": "2026-04-20",
+    "dealScore": 21,
+    "description": "11100 School House Road, Glen, MT, 59732, Beaverhead County \u2014 Peaceful irrigated land with mountain views, water rights, and paved access, offering an ideal setting for a ranchette, horse property, or country home near abundant outdoor recreation.",
+    "daysOnMarket": null
+  },
+  {
+    "id": "landwatch_419407255",
+    "title": "Marion Mountain Haven",
+    "price": 2016000.0,
+    "acreage": 640.0,
+    "pricePerAcre": 3150.0,
+    "location": {
+      "lat": 0.0,
+      "lng": 0.0,
+      "state": "MT",
+      "county": "Flathead County"
+    },
+    "features": [
+      "water_creek"
+    ],
+    "source": "landwatch",
+    "url": "https://www.landwatch.com/flathead-county-montana-recreational-property-for-sale/pid/419407255",
+    "dateFound": "2026-04-20",
+    "dealScore": 21,
+    "description": "Griffin Creek Road, Marion, MT, 59925, Flathead County \u2014 A secluded, heavily treed mountain retreat offering outstanding recreation, abundant wildlife, and breathtaking views, all while remaining conveniently close to modern amenities.",
+    "daysOnMarket": null
+  },
+  {
+    "id": "landwatch_419997476",
+    "title": "Land in MT",
+    "price": 8500000.0,
+    "acreage": 10510.0,
+    "pricePerAcre": 808.75,
+    "location": {
+      "lat": 0.0,
+      "lng": 0.0,
+      "state": "MT",
+      "county": "Dawson County"
+    },
+    "features": [
+      "water_creek"
+    ],
+    "source": "landwatch",
+    "url": "https://www.landwatch.com/dawson-county-montana-farms-and-ranches-for-sale/pid/419997476",
+    "dateFound": "2026-04-20",
+    "dealScore": 21,
+    "description": "Glendive, MT, 59330, Dawson County \u2014 Located in Dawson County MT. One mile northeast of Glendive MT. Ranch lies east of Belle Prairie Road and north of I-94. The ranch has 3+/- miles of Yellowstone river frontage. Total acres 13,269+/- . 10,510+/- acres deeded. 640 acres State of Montan",
+    "daysOnMarket": null
+  },
+  {
+    "id": "landwatch_424593883",
+    "title": "Land in MT",
+    "price": 8250000.0,
+    "acreage": 2802.0,
+    "pricePerAcre": 2944.33,
+    "location": {
+      "lat": 0.0,
+      "lng": 0.0,
+      "state": "MT",
+      "county": "Beaverhead County"
+    },
+    "features": [
+      "water_creek"
+    ],
+    "source": "landwatch",
+    "url": "https://www.landwatch.com/beaverhead-county-montana-farms-and-ranches-for-sale/pid/424593883",
+    "dateFound": "2026-04-20",
+    "dealScore": 21,
+    "description": "3007 Coyote Creek Rd, Dillon, MT, 59725, Beaverhead County \u2014 Nestled in the heart of Montana ranch country near Grant, the Coyote Creek Ranch encompasses 2,802\u00b1 deeded acres surrounded by breathtaking views of the Pioneer Mountains. Steeped in history, this region of Horse Prairie is where the Lewis and Clark",
+    "daysOnMarket": null
+  },
+  {
+    "id": "landwatch_424680580",
+    "title": "Land in MT",
+    "price": 5950000.0,
+    "acreage": 580.0,
+    "pricePerAcre": 10258.62,
+    "location": {
+      "lat": 0.0,
+      "lng": 0.0,
+      "state": "MT",
+      "county": "Madison County"
+    },
+    "features": [
+      "water_creek"
+    ],
+    "source": "landwatch",
+    "url": "https://www.landwatch.com/madison-county-montana-farms-and-ranches-for-sale/pid/424680580",
+    "dateFound": "2026-04-20",
+    "dealScore": 21,
+    "description": "1891 Spring Creek Road, Twin Bridges, MT, 59754, Madison County \u2014 Spring Creek Farm presents a rare opportunity to own a fully functional, highly productive irrigated farm and feedlot in the heart of Montana\u2019s renowned agricultural country. Located on the fertile East Bench between Twin Bridges and Dillon, this 580",
+    "daysOnMarket": null
+  },
+  {
+    "id": "landwatch_424059203",
+    "title": "Land in MT",
+    "price": 1850000.0,
+    "acreage": 180.0,
+    "pricePerAcre": 10277.78,
+    "location": {
+      "lat": 0.0,
+      "lng": 0.0,
+      "state": "MT",
+      "county": "Big Horn County"
+    },
+    "features": [
+      "water_creek"
+    ],
+    "source": "landwatch",
+    "url": "https://www.landwatch.com/big-horn-county-montana-farms-and-ranches-for-sale/pid/424059203",
+    "dateFound": "2026-04-20",
+    "dealScore": 21,
+    "description": "Hardin, MT, 59034, Big Horn County \u2014 Located in the heart of Montanas world-famous Bighorn River Valley, the Seder Bighorn Farm is a turnkey opportunity for a wide range of potential new owners. This 175 +/- acre, highly productive, irrigated farm is the perfect setup for someone lookin",
+    "daysOnMarket": null
+  },
+  {
+    "id": "landwatch_422674142",
+    "title": "Listing Details Page",
+    "price": 6000000.0,
+    "acreage": 3020.0,
+    "pricePerAcre": 1986.75,
+    "location": {
+      "lat": 0.0,
+      "lng": 0.0,
+      "state": "MT",
+      "county": "Big Horn County"
+    },
+    "features": [
+      "water_creek"
+    ],
+    "source": "landwatch",
+    "url": "https://www.landwatch.com/big-horn-county-montana-farms-and-ranches-for-sale/pid/422674142",
+    "dateFound": "2026-04-20",
+    "dealScore": 21,
+    "description": "Quietus, MT, 59025, Big Horn County \u2014 Nestled high on a scenic divide, the Upper Horse Creek Ranch is a 3,020-acre property offering panoramic views of the Big Horn Mountains to the west and the Tongue River Reservoir to the east. This expansive piece of land is a blank canvas, ideal for",
+    "daysOnMarket": null
+  },
+  {
+    "id": "landwatch_420311585",
+    "title": "Listing Details Page",
+    "price": 3595000.0,
+    "acreage": 6050.0,
+    "pricePerAcre": 594.21,
+    "location": {
+      "lat": 0.0,
+      "lng": 0.0,
+      "state": "MT",
+      "county": "Rosebud County"
+    },
+    "features": [
+      "water_creek"
+    ],
+    "source": "landwatch",
+    "url": "https://www.landwatch.com/rosebud-county-montana-farms-and-ranches-for-sale/pid/420311585",
+    "dateFound": "2026-04-20",
+    "dealScore": 21,
+    "description": "Forsyth, MT, 59327, Rosebud County \u2014 Blacktail Creek Ranch boasts 6,050+/- deeded acres with adjoining state and BLM leases totaling 6,730+/- acres of fertile rangeland. Situated 34 miles northwest of Forsyth and 20 miles north of Vananda, from the east fork of Blacktail Creek, this imp",
+    "daysOnMarket": null
+  },
+  {
+    "id": "landwatch_425614538",
+    "title": "Listing Details Page",
+    "price": 1408400.0,
+    "acreage": 64.0,
+    "pricePerAcre": 22006.25,
+    "location": {
+      "lat": 0.0,
+      "lng": 0.0,
+      "state": "MT",
+      "county": "Yellowstone County"
+    },
+    "features": [
+      "water_creek"
+    ],
+    "source": "landwatch",
+    "url": "https://www.landwatch.com/yellowstone-county-montana-farms-and-ranches-for-sale/pid/425614538",
+    "dateFound": "2026-04-20",
+    "dealScore": 21,
+    "description": "4320 Moser Dome Road, Joliet, MT, 59041, Yellowstone County \u2014 So, you\u2019ve watched the show \"Yellowstone\" and want a taste of the real thing? Welcome to 64 irrigated acres of pure Montana beauty with rare river rights on the legendary Clark Fork River. This property offers space, solitude, and views that stop you",
+    "daysOnMarket": null
+  },
+  {
+    "id": "landwatch_426407435",
+    "title": "Listing Details Page",
+    "price": 350000.0,
+    "acreage": 10.3,
+    "pricePerAcre": 33980.58,
+    "location": {
+      "lat": 0.0,
+      "lng": 0.0,
+      "state": "MT",
+      "county": "Lewis and Clark County"
+    },
+    "features": [
+      "water_creek"
+    ],
+    "source": "landwatch",
+    "url": "https://www.landwatch.com/lewis-and-clark-county-montana-recreational-property-for-sale/pid/426407435",
+    "dateFound": "2026-04-20",
+    "dealScore": 21,
+    "description": "4220 Denton Gulch Road, Wolf Creek, MT, 59648, Lewis and Clark County \u2014 Located in the scenic Wolf Creek Canyon area of Lewis and Clark County, Montana, this 10.27-acre creekfront property offers a private retreat with natural beauty and direct access to outdoor adventure. Positioned in a quiet and secluded setting, this",
+    "daysOnMarket": null
+  },
+  {
+    "id": "landwatch_419754375",
+    "title": "Listing Details Page",
+    "price": 1660000.0,
+    "acreage": 138.0,
+    "pricePerAcre": 12028.99,
+    "location": {
+      "lat": 0.0,
+      "lng": 0.0,
+      "state": "MT",
+      "county": "Carbon County"
+    },
+    "features": [
+      "water_creek"
+    ],
+    "source": "landwatch",
+    "url": "https://www.landwatch.com/carbon-county-montana-farms-and-ranches-for-sale/pid/419754375",
+    "dateFound": "2026-04-20",
+    "dealScore": 21,
+    "description": "1019 Red Lodge Creek Rd, Red Lodge, MT, 59068, Carbon County \u2014 Discover your slice of paradise nestled in the foothills of the breathtaking Beartooth mountain range! This stunning recreational property offers the perfect blend of natural beauty and practical amenities. With a well in place and approximately half",
+    "daysOnMarket": null
+  },
+  {
+    "id": "landwatch_414774266",
+    "title": "Listing Details Page",
+    "price": 8900000.0,
+    "acreage": 5852.0,
+    "pricePerAcre": 1520.85,
+    "location": {
+      "lat": 0.0,
+      "lng": 0.0,
+      "state": "MT",
+      "county": "Carbon County"
+    },
+    "features": [
+      "water_creek"
+    ],
+    "source": "landwatch",
+    "url": "https://www.landwatch.com/carbon-county-montana-farms-and-ranches-for-sale/pid/414774266",
+    "dateFound": "2026-04-20",
+    "dealScore": 21,
+    "description": "Bridger, MT, 59014, Carbon County \u2014 The Cherry Springs Ranch is located in the productive and scenic Clarks Fork River Valley. Located seven miles southeast of Bridger, Montana, 27 miles from Red Lodge Mountain, a family friendly ski resort, and 57 miles southwest of Billings, Montana.",
+    "daysOnMarket": null
+  },
+  {
+    "id": "landwatch_423165461",
+    "title": "Listing Details Page",
+    "price": 1050000.0,
+    "acreage": 599.0,
+    "pricePerAcre": 1752.92,
+    "location": {
+      "lat": 0.0,
+      "lng": 0.0,
+      "state": "MT",
+      "county": "Phillips County"
+    },
+    "features": [
+      "water_creek"
+    ],
+    "source": "landwatch",
+    "url": "https://www.landwatch.com/phillips-county-montana-farms-and-ranches-for-sale/pid/423165461",
+    "dateFound": "2026-04-20",
+    "dealScore": 21,
+    "description": "Malta, MT, 59538, Phillips County \u2014 Alkali Creek Ranch An exceptional opportunity to own Montana ranch land just minutes from town. This small acreage property lies just 7 miles south of Malta, MT, offering the rare combination of proximity to amenities and country living privacy. With",
+    "daysOnMarket": null
+  },
+  {
+    "id": "landwatch_426377853",
+    "title": "Listing Details Page",
+    "price": 1050000.0,
+    "acreage": 551.0,
+    "pricePerAcre": 1905.63,
+    "location": {
+      "lat": 0.0,
+      "lng": 0.0,
+      "state": "MT",
+      "county": "Custer County"
+    },
+    "features": [
+      "water_creek"
+    ],
+    "source": "landwatch",
+    "url": "https://www.landwatch.com/custer-county-montana-farms-and-ranches-for-sale/pid/426377853",
+    "dateFound": "2026-04-20",
+    "dealScore": 21,
+    "description": "Basin Creek County Rd, Volborg, MT, 59351, Custer County \u2014 'Life sure is great \u2013 way out here in Montana.' Nibs Allen Legacy 551 Ranch is the kind of place that feels like Montana used to be. Set on 551 deeded acres, with an additional 80 acres of adjoining BLM, this is a straightforward, honest piece of gro",
+    "daysOnMarket": null
+  },
+  {
+    "id": "landwatch_421592635",
+    "title": "Listing Details Page",
+    "price": 15000000.0,
+    "acreage": 8519.0,
+    "pricePerAcre": 1760.77,
+    "location": {
+      "lat": 0.0,
+      "lng": 0.0,
+      "state": "MT",
+      "county": "Beaverhead County"
+    },
+    "features": [
+      "water_creek"
+    ],
+    "source": "landwatch",
+    "url": "https://www.landwatch.com/beaverhead-county-montana-farms-and-ranches-for-sale/pid/421592635",
+    "dateFound": "2026-04-20",
+    "dealScore": 21,
+    "description": "Dillon, MT, 59725, Beaverhead County \u2014 Carter Creek Ranch is an expansive 8,519+/- deeded acre property located ten miles southeast of Dillon, Montana, in a region known for its strong agricultural heritage and recreational opportunities. An airport with sufficient services for private ai",
+    "daysOnMarket": null
+  },
+  {
+    "id": "landwatch_423912266",
+    "title": "Listing Details Page",
+    "price": 5000000.0,
+    "acreage": 229.0,
+    "pricePerAcre": 21834.06,
+    "location": {
+      "lat": 0.0,
+      "lng": 0.0,
+      "state": "MT",
+      "county": "Missoula County"
+    },
+    "features": [
+      "water_pond",
+      "timber"
+    ],
+    "source": "landwatch",
+    "url": "https://www.landwatch.com/missoula-county-montana-farms-and-ranches-for-sale/pid/423912266",
+    "dateFound": "2026-04-20",
+    "dealScore": 21,
+    "description": "Seeley Lake, MT, 59868, Missoula County \u2014 Nestled at the gateway to the Swan Valley, Grey Wolf Guest Ranch offers a unique opportunity to own 229+/- acres nearly surrounded by Lolo National Forest. Ideal for group events and gatherings, the focal point of the property is the 7,800+/- square",
+    "daysOnMarket": null
+  },
+  {
+    "id": "landwatch_422675982",
+    "title": "Listing Details Page",
+    "price": 695000.0,
+    "acreage": 94.0,
+    "pricePerAcre": 7393.62,
+    "location": {
+      "lat": 0.0,
+      "lng": 0.0,
+      "state": "MT",
+      "county": "Chouteau County"
+    },
+    "features": [
+      "water_creek"
+    ],
+    "source": "landwatch",
+    "url": "https://www.landwatch.com/chouteau-county-montana-farms-and-ranches-for-sale/pid/422675982",
+    "dateFound": "2026-04-20",
+    "dealScore": 21,
+    "description": "105 MT-80, Fort Benton, MT, 59442, Chouteau County \u2014 Overlooking the picturesque valley carved out by the mighty Missouri River, marking the birthplace of Montana, this meticulously maintained 94.1-acre property offers a unique blend of rustic charm and modern comfort. The residence features a 1,848-sq",
+    "daysOnMarket": null
+  },
+  {
+    "id": "landwatch_423226766",
+    "title": "Listing Details Page",
+    "price": 15000000.0,
+    "acreage": 2037.0,
+    "pricePerAcre": 7363.77,
+    "location": {
+      "lat": 0.0,
+      "lng": 0.0,
+      "state": "MT",
+      "county": "Park County"
+    },
+    "features": [
+      "water_creek"
+    ],
+    "source": "landwatch",
+    "url": "https://www.landwatch.com/park-county-montana-farms-and-ranches-for-sale/pid/423226766",
+    "dateFound": "2026-04-20",
+    "dealScore": 21,
+    "description": "Wilsall, MT, 59086, Park County \u2014 The 2,217+/- acre Muddy Creek Ranch enjoys a dramatically beautiful setting on the west side of the Shields Valley between the communities of Wilsall and Sedan. The ease of access to the town of Livingston to the southeast and Bridger Bowl Ski Resort",
+    "daysOnMarket": null
+  },
+  {
+    "id": "landwatch_425973409",
+    "title": "Land in MT",
+    "price": 345000.0,
+    "acreage": 320.0,
+    "pricePerAcre": 1078.12,
+    "location": {
+      "lat": 0.0,
+      "lng": 0.0,
+      "state": "MT",
+      "county": "Hill County"
+    },
+    "features": [
+      "water_creek"
+    ],
+    "source": "landwatch",
+    "url": "https://www.landwatch.com/hill-county-montana-farms-and-ranches-for-sale/pid/425973409",
+    "dateFound": "2026-04-20",
+    "dealScore": 21,
+    "description": "123 Road 220 North, Simpson, MT, 59501, Hill County \u2014 Bordering public state land that leads to the Milk River, this 320-acre property northwest of Havre, Montana offers a blend of tillable ground and grazing acres, making it a versatile opportunity for agriculture, livestock, or land investment. With l",
+    "daysOnMarket": null
+  },
+  {
+    "id": "landwatch_425766646",
+    "title": "Land in MT",
+    "price": 8950000.0,
+    "acreage": 2411.0,
+    "pricePerAcre": 3712.15,
+    "location": {
+      "lat": 0.0,
+      "lng": 0.0,
+      "state": "MT",
+      "county": "Lake County"
+    },
+    "features": [
+      "water_pond",
+      "pasture"
+    ],
+    "source": "landwatch",
+    "url": "https://www.landwatch.com/lake-county-montana-farms-and-ranches-for-sale/pid/425766646",
+    "dateFound": "2026-04-20",
+    "dealScore": 21,
+    "description": "58406 Moiese Valley Rd, Charlo, MT, 59824, Lake County \u2014 MOTIVATED SELLERS The Moiese Valley Ranch is a genuine working operation featuring irrigated farmland, fenced pasture, residences, infrastructure, and equipment, all set within an extraordinary western Montana setting. Roughly 141 acres are entirely",
+    "daysOnMarket": null
+  },
+  {
+    "id": "landwatch_417904930",
+    "title": "3 beds\u00a0\u2022\u00a03,250 sqft",
+    "price": 5950000.0,
+    "acreage": 141.0,
+    "pricePerAcre": 42198.58,
+    "location": {
+      "lat": 0.0,
+      "lng": 0.0,
+      "state": "MT",
+      "county": "Madison County"
+    },
+    "features": [
+      "water_creek"
+    ],
+    "source": "landwatch",
+    "url": "https://www.landwatch.com/madison-county-montana-farms-and-ranches-for-sale/pid/417904930",
+    "dateFound": "2026-04-20",
+    "dealScore": 21,
+    "description": "Twin Bridges, MT, 59754, Madison County \u2014 Crow's Foot on the Big Hole is a 141+/- acre riparian retreat located along a one-mile stretch of the fabled Big Hole River near Twin Bridges, Montana. The ranch is complemented by a 3,250+/- square foot custom, two-story, three-bedroom residence tha",
+    "daysOnMarket": null
+  },
+  {
+    "id": "landwatch_423226164",
+    "title": "Land in MT",
+    "price": 11875000.0,
+    "acreage": 1224.0,
+    "pricePerAcre": 9701.8,
+    "location": {
+      "lat": 0.0,
+      "lng": 0.0,
+      "state": "MT",
+      "county": "Park County"
+    },
+    "features": [
+      "water_creek"
+    ],
+    "source": "landwatch",
+    "url": "https://www.landwatch.com/park-county-montana-farms-and-ranches-for-sale/pid/423226164",
+    "dateFound": "2026-04-20",
+    "dealScore": 21,
+    "description": "Wilsall, MT, 59086, Park County \u2014 The 1,404+/- acre Muddy Creek Headquarters is the central portion of the 2,217+/- acre Muddy Creek Ranch. The headquarters enjoys a dramatically beautiful setting on the west side of the Shields Valley between the communities of Wilsall and Sedan. Th",
+    "daysOnMarket": null
+  },
+  {
+    "id": "landwatch_423863720",
+    "title": "Land in MT",
+    "price": 995000.0,
+    "acreage": 31.0,
+    "pricePerAcre": 32096.77,
+    "location": {
+      "lat": 0.0,
+      "lng": 0.0,
+      "state": "MT",
+      "county": "Powell County"
+    },
+    "features": [
+      "water_creek"
+    ],
+    "source": "landwatch",
+    "url": "https://www.landwatch.com/powell-county-montana-horse-property-for-sale/pid/423863720",
+    "dateFound": "2026-04-20",
+    "dealScore": 21,
+    "description": "2553 Mullan Trail, Gold Creek, MT, 59733, Powell County \u2014 Discover your dream retreat on this breathtaking 30.87-acre property, perfectly designed for both comfort and equestrian pursuits. This comfortable 3-bedroom, 3-bath home features an attached 2-car garage, providing convenience and ease of living. Yo",
+    "daysOnMarket": null
+  },
+  {
+    "id": "landwatch_426378732",
+    "title": "Listing Details Page",
+    "price": 139760.0,
+    "acreage": 16.8,
+    "pricePerAcre": 8319.05,
+    "location": {
+      "lat": 0.0,
+      "lng": 0.0,
+      "state": "MT",
+      "county": "Broadwater County"
+    },
+    "features": [
+      "structures",
+      "timber",
+      "hunting"
+    ],
+    "source": "landwatch",
+    "url": "https://www.landwatch.com/broadwater-county-montana-recreational-property-for-sale/pid/426378732",
+    "dateFound": "2026-04-20",
+    "dealScore": 20,
+    "description": "Keating Gulch Road, Radersburg, MT, 59643, Broadwater County \u2014 Bordering BLM land in the Elkhorn Mountains with year-round living off the grid, this property cant be beat. Its also on a private gated road with elk and deer hunting and a cabin or home site with fantastic views thats all close to National Forest.",
+    "daysOnMarket": null
+  },
+  {
+    "id": "landwatch_423052657",
+    "title": "Listing Details Page",
+    "price": 1950000.0,
+    "acreage": 160.0,
+    "pricePerAcre": 12187.5,
+    "location": {
+      "lat": 0.0,
+      "lng": 0.0,
+      "state": "MT",
+      "county": "Sweet Grass County"
+    },
+    "features": [
+      "road_paved",
+      "timber"
+    ],
+    "source": "landwatch",
+    "url": "https://www.landwatch.com/sweet-grass-county-montana-farms-and-ranches-for-sale/pid/423052657",
+    "dateFound": "2026-04-20",
+    "dealScore": 20,
+    "description": "307 Howie Rd, Big Timber, MT, 59011, Sweet Grass County \u2014 The Laubach Ranch is set up and ready for any new buyer wanting to have 160 acres and a few head of livestock. Located right off of Howie Road, this ranch has year-round access off of a paved road. The parcel is located 5 miles from downtown Big Timb",
+    "daysOnMarket": null
+  },
+  {
+    "id": "landwatch_422992565",
+    "title": "Windancer Ranch",
+    "price": 28330000.0,
+    "acreage": 14160.0,
+    "pricePerAcre": 2000.71,
+    "location": {
+      "lat": 0.0,
+      "lng": 0.0,
+      "state": "MT",
+      "county": "Yellowstone County"
+    },
+    "features": [
+      "timber",
+      "pasture",
+      "hunting"
+    ],
+    "source": "landwatch",
+    "url": "https://www.landwatch.com/yellowstone-county-montana-farms-and-ranches-for-sale/pid/422992565",
+    "dateFound": "2026-04-20",
+    "dealScore": 19,
+    "description": "7200 Pineview Rd, Custer, MT, 59024, Yellowstone County \u2014 Secluded log home with world-class elk hunting, spring-fed reservoir, productive hayfields, and full ranch infrastructure for livestock and recreation.",
+    "daysOnMarket": null
+  },
+  {
+    "id": "landwatch_413433162",
+    "title": "Cromwell: Island of Legends",
+    "price": 72000000.0,
+    "acreage": 348.0,
+    "pricePerAcre": 206896.55,
+    "location": {
+      "lat": 0.0,
+      "lng": 0.0,
+      "state": "MT",
+      "county": "Lake County"
+    },
+    "features": [
+      "water_pond"
+    ],
+    "source": "landwatch",
+    "url": "https://www.landwatch.com/lake-county-montana-farms-and-ranches-for-sale/pid/413433162",
+    "dateFound": "2026-04-20",
+    "dealScore": 19,
+    "description": "Dayton MT, Dayton, MT, 59915, Lake County \u2014 A legendary private island on iconic Flathead Lake, offering rich history, unmatched privacy, and grand unfinished architecture with limitless potential.",
+    "daysOnMarket": null
+  },
+  {
+    "id": "landwatch_426214553",
+    "title": "Land in MT",
+    "price": 1840000.0,
+    "acreage": 79.9,
+    "pricePerAcre": 23028.79,
+    "location": {
+      "lat": 0.0,
+      "lng": 0.0,
+      "state": "MT",
+      "county": "Lake County"
+    },
+    "features": [
+      "water_pond"
+    ],
+    "source": "landwatch",
+    "url": "https://www.landwatch.com/lake-county-montana-farms-and-ranches-for-sale/pid/426214553",
+    "dateFound": "2026-04-20",
+    "dealScore": 19,
+    "description": "48945 Valley View Road, Ronan, MT, 59864, Lake County \u2014 K9\u2019s Cloud 9 is an 80-acre ranch in the Round Butte area \u2014 a region respected among field trial professionals for its terrain, climate, and varied water features. Built with intention and performance in mind, the property reflects the standards serio",
+    "daysOnMarket": null
+  },
+  {
+    "id": "landwatch_424394188",
+    "title": "Listing Details Page",
+    "price": 249997.0,
+    "acreage": 74.0,
+    "pricePerAcre": 3378.34,
+    "location": {
+      "lat": 0.0,
+      "lng": 0.0,
+      "state": "MT",
+      "county": "Lake County"
+    },
+    "features": [
+      "water_pond"
+    ],
+    "source": "landwatch",
+    "url": "https://www.landwatch.com/lake-county-montana-recreational-property-for-sale/pid/424394188",
+    "dateFound": "2026-04-20",
+    "dealScore": 19,
+    "description": "Hot Springs, MT, 59845, Lake County \u2014 Welcome to your own private Montana escape 74 sprawling acres of unspoiled land nestled against the rolling mountain foothills 5 minutes outside the town of Hot Springs. This one-of-a-kind property combines breathtaking scenery, abundant wildlife, an",
+    "daysOnMarket": null
+  },
+  {
+    "id": "landwatch_423430058",
+    "title": "Listing Details Page",
+    "price": 675000.0,
+    "acreage": 180.0,
+    "pricePerAcre": 3750.0,
+    "location": {
+      "lat": 0.0,
+      "lng": 0.0,
+      "state": "MT",
+      "county": "Lake County"
+    },
+    "features": [
+      "water_pond"
+    ],
+    "source": "landwatch",
+    "url": "https://www.landwatch.com/lake-county-montana-farms-and-ranches-for-sale/pid/423430058",
+    "dateFound": "2026-04-20",
+    "dealScore": 19,
+    "description": "44549 Turnquist Road, Ronan, MT, 59864, Lake County \u2014 180 acres total (divided into 3 parcels) Property has a gravel pit on site that can be used to build road etc or have your own personal shooting range. Next to the gravel pit is a large leveled out area perfect for a home site or be able to use for c",
+    "daysOnMarket": null
+  },
+  {
+    "id": "landwatch_425896415",
+    "title": "Listing Details Page",
+    "price": 6600000.0,
+    "acreage": 1236.0,
+    "pricePerAcre": 5339.81,
+    "location": {
+      "lat": 0.0,
+      "lng": 0.0,
+      "state": "MT",
+      "county": "Pondera County"
+    },
+    "features": [
+      "water_pond"
+    ],
+    "source": "landwatch",
+    "url": "https://www.landwatch.com/pondera-county-montana-farms-and-ranches-for-sale/pid/425896415",
+    "dateFound": "2026-04-20",
+    "dealScore": 19,
+    "description": "2243 Buena Vista Road, Valier, MT, 59486, Pondera County \u2014 Located just 6.5 miles from Valier, Montana, this 1,236\u00b1 deeded acre farm and ranch offers a rare combination of productive irrigated farmland, livestock infrastructure, significant water rights, and year-round recreational appeal. With 920 shares of",
+    "daysOnMarket": null
+  },
+  {
+    "id": "landwatch_420986297",
+    "title": "Listing Details Page",
+    "price": 5650000.0,
+    "acreage": 24.8,
+    "pricePerAcre": 227822.58,
+    "location": {
+      "lat": 0.0,
+      "lng": 0.0,
+      "state": "MT",
+      "county": "Lake County"
+    },
+    "features": [
+      "water_pond"
+    ],
+    "source": "landwatch",
+    "url": "https://www.landwatch.com/lake-county-montana-recreational-property-for-sale/pid/420986297",
+    "dateFound": "2026-04-20",
+    "dealScore": 19,
+    "description": "31572 Lake to Sky Drive, Bigfork, MT, 59911, Lake County \u2014 EMBRACE THE EXTRAORDINARY! Welcome to \"Castle Rock\", a hidden gem nestled above spectacular Flathead Lake, in breathtaking Bigfork Montana. This cherished estate offers spectacular 180 degree views of the mountains of Whitefish, unforgettable Flathea",
+    "daysOnMarket": null
+  },
+  {
+    "id": "landwatch_425013431",
+    "title": "Land in MT",
+    "price": 490000.0,
+    "acreage": 26.2,
+    "pricePerAcre": 18702.29,
+    "location": {
+      "lat": 0.0,
+      "lng": 0.0,
+      "state": "MT",
+      "county": "Lewis and Clark County"
+    },
+    "features": [
+      "timber",
+      "pasture",
+      "hunting"
+    ],
+    "source": "landwatch",
+    "url": "https://www.landwatch.com/lewis-and-clark-county-montana-recreational-property-for-sale/pid/425013431",
+    "dateFound": "2026-04-20",
+    "dealScore": 19,
+    "description": "123 Strandskov, Lincoln, MT, 59639, Lewis and Clark County \u2014 A summer playground for off-roading and trail exploration, and a fall refuge for hunting, these 26.2 acres offer unparalleled year-round recreation. The property showcases a blend of open meadows and forested pine stands, filling the air with the fre",
+    "daysOnMarket": null
+  },
+  {
+    "id": "landwatch_420434800",
+    "title": "Stagecoach Trail Ranch",
+    "price": 4150000.0,
+    "acreage": 1280.0,
+    "pricePerAcre": 3242.19,
+    "location": {
+      "lat": 0.0,
+      "lng": 0.0,
+      "state": "MT",
+      "county": "Sweet Grass County"
+    },
+    "features": [
+      "timber",
+      "pasture"
+    ],
+    "source": "landwatch",
+    "url": "https://www.landwatch.com/sweet-grass-county-montana-farms-and-ranches-for-sale/pid/420434800",
+    "dateFound": "2026-04-20",
+    "dealScore": 18,
+    "description": "Big Timber, MT, 59011, Sweet Grass County \u2014 The Stagecoach Trail Ranch is a historic corridor in the old west that now serves as a hunters paradise and a major corridor for wildlife. The property consists of 1,280+/- acres, including dryland hay acreage and lightly timbered draws and hills.",
+    "daysOnMarket": null
+  },
+  {
+    "id": "landwatch_424902911",
+    "title": "Listing Details Page",
+    "price": 85000.0,
+    "acreage": 20.0,
+    "pricePerAcre": 4250.0,
+    "location": {
+      "lat": 0.0,
+      "lng": 0.0,
+      "state": "MT",
+      "county": "Carbon County"
+    },
+    "features": [
+      "off_grid_ready"
+    ],
+    "source": "landwatch",
+    "url": "https://www.landwatch.com/carbon-county-montana-recreational-property-for-sale/pid/424902911",
+    "dateFound": "2026-04-20",
+    "dealScore": 18,
+    "description": "947-7, Belfry, MT, 59008, Carbon County \u2014 Welcome to your private mountain retreat. This 20-acre gem is located on the Eastern edge of the Beartooth Mountains. From here you will have incredible access to unlimited outdoor experiences in every direction. This off-grid property has a nice mix",
+    "daysOnMarket": null
+  },
+  {
+    "id": "landwatch_425239988",
+    "title": "Listing Details Page",
+    "price": 275000.0,
+    "acreage": 14.3,
+    "pricePerAcre": 19230.77,
+    "location": {
+      "lat": 0.0,
+      "lng": 0.0,
+      "state": "MT",
+      "county": "Missoula County"
+    },
+    "features": [
+      "off_grid_ready"
+    ],
+    "source": "landwatch",
+    "url": "https://www.landwatch.com/missoula-county-montana-homes-for-sale/pid/425239988",
+    "dateFound": "2026-04-20",
+    "dealScore": 18,
+    "description": "19744 Antiquity Lane, Florence, MT, 59833, Missoula County \u2014 Off Grid Property Nestled at 19744 Antiquity LANE, Florence, Montana, this single-family residence offers a unique opportunity to embrace the tranquility of rural living. Built in 2013, this property provides a foundation for crafting your ideal Mont",
+    "daysOnMarket": null
+  },
+  {
+    "id": "landwatch_425858063",
+    "title": "Listing Details Page",
+    "price": 300000.0,
+    "acreage": 38.0,
+    "pricePerAcre": 7894.74,
+    "location": {
+      "lat": 0.0,
+      "lng": 0.0,
+      "state": "MT",
+      "county": "Musselshell County"
+    },
+    "features": [
+      "mineral_rights"
+    ],
+    "source": "landwatch",
+    "url": "https://www.landwatch.com/musselshell-county-montana-undeveloped-land-for-sale/pid/425858063",
+    "dateFound": "2026-04-20",
+    "dealScore": 18,
+    "description": "Southwest Quarter of Section 26, Township 8 North, Range 26 East, M.P.M., Musselshell, MT, 59059, Musselshell County \u2014 $300,000 for 38 acres. With your purchase you get full access to the 260 acres of undivided property plus any mineral rights found on property. Mussellshell County, Montana.",
+    "daysOnMarket": null
+  },
+  {
+    "id": "landwatch_423732009",
+    "title": "Listing Details Page",
+    "price": 6950000.0,
+    "acreage": 3.25,
+    "pricePerAcre": 2138461.54,
+    "location": {
+      "lat": 0.0,
+      "lng": 0.0,
+      "state": "MT",
+      "county": "Sweet Grass County"
+    },
+    "features": [
+      "timber",
+      "pasture"
+    ],
+    "source": "landwatch",
+    "url": "https://www.landwatch.com/sweet-grass-county-montana-commercial-property-for-sale/pid/423732009",
+    "dateFound": "2026-04-20",
+    "dealScore": 18,
+    "description": "228 Big Timber Loop, Big Timber, MT, 59011, Sweet Grass County \u2014 For the first time in 40 years this iconic business is now being offered, and Hayden Outdoors Real Estate is honored to represent, The Fort in Big Timber, Montana. Land The Fort is a welcoming convenience store located in the heart of Big Timber MT.",
+    "daysOnMarket": null
+  },
+  {
+    "id": "landwatch_421041939",
+    "title": "Land in MT",
+    "price": 189000.0,
+    "acreage": 40.1,
+    "pricePerAcre": 4713.22,
+    "location": {
+      "lat": 0.0,
+      "lng": 0.0,
+      "state": "MT",
+      "county": "Jefferson County"
+    },
+    "features": [
+      "mineral_rights"
+    ],
+    "source": "landwatch",
+    "url": "https://www.landwatch.com/jefferson-county-montana-recreational-property-for-sale/pid/421041939",
+    "dateFound": "2026-04-20",
+    "dealScore": 18,
+    "description": "TBD High Ore Road, Lot#WP001, Boulder, MT, 59632, Jefferson County \u2014 Escape to your mountain retreat with this insurable and accessible property, offering sweeping views and the rugged beauty of Montana's mountains. This incredible offering is not one, but two patented mining claims with surface and mineral rights. A",
+    "daysOnMarket": null
+  },
+  {
+    "id": "landwatch_425618786",
+    "title": "Land in MT",
+    "price": 599000.0,
+    "acreage": 76.0,
+    "pricePerAcre": 7881.58,
+    "location": {
+      "lat": 0.0,
+      "lng": 0.0,
+      "state": "MT",
+      "county": "Sanders County"
+    },
+    "features": [
+      "road_paved"
+    ],
+    "source": "landwatch",
+    "url": "https://www.landwatch.com/sanders-county-montana-farms-and-ranches-for-sale/pid/425618786",
+    "dateFound": "2026-04-20",
+    "dealScore": 18,
+    "description": "2167 MT HIGHWAY 28, Hot Springs, MT, 59845, Sanders County \u2014 Premium Farmstead with Commercial Development Potential A +/- 65-acre irrigated farmstead awaits at 2167 Mt Highway 28. The property offers exceptional versatility for equestrian operations, homesteading, or commercial development. With paved road fr",
+    "daysOnMarket": null
+  },
+  {
+    "id": "landwatch_423622092",
+    "title": "Listing Details Page",
+    "price": 2250000.0,
+    "acreage": 640.0,
+    "pricePerAcre": 3515.62,
+    "location": {
+      "lat": 0.0,
+      "lng": 0.0,
+      "state": "MT",
+      "county": "Yellowstone County"
+    },
+    "features": [
+      "timber",
+      "hunting"
+    ],
+    "source": "landwatch",
+    "url": "https://www.landwatch.com/yellowstone-county-montana-recreational-property-for-sale/pid/423622092",
+    "dateFound": "2026-04-20",
+    "dealScore": 17,
+    "description": "Pompeys Pillar, MT, 59064, Yellowstone County \u2014 Welcome to Pine Ridge Sanctuary, a rare offering of 640 deeded acres of prime Montana hunting land, ideally situated just 40 miles (approximately 50 minutes) from Billings, Montanas largest city and commercial hub. This remarkable property features a",
+    "daysOnMarket": null
+  },
+  {
+    "id": "landwatch_420212225",
+    "title": "Listing Details Page",
+    "price": 5155483.0,
+    "acreage": 731.0,
+    "pricePerAcre": 7052.64,
+    "location": {
+      "lat": 0.0,
+      "lng": 0.0,
+      "state": "MT",
+      "county": "Teton County"
+    },
+    "features": [
+      "pasture",
+      "hunting"
+    ],
+    "source": "landwatch",
+    "url": "https://www.landwatch.com/teton-county-montana-farms-and-ranches-for-sale/pid/420212225",
+    "dateFound": "2026-04-20",
+    "dealScore": 17,
+    "description": "871 2nd Rd NE, Fairfield, MT, 59436, Teton County \u2014 Irrigated Farm in Teton County Montana Rare Opportunity to a acquire a productive 731 acre farm in the Greenfield Irrigation District, NE of Fairfield, Montana, an area known for malting barley, canola, alfalfa hay, pheasant &amp; waterfowl and hunting.",
+    "daysOnMarket": null
+  },
+  {
+    "id": "landwatch_424885450",
+    "title": "Listing Details Page",
+    "price": 300000.0,
+    "acreage": 28.0,
+    "pricePerAcre": 10714.29,
+    "location": {
+      "lat": 0.0,
+      "lng": 0.0,
+      "state": "MT",
+      "county": "Chouteau County"
+    },
+    "features": [
+      "structures"
+    ],
+    "source": "landwatch",
+    "url": "https://www.landwatch.com/chouteau-county-montana-farms-and-ranches-for-sale/pid/424885450",
+    "dateFound": "2026-04-20",
+    "dealScore": 17,
+    "description": "33919 U.S. 87, Fort Benton, MT, 59442, Chouteau County \u2014 Just 8 miles from Fort Benton, these 28 acres offer the perfect blend of rural charm, scenic beauty, and practical potential. Whether you\u2019re dreaming of building a new home, adding a workshop, or keeping livestock like horses, sheep, goats, or a few",
+    "daysOnMarket": null
+  },
+  {
+    "id": "landwatch_425815817",
+    "title": "Land in MT",
+    "price": 1645000.0,
+    "acreage": 60.0,
+    "pricePerAcre": 27416.67,
+    "location": {
+      "lat": 0.0,
+      "lng": 0.0,
+      "state": "MT",
+      "county": "Broadwater County"
+    },
+    "features": [
+      "pasture",
+      "hunting"
+    ],
+    "source": "landwatch",
+    "url": "https://www.landwatch.com/broadwater-county-montana-farms-and-ranches-for-sale/pid/425815817",
+    "dateFound": "2026-04-20",
+    "dealScore": 17,
+    "description": "2584 MT HWY 284, Townsend, MT, 59644, Broadwater County \u2014 Welcome to The Elk Meadows Ranch located in Townsend, MT. Set on 60 acres of wide-open Montana ground, this one-of-a-kind property is where freedom, functionality, and frontier living all come together. This ranch sits in one of the best recreational",
+    "daysOnMarket": null
+  },
+  {
+    "id": "landwatch_416186850",
+    "title": "Conservation Easement",
+    "price": 4875000.0,
+    "acreage": 313.0,
+    "pricePerAcre": 15575.08,
+    "location": {
+      "lat": 0.0,
+      "lng": 0.0,
+      "state": "MT",
+      "county": "Gallatin County"
+    },
+    "features": [
+      "pasture"
+    ],
+    "source": "landwatch",
+    "url": "https://www.landwatch.com/gallatin-county-montana-farms-and-ranches-for-sale/pid/416186850",
+    "dateFound": "2026-04-20",
+    "dealScore": 16,
+    "description": "Penwell Bridge Road, Belgrade, MT, 59714, Gallatin County \u2014 Spanning 313 acres, this property features hay, grain, and other crop production, providing income opportunities while offering privacy and stunning Gallatin Valley views. A conservation easement ensures the land's agricultural and environmental value is preserved, with an 8-acre build site allowed for development",
+    "daysOnMarket": null
+  },
+  {
+    "id": "landwatch_422755577",
+    "title": "Listing Details Page",
+    "price": 5900000.0,
+    "acreage": 26.5,
+    "pricePerAcre": 222641.51,
+    "location": {
+      "lat": 0.0,
+      "lng": 0.0,
+      "state": "MT",
+      "county": "Carbon County"
+    },
+    "features": [
+      "timber"
+    ],
+    "source": "landwatch",
+    "url": "https://www.landwatch.com/carbon-county-montana-homes-for-sale/pid/422755577",
+    "dateFound": "2026-04-20",
+    "dealScore": 16,
+    "description": "94 Sheep Mountain Road W 614 AC State Lease), Red Lodge, MT, 59068, Carbon County \u2014 Stunning 5 BR/5.5 BA Sheep Mountain home near Red Lodge. This incredible property sits privately at the end of the road bordering State Land &amp; National Forest on 3 sides, a \"Montana Paradise\", includes 641 unspoiled deeded &amp; leased fenced acres which",
+    "daysOnMarket": null
+  },
+  {
+    "id": "landwatch_425618796",
+    "title": "Listing Details Page",
+    "price": 1749000.0,
+    "acreage": 21.2,
+    "pricePerAcre": 82500.0,
+    "location": {
+      "lat": 0.0,
+      "lng": 0.0,
+      "state": "MT",
+      "county": "Flathead County"
+    },
+    "features": [
+      "timber"
+    ],
+    "source": "landwatch",
+    "url": "https://www.landwatch.com/flathead-county-montana-recreational-property-for-sale/pid/425618796",
+    "dateFound": "2026-04-20",
+    "dealScore": 16,
+    "description": "2503 Wild Bill Road, Kila, MT, 59920, Flathead County \u2014 Discover this quintessential Montana ranchette a custom timber-framed home with horse facilities, nestled on approximately 21 acres of sheltered land. Bordered on two sides by thousands of acres of National Forest, the property features a gently flow",
+    "daysOnMarket": null
+  },
+  {
+    "id": "landwatch_426368378",
+    "title": "Listing Details Page",
+    "price": 300000.0,
+    "acreage": 0.05,
+    "pricePerAcre": 6000000.0,
+    "location": {
+      "lat": 0.0,
+      "lng": 0.0,
+      "state": "MT",
+      "county": "Sweet Grass County"
+    },
+    "features": [
+      "timber"
+    ],
+    "source": "landwatch",
+    "url": "https://www.landwatch.com/sweet-grass-county-montana-homes-for-sale/pid/426368378",
+    "dateFound": "2026-04-20",
+    "dealScore": 16,
+    "description": "1004 Sheep Herder Ln., Big Timber, MT, 59011, Sweet Grass County \u2014 Looking for your next home or a great investment property? Check out this townhome, proving a comfortable living space without the worry of exterior upkeep and lawncare. Located in-between Bozeman and Billings in the quaint town of Big Timber, MT. Im",
+    "daysOnMarket": null
+  },
+  {
+    "id": "landwatch_425766651",
+    "title": "Land in MT",
+    "price": 1512000.0,
+    "acreage": 840.0,
+    "pricePerAcre": 1800.0,
+    "location": {
+      "lat": 0.0,
+      "lng": 0.0,
+      "state": "MT",
+      "county": "Mineral County"
+    },
+    "features": [
+      "timber"
+    ],
+    "source": "landwatch",
+    "url": "https://www.landwatch.com/mineral-county-montana-farms-and-ranches-for-sale/pid/425766651",
+    "dateFound": "2026-04-20",
+    "dealScore": 16,
+    "description": "N Frontage Rd, Alberton, MT, 59820, Mineral County \u2014 SWITCHBACK RANCH - MINERAL COUNTY, MT Switchback Ranch encompasses +/- 840 acres just outside Alberton, Montana. The property combines scale, timber, and direct access to public land in one of Western Montana's most scenic corridors. An unimproved ea",
+    "daysOnMarket": null
+  },
+  {
+    "id": "landwatch_419308843",
+    "title": "Land in MT",
+    "price": 4450000.0,
+    "acreage": 1273.0,
+    "pricePerAcre": 3495.68,
+    "location": {
+      "lat": 0.0,
+      "lng": 0.0,
+      "state": "MT",
+      "county": "Beaverhead County"
+    },
+    "features": [
+      "hunting"
+    ],
+    "source": "landwatch",
+    "url": "https://www.landwatch.com/beaverhead-county-montana-farms-and-ranches-for-sale/pid/419308843",
+    "dateFound": "2026-04-20",
+    "dealScore": 15,
+    "description": "31420 Montana 324, Dillon, MT, 59725, Beaverhead County \u2014 The Elk Canyon Ranch stands out as the best offering currently on the market in Montana, providing unparalleled quality and unmatched opportunities for discerning elk and big game hunters. This turnkey, top-tier elk hunting ranch is located in a gene",
+    "daysOnMarket": null
+  },
+  {
+    "id": "landwatch_420448284",
+    "title": "Listing Details Page",
+    "price": 21000000.0,
+    "acreage": 23665.0,
+    "pricePerAcre": 887.39,
+    "location": {
+      "lat": 0.0,
+      "lng": 0.0,
+      "state": "MT",
+      "county": "Big Horn County"
+    },
+    "features": [
+      "hunting"
+    ],
+    "source": "landwatch",
+    "url": "https://www.landwatch.com/big-horn-county-montana-farms-and-ranches-for-sale/pid/420448284",
+    "dateFound": "2026-04-20",
+    "dealScore": 15,
+    "description": "5621 Quietus Rd, Decker, MT, 59025, Big Horn County \u2014 Ranch Highlights Acreage 23,665 Total 13,800 deeded 4,688 BLM (MT Allotment 00085 695 AUMs) 1,305 State (#2545, #6844, #8060) 3,875 Private Lease Features Premier grazing land All contiguous Extremely limited public access Hunting, wildlife viewing,",
+    "daysOnMarket": null
+  },
+  {
+    "id": "landwatch_422915205",
+    "title": "Listing Details Page",
+    "price": 1200000.0,
+    "acreage": 2.92,
+    "pricePerAcre": 410958.9,
+    "location": {
+      "lat": 0.0,
+      "lng": 0.0,
+      "state": "MT",
+      "county": "Ravalli County"
+    },
+    "features": [
+      "hunting"
+    ],
+    "source": "landwatch",
+    "url": "https://www.landwatch.com/ravalli-county-montana-recreational-property-for-sale/pid/422915205",
+    "dateFound": "2026-04-20",
+    "dealScore": 15,
+    "description": "456 Blue Jay Lane, Hamilton, MT, 59840, Ravalli County \u2014 Imagine nearly 30 million acres of wilderness out your back door. Whether your passion is hiking, hunting or horseback riding, you could not ask for a better base camp than this beautiful log home.Nestled in the heart of Western Montana, this 2.96 ac",
+    "daysOnMarket": null
+  },
+  {
+    "id": "landwatch_417793952",
+    "title": "Listing Details Page",
+    "price": 7500000.0,
+    "acreage": 2134.0,
+    "pricePerAcre": 3514.53,
+    "location": {
+      "lat": 0.0,
+      "lng": 0.0,
+      "state": "MT",
+      "county": "Flathead County"
+    },
+    "features": [
+      "hunting"
+    ],
+    "source": "landwatch",
+    "url": "https://www.landwatch.com/flathead-county-montana-farms-and-ranches-for-sale/pid/417793952",
+    "dateFound": "2026-04-20",
+    "dealScore": 15,
+    "description": "Kila, MT, 59920, Flathead County \u2014 Nestled on the southern flank of the highest peak in the region lies the 2,134+/- acre Haskill Mountain Retreat, in Flathead County, Montana. Recreational opportunities abound with healthy populations of deer, elk, and bear situated in Hunting Distri",
+    "daysOnMarket": null
+  },
+  {
+    "id": "landwatch_425854924",
+    "title": "Land in MT",
+    "price": 1650000.0,
+    "acreage": 640.0,
+    "pricePerAcre": 2578.12,
+    "location": {
+      "lat": 0.0,
+      "lng": 0.0,
+      "state": "MT",
+      "county": "Petroleum County"
+    },
+    "features": [
+      "hunting"
+    ],
+    "source": "landwatch",
+    "url": "https://www.landwatch.com/petroleum-county-montana-farms-and-ranches-for-sale/pid/425854924",
+    "dateFound": "2026-04-20",
+    "dealScore": 15,
+    "description": "TBD, Winnett, MT, 59087, Petroleum County \u2014 The Breaks Hunting Camp West Unit is well known as one of the premier elk habitats in Montana and the western U.S. The Breaks Hunting Camp offers the sportsman an incredible opportunity of a lifetime to fulfill dreams and make memories. Land A sports",
+    "daysOnMarket": null
+  },
+  {
+    "id": "landwatch_423267544",
+    "title": "Land in MT",
+    "price": 175000.0,
+    "acreage": 28.6,
+    "pricePerAcre": 6118.88,
+    "location": {
+      "lat": 0.0,
+      "lng": 0.0,
+      "state": "MT",
+      "county": "Jefferson County"
+    },
+    "features": [
+      "hunting"
+    ],
+    "source": "landwatch",
+    "url": "https://www.landwatch.com/jefferson-county-montana-recreational-property-for-sale/pid/423267544",
+    "dateFound": "2026-04-20",
+    "dealScore": 15,
+    "description": "TBD High Ore Road, Boulder, MT, 59632, Jefferson County \u2014 This is an incredible opportunity to own two beautiful mountain lots just north of the I-15 \"High Ore\" interchange near Boulder for quick commuting. The property offers incredible hunting opportunities, with deer, elk, and bears frequently seen in th",
+    "daysOnMarket": null
+  },
+  {
+    "id": "landwatch_423076003",
+    "title": "Land in MT",
+    "price": 2995000.0,
+    "acreage": 80.2,
+    "pricePerAcre": 37344.14,
+    "location": {
+      "lat": 0.0,
+      "lng": 0.0,
+      "state": "MT",
+      "county": "Gallatin County"
+    },
+    "features": [],
+    "source": "landwatch",
+    "url": "https://www.landwatch.com/gallatin-county-montana-undeveloped-land-for-sale/pid/423076003",
+    "dateFound": "2026-04-20",
+    "dealScore": 14,
+    "description": "S Whistleberry Road, Bozeman, MT, 59718, Gallatin County \u2014 Welcome to one of the most stunning parcels in the exclusive, gated 7 Ranges community - a peaceful enclave perfectly positioned between Bozeman and Big Sky. This exceptional lot offers 360-degree views of the Gallatin Valley and the surrounding moun",
+    "daysOnMarket": null
+  },
+  {
+    "id": "landwatch_425745128",
+    "title": "Land in MT",
+    "price": 1395000.0,
+    "acreage": 138.0,
+    "pricePerAcre": 10108.7,
+    "location": {
+      "lat": 0.0,
+      "lng": 0.0,
+      "state": "MT",
+      "county": "Carbon County"
+    },
+    "features": [],
+    "source": "landwatch",
+    "url": "https://www.landwatch.com/carbon-county-montana-farms-and-ranches-for-sale/pid/425745128",
+    "dateFound": "2026-04-20",
+    "dealScore": 14,
+    "description": "West Teesdale Lane, Bridger, MT, 59014, Carbon County \u2014 This is a very productive pivot with a strong, two-year-old stand of alfalfa, ample water, and outstanding access. The property offers numerous potential homesites and improvement locations that can be developed while preserving the full productivity",
+    "daysOnMarket": null
+  },
+  {
+    "id": "landwatch_425605534",
+    "title": "Listing Details Page",
+    "price": 800000.0,
+    "acreage": 80.0,
+    "pricePerAcre": 10000.0,
+    "location": {
+      "lat": 0.0,
+      "lng": 0.0,
+      "state": "MT",
+      "county": "Fergus County"
+    },
+    "features": [],
+    "source": "landwatch",
+    "url": "https://www.landwatch.com/fergus-county-montana-farms-and-ranches-for-sale/pid/425605534",
+    "dateFound": "2026-04-20",
+    "dealScore": 14,
+    "description": "102310 U.S. 87, Lewistown, MT, 59457, Fergus County \u2014 Set on 80 deeded acres just minutes from Lewistown, this picturesque rural property offers the space, privacy, and freedom Montana living is known for. The land is improved with a modest 3-bedroom, 1-bath ranch-style home. The acreage provides ample",
+    "daysOnMarket": null
+  },
+  {
+    "id": "landwatch_423977674",
+    "title": "Listing Details Page",
+    "price": 899000.0,
+    "acreage": 11.7,
+    "pricePerAcre": 76837.61,
+    "location": {
+      "lat": 0.0,
+      "lng": 0.0,
+      "state": "MT",
+      "county": "Gallatin County"
+    },
+    "features": [],
+    "source": "landwatch",
+    "url": "https://www.landwatch.com/gallatin-county-montana-undeveloped-land-for-sale/pid/423977674",
+    "dateFound": "2026-04-20",
+    "dealScore": 14,
+    "description": "8663 E Panorama, Bozeman, MT, 59715, Gallatin County \u2014 Experience wide - open Montana living on this exceptional 11+ acre parcel located along the west side of the Bridger Mountain Range. This property offers sweeping panoramic views of the Gallatin Valley, surrounding mountain ranges, and unforgettable",
+    "daysOnMarket": null
+  },
+  {
+    "id": "landwatch_425961163",
+    "title": "Listing Details Page",
+    "price": 1450000.0,
+    "acreage": 1637.0,
+    "pricePerAcre": 885.77,
+    "location": {
+      "lat": 0.0,
+      "lng": 0.0,
+      "state": "MT",
+      "county": "Stillwater County"
+    },
+    "features": [],
+    "source": "landwatch",
+    "url": "https://www.landwatch.com/stillwater-county-montana-farms-and-ranches-for-sale/pid/425961163",
+    "dateFound": "2026-04-20",
+    "dealScore": 14,
+    "description": "Hailstone Basin Rd, Rapelje, MT, 59067, Stillwater County \u2014 Hailstone Basin Land &amp; Livestock an Efficient Grazing &amp; Agricultural Property Stillwater County Rapelje, MT DESCRIPTION: Hailstone Basin Land &amp; Livestock is an Efficient and Flexible Agricultural Property located near Rapelje, Montana. This Ranch off",
+    "daysOnMarket": null
+  },
+  {
+    "id": "landwatch_423687217",
+    "title": "Listing Details Page",
+    "price": 1950000.0,
+    "acreage": 1546.0,
+    "pricePerAcre": 1261.32,
+    "location": {
+      "lat": 0.0,
+      "lng": 0.0,
+      "state": "MT",
+      "county": "Golden Valley County"
+    },
+    "features": [],
+    "source": "landwatch",
+    "url": "https://www.landwatch.com/golden-valley-county-montana-farms-and-ranches-for-sale/pid/423687217",
+    "dateFound": "2026-04-20",
+    "dealScore": 14,
+    "description": "Jessie Road, Ryegate, MT, 59074, Golden Valley County \u2014 Jessie Road Ranch \\| 1,546 Acres \\| Golden Valley County, Montana Welcome to Jessie Road Ranch a rare opportunity to own approximately 1,546 acres of productive rangeland in the heart of Golden Valley County, Montana. This diverse property offers a ble",
+    "daysOnMarket": null
+  },
+  {
+    "id": "landwatch_425778007",
+    "title": "Listing Details Page",
+    "price": 2350000.0,
+    "acreage": 39.0,
+    "pricePerAcre": 60256.41,
+    "location": {
+      "lat": 0.0,
+      "lng": 0.0,
+      "state": "MT",
+      "county": "Lewis and Clark County"
+    },
+    "features": [],
+    "source": "landwatch",
+    "url": "https://www.landwatch.com/lewis-and-clark-county-montana-farms-and-ranches-for-sale/pid/425778007",
+    "dateFound": "2026-04-20",
+    "dealScore": 14,
+    "description": "3950 Floweree Drive, Helena, MT, 59602, Lewis and Clark County \u2014 Located only minutes from downtown Helena lies 39 +/- acres for you to enjoy country living in a surprisingly close proximity to town amenities. This beautiful property, set in a very comfortable rural setting, features a 2,070 sqft home with beautif",
+    "daysOnMarket": null
+  },
+  {
+    "id": "landwatch_423118078",
+    "title": "Listing Details Page",
+    "price": 57000000.0,
+    "acreage": 23500.0,
+    "pricePerAcre": 2425.53,
+    "location": {
+      "lat": 0.0,
+      "lng": 0.0,
+      "state": "MT",
+      "county": "Big Horn County"
+    },
+    "features": [],
+    "source": "landwatch",
+    "url": "https://www.landwatch.com/big-horn-county-montana-farms-and-ranches-for-sale/pid/423118078",
+    "dateFound": "2026-04-20",
+    "dealScore": 14,
+    "description": "TBD County Rd 147A, Custer, MT, 59024, Big Horn County \u2014 The Custer Legacy Ranch provides a rare combination to today\u2019s market. This self-sustaining 23,500+/- acre deeded ranch is a single contiguous block, along with 1,280 acres of state lands lease totaling 24,780 acres. The ranch has extensive water res",
+    "daysOnMarket": null
+  },
+  {
+    "id": "landwatch_422181765",
+    "title": "Listing Details Page",
+    "price": 3800000.0,
+    "acreage": 5736.0,
+    "pricePerAcre": 662.48,
+    "location": {
+      "lat": 0.0,
+      "lng": 0.0,
+      "state": "MT",
+      "county": "Fallon County"
+    },
+    "features": [],
+    "source": "landwatch",
+    "url": "https://www.landwatch.com/fallon-county-montana-farms-and-ranches-for-sale/pid/422181765",
+    "dateFound": "2026-04-20",
+    "dealScore": 14,
+    "description": "NHN Straub Access Rd, Plevna, MT, 59344, Fallon County \u2014 Discover PC Ranch. Nestled in the heart of Eastern Montana\u2019s stunning landscape, this lush and beautiful cattle ranch is a testament to nature\u2019s grandeur and the harmonious coexistence between the land and its inhabitants. Spanning acres of verdant t",
+    "daysOnMarket": null
+  },
+  {
+    "id": "landwatch_419789800",
+    "title": "Listing Details Page",
+    "price": 7450000.0,
+    "acreage": 155.0,
+    "pricePerAcre": 48064.52,
+    "location": {
+      "lat": 0.0,
+      "lng": 0.0,
+      "state": "MT",
+      "county": "Ravalli County"
+    },
+    "features": [],
+    "source": "landwatch",
+    "url": "https://www.landwatch.com/ravalli-county-montana-farms-and-ranches-for-sale/pid/419789800",
+    "dateFound": "2026-04-20",
+    "dealScore": 14,
+    "description": "Darby, MT, 59829, Ravalli County \u2014 Efficient and compact in a setting that rivals some of the best in the West, Hart Bench Ranch sets a new bar for what a hobby operation can be. Situated on an eponymous bench in the shadows of the Bitterroot Mountains' most scenic peaks lies a near-p",
+    "daysOnMarket": null
+  },
+  {
+    "id": "landwatch_425608422",
+    "title": "Listing Details Page",
+    "price": 1600000.0,
+    "acreage": 80.0,
+    "pricePerAcre": 20000.0,
+    "location": {
+      "lat": 0.0,
+      "lng": 0.0,
+      "state": "MT",
+      "county": "Teton County"
+    },
+    "features": [],
+    "source": "landwatch",
+    "url": "https://www.landwatch.com/teton-county-montana-farms-and-ranches-for-sale/pid/425608422",
+    "dateFound": "2026-04-20",
+    "dealScore": 14,
+    "description": "1481 County Line Road, Vaughn, MT, 59487, Teton County \u2014 For those ready to leave the pace of the city behind and step into a life shaped by land, water, and wide-open skies, this irrigated Vaughn ranchette offers a compelling opportunity. Set on 80 deeded acres in the heart of Montana\u2019s agricultural count",
+    "daysOnMarket": null
+  },
+  {
+    "id": "landwatch_423185667",
+    "title": "Listing Details Page",
+    "price": 4650000.0,
+    "acreage": 3760.0,
+    "pricePerAcre": 1236.7,
+    "location": {
+      "lat": 0.0,
+      "lng": 0.0,
+      "state": "MT",
+      "county": "Beaverhead County"
+    },
+    "features": [],
+    "source": "landwatch",
+    "url": "https://www.landwatch.com/beaverhead-county-montana-farms-and-ranches-for-sale/pid/423185667",
+    "dateFound": "2026-04-20",
+    "dealScore": 14,
+    "description": "Dillon, MT, 59725, Beaverhead County \u2014 The Axes Canyon Smith Unit's 3,760+/- deeded acres and 438+/- state lease acres lie along the foothills of the Ruby Mountains, just five miles from Dillon, Montana. Bordering public lands and offering a diverse landscape that transitions from foothil",
+    "daysOnMarket": null
+  },
+  {
+    "id": "landwatch_422189477",
+    "title": "Listing Details Page",
+    "price": 3800000.0,
+    "acreage": 5736.0,
+    "pricePerAcre": 662.48,
+    "location": {
+      "lat": 0.0,
+      "lng": 0.0,
+      "state": "MT",
+      "county": "Fallon County"
+    },
+    "features": [],
+    "source": "landwatch",
+    "url": "https://www.landwatch.com/fallon-county-montana-farms-and-ranches-for-sale/pid/422189477",
+    "dateFound": "2026-04-20",
+    "dealScore": 14,
+    "description": "NHN Straub Access Rd, Plevna, MT, 59344, Fallon County \u2014 Discover PC Ranch. Nestled in the heart of Eastern Montana's stunning landscape, this lush and beautiful cattle ranch is a testament to nature's grandeur and the harmonious coexistence between the land and its inhabitants. Spanning acres of verdant t",
+    "daysOnMarket": null
+  },
+  {
+    "id": "landwatch_426377844",
+    "title": "Listing Details Page",
+    "price": 2800000.0,
+    "acreage": 0.85,
+    "pricePerAcre": 3294117.65,
+    "location": {
+      "lat": 0.0,
+      "lng": 0.0,
+      "state": "MT",
+      "county": "Wheatland County"
+    },
+    "features": [],
+    "source": "landwatch",
+    "url": "https://www.landwatch.com/wheatland-county-montana-commercial-property-for-sale/pid/426377844",
+    "dateFound": "2026-04-20",
+    "dealScore": 14,
+    "description": "207 Third Street Northeast, Harlowton, MT, 59036, Wheatland County \u2014 Midtown Market is a rare chance to own an established, community-centered grocery and retail business in the heart of Harlowton, Montana. Long regarded as an essential part of everyday life in Wheatland County, the store serves local families, ranche",
+    "daysOnMarket": null
+  },
+  {
+    "id": "landwatch_424060926",
+    "title": "Listing Details Page",
+    "price": 325000.0,
+    "acreage": 7.35,
+    "pricePerAcre": 44217.69,
+    "location": {
+      "lat": 0.0,
+      "lng": 0.0,
+      "state": "MT",
+      "county": "Liberty County"
+    },
+    "features": [],
+    "source": "landwatch",
+    "url": "https://www.landwatch.com/liberty-county-montana-farms-and-ranches-for-sale/pid/424060926",
+    "dateFound": "2026-04-20",
+    "dealScore": 14,
+    "description": "164 Main Street, Lothair, MT, 59461, Liberty County \u2014 \\*Motivated seller offering up to $10k in closing costs. Bring all offers!\\* Nestled on 7.345 acres in the quiet community of Lothair, Montana, this unique property offers space, sustainability, and endless potential. Chemical-free for the past eight y",
+    "daysOnMarket": null
+  },
+  {
+    "id": "landwatch_426110803",
+    "title": "Land in MT",
+    "price": 11000000.0,
+    "acreage": 8670.0,
+    "pricePerAcre": 1268.74,
+    "location": {
+      "lat": 0.0,
+      "lng": 0.0,
+      "state": "MT",
+      "county": "Yellowstone County"
+    },
+    "features": [],
+    "source": "landwatch",
+    "url": "https://www.landwatch.com/yellowstone-county-montana-farms-and-ranches-for-sale/pid/426110803",
+    "dateFound": "2026-04-20",
+    "dealScore": 14,
+    "description": "NHN Rd, Broadview, MT, 59015, Yellowstone County \u2014 Located less than 20 miles from Billings, this 8,670\u00b1 acre ranch represents a rare opportunity to own a large, contiguous block of land in one of Montana\u2019s most desirable regions. Positioned in the corridor between Billings and Roundup, the property",
+    "daysOnMarket": null
+  },
+  {
+    "id": "landwatch_422014700",
+    "title": "Listing Details Page",
+    "price": 22700000.0,
+    "acreage": 15964.0,
+    "pricePerAcre": 1421.95,
+    "location": {
+      "lat": 0.0,
+      "lng": 0.0,
+      "state": "MT",
+      "county": "Roosevelt County"
+    },
+    "features": [],
+    "source": "landwatch",
+    "url": "https://www.landwatch.com/roosevelt-county-montana-farms-and-ranches-for-sale/pid/422014700",
+    "dateFound": "2026-04-20",
+    "dealScore": 14,
+    "description": "Wolf Point, MT, 59201, Roosevelt County \u2014 LoMac Farms is a large farm in northeastern Montana that is 15,964+/- deeded acres consisting of 12,376+/- acres of loamy cropland and 3,582+/- acres of rangeland. The farm is characterized by flat to slightly sloping farm fields with interspersed gr",
+    "daysOnMarket": null
+  },
+  {
+    "id": "landwatch_423356432",
+    "title": "Listing Details Page",
+    "price": 10400000.0,
+    "acreage": 2541.0,
+    "pricePerAcre": 4092.88,
+    "location": {
+      "lat": 0.0,
+      "lng": 0.0,
+      "state": "MT",
+      "county": "Teton County"
+    },
+    "features": [],
+    "source": "landwatch",
+    "url": "https://www.landwatch.com/teton-county-montana-farms-and-ranches-for-sale/pid/423356432",
+    "dateFound": "2026-04-20",
+    "dealScore": 14,
+    "description": "Choteau, MT, 59422, Teton County \u2014 Breathtaking views of the Rocky Mountain Front and Glacier National Park provide a stunning backdrop to this exceptional 2,541-acre ranch located just four miles northwest of the charming farm town of Choteau in north central Montana. This well-maint",
+    "daysOnMarket": null
+  },
+  {
+    "id": "landwatch_423181087",
+    "title": "Listing Details Page",
+    "price": 15959000.0,
+    "acreage": 9040.0,
+    "pricePerAcre": 1765.38,
+    "location": {
+      "lat": 0.0,
+      "lng": 0.0,
+      "state": "MT",
+      "county": "Chouteau County"
+    },
+    "features": [],
+    "source": "landwatch",
+    "url": "https://www.landwatch.com/chouteau-county-montana-farms-and-ranches-for-sale/pid/423181087",
+    "dateFound": "2026-04-20",
+    "dealScore": 14,
+    "description": "Square Butte, MT, 59446, Chouteau County \u2014 10,240 Total Acres, of which 9,040 are deeded. The ranch has 1,152 productive agricultural acres, multiple developed springs and reservoirs. It is one of the most iconic, one-of-a-kind properties offered in Montana today. An imposing landmass named S",
+    "daysOnMarket": null
+  },
+  {
+    "id": "landwatch_422627050",
+    "title": "Land in MT",
+    "price": 4950000.0,
+    "acreage": 400.0,
+    "pricePerAcre": 12375.0,
+    "location": {
+      "lat": 0.0,
+      "lng": 0.0,
+      "state": "MT",
+      "county": "Granite County"
+    },
+    "features": [],
+    "source": "landwatch",
+    "url": "https://www.landwatch.com/granite-county-montana-farms-and-ranches-for-sale/pid/422627050",
+    "dateFound": "2026-04-20",
+    "dealScore": 14,
+    "description": "Pintler Vista Ranch, Philipsburg, MT, 59858, Granite County \u2014 Perched on a ridgetop with breathtaking views of the Pintler Range, Discovery Ski Area, and near 360- degree views of the surrounding valleys, this 400+/- acre retreat offers an exceptional opportunity to own a private sanctuary in the heart of Monta",
+    "daysOnMarket": null
+  },
+  {
+    "id": "landwatch_426101217",
+    "title": "Land in MT",
+    "price": 450000.0,
+    "acreage": 31.8,
+    "pricePerAcre": 14150.94,
+    "location": {
+      "lat": 0.0,
+      "lng": 0.0,
+      "state": "MT",
+      "county": "Teton County"
+    },
+    "features": [],
+    "source": "landwatch",
+    "url": "https://www.landwatch.com/teton-county-montana-recreational-property-for-sale/pid/426101217",
+    "dateFound": "2026-04-20",
+    "dealScore": 14,
+    "description": "127 State Highway 221, Choteau, MT, 59422, Teton County \u2014 Imagine waking up to unobstructed views of the Rocky Mountain Front stretching endlessly across the horizon. This is the everyday reality that awaits on this exceptional 31.75\u00b1 acre property on the outskirts of Choteau, Montana. Perched along paved H",
+    "daysOnMarket": null
+  },
+  {
+    "id": "landwatch_423749455",
+    "title": "Land in MT",
+    "price": 3250000.0,
+    "acreage": 3356.0,
+    "pricePerAcre": 968.41,
+    "location": {
+      "lat": 0.0,
+      "lng": 0.0,
+      "state": "MT",
+      "county": "Fergus County"
+    },
+    "features": [],
+    "source": "landwatch",
+    "url": "https://www.landwatch.com/fergus-county-montana-farms-and-ranches-for-sale/pid/423749455",
+    "dateFound": "2026-04-20",
+    "dealScore": 14,
+    "description": "12201 Everson Road, Denton, MT, 59430, Fergus County \u2014 Fergus County \\| North of Denton, MT This Central Montana property presents a unique opportunity to acquire a productive agricultural operation with recreational appeal in one of the states most desirable farming regions. Spanning over 3,356 total acr",
+    "daysOnMarket": null
+  },
+  {
+    "id": "landwatch_418627369",
+    "title": "Land in MT",
+    "price": 3900000.0,
+    "acreage": 686.0,
+    "pricePerAcre": 5685.13,
+    "location": {
+      "lat": 0.0,
+      "lng": 0.0,
+      "state": "MT",
+      "county": "Stillwater County"
+    },
+    "features": [],
+    "source": "landwatch",
+    "url": "https://www.landwatch.com/stillwater-county-montana-farms-and-ranches-for-sale/pid/418627369",
+    "dateFound": "2026-04-20",
+    "dealScore": 14,
+    "description": "Nye, MT, 59061, Stillwater County \u2014 The Beartooth Foothills Ranch is located three miles east of the small town of Nye, Montana on the north slopes of the Beartooth Mountain Range. Red Lodge is 45 miles to the southeast via Montana Highways 419 and 78 through Roscoe, one of Montana's p",
+    "daysOnMarket": null
+  },
+  {
+    "id": "landwatch_426330507",
+    "title": "Land in MT",
+    "price": 3500000.0,
+    "acreage": 20.4,
+    "pricePerAcre": 171568.63,
+    "location": {
+      "lat": 0.0,
+      "lng": 0.0,
+      "state": "MT",
+      "county": "Park County"
+    },
+    "features": [],
+    "source": "landwatch",
+    "url": "https://www.landwatch.com/park-county-montana-farms-and-ranches-for-sale/pid/426330507",
+    "dateFound": "2026-04-20",
+    "dealScore": 14,
+    "description": "West Boulder Fishing Haven, Mcleod, MT, 59052, Park County \u2014 West Boulder Fishing Haven is a 20+/- acre property featuring a beautifully remodeled 5,000+/- square foot custom home, inspired by the iconic Old Faithful Inn at Yellowstone National Park, and includes one of only twenty exclusive memberships to the",
+    "daysOnMarket": null
+  },
+  {
+    "id": "landwatch_423675481",
+    "title": "Land in MT",
+    "price": 2800000.0,
+    "acreage": 1793.0,
+    "pricePerAcre": 1561.63,
+    "location": {
+      "lat": 0.0,
+      "lng": 0.0,
+      "state": "MT",
+      "county": "Musselshell County"
+    },
+    "features": [],
+    "source": "landwatch",
+    "url": "https://www.landwatch.com/musselshell-county-montana-farms-and-ranches-for-sale/pid/423675481",
+    "dateFound": "2026-04-20",
+    "dealScore": 14,
+    "description": "Roundup, MT, 59072, Musselshell County \u2014 For more information or to schedule a showing, Contact Wes Oja, Broker\\|Partner, Hall and Hall, LLP at 406-861-2501. The Lowery Ranch is a historically significant and well-managed property located just three miles west of Roundup. Encompassing 1,793+",
+    "daysOnMarket": null
+  },
+  {
+    "id": "landwatch_422215145",
+    "title": "Land in MT",
+    "price": 1975000.0,
+    "acreage": 1138.0,
+    "pricePerAcre": 1735.5,
+    "location": {
+      "lat": 0.0,
+      "lng": 0.0,
+      "state": "MT",
+      "county": "Gallatin County"
+    },
+    "features": [],
+    "source": "landwatch",
+    "url": "https://www.landwatch.com/gallatin-county-montana-farms-and-ranches-for-sale/pid/422215145",
+    "dateFound": "2026-04-20",
+    "dealScore": 14,
+    "description": "Manhattan, MT, 59741, Gallatin County \u2014 Located in Gallatin County, Montana this 1,138-acre contiguous foothills property offers diverse topography just 7 miles to Manhattan and only 30 minutes from Bozeman. The property features basic improvements including roads and fences, and its eleva",
+    "daysOnMarket": null
+  }
+]
