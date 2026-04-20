@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Property, FEATURE_LABELS } from '../types/property';
+import { Property, FEATURE_LABELS, AI_TAG_LABELS, RED_FLAG_LABELS } from '../types/property';
 import {
   formatPrice,
   formatAcreage,
@@ -99,6 +99,58 @@ export const PropertyDetail = ({ property, onClose }: PropertyDetailProps) => {
               </>
             )}
           </div>
+
+          {/* AI Analysis */}
+          {property.enrichedAt && (
+            <div className="rounded-lg border border-purple-100 bg-purple-50/40 p-4">
+              <div className="flex items-center gap-2 mb-3">
+                <h3 className="text-sm font-semibold text-purple-900">AI Analysis</h3>
+                {property.homesteadFitScore !== undefined && (
+                  <span className="text-xs font-bold text-purple-700 bg-white border border-purple-200 rounded-full px-2 py-0.5">
+                    Fit {property.homesteadFitScore}/100
+                  </span>
+                )}
+                <span className="ml-auto text-[10px] text-purple-500 tracking-wide uppercase font-medium">
+                  Beta
+                </span>
+              </div>
+              {property.aiSummary && (
+                <p className="text-sm text-gray-700 leading-relaxed mb-3">
+                  {property.aiSummary}
+                </p>
+              )}
+              {(property.redFlags?.length ?? 0) > 0 && (
+                <div className="mb-3">
+                  <p className="text-xs font-semibold text-amber-800 mb-1.5">⚠ Red Flags</p>
+                  <div className="flex flex-wrap gap-1.5">
+                    {property.redFlags!.map((flag) => (
+                      <span
+                        key={flag}
+                        className="rounded-full bg-amber-50 border border-amber-200 px-2 py-0.5 text-xs text-amber-700 font-medium"
+                      >
+                        {RED_FLAG_LABELS[flag]}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+              {(property.aiTags?.length ?? 0) > 0 && (
+                <div>
+                  <p className="text-xs font-semibold text-purple-800 mb-1.5">Tags</p>
+                  <div className="flex flex-wrap gap-1.5">
+                    {property.aiTags!.map((tag) => (
+                      <span
+                        key={tag}
+                        className="rounded-full bg-white border border-purple-200 px-2 py-0.5 text-xs text-purple-700 font-medium"
+                      >
+                        {AI_TAG_LABELS[tag]}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
 
           {/* Description */}
           {property.description && (

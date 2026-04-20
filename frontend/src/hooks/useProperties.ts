@@ -13,6 +13,18 @@ const applyFilters = (properties: Property[], filters: FilterState): Property[] 
       if (!hasAll) return false;
     }
     if (filters.sources.length > 0 && !filters.sources.includes(p.source)) return false;
+    // AI-derived filters — skip any listing that hasn't been enriched yet
+    // when an AI filter is active, rather than treating missing = passing.
+    if (filters.minHomesteadFit > 0) {
+      if (p.homesteadFitScore === undefined) return false;
+      if (p.homesteadFitScore < filters.minHomesteadFit) return false;
+    }
+    if (filters.aiTags.length > 0) {
+      const tags = p.aiTags ?? [];
+      const hasAll = filters.aiTags.every((t) => tags.includes(t));
+      if (!hasAll) return false;
+    }
+    if (filters.hideWithRedFlags && (p.redFlags?.length ?? 0) > 0) return false;
     return true;
   });
 };
@@ -55,8 +67,11 @@ export const useProperties = (filters: FilterState) => {
     () => [...filtered].sort((a: Property, b: Property) => {
       switch (filters.sortBy) {
         case 'price': return a.price - b.price;
+        case 'pricePerAcre': return a.pricePerAcre - b.pricePerAcre;
         case 'acreage': return b.acreage - a.acreage;
+        case 'dateFound': return new Date(b.dateFound).getTime() - new Date(a.dateFound).getTime();
         case 'title': return a.title.localeCompare(b.title);
+        case 'homesteadFit': return (b.homesteadFitScore ?? -1) - (a.homesteadFitScore ?? -1);
         default: return b.dealScore - a.dealScore;
       }
     }),

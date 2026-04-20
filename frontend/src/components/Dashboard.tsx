@@ -12,10 +12,10 @@ import { formatPrice, formatAcreage } from '../utils/formatters';
 const MapView = lazy(() => import('./MapView').then(m => ({ default: m.MapView })));
 
 type ViewMode = 'list' | 'map';
-type SortOption = 'score' | 'price_asc' | 'price_desc' | 'ppa_asc' | 'acreage_desc' | 'newest';
+type SortOption = 'score' | 'fit' | 'price_asc' | 'price_desc' | 'ppa_asc' | 'acreage_desc' | 'newest';
 
 export const Dashboard = () => {
-  const { filters, updateFilter, toggleState, toggleFeature, resetFilters, hasActiveFilters } = useFilters();
+  const { filters, updateFilter, toggleState, toggleFeature, toggleAITag, resetFilters, hasActiveFilters } = useFilters();
   const { properties, loading, error, stats } = useProperties(filters);
   const [viewMode, setViewMode] = useState<ViewMode>('list');
   const [selectedId, setSelectedId] = useState<string | null>(null);
@@ -33,13 +33,17 @@ export const Dashboard = () => {
     filters.maxAcreage !== DEFAULT_FILTERS.maxAcreage ? 1 : 0,
     filters.maxPricePerAcre !== DEFAULT_FILTERS.maxPricePerAcre ? 1 : 0,
     filters.minDealScore !== DEFAULT_FILTERS.minDealScore ? 1 : 0,
+    filters.minHomesteadFit !== DEFAULT_FILTERS.minHomesteadFit ? 1 : 0,
+    filters.hideWithRedFlags ? 1 : 0,
     filters.states.length,
     filters.features.length,
+    filters.aiTags.length,
     filters.sources.length,
   ].reduce((a, b) => a + b, 0);
 
   const sortedProperties = [...properties].sort((a: Property, b: Property) => {
     switch (sortBy) {
+      case 'fit': return (b.homesteadFitScore ?? -1) - (a.homesteadFitScore ?? -1);
       case 'price_asc': return a.price - b.price;
       case 'price_desc': return b.price - a.price;
       case 'ppa_asc': return a.pricePerAcre - b.pricePerAcre;
@@ -138,6 +142,7 @@ export const Dashboard = () => {
                 onUpdateFilter={updateFilter}
                 onToggleState={toggleState}
                 onToggleFeature={toggleFeature}
+                onToggleAITag={toggleAITag}
                 onReset={resetFilters}
                 hasActiveFilters={hasActiveFilters}
                 resultCount={properties.length}
@@ -182,6 +187,7 @@ export const Dashboard = () => {
               onUpdateFilter={updateFilter}
               onToggleState={toggleState}
               onToggleFeature={toggleFeature}
+              onToggleAITag={toggleAITag}
               onReset={resetFilters}
               hasActiveFilters={hasActiveFilters}
               resultCount={properties.length}
@@ -224,6 +230,7 @@ export const Dashboard = () => {
                     className="border border-gray-200 rounded-lg px-3 py-1.5 text-sm bg-white focus:ring-1 focus:ring-green-500 focus:outline-none"
                   >
                     <option value="score">Best Deal (Score)</option>
+                    <option value="fit">Homestead Fit (AI)</option>
                     <option value="price_asc">Price: Low to High</option>
                     <option value="price_desc">Price: High to Low</option>
                     <option value="ppa_asc">Price/Acre: Low to High</option>

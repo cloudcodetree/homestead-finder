@@ -12,18 +12,39 @@
       "county": "Deer Lodge",
       "address": "Near Warm Springs, MT"
     },
-    "features": ["water_creek", "road_dirt", "timber", "hunting", "no_hoa"],
+    "features": [
+      "water_creek",
+      "road_dirt",
+      "timber",
+      "hunting",
+      "no_hoa"
+    ],
     "source": "landwatch",
     "url": "https://www.landwatch.com/listing/101",
     "dateFound": "2024-01-10",
     "dealScore": 87,
     "status": "unverified",
-    "description": "Stunning 80-acre parcel with a year-round creek running through the northwest corner. Heavily timbered with mixed ponderosa pine and fir. Dirt road access to the property. No HOA or covenants. Incredible hunting — elk, deer, and turkey. This is a rare find at this price per acre.",
-    "daysOnMarket": 142
+    "description": "Stunning 80-acre parcel with a year-round creek running through the northwest corner. Heavily timbered with mixed ponderosa pine and fir. Dirt road access to the property. No HOA or covenants. Incredible hunting \u2014 elk, deer, and turkey. This is a rare find at this price per acre.",
+    "daysOnMarket": 142,
+    "aiTags": [
+      "water_rights_present",
+      "year_round_water",
+      "timber_harvestable",
+      "hunting_viable",
+      "no_hoa",
+      "remote_access_concerns",
+      "off_grid_viable",
+      "isolated"
+    ],
+    "homesteadFitScore": 72,
+    "redFlags": [],
+    "aiSummary": "This 80-acre Montana property offers solid homesteading potential with year-round water, harvestable timber, and excellent hunting opportunities. However, the heavily timbered terrain suggests significant clearing work before building, and there's no mention of utilities or existing structures. The dirt road access is manageable for off-grid self-sufficient living, and the lack of HOA restrictions is a major plus.",
+    "enrichedAt": "2026-04-20T22:15:08.409894+00:00",
+    "_enrichHash": "e429ed973e0435da"
   },
   {
     "id": "landwatch_205",
-    "title": "40 Acres — Water Well, Power, Owner Financing",
+    "title": "40 Acres \u2014 Water Well, Power, Owner Financing",
     "price": 55000,
     "acreage": 40,
     "pricePerAcre": 1375,
@@ -34,18 +55,40 @@
       "county": "Custer",
       "address": "Near Mackay, ID"
     },
-    "features": ["water_well", "electric", "owner_financing", "road_dirt", "pasture", "no_hoa"],
+    "features": [
+      "water_well",
+      "electric",
+      "owner_financing",
+      "road_dirt",
+      "pasture",
+      "no_hoa"
+    ],
     "source": "landwatch",
     "url": "https://www.landwatch.com/listing/205",
     "dateFound": "2024-01-08",
     "dealScore": 82,
     "status": "unverified",
     "description": "40 acres of flat to gently rolling pasture land with existing water well and power to the property line. Owner will finance with 20% down at 6% for qualified buyers. Stunning views of the Lost River Range. Ideal for livestock or building a homestead.",
-    "daysOnMarket": 95
+    "daysOnMarket": 95,
+    "aiTags": [
+      "utilities_on_site",
+      "water_rights_present",
+      "off_grid_viable",
+      "buildable_with_work",
+      "soil_suitable_for_ag",
+      "agricultural_potential",
+      "grazing_suitable",
+      "remote_living_viable"
+    ],
+    "homesteadFitScore": 75,
+    "redFlags": [],
+    "aiSummary": "Strong entry-level homestead property with water well and power already in place, eliminating two major infrastructure barriers. Pasture-suitable terrain and 40 acres provide good potential for livestock or building. Road access quality and septic/zoning requirements need verification before committing.",
+    "enrichedAt": "2026-04-20T22:15:32.156600+00:00",
+    "_enrichHash": "fbe83716dd035096"
   },
   {
     "id": "county_tax_MT_304",
-    "title": "Tax Deed Sale — 120 Acres, Broadwater County MT",
+    "title": "Tax Deed Sale \u2014 120 Acres, Broadwater County MT",
     "price": 72000,
     "acreage": 120,
     "pricePerAcre": 600,
@@ -56,14 +99,38 @@
       "county": "Broadwater",
       "address": "Broadwater County, MT"
     },
-    "features": ["water_creek", "timber", "mineral_rights", "hunting", "road_dirt"],
+    "features": [
+      "water_creek",
+      "timber",
+      "mineral_rights",
+      "hunting",
+      "road_dirt"
+    ],
     "source": "county_tax",
     "url": "https://broadwatercounty.mt.gov/tax-sales/304",
     "dateFound": "2024-01-12",
     "dealScore": 91,
     "status": "unverified",
-    "description": "County tax deed sale. 120 acres with seasonal creek, mixed timber, and included mineral rights. Borders National Forest on two sides. Access via county-maintained dirt road. Bidding starts at $72,000 — significantly below assessed value of $145,000.",
-    "daysOnMarket": 30
+    "description": "County tax deed sale. 120 acres with seasonal creek, mixed timber, and included mineral rights. Borders National Forest on two sides. Access via county-maintained dirt road. Bidding starts at $72,000 \u2014 significantly below assessed value of $145,000.",
+    "daysOnMarket": 30,
+    "aiTags": [
+      "seasonal_water_only",
+      "water_rights_present",
+      "timber_harvestable",
+      "off_grid_viable",
+      "remote_living_viable",
+      "isolated",
+      "hunting_viable",
+      "no_hoa"
+    ],
+    "homesteadFitScore": 68,
+    "redFlags": [
+      "tax_sale_risk",
+      "requires_well_drilling"
+    ],
+    "aiSummary": "Excellent acreage (120 acres) at exceptional price with included mineral rights and National Forest borders, strong for timber and hunting potential. Seasonal creek means year-round water would require well drilling investment. Tax deed sale status carries title and insurance complications that require thorough investigation before purchase.",
+    "enrichedAt": "2026-04-20T22:16:05.986891+00:00",
+    "_enrichHash": "234864f3ce6ef962"
   },
   {
     "id": "lands_of_america_507",
@@ -78,18 +145,40 @@
       "county": "Creek",
       "address": "Near Bristow, OK"
     },
-    "features": ["water_pond", "electric", "septic", "structures", "pasture", "road_paved"],
+    "features": [
+      "water_pond",
+      "electric",
+      "septic",
+      "structures",
+      "pasture",
+      "road_paved"
+    ],
     "source": "lands_of_america",
     "url": "https://www.landsofamerica.com/property/507",
     "dateFound": "2024-01-09",
     "dealScore": 74,
     "status": "unverified",
     "description": "55 acres of prime Oklahoma pasture with a 3-acre stocked pond. Existing structures include a metal hay barn (40x60), equipment shed, and an older farmhouse needing renovation. Paved road frontage. Rural electric and septic already in place.",
-    "daysOnMarket": 67
+    "daysOnMarket": 67,
+    "aiTags": [
+      "paved_access",
+      "utilities_on_site",
+      "water_rights_present",
+      "year_round_water",
+      "buildable_with_work",
+      "soil_suitable_for_ag",
+      "agricultural_potential",
+      "no_hoa"
+    ],
+    "homesteadFitScore": 75,
+    "redFlags": [],
+    "aiSummary": "Well-equipped 55-acre property with paved road access, pond-sourced year-round water, rural electric, and existing septic. The older farmhouse requires renovation, but pasture land and existing structures support agricultural activities and homesteading potential. Price per acre is reasonable for Oklahoma rural property.",
+    "enrichedAt": "2026-04-20T22:16:26.608291+00:00",
+    "_enrichHash": "b6c5e794dd08a043"
   },
   {
     "id": "zillow_land_889",
-    "title": "5 Acres — Mountain View, Off-Grid Ready, Colorado",
+    "title": "5 Acres \u2014 Mountain View, Off-Grid Ready, Colorado",
     "price": 42000,
     "acreage": 5,
     "pricePerAcre": 8400,
@@ -100,18 +189,38 @@
       "county": "Costilla",
       "address": "San Luis Valley, CO"
     },
-    "features": ["road_dirt", "off_grid_ready", "no_hoa"],
+    "features": [
+      "road_dirt",
+      "off_grid_ready",
+      "no_hoa"
+    ],
     "source": "zillow",
     "url": "https://www.zillow.com/homes/889",
     "dateFound": "2024-01-11",
     "dealScore": 52,
     "status": "unverified",
-    "description": "5 acres in the San Luis Valley with 360-degree mountain views. Off-grid subdivision — solar and propane are typical utilities. Dirt road access maintained by HOA. Popular area for tiny homes and yurts. Year-round access.",
-    "daysOnMarket": 14
+    "description": "5 acres in the San Luis Valley with 360-degree mountain views. Off-grid subdivision \u2014 solar and propane are typical utilities. Dirt road access maintained by HOA. Popular area for tiny homes and yurts. Year-round access.",
+    "daysOnMarket": 14,
+    "aiTags": [
+      "off_grid_viable",
+      "build_ready",
+      "no_water_mentioned",
+      "remote_living_viable",
+      "isolated",
+      "hoa_present"
+    ],
+    "homesteadFitScore": 62,
+    "redFlags": [
+      "no_water_source",
+      "hoa_restrictions"
+    ],
+    "aiSummary": "An off-grid subdivision property specifically designed for alternative living with year-round access and typical solar/propane infrastructure. Water source is unspecified and HOA restrictions should be clarified before purchase.",
+    "enrichedAt": "2026-04-20T22:17:07.449005+00:00",
+    "_enrichHash": "c6cc5db94de32aa9"
   },
   {
     "id": "blm_wy_012",
-    "title": "BLM Adjacent — 160 Acres, Sweetwater County WY",
+    "title": "BLM Adjacent \u2014 160 Acres, Sweetwater County WY",
     "price": 64000,
     "acreage": 160,
     "pricePerAcre": 400,
@@ -122,14 +231,38 @@
       "county": "Sweetwater",
       "address": "Near Rock Springs, WY"
     },
-    "features": ["hunting", "mineral_rights", "road_dirt", "no_hoa"],
+    "features": [
+      "hunting",
+      "mineral_rights",
+      "road_dirt",
+      "no_hoa"
+    ],
     "source": "blm",
     "url": "https://www.blm.gov/sale/wy-012",
     "dateFound": "2024-01-07",
     "dealScore": 78,
     "status": "unverified",
-    "description": "160-acre parcel adjacent to 50,000+ acres of BLM land. Effectively private with unlimited access to public land. Prong horn and mule deer hunting. Mineral rights included. This is as remote as it gets — 30 miles from nearest town. Seller financing available.",
-    "daysOnMarket": 210
+    "description": "160-acre parcel adjacent to 50,000+ acres of BLM land. Effectively private with unlimited access to public land. Prong horn and mule deer hunting. Mineral rights included. This is as remote as it gets \u2014 30 miles from nearest town. Seller financing available.",
+    "daysOnMarket": 210,
+    "aiTags": [
+      "isolated",
+      "no_water_mentioned",
+      "off_grid_viable",
+      "no_hoa",
+      "hunting_viable",
+      "grazing_suitable",
+      "remote_living_viable",
+      "infrastructure_needed"
+    ],
+    "homesteadFitScore": 40,
+    "redFlags": [
+      "no_water_source",
+      "extreme_remote",
+      "requires_well_drilling"
+    ],
+    "aiSummary": "This remote 160-acre parcel offers hunting, grazing potential, and freedom from restrictions, but critically lacks any mention of water sources. The 30-mile distance to town combined with undisclosed water availability makes self-sufficient living risky without significant upfront well drilling and infrastructure investment.",
+    "enrichedAt": "2026-04-20T22:17:38.451688+00:00",
+    "_enrichHash": "11c1e8b94c5ecaf2"
   },
   {
     "id": "realtor_mn_441",
@@ -159,11 +292,26 @@
     "dealScore": 68,
     "status": "unverified",
     "description": "87 acres of prime northwoods timber with a 2-bed 1-bath cabin, drilled well, and electric. 3-acre bass pond stocked annually. Paved road to property. Adjacent to state forest. Cabin needs some updating but is liveable year-round. Wood heat plus electric baseboard.",
-    "daysOnMarket": 88
+    "daysOnMarket": 88,
+    "aiTags": [
+      "paved_access",
+      "utilities_on_site",
+      "water_rights_present",
+      "year_round_water",
+      "buildable_with_work",
+      "remote_living_viable",
+      "timber_harvestable",
+      "hunting_viable"
+    ],
+    "homesteadFitScore": 75,
+    "redFlags": [],
+    "aiSummary": "Strong candidate with functioning cabin, year-round well water, electric power, and 87 acres of timber adjacent to state forest. Paved road access and excellent hunting/timber potential offset remote location and limited agricultural suitability. Cabin needs updates but is already liveable year-round.",
+    "enrichedAt": "2026-04-20T22:17:58.432309+00:00",
+    "_enrichHash": "08d8856fa5e5be13"
   },
   {
     "id": "auction_hubzu_223",
-    "title": "Foreclosure Auction — 320 Acres, Texas Panhandle",
+    "title": "Foreclosure Auction \u2014 320 Acres, Texas Panhandle",
     "price": 85000,
     "acreage": 320,
     "pricePerAcre": 266,
@@ -174,14 +322,40 @@
       "county": "Wheeler",
       "address": "Wheeler County, TX"
     },
-    "features": ["pasture", "road_dirt", "mineral_rights", "hunting"],
+    "features": [
+      "pasture",
+      "road_dirt",
+      "mineral_rights",
+      "hunting"
+    ],
     "source": "auction",
     "url": "https://www.hubzu.com/property/223",
     "dateFound": "2024-01-13",
     "dealScore": 85,
     "status": "unverified",
     "description": "Bank-owned foreclosure auction. 320 acres of native grassland in the Texas Panhandle. Historically used for cattle grazing. Mineral rights included. Low per-acre price reflects remote location and lack of improvements. Great long-term hold. Auction ends Jan 25.",
-    "daysOnMarket": 45
+    "daysOnMarket": 45,
+    "aiTags": [
+      "remote_access_concerns",
+      "infrastructure_needed",
+      "no_water_mentioned",
+      "buildable_with_work",
+      "off_grid_viable",
+      "isolated",
+      "agricultural_potential",
+      "grazing_suitable"
+    ],
+    "homesteadFitScore": 58,
+    "redFlags": [
+      "tax_sale_risk",
+      "no_water_source",
+      "requires_well_drilling",
+      "requires_septic_install",
+      "extreme_remote"
+    ],
+    "aiSummary": "Cheap remote grassland with grazing potential appeals to off-grid homesteaders, but lack of any water source and zero infrastructure mean substantial well-drilling and development costs. The extreme isolation and foreclosure status add additional risks and complications to an already challenging property.",
+    "enrichedAt": "2026-04-20T22:18:22.030676+00:00",
+    "_enrichHash": "d27bfde9870928d6"
   },
   {
     "id": "landwatch_667",
@@ -196,18 +370,39 @@
       "county": "Meigs",
       "address": "Near Decatur, TN"
     },
-    "features": ["water_creek", "road_paved", "timber", "no_hoa", "hunting"],
+    "features": [
+      "water_creek",
+      "road_paved",
+      "timber",
+      "no_hoa",
+      "hunting"
+    ],
     "source": "landwatch",
     "url": "https://www.landwatch.com/listing/667",
     "dateFound": "2024-01-05",
     "dealScore": 63,
     "status": "unverified",
-    "description": "25 acres in the rolling hills of East Tennessee. Year-round creek, mixed hardwood timber, and paved road frontage. Surveyed and perc tested. No restrictions. Ideal homestead site — mild climate, good rainfall, close to Chattanooga.",
-    "daysOnMarket": 55
+    "description": "25 acres in the rolling hills of East Tennessee. Year-round creek, mixed hardwood timber, and paved road frontage. Surveyed and perc tested. No restrictions. Ideal homestead site \u2014 mild climate, good rainfall, close to Chattanooga.",
+    "daysOnMarket": 55,
+    "aiTags": [
+      "paved_access",
+      "water_rights_present",
+      "year_round_water",
+      "buildable_with_work",
+      "off_grid_viable",
+      "remote_living_viable",
+      "timber_harvestable",
+      "no_hoa"
+    ],
+    "homesteadFitScore": 77,
+    "redFlags": [],
+    "aiSummary": "Strong property with year-round creek, paved road access, and no restrictions. The surveyed land and perc-tested status confirm buildability, though well drilling and septic installation will be required. Good rainfall, mild climate, and timber potential support self-sufficient living, but proximity to Chattanooga means it offers services access rather than true isolation.",
+    "enrichedAt": "2026-04-20T22:18:54.361587+00:00",
+    "_enrichHash": "ae88588b9210a654"
   },
   {
     "id": "landwatch_891",
-    "title": "640 Acres — Remote Ranch, New Mexico",
+    "title": "640 Acres \u2014 Remote Ranch, New Mexico",
     "price": 320000,
     "acreage": 640,
     "pricePerAcre": 500,
@@ -231,7 +426,24 @@
     "dateFound": "2024-01-03",
     "dealScore": 79,
     "status": "unverified",
-    "description": "640 acres (1 section) of remote New Mexico ranch land in the Gila country. Existing water well, small cabin structure, and solar setup. Borders Gila National Forest. Excellent elk, deer, and bear hunting. Very remote — 40 miles from Reserve. Owner has held 30+ years.",
-    "daysOnMarket": 178
+    "description": "640 acres (1 section) of remote New Mexico ranch land in the Gila country. Existing water well, small cabin structure, and solar setup. Borders Gila National Forest. Excellent elk, deer, and bear hunting. Very remote \u2014 40 miles from Reserve. Owner has held 30+ years.",
+    "daysOnMarket": 178,
+    "aiTags": [
+      "utilities_on_site",
+      "water_rights_present",
+      "year_round_water",
+      "build_ready",
+      "off_grid_viable",
+      "hunting_viable",
+      "isolated",
+      "remote_living_viable"
+    ],
+    "homesteadFitScore": 74,
+    "redFlags": [
+      "extreme_remote"
+    ],
+    "aiSummary": "This 640-acre property has solid off-grid infrastructure (well, solar, cabin) and exceptional hunting potential, making it viable for remote homesteading. At 40 miles from the nearest town, it's extremely isolated, which is both an asset for privacy and a liability for access to services. Best suited for experienced homesteaders comfortable with genuine remoteness.",
+    "enrichedAt": "2026-04-20T22:19:18.286337+00:00",
+    "_enrichHash": "60459ba099a0f2b5"
   }
 ]

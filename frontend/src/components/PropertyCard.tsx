@@ -52,12 +52,31 @@ export const PropertyCard = ({ property, onClick, isSelected = false }: Property
           </p>
         </div>
         <div className="flex flex-col items-end gap-1 flex-shrink-0">
-          <div className={`rounded-full px-2 py-1 text-xs font-bold ${scoreColor}`}>
-            {property.dealScore}
+          <div className="flex items-center gap-1">
+            {property.homesteadFitScore !== undefined && (
+              <div
+                className="rounded-full px-2 py-1 text-xs font-bold bg-purple-100 text-purple-700 border border-purple-200"
+                title={`AI Homestead Fit Score: ${property.homesteadFitScore}`}
+              >
+                ◆ {property.homesteadFitScore}
+              </div>
+            )}
+            <div className={`rounded-full px-2 py-1 text-xs font-bold ${scoreColor}`} title={`Deal Score: ${property.dealScore}`}>
+              {property.dealScore}
+            </div>
           </div>
           <ValidationBadge status={property.status} />
         </div>
       </div>
+
+      {(property.redFlags?.length ?? 0) > 0 && (
+        <div className="mt-2 flex items-center gap-1 text-xs text-amber-700 bg-amber-50 border border-amber-200 rounded px-2 py-1">
+          <span>⚠</span>
+          <span className="font-medium">
+            {property.redFlags!.length} red flag{property.redFlags!.length === 1 ? '' : 's'}
+          </span>
+        </div>
+      )}
 
       <div className="mt-3 flex items-center gap-4">
         <div>

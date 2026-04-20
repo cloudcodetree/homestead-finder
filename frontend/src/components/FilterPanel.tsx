@@ -1,10 +1,19 @@
-import { FilterState, PropertyFeature, FEATURE_LABELS, US_STATES, SortBy, SORT_LABELS } from '../types/property';
+import {
+  AITag,
+  AI_TAG_LABELS,
+  FilterState,
+  PropertyFeature,
+  FEATURE_LABELS,
+  SortBy,
+  SORT_LABELS,
+} from '../types/property';
 
 interface FilterPanelProps {
   filters: FilterState;
   onUpdateFilter: <K extends keyof FilterState>(key: K, value: FilterState[K]) => void;
   onToggleState: (state: string) => void;
   onToggleFeature: (feature: PropertyFeature) => void;
+  onToggleAITag: (tag: AITag) => void;
   onReset: () => void;
   hasActiveFilters: boolean;
   resultCount: number;
@@ -36,6 +45,7 @@ export const FilterPanel = ({
   onUpdateFilter,
   onToggleState,
   onToggleFeature,
+  onToggleAITag,
   onReset,
   hasActiveFilters,
   resultCount,
@@ -217,6 +227,87 @@ export const FilterPanel = ({
                 <span className="text-sm text-gray-700">{FEATURE_LABELS[feature]}</span>
               </label>
             ))}
+          </div>
+        </div>
+
+        {/* AI Insights */}
+        <div className="pt-4 border-t border-gray-100">
+          <div className="flex items-center gap-1.5 mb-3">
+            <span className="text-sm font-semibold text-gray-900">AI Insights</span>
+            <span className="text-[10px] px-1.5 py-0.5 bg-purple-100 text-purple-700 rounded font-medium tracking-wide uppercase">
+              Beta
+            </span>
+          </div>
+          <p className="text-xs text-gray-500 mb-4">
+            Filters based on Claude&apos;s analysis of listing descriptions.
+          </p>
+
+          {/* Min Homestead Fit */}
+          <div className="mb-5">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Min Homestead Fit:{' '}
+              <span className="text-purple-600 font-bold">
+                {filters.minHomesteadFit}
+              </span>
+            </label>
+            <input
+              type="range"
+              min={0}
+              max={100}
+              step={5}
+              value={filters.minHomesteadFit}
+              onChange={(e) =>
+                onUpdateFilter('minHomesteadFit', Number(e.target.value))
+              }
+              className="w-full accent-purple-600"
+            />
+            <div className="flex justify-between text-xs text-gray-400 mt-1">
+              <span>0</span>
+              <span>50</span>
+              <span>100</span>
+            </div>
+            {filters.minHomesteadFit > 0 && (
+              <p className="text-xs text-gray-500 mt-1">
+                Hides un-analyzed listings.
+              </p>
+            )}
+          </div>
+
+          {/* Hide red flags */}
+          <div className="mb-5">
+            <label className="flex items-center gap-2 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={filters.hideWithRedFlags}
+                onChange={(e) =>
+                  onUpdateFilter('hideWithRedFlags', e.target.checked)
+                }
+                className="rounded border-gray-300 text-purple-600 focus:ring-purple-500"
+              />
+              <span className="text-sm text-gray-700">Hide listings with red flags</span>
+            </label>
+          </div>
+
+          {/* AI Tags */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              AI Tags (must have all)
+            </label>
+            <div className="flex flex-wrap gap-1.5">
+              {(Object.keys(AI_TAG_LABELS) as AITag[]).map((tag) => (
+                <button
+                  key={tag}
+                  onClick={() => onToggleAITag(tag)}
+                  className={`rounded px-2 py-0.5 text-xs font-medium transition-colors ${
+                    filters.aiTags.includes(tag)
+                      ? 'bg-purple-600 text-white'
+                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                  }`}
+                >
+                  {AI_TAG_LABELS[tag]}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
       </div>
