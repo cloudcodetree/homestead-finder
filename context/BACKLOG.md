@@ -18,6 +18,19 @@
 
 ## P1 — Next Session
 
+- [ ] **Port LandWatch markdown-parser approach to lands_of_america.py**
+  - Same Cloudflare block, same Firecrawl fallback path available
+  - Capture a sample Firecrawl markdown, identify listing-link pattern
+  - Clone `parse_markdown_listings` + state URL slug logic
+  - Add fixture-based tests
+
+- [ ] **Run first production enrichment pass**
+  - Non-dry-run scrape to populate `data/listings.json` with real LandWatch data
+  - `python -m scraper.enrich` locally (burns ~30s per listing on Haiku)
+  - Commit enriched `listings.json`
+  - `python -m scraper.curate` for the first Top Picks
+  - Commit `data/curated.json`
+
 - [ ] **Server-side URL validation in scraper**
   - Add `scraper/utils/validator.py` — HTTP HEAD requests against listing URLs
   - Write `validated`, `validatedAt`, `status` fields back to each listing in `listings.json`
@@ -111,6 +124,12 @@
 
 ## Completed
 
+- [x] **LandWatch Firecrawl+markdown parser** — restored real data flow, 125 MT listings verified in CI (2026-04-20)
+- [x] **AI enrichment pipeline** — `scraper/enrich.py` with 28 aiTags / 14 redFlags / fit score / summary, idempotent, local Max (2026-04-20)
+- [x] **AI curation** — `scraper/curate.py` produces `data/curated.json` with ranked picks + reasoning (2026-04-20)
+- [x] **Top Picks dashboard view** — new view-mode showing curated picks with headlines + reasons (2026-04-20)
+- [x] **Natural-language query proxy** — localhost-only `scraper/query_server.py` + "Ask Claude" bar that auto-hides in production (2026-04-20)
+- [x] **ADR-012** — local-Max for AI, CI for parsing (2026-04-20)
 - [x] Project scaffolding (2024-01-15)
 - [x] Frontend: Dashboard, Map, List, Filters, PropertyDetail, Notifications (2024-01-15)
 - [x] Scraper: Base class, 7 sources, scoring engine, notifier (2024-01-15)

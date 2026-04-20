@@ -10,14 +10,16 @@
 
 | Item | Status |
 |------|--------|
-| Last Updated | 2026-04-06 |
-| Current Phase | UI polish + validation system added on top of adaptive scraping |
-| Dashboard | Working locally; builds clean; validation badges, collapsible filters, sort-by added |
-| Scraper | Adaptive strategy chain built (HTTP→Playwright→Firecrawl→Claude AI) |
-| GitHub Pages | Not yet enabled in repo settings |
-| Data | Sample data only — real scraping blocked by Cloudflare on main sources |
+| Last Updated | 2026-04-20 |
+| Current Phase | AI-enrichment pipeline shipped (local Max via `claude -p`) + real data flowing for LandWatch |
+| Dashboard | AI filters, Top Picks view, Ask-Claude bar (dev-only), all CI-verified green |
+| Scraper | LandWatch markdown parser working via Firecrawl; 125 real MT listings pulled in dry-run |
+| GitHub Pages | Still not enabled in repo settings |
+| Data | Real LandWatch scraping works (125 listings/state); other sources still need work |
 | Notifications | SendGrid integrated but not configured |
-| AI Learning | Pipeline built — needs API keys to activate (ANTHROPIC_API_KEY, FIRECRAWL_API_KEY) |
+| AI (local) | `claude -p` wrapper + enrich.py + curate.py + query_server.py all working with Max subscription |
+| AI (CI) | Intentionally not running in CI — see ADR-012 |
+| Firecrawl | `FIRECRAWL_API_KEY` in GitHub secrets; fallback chain working |
 
 ---
 
@@ -41,15 +43,33 @@
 - **Mobile filter drawer** — Slides from left with backdrop overlay; floating green FAB "Filters (N)" button
 - **Sort-by dropdown** — 6 sort options (Best Deal, Price, Price/Acre, Acreage, Newest); persists in state
 - Sample data: all 10 listings marked `status: "unverified"`
+- **LandWatch Firecrawl+markdown parser** — site restructured to `/<state>-land-for-sale/page-N`; parser groups links by `/pid/<id>` and extracts title/address/price/acres/description. 25 listings/page, verified in CI: 125 MT listings retrieved successfully. Fixture-based tests at `scraper/tests/test_landwatch.py`.
+- **Playwright install step** added to `.github/workflows/scrape.yml`.
+- **Local AI pipeline** — billed against Claude Max subscription, runs on developer's machine:
+  - `scraper/llm.py` — `claude -p` subprocess wrapper with on-disk cache keyed by (model, system, prompt) hash
+  - `scraper/enrich.py` — per-listing enrichment (aiTags, homesteadFitScore, redFlags, aiSummary), idempotent via content hash, default model Haiku
+  - `scraper/curate.py` — weekly Top Picks curation (ranked list with headline + reason per pick), default model Sonnet, single batched call
+  - `scraper/query_server.py` — localhost-only HTTP proxy (stdlib, no deps) exposing `/health` and `/query` for natural-language re-ranking
+- **Frontend AI UI:**
+  - New Property fields: `aiTags`, `homesteadFitScore`, `redFlags`, `aiSummary`, `enrichedAt` (all optional)
+  - FilterPanel "AI Insights" section: min-homestead-fit slider, hide-red-flags checkbox, aiTags multi-select (purple-themed)
+  - PropertyCard: purple fit-score pill + red-flag count warning
+  - PropertyDetail: dedicated AI Analysis panel with summary, red flags, tag chips
+  - New "Picks" view-mode showing the curated list (loads `data/curated.json` with fallback to `sample-curated.json`)
+  - "Ask Claude" bar in list view (auto-hidden when `query_server.py` isn't running — invisible in production)
+  - New sort option: "Homestead Fit (AI)"
 
 ### Not Yet Done
-- [ ] Real listing data flowing (need Firecrawl or Anthropic API key to bypass Cloudflare)
+- [x] ~~Real listing data flowing (need Firecrawl or Anthropic API key to bypass Cloudflare)~~ — **done for LandWatch** via Firecrawl
+- [ ] Port the markdown-parser approach to `lands_of_america.py` (same Cloudflare block)
 - [ ] GitHub Pages enabled on the repo
 - [ ] SendGrid secrets configured
 - [ ] BLM URLs updated (currently 404 — site restructured)
 - [ ] County tax URLs audited (most are dead)
 - [ ] Geocoding for listings without lat/lng
 - [ ] Real server-side URL validation in scraper (see ADR-011)
+- [ ] Run a real (non-dry-run) scrape to populate `data/listings.json` with LandWatch data
+- [ ] First production enrich pass — `python -m scraper.enrich` against the real scrape output
 
 ---
 
@@ -89,6 +109,50 @@
 ---
 
 ## Recent Sessions
+
+### Session 6 — 2026-04-20
+**What was done:** Shipped LandWatch real-data pipeline + full local-AI hybrid (enrichment, curation, NL query).
+
+- **Scraping unblocked (LandWatch):**
+  - Added `FIRECRAWL_API_KEY` to GitHub secrets
+  - Discovered old URL format 404s; new pattern is `/<state>-land-for-sale[/page-N]`
+  - Built markdown parser — groups `[text](url)` links by `/pid/<id>`, extracts title/address/price/acres
+  - Added `playwright install chromium` to the CI workflow
+  - Dry-run CI pulled 125 real MT listings (25/page × 5 pages) via Firecrawl
+  - 10 fixture-based tests in `scraper/tests/test_landwatch.py`
+  - Fixed "Valley County County" doubling bug
+
+- **Decision:** user wanted AI for enrichment/filtering/ranking but doesn't want to pay for API credits on top of Max subscription. Researched Max → `claude -p` works locally against subscription, but NOT in GitHub Actions. Chose the hybrid architecture documented in **ADR-012**: CI does only parsing, local machine does all AI work via `claude -p`.
+
+- **Phase A:** `scraper/llm.py` — `claude -p` subprocess wrapper with on-disk cache, structured JSON output, model override. Default Haiku.
+
+- **Phase B (per-listing enrichment):**
+  - `scraper/enrich.py` — calls Claude per listing against a controlled vocabulary (28 aiTags, 14 redFlags), idempotent via content hash
+  - TS types extended with AITag, RedFlag, AI_TAG_LABELS, RED_FLAG_LABELS
+  - FilterPanel "AI Insights" section with 3 controls
+  - PropertyCard shows fit pill + red-flag count
+  - PropertyDetail has dedicated AI Analysis panel
+  - Sample-listings.json re-enriched for a complete demo
+
+- **Phase C (curation):**
+  - `scraper/curate.py` — two-stage: deterministic pre-rank (top 50 by 0.4·dealScore + 0.6·homesteadFit − 5·redFlags) → one Sonnet call picking top N with headline + reason
+  - New `TopPicks` component with ranked cards
+  - New "Picks" view-mode tab in top nav, loads `data/curated.json` with fallback to `sample-curated.json`
+
+- **Phase D (natural-language query):**
+  - `scraper/query_server.py` — stdlib-only localhost HTTP server, refuses to bind non-loopback without `--unsafe-any-host`
+  - `/health` and `/query` endpoints with CORS limited to Vite dev ports
+  - `useQueryServer` pings `/health` to gate the UI
+  - `AskClaude` component — purple input bar that auto-hides when the server isn't running
+  - Dashboard: when a query result is active, the list view replaces the filtered/sorted grid with Claude's ranked matches + inline reasons
+
+- **CI:** both Python (ruff + pytest) and Frontend (tsc + eslint + build) workflows green on the final push.
+
+**Decisions made:** ADR-012 — local-Max for AI, CI for parsing. Vocabularies manually kept in sync between Python and TypeScript.
+
+**Commits:** `fix(scraper): update LandWatch to current URL format`, `fix: double County`, `fix: ruff lint`, `feat: AI enrichment pipeline`, `feat: AI-curated Top Picks`, `feat: natural-language query`.
+
+---
 
 ### Session 4 — 2026-04-06
 **What was done:** UI feature additions — listing validation system, collapsible filters, sort-by.
@@ -135,9 +199,10 @@
 
 | Issue | Severity | Notes |
 |-------|----------|-------|
-| All scrapers return 0 listings | **High** | Need Firecrawl/Anthropic API keys to bypass Cloudflare |
+| Other scrapers (lands_of_america, BLM, county tax) still return 0 | **High** | Only LandWatch has the new Firecrawl+markdown parser. Same approach should work for lands_of_america. |
 | BLM URLs are 404 | Medium | blm.gov restructured — need to find new URLs |
 | County tax URLs dead | Medium | DNS failures, SSL errors on most county sites |
 | Missing lat/lng in most scrapers | Medium | Map shows 0,0 for many listings |
-| No API keys configured | Medium | Need FIRECRAWL_API_KEY and/or ANTHROPIC_API_KEY |
+| AI vocabularies duplicated across Python and TS | Low | Kept in sync by hand (see ADR-012). Consider codegen later. |
 | URL validation is stub only | Low | Client-side CORS blocks it; needs scraper-side impl (ADR-011) |
+| NL query bar only works in `npm run dev` | By design | ADR-012 — `query_server.py` must be running locally. Production (Pages) hides the feature. |
