@@ -6,6 +6,7 @@ import { PropertyDetail } from './PropertyDetail';
 import { NotificationSettings } from './NotificationSettings';
 import { TopPicks } from './TopPicks';
 import { AskClaude } from './AskClaude';
+import { ErrorBoundary } from './ErrorBoundary';
 import { useProperties } from '../hooks/useProperties';
 import { useFilters } from '../hooks/useFilters';
 import { useCurated } from '../hooks/useCurated';
@@ -19,8 +20,12 @@ type ViewMode = 'list' | 'map' | 'picks';
 
 export const Dashboard = () => {
   const { filters, updateFilter, toggleState, toggleFeature, toggleAITag, resetFilters, hasActiveFilters } = useFilters();
-  const { properties, loading, error, stats } = useProperties(filters);
-  const { curation } = useCurated();
+  const { properties, loading, error, stats, isSample: listingsAreSample } = useProperties(filters);
+  const { curation, isSample: curationIsSample } = useCurated();
+  // When real listings are loaded but the curation is still from the
+  // bundled sample, the sample picks reference IDs that don't exist —
+  // suppress the Picks view in that case and show the "run curate" nudge.
+  const curationMatchesListings = curation && !(curationIsSample && !listingsAreSample);
   const [viewMode, setViewMode] = useState<ViewMode>('list');
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [showNotifications, setShowNotifications] = useState(false);
@@ -95,7 +100,7 @@ export const Dashboard = () => {
               title="AI-curated top picks"
             >
               <span>Picks</span>
-              {curation && curation.picks.length > 0 && (
+              {curationMatchesListings && curation && curation.picks.length > 0 && (
                 <span className="text-[10px] px-1 bg-purple-100 text-purple-700 rounded font-medium">
                   {curation.picks.length}
                 </span>
@@ -227,31 +232,34 @@ export const Dashboard = () => {
 
           {!loading && !error && viewMode === 'list' && (
             <div className="h-full overflow-y-auto p-4">
-              <AskClaude
-                onResult={setQueryResult}
-                activeQuestion={queryResult?.question ?? null}
-              />
+              <ErrorBoundary label="Ask Claude">
+                <AskClaude
+                  onResult={setQueryResult}
+                  activeQuestion={queryResult?.question ?? null}
+                />
+              </ErrorBoundary>
 
-              {queryResult ? (
-                // Query results mode: show Claude's matches in ranked order
-                // with inline reasons, ignoring filters/sort.
-                <div className="max-w-6xl mx-auto">
-                  <p className="text-sm text-gray-500 mb-3">
-                    {queryResult.matches.length} match
-                    {queryResult.matches.length === 1 ? '' : 'es'} for{' '}
-                    <em className="text-gray-700">&ldquo;{queryResult.question}&rdquo;</em>{' '}
-                    · considered {queryResult.totalConsidered} listings
-                  </p>
+              {/* Claude query results — pinned section above the normal list.
+                  Hidden when no query is active. */}
+              {queryResult && (
+                <section className="max-w-6xl mx-auto mb-6 bg-purple-50/50 border border-purple-200 rounded-xl p-4">
+                  <header className="flex items-center gap-2 mb-3">
+                    <span className="text-sm font-semibold text-purple-900">
+                      Claude&apos;s picks for{' '}
+                      <em className="font-medium text-purple-700">
+                        &ldquo;{queryResult.question}&rdquo;
+                      </em>
+                    </span>
+                    <span className="text-xs text-purple-600">
+                      {queryResult.matches.length} of{' '}
+                      {queryResult.totalConsidered}
+                    </span>
+                  </header>
                   {queryResult.matches.length === 0 ? (
-                    <div className="flex flex-col items-center justify-center h-64 text-center">
-                      <p className="text-4xl mb-3">🤔</p>
-                      <p className="text-gray-600 font-medium">
-                        No listings matched that query
-                      </p>
-                      <p className="text-sm text-gray-500 mt-1">
-                        Try rephrasing or broadening your criteria.
-                      </p>
-                    </div>
+                    <p className="text-sm text-gray-600 py-2">
+                      No listings matched. Try rephrasing or broadening your
+                      criteria.
+                    </p>
                   ) : (
                     <div className="space-y-3">
                       {queryResult.matches.map((match, i) => {
@@ -268,7 +276,7 @@ export const Dashboard = () => {
                                 onClick={setSelectedId}
                                 isSelected={selectedId === p.id}
                               />
-                              <p className="mt-1 text-xs text-purple-700 bg-purple-50 border border-purple-200 rounded px-2 py-1">
+                              <p className="mt-1 text-xs text-purple-700 bg-white border border-purple-200 rounded px-2 py-1">
                                 <span className="font-semibold">Claude: </span>
                                 {match.reason}
                               </p>
@@ -278,53 +286,55 @@ export const Dashboard = () => {
                       })}
                     </div>
                   )}
+                </section>
+              )}
+
+              {/* Normal filtered list — always rendered so the user keeps
+                  their filters + sort context even when a query is active. */}
+              {/* Sort + count bar */}
+              <div className="flex items-center justify-between mb-4 max-w-6xl mx-auto">
+                <p className="text-sm text-gray-500">
+                  {queryResult ? 'All listings' : `${sortedProperties.length} properties`}
+                </p>
+                <div className="flex items-center gap-2">
+                  <label className="text-sm text-gray-600 hidden sm:block" htmlFor="sort-select">Sort:</label>
+                  <select
+                    id="sort-select"
+                    value={filters.sortBy}
+                    onChange={e => updateFilter('sortBy', e.target.value as SortBy)}
+                    className="border border-gray-200 rounded-lg px-3 py-1.5 text-sm bg-white focus:ring-1 focus:ring-green-500 focus:outline-none"
+                  >
+                    {(Object.keys(SORT_LABELS) as SortBy[]).map((option) => (
+                      <option key={option} value={option}>
+                        {SORT_LABELS[option]}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+
+              {sortedProperties.length === 0 ? (
+                <div className="flex flex-col items-center justify-center h-64 text-center">
+                  <p className="text-4xl mb-3">🌾</p>
+                  <p className="text-gray-600 font-medium">No properties match your filters</p>
+                  <button
+                    onClick={resetFilters}
+                    className="mt-3 text-green-600 hover:text-green-700 text-sm font-medium"
+                  >
+                    Clear filters
+                  </button>
                 </div>
               ) : (
-                <>
-                  {/* Sort + count bar */}
-                  <div className="flex items-center justify-between mb-4 max-w-6xl mx-auto">
-                    <p className="text-sm text-gray-500">{sortedProperties.length} properties</p>
-                    <div className="flex items-center gap-2">
-                      <label className="text-sm text-gray-600 hidden sm:block" htmlFor="sort-select">Sort:</label>
-                      <select
-                        id="sort-select"
-                        value={filters.sortBy}
-                        onChange={e => updateFilter('sortBy', e.target.value as SortBy)}
-                        className="border border-gray-200 rounded-lg px-3 py-1.5 text-sm bg-white focus:ring-1 focus:ring-green-500 focus:outline-none"
-                      >
-                        {(Object.keys(SORT_LABELS) as SortBy[]).map((option) => (
-                          <option key={option} value={option}>
-                            {SORT_LABELS[option]}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-                  </div>
-
-                  {sortedProperties.length === 0 ? (
-                    <div className="flex flex-col items-center justify-center h-64 text-center">
-                      <p className="text-4xl mb-3">🌾</p>
-                      <p className="text-gray-600 font-medium">No properties match your filters</p>
-                      <button
-                        onClick={resetFilters}
-                        className="mt-3 text-green-600 hover:text-green-700 text-sm font-medium"
-                      >
-                        Clear filters
-                      </button>
-                    </div>
-                  ) : (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3 max-w-6xl mx-auto">
-                      {sortedProperties.map((property: Property) => (
-                        <PropertyCard
-                          key={property.id}
-                          property={property}
-                          onClick={setSelectedId}
-                          isSelected={selectedId === property.id}
-                        />
-                      ))}
-                    </div>
-                  )}
-                </>
+                <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3 max-w-6xl mx-auto">
+                  {sortedProperties.map((property: Property) => (
+                    <PropertyCard
+                      key={property.id}
+                      property={property}
+                      onClick={setSelectedId}
+                      isSelected={selectedId === property.id}
+                    />
+                  ))}
+                </div>
               )}
             </div>
           )}
@@ -344,22 +354,31 @@ export const Dashboard = () => {
           )}
 
           {!loading && !error && viewMode === 'picks' && (
-            curation ? (
-              <TopPicks
-                picks={curation.picks}
-                properties={properties}
-                curatedAt={curation.curatedAt}
-                model={curation.model}
-                onSelectProperty={setSelectedId}
-              />
+            curationMatchesListings && curation ? (
+              <ErrorBoundary label="Top Picks">
+                <TopPicks
+                  picks={curation.picks}
+                  properties={properties}
+                  curatedAt={curation.curatedAt}
+                  model={curation.model}
+                  onSelectProperty={setSelectedId}
+                />
+              </ErrorBoundary>
             ) : (
               <div className="flex items-center justify-center h-full p-6 text-center">
-                <div>
+                <div className="max-w-md">
                   <p className="text-4xl mb-3">✨</p>
                   <p className="text-gray-600 font-medium">No curated picks yet</p>
                   <p className="text-sm text-gray-500 mt-1">
-                    Run <code className="px-1.5 py-0.5 bg-gray-100 rounded text-xs">python -m scraper.curate</code> locally to generate top picks.
+                    Run <code className="px-1.5 py-0.5 bg-gray-100 rounded text-xs">python -m scraper.curate</code> locally to generate top picks and commit <code className="px-1.5 py-0.5 bg-gray-100 rounded text-xs">data/curated.json</code>.
                   </p>
+                  {curationIsSample && !listingsAreSample && (
+                    <p className="text-xs text-gray-400 mt-3">
+                      (The bundled sample curation was hidden because it
+                      references sample listing IDs that don&apos;t match your
+                      real data.)
+                    </p>
+                  )}
                 </div>
               </div>
             )

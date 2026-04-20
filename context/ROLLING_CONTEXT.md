@@ -11,7 +11,7 @@
 | Item | Status |
 |------|--------|
 | Last Updated | 2026-04-20 |
-| Current Phase | AI-enrichment pipeline shipped (local Max via `claude -p`) + real data flowing for LandWatch |
+| Current Phase | AI-enrichment pipeline shipped (local Max via `claude -p`) + real data flowing for LandWatch. Visual architecture docs added at `docs/diagrams.html`. |
 | Dashboard | AI filters, Top Picks view, Ask-Claude bar (dev-only), all CI-verified green |
 | Scraper | LandWatch markdown parser working via Firecrawl; 125 real MT listings pulled in dry-run |
 | GitHub Pages | Still not enabled in repo settings |
@@ -109,6 +109,15 @@
 ---
 
 ## Recent Sessions
+
+### Session 7 — 2026-04-20
+**What was done:** Built a single-page visual reference at `docs/diagrams.html` covering four views: (1) system architecture + daily data flow, (2) adaptive fetch strategy chain (HTTP → Playwright → Firecrawl → Claude + learning pipeline), (3) local AI pipeline for enrich/curate/query (ADR-012), (4) deal-scoring formula breakdown with a pie chart of factor weights. Uses Mermaid.js from CDN with sticky nav, per-section context notes pulled from the ADRs, and color-coded node classes. All 5 Mermaid blocks validated via kroki.io (HTTP 200).
+
+**Decisions made:** None — this is a read-only documentation artifact.
+
+**Commits:** None yet (file created, not committed).
+
+---
 
 ### Session 6 — 2026-04-20
 **What was done:** Shipped LandWatch real-data pipeline + full local-AI hybrid (enrichment, curation, NL query).
