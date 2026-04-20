@@ -162,7 +162,14 @@ def _extract_listing_from_cluster(
     if address:
         cm = _ADDRESS_RE.search(address)
         if cm:
-            county = f"{cm.group(2).strip()} County"
+            captured = cm.group(2).strip()
+            # Some pages include "County" inside the captured name (e.g. when
+            # the address contains "Valley County, MT, 59230, Valley County").
+            # Only append the suffix if it isn't already present.
+            if captured.lower().endswith("county"):
+                county = captured
+            else:
+                county = f"{captured} County"
 
     combined_desc = description or ""
     if address:
