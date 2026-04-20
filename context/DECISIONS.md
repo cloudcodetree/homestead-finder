@@ -237,19 +237,34 @@ The user has Claude Max and wants to avoid paying for API credits separately.
 - `scraper/curate.py` — local "top picks" generator, writes `data/curated.json`, commit.
 - `scraper/query_server.py` — localhost HTTP proxy for natural-language queries. The frontend pings `/health` on mount and only shows the "Ask Claude" bar when the server is up, so the feature auto-hides in production (GitHub Pages).
 
-Controlled vocabularies for `aiTags` and `redFlags` are duplicated between Python (`scraper/enrich.py`) and TypeScript (`frontend/src/types/property.ts`) — kept in sync by hand, documented in both files.
+Controlled vocabularies for `aiTags` and `redFlags` live in one source of truth: `scraper/ai_vocab.json`. Python loads it at import via `scraper/ai_vocab.py`; TypeScript consumes `frontend/src/types/ai-vocab.generated.ts`, which is emitted from the same JSON by `scraper/emit_ts_vocab.py`. CI runs the emit script with `--check` so drift is caught before merge.
 
 **Consequences:**
 - (+) No ongoing API cost — Max subscription covers enrichment, curation, and NL query
 - (+) CI stays fast and deterministic; scheduled daily scrapes don't require the `claude` CLI or OAuth state
 - (+) The public GitHub Pages dashboard gracefully degrades: it shows pre-computed AI fields but hides the live "Ask Claude" feature when the local proxy isn't running
-- (+) Cache in `data/cache/llm/` makes re-runs effectively free
+- (+) Cache in `data/cache/llm/` with LRU eviction (200MB cap) makes re-runs effectively free without unbounded disk growth
+- (+) Subprocess retries with exponential backoff absorb transient CLI failures; model-level errors (bad JSON, envelope error) fail fast since retry won't help
+- (+) Per-call cost attribution via `data/ai_costs.jsonl` with `tag` field lets the user see what share of Max quota each phase (enrich/curate/query) burned
 - (-) AI-derived data (aiTags, curated picks) is only refreshed when the developer manually runs the scripts and commits — no automation
 - (-) The local proxy means the NL query feature only works in `npm run dev` mode, not in production
-- (-) Vocabularies must be manually kept in sync across Python and TypeScript
 - (?) If the user eventually wants automated daily enrichment, the path is either (a) add `ANTHROPIC_API_KEY` to GitHub secrets and bypass the local path, or (b) trigger enrichment from a self-hosted runner logged in to Claude
 
-**Migration note:** If the NL query feature later needs to work on the public site, the simplest path is to add API credits and have the server-side call use `ANTHROPIC_API_KEY` as a fallback when OAuth is absent. The `llm.py` wrapper already has the right shape for this — it would just need an auth-mode switch.
+**Edge cases / failure modes:**
+
+1. **Max subscription lapses.** `claude -p` will start returning auth errors. `llm._claude_path` still succeeds (binary is present), but `_run_subprocess_with_retry` raises `LLMCallFailed` after retries. No cached data is lost; new enrichment just fails until the subscription is renewed. The frontend continues serving the last committed `listings.json` and `curated.json`.
+
+2. **OAuth token expires mid-batch** (docs say 1 year). Same symptom as #1; the scripts fail loudly rather than silently producing empty enrichments because `_sanitize_enrichment` returns None on failed calls and the listing is left unenriched (not overwritten).
+
+3. **Concurrent parallelism vs. CLI state.** `enrich.py` runs up to 4 `claude -p` subprocesses in parallel. Each has its own OAuth refresh, so there's no shared-state contention. If the user is running an interactive `claude` session at the same time, quota is shared across all subprocesses (OS view) but the CLI handles scheduling internally.
+
+4. **Cost log collision under parallelism.** `ai_costs.record` uses `open("a")` which is append-safe on POSIX (each `write` is atomic for lines under PIPE_BUF). No lock needed for the volumes we're at. If that assumption changes (Windows, >4KB records), switch to flock.
+
+5. **Sample data drift.** `frontend/src/data/sample-curated.json` references sample listing IDs. When real `data/listings.json` exists but `data/curated.json` doesn't, the frontend checks `isSample` on both and suppresses the sample curation rather than rendering picks that reference nonexistent IDs. User sees a "run `scraper.curate` locally" nudge instead.
+
+**Migration notes:**
+- **NL query on public site** — requires API credits. The `llm.py` wrapper's `_claude_path()` already supports `CLAUDE_CMD` override; a sibling "api mode" that calls the Anthropic SDK when `ANTHROPIC_API_KEY` is set would be additive, not disruptive.
+- **Automated enrichment** — move `scraper/enrich.py` to a workflow triggered manually (or on a schedule that tolerates occasional failures) using a self-hosted runner with `claude login` state persisted. Or bite the bullet and add API credits for reliability.
 
 ---
 
