@@ -27,6 +27,7 @@ from pathlib import Path
 from typing import Any
 
 import config
+from ai_vocab import ai_tags, red_flags
 from llm import LLMCallFailed, LLMUnavailable, call_json, is_available
 from logger import get_logger
 
@@ -35,61 +36,9 @@ log = get_logger("enrich")
 
 # Controlled vocabulary — Claude must pick from this list. Keeps tags stable
 # across runs (important for filter UIs) and prevents hallucinated tags.
-AI_TAG_VOCABULARY: list[str] = [
-    # Access & infrastructure
-    "paved_access",
-    "seasonal_access_only",
-    "remote_access_concerns",
-    "utilities_on_site",
-    "off_grid_viable",
-    "infrastructure_needed",
-    # Water
-    "water_rights_present",
-    "year_round_water",
-    "seasonal_water_only",
-    "no_water_mentioned",
-    # Buildability
-    "build_ready",
-    "buildable_with_work",
-    "difficult_terrain",
-    "soil_suitable_for_ag",
-    # Living viability
-    "remote_living_viable",
-    "near_services",
-    "isolated",
-    # Productive uses
-    "agricultural_potential",
-    "timber_harvestable",
-    "hunting_viable",
-    "grazing_suitable",
-    # Restrictions / concerns
-    "no_hoa",
-    "hoa_present",
-    "deed_restrictions",
-    "zoning_concerns",
-    # Risk signals
-    "flood_risk_mentioned",
-    "fire_risk_mentioned",
-    "mineral_rights_excluded",
-]
-
-
-AI_RED_FLAG_VOCABULARY: list[str] = [
-    "hoa_restrictions",
-    "flood_zone_mention",
-    "wetland_restrictions",
-    "no_water_source",
-    "no_road_access",
-    "easement_concerns",
-    "environmental_hazard",
-    "title_issues_mentioned",
-    "tax_sale_risk",
-    "requires_septic_install",
-    "requires_well_drilling",
-    "zoning_prohibits_residential",
-    "extreme_remote",
-    "price_seems_too_good",
-]
+# Source of truth: scraper/ai_vocab.json.
+AI_TAG_VOCABULARY: list[str] = ai_tags()
+AI_RED_FLAG_VOCABULARY: list[str] = red_flags()
 
 
 PROMPT_TEMPLATE = """You are analyzing a US land listing for homesteading suitability.

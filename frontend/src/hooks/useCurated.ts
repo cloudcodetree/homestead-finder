@@ -1,44 +1,22 @@
-import { useEffect, useState } from 'react';
+import { useCallback } from 'react';
 import { CurationResult } from '../types/property';
+import { useJsonAsset } from './useJsonAsset';
+
+const loadSample = () => import('../data/sample-curated.json');
+
+const isEmpty = (d: CurationResult) => !d.picks || d.picks.length === 0;
 
 /**
- * Load the curated "top picks" file (data/curated.json) with a fallback to
- * the local sample. Works the same way as useProperties so the two hooks
- * stay in sync and the dashboard can offline-render in dev.
+ * Load `data/curated.json` with a fallback to the bundled sample. When the
+ * real curated file exists but is misaligned (e.g. the dev just scraped
+ * real listings but hasn't run `python -m scraper.curate` yet) the hook
+ * will return the sample; the dashboard uses `isSample` to show a hint.
  */
 export const useCurated = () => {
-  const [curation, setCuration] = useState<CurationResult | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        let data: CurationResult;
-        try {
-          const response = await fetch(
-            `${import.meta.env.BASE_URL}data/curated.json`
-          );
-          if (!response.ok) throw new Error('No curated data yet');
-          const fetched = (await response.json()) as CurationResult;
-          if (!fetched.picks || fetched.picks.length === 0)
-            throw new Error('No curated picks yet');
-          data = fetched;
-        } catch {
-          const sample = await import('../data/sample-curated.json');
-          data = sample.default as CurationResult;
-        }
-        setCuration(data);
-      } catch (err) {
-        setError(
-          err instanceof Error ? err.message : 'Failed to load curated picks'
-        );
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchData();
-  }, []);
-
-  return { curation, loading, error };
+  const { data, loading, error, isSample } = useJsonAsset<CurationResult>({
+    assetPath: 'data/curated.json',
+    loadFallback: useCallback(loadSample, []),
+    isEmpty,
+  });
+  return { curation: data, loading, error, isSample };
 };

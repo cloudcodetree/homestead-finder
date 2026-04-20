@@ -13,65 +13,19 @@ from typing import Any
 
 from logger import get_logger
 from strategies.base import AllStrategiesFailed
+from utils.us_states import STATE_SLUGS, slug_for
 
 from .base import BaseScraper, RawListing
 
 log = get_logger("scraper.landwatch")
 
 
-# State abbr → URL slug used by LandWatch
-STATE_SLUGS: dict[str, str] = {
-    "AL": "alabama",
-    "AK": "alaska",
-    "AZ": "arizona",
-    "AR": "arkansas",
-    "CA": "california",
-    "CO": "colorado",
-    "CT": "connecticut",
-    "DE": "delaware",
-    "FL": "florida",
-    "GA": "georgia",
-    "HI": "hawaii",
-    "ID": "idaho",
-    "IL": "illinois",
-    "IN": "indiana",
-    "IA": "iowa",
-    "KS": "kansas",
-    "KY": "kentucky",
-    "LA": "louisiana",
-    "ME": "maine",
-    "MD": "maryland",
-    "MA": "massachusetts",
-    "MI": "michigan",
-    "MN": "minnesota",
-    "MS": "mississippi",
-    "MO": "missouri",
-    "MT": "montana",
-    "NE": "nebraska",
-    "NV": "nevada",
-    "NH": "new-hampshire",
-    "NJ": "new-jersey",
-    "NM": "new-mexico",
-    "NY": "new-york",
-    "NC": "north-carolina",
-    "ND": "north-dakota",
-    "OH": "ohio",
-    "OK": "oklahoma",
-    "OR": "oregon",
-    "PA": "pennsylvania",
-    "RI": "rhode-island",
-    "SC": "south-carolina",
-    "SD": "south-dakota",
-    "TN": "tennessee",
-    "TX": "texas",
-    "UT": "utah",
-    "VT": "vermont",
-    "VA": "virginia",
-    "WA": "washington",
-    "WV": "west-virginia",
-    "WI": "wisconsin",
-    "WY": "wyoming",
-}
+__all__ = [
+    "LandWatchScraper",
+    "STATE_SLUGS",  # re-exported for backward-compat with existing tests
+    "parse_markdown_listings",
+    "extract_features",
+]
 
 
 FEATURE_KEYWORDS: dict[str, list[str]] = {
@@ -272,7 +226,7 @@ class LandWatchScraper(BaseScraper):
     RATE_LIMIT_SECONDS = 2.5
 
     def _state_url(self, state: str, page: int) -> str:
-        slug = STATE_SLUGS.get(state.upper())
+        slug = slug_for(state)
         if not slug:
             return ""
         base = f"{self.BASE_URL}/{slug}-land-for-sale"

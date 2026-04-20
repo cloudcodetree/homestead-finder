@@ -1,5 +1,5 @@
 import { useState, lazy, Suspense } from 'react';
-import { Property, DEFAULT_FILTERS } from '../types/property';
+import { Property, DEFAULT_FILTERS, SortBy, SORT_LABELS } from '../types/property';
 import { PropertyCard } from './PropertyCard';
 import { FilterPanel } from './FilterPanel';
 import { PropertyDetail } from './PropertyDetail';
@@ -16,7 +16,6 @@ import { formatPrice, formatAcreage } from '../utils/formatters';
 const MapView = lazy(() => import('./MapView').then(m => ({ default: m.MapView })));
 
 type ViewMode = 'list' | 'map' | 'picks';
-type SortOption = 'score' | 'fit' | 'price_asc' | 'price_desc' | 'ppa_asc' | 'acreage_desc' | 'newest';
 
 export const Dashboard = () => {
   const { filters, updateFilter, toggleState, toggleFeature, toggleAITag, resetFilters, hasActiveFilters } = useFilters();
@@ -27,7 +26,6 @@ export const Dashboard = () => {
   const [showNotifications, setShowNotifications] = useState(false);
   const [showFilters, setShowFilters] = useState(false); // mobile drawer
   const [sidebarOpen, setSidebarOpen] = useState(true); // desktop collapse
-  const [sortBy, setSortBy] = useState<SortOption>('score');
   const [queryResult, setQueryResult] = useState<QueryResponse | null>(null);
 
   const selectedProperty = selectedId ? properties.find((p: Property) => p.id === selectedId) ?? null : null;
@@ -47,17 +45,8 @@ export const Dashboard = () => {
     filters.sources.length,
   ].reduce((a, b) => a + b, 0);
 
-  const sortedProperties = [...properties].sort((a: Property, b: Property) => {
-    switch (sortBy) {
-      case 'fit': return (b.homesteadFitScore ?? -1) - (a.homesteadFitScore ?? -1);
-      case 'price_asc': return a.price - b.price;
-      case 'price_desc': return b.price - a.price;
-      case 'ppa_asc': return a.pricePerAcre - b.pricePerAcre;
-      case 'acreage_desc': return b.acreage - a.acreage;
-      case 'newest': return new Date(b.dateFound).getTime() - new Date(a.dateFound).getTime();
-      default: return b.dealScore - a.dealScore;
-    }
-  });
+  // `properties` is already sorted by the hook using filters.sortBy
+  const sortedProperties = properties;
 
   return (
     <div className="flex flex-col h-screen bg-gray-50">
@@ -299,17 +288,15 @@ export const Dashboard = () => {
                       <label className="text-sm text-gray-600 hidden sm:block" htmlFor="sort-select">Sort:</label>
                       <select
                         id="sort-select"
-                        value={sortBy}
-                        onChange={e => setSortBy(e.target.value as SortOption)}
+                        value={filters.sortBy}
+                        onChange={e => updateFilter('sortBy', e.target.value as SortBy)}
                         className="border border-gray-200 rounded-lg px-3 py-1.5 text-sm bg-white focus:ring-1 focus:ring-green-500 focus:outline-none"
                       >
-                        <option value="score">Best Deal (Score)</option>
-                        <option value="fit">Homestead Fit (AI)</option>
-                        <option value="price_asc">Price: Low to High</option>
-                        <option value="price_desc">Price: High to Low</option>
-                        <option value="ppa_asc">Price/Acre: Low to High</option>
-                        <option value="acreage_desc">Acreage: Most</option>
-                        <option value="newest">Newest First</option>
+                        {(Object.keys(SORT_LABELS) as SortBy[]).map((option) => (
+                          <option key={option} value={option}>
+                            {SORT_LABELS[option]}
+                          </option>
+                        ))}
                       </select>
                     </div>
                   </div>

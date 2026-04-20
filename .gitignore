@@ -49,3 +49,4 @@ npm-debug.log*
 frontend/public/data/
 data/scraper.log
 data/cache/
+.claude/worktrees/

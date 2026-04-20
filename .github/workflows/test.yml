@@ -29,6 +29,11 @@ jobs:
           ruff check .
           ruff format --check .
 
+      - name: Check AI vocab TS is up to date
+        run: |
+          cd scraper
+          python -m emit_ts_vocab --check
+
       - name: Run pytest
         run: |
           cd scraper

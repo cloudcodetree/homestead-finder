@@ -1,5 +1,6 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import { Property, FilterState } from '../types/property';
+import { useJsonAsset } from './useJsonAsset';
 
 const applyFilters = (properties: Property[], filters: FilterState): Property[] => {
   return properties.filter((p) => {
@@ -29,52 +30,48 @@ const applyFilters = (properties: Property[], filters: FilterState): Property[] 
   });
 };
 
+// Module-scoped so useCallback sees a stable reference and the useJsonAsset
+// effect doesn't re-fire every render.
+const loadSample = () => import('../data/sample-listings.json');
+
+const isEmptyArray = (d: Property[]) => d.length === 0;
+
 export const useProperties = (filters: FilterState) => {
-  const [allProperties, setAllProperties] = useState<Property[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const { data, loading, error, isSample } = useJsonAsset<Property[]>({
+    assetPath: 'data/listings.json',
+    loadFallback: useCallback(loadSample, []),
+    isEmpty: isEmptyArray,
+  });
+  const allProperties = data ?? [];
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        // Try fetching from data/listings.json first (scraped data),
-        // fall back to sample data for development
-        let data: Property[];
-        try {
-          const response = await fetch(`${import.meta.env.BASE_URL}data/listings.json`);
-          if (!response.ok) throw new Error('No scraped data yet');
-          const fetched = await response.json() as Property[];
-          // listings.json is [] when scraper hasn't found any results yet
-          if (fetched.length === 0) throw new Error('No scraped data yet');
-          data = fetched;
-        } catch {
-          const sampleModule = await import('../data/sample-listings.json');
-          data = sampleModule.default as Property[];
-        }
-        setAllProperties(data);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'Failed to load listings');
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchData();
-  }, []);
-
-  const filtered = useMemo(() => applyFilters(allProperties, filters), [allProperties, filters]);
+  const filtered = useMemo(
+    () => applyFilters(allProperties, filters),
+    [allProperties, filters]
+  );
 
   const sorted = useMemo(
-    () => [...filtered].sort((a: Property, b: Property) => {
-      switch (filters.sortBy) {
-        case 'price': return a.price - b.price;
-        case 'pricePerAcre': return a.pricePerAcre - b.pricePerAcre;
-        case 'acreage': return b.acreage - a.acreage;
-        case 'dateFound': return new Date(b.dateFound).getTime() - new Date(a.dateFound).getTime();
-        case 'title': return a.title.localeCompare(b.title);
-        case 'homesteadFit': return (b.homesteadFitScore ?? -1) - (a.homesteadFitScore ?? -1);
-        default: return b.dealScore - a.dealScore;
-      }
-    }),
+    () =>
+      [...filtered].sort((a: Property, b: Property) => {
+        switch (filters.sortBy) {
+          case 'priceAsc':
+            return a.price - b.price;
+          case 'priceDesc':
+            return b.price - a.price;
+          case 'pricePerAcre':
+            return a.pricePerAcre - b.pricePerAcre;
+          case 'acreage':
+            return b.acreage - a.acreage;
+          case 'dateFound':
+            return new Date(b.dateFound).getTime() - new Date(a.dateFound).getTime();
+          case 'title':
+            return a.title.localeCompare(b.title);
+          case 'homesteadFit':
+            return (b.homesteadFitScore ?? -1) - (a.homesteadFitScore ?? -1);
+          case 'dealScore':
+          default:
+            return b.dealScore - a.dealScore;
+        }
+      }),
     [filtered, filters.sortBy]
   );
 
@@ -86,12 +83,13 @@ export const useProperties = (filters: FilterState) => {
       avgScore:
         allProperties.length > 0
           ? Math.round(
-              allProperties.reduce((sum, p) => sum + p.dealScore, 0) / allProperties.length
+              allProperties.reduce((sum, p) => sum + p.dealScore, 0) /
+                allProperties.length
             )
           : 0,
     }),
     [allProperties, filtered]
   );
 
-  return { properties: sorted, loading, error, stats };
+  return { properties: sorted, loading, error, stats, isSample };
 };
