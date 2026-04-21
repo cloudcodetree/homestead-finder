@@ -59,7 +59,9 @@ The listing is below. Return ONLY a JSON object (no prose, no markdown fences) w
 {flag_vocab}
 
 - aiSummary: 2-3 short sentences explaining the property's homesteading
-  suitability. Be honest and specific. Avoid marketing language.
+  suitability. Be honest and specific. Avoid marketing language. Reference
+  the objective signals below when relevant (soil class, flood zone,
+  elevation, watershed).
 
 LISTING:
 Title: {title}
@@ -70,13 +72,20 @@ State: {state}
 County: {county}
 Description: {description}
 
+OBJECTIVE DATA (from US government sources — treat as ground truth):
+{geo_block}
+
 Return ONLY the JSON object."""
 
 
 def _content_hash(listing: dict[str, Any]) -> str:
     """Hash the listing fields that matter for enrichment. When these change,
-    we must re-enrich."""
+    we must re-enrich. Geo-enrichment signals are folded in so adding
+    soil/flood/elevation triggers a fresh pass."""
     h = hashlib.sha256()
+    geo = listing.get("geoEnrichment") or {}
+    soil = (geo.get("soil") or {}) if geo else {}
+    flood = (geo.get("flood") or {}) if geo else {}
     parts = [
         str(listing.get("title", "")),
         str(listing.get("description", "")),
@@ -84,9 +93,87 @@ def _content_hash(listing: dict[str, Any]) -> str:
         str(listing.get("acreage", "")),
         str(listing.get("location", {}).get("state", "")),
         str(listing.get("location", {}).get("county", "")),
+        # Geo signals — when any of these change (e.g. lat/lng corrected,
+        # new enrichment added) we want to regenerate the AI tags.
+        str(soil.get("capabilityClass", "")),
+        str(soil.get("floodFrequency", "")),
+        str(soil.get("mapUnitKey", "")),
+        str(flood.get("floodZone", "")),
+        str((geo.get("elevation") or {}).get("elevationMeters", "")),
     ]
     h.update("|".join(parts).encode())
     return h.hexdigest()[:16]
+
+
+def _build_geo_block(listing: dict[str, Any]) -> str:
+    """Format geo-enrichment facts into a compact, model-friendly block.
+
+    Empty string (not the literal '(none available)') is fine — Claude
+    will just lean on the description. But when we have ground-truth
+    soil or flood data, we present it unambiguously so the model isn't
+    guessing from marketing copy.
+    """
+    geo = listing.get("geoEnrichment") or {}
+    if not geo:
+        return "(geospatial data not yet populated for this listing)"
+
+    lines: list[str] = []
+    soil = geo.get("soil") or {}
+    if soil:
+        cap = soil.get("capabilityClass") or ""
+        cap_desc = soil.get("capabilityClassDescription") or ""
+        map_unit = soil.get("mapUnitName") or ""
+        slope = soil.get("slopePercent")
+        drainage = soil.get("drainageClass") or ""
+        farmland = soil.get("farmlandClass") or ""
+        bedrock = soil.get("bedrockDepthInches")
+        flood_freq = soil.get("floodFrequency") or ""
+
+        lines.append("Soil (USDA SSURGO):")
+        if map_unit:
+            lines.append(f"  - Map unit: {map_unit}")
+        if cap:
+            lines.append(
+                f"  - Land capability class (1=best, 8=worst): {cap} — {cap_desc}"
+            )
+        if farmland:
+            lines.append(f"  - Farmland classification: {farmland}")
+        if slope is not None:
+            lines.append(f"  - Slope: {slope}%")
+        if drainage:
+            lines.append(f"  - Drainage: {drainage}")
+        if bedrock is not None:
+            lines.append(f"  - Depth to bedrock: {bedrock} inches")
+        if flood_freq:
+            lines.append(f"  - Flood frequency (soil record): {flood_freq}")
+
+    flood = geo.get("flood") or {}
+    if flood:
+        zone = flood.get("floodZone") or ""
+        sfha = flood.get("isSFHA")
+        lines.append("FEMA flood data:")
+        lines.append(f"  - Flood zone: {zone}")
+        if sfha is True:
+            lines.append("  - Inside the 100-year floodplain (SFHA)")
+        elif zone == "X":
+            lines.append("  - Outside mapped flood hazard areas")
+        elif zone == "D":
+            lines.append("  - Flood hazard NOT yet determined for this area")
+
+    elev = geo.get("elevation") or {}
+    if elev.get("elevationFeet") is not None:
+        lines.append(
+            f"Elevation: {elev['elevationFeet']} ft "
+            f"({elev.get('elevationMeters', '?')} m)"
+        )
+
+    watershed = geo.get("watershed") or {}
+    if watershed.get("watershedName"):
+        lines.append(
+            f"Watershed: {watershed['watershedName']} (HUC-12 {watershed.get('huc12','')})"
+        )
+
+    return "\n".join(lines) if lines else "(no geospatial data available)"
 
 
 def _needs_enrichment(listing: dict[str, Any], force: bool) -> bool:
@@ -113,7 +200,10 @@ def _build_prompt(listing: dict[str, Any]) -> str:
         ppa=ppa,
         state=location.get("state", ""),
         county=location.get("county", ""),
-        description=(listing.get("description", "") or "")[:1500],
+        # Feed the full 3000-char detail-page description when available
+        # (detail_fetcher upgrades this from the 500-char search blurb).
+        description=(listing.get("description", "") or "")[:3000],
+        geo_block=_build_geo_block(listing),
     )
 
 
