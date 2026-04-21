@@ -1,38 +1,80 @@
 {
-  "curatedAt": "2026-04-20T23:26:43.031631+00:00",
+  "curatedAt": "2026-04-21T02:54:38.960742+00:00",
   "model": "sonnet",
-  "candidateCount": 5,
-  "pickCount": 5,
+  "candidateCount": 50,
+  "pickCount": 12,
   "picks": [
     {
-      "id": "landwatch_417786257",
-      "headline": "Best value Montana creek land under $150k",
-      "reason": "At $8,128/acre for 18.3 acres with year-round creek water, this is the strongest value proposition in the set by a wide margin. Timber and hunting add real self-sufficiency potential. Seasonal access is a genuine concern that needs verification before committing, but no red flags and solid water is a rare combination at this price.",
+      "id": "landwatch_426374886",
+      "headline": "Forested river parcel with every box checked",
+      "reason": "At $169,900 for 20 acres, this is the most accessible entry point in the set with zero compromises on fundamentals: paved access, year-round water, documented water rights, two prepared building sites, and BLM adjacency for expanded hunting and foraging. The homesteadFitScore of 80 is tied for highest in this pool, and no red flags are present. Small acreage limits large-scale agriculture, but the off-grid and timber tags suggest genuine self-sufficiency potential.",
       "rank": 1
     },
     {
-      "id": "landwatch_425698602",
-      "headline": "Existing cabin with creek and timber rights",
-      "reason": "The existing cabin on 11.5 acres is a significant practical advantage \u2014 avoiding a full build-out lowers the effective entry cost despite the $47,826/acre price tag. Water rights and nearby creek support off-grid viability. Year-round road access and utility details must be confirmed, but no red flags and a livable structure make this immediately actionable.",
+      "id": "landwatch_425618786",
+      "headline": "Irrigated farmstead with utilities already in place",
+      "reason": "76 acres with established water rights, paved highway access, utilities on-site, and agricultural infrastructure \u2014 all for $599K ($7,881/acre) makes this the strongest mid-range package in the list. The Sanders County location in northwest Montana offers a milder climate for growing seasons. The listing is incomplete on some details, but the combination of existing irrigation, no HOA, and proximity to services is rare at this price.",
       "rank": 2
     },
     {
-      "id": "landwatch_421939072",
-      "headline": "National Forest border with exceptional water access",
-      "reason": "Surrounded by National Forest on a 5-acre parcel gives de facto access to much larger wild land while keeping ownership costs bounded. The listing notes creeks, rivers, and a nearby lake \u2014 unusually strong water access \u2014 plus an existing shop structure. At $44,970/acre it is expensive for the acreage, and well/septic installs are required costs to budget for.",
+      "id": "landwatch_425973409",
+      "headline": "320 acres of tillable Montana at a bargain price",
+      "reason": "At $1,078/acre ($345K total), this is the strongest value-per-acre offering with confirmed year-round water, agricultural-grade soil, and 320 acres large enough to support livestock and crop production. Infrastructure is needed \u2014 no utilities on-site \u2014 but the price accounts for that gap. Milk River proximity and off-grid viability tag make this a compelling raw-land homestead project for a capable builder.",
       "rank": 3
     },
     {
-      "id": "landwatch_416383838",
-      "headline": "Massive ranch with water, wrong scale for one family",
-      "reason": "Nearly 30,000 acres with creek water and grazing infrastructure at $401/acre is extraordinary land economics, but the $12M price makes it commercial territory, not a homestead buy. For a group or cooperative with real capital, the self-sufficiency potential (water rights, timber, hunting, grazing) is unmatched in this set. Ranked 4th because the scale disqualifies it for most individual homesteaders.",
+      "id": "landwatch_423141243",
+      "headline": "272 forested acres with creek, timber, and meadows",
+      "reason": "At $3,305/acre ($899K), Novak Creek Lane offers substantial acreage combining open meadows for agriculture, forest for timber and firewood, and creek water \u2014 core self-sufficiency pillars. No HOA and isolated setting check the restriction-free box. The listing is sparse on road access specifics, and cliff terrain means building site selection requires site inspection, but the raw fundamentals are strong for the price.",
       "rank": 4
     },
     {
-      "id": "landwatch_412254043",
-      "headline": "Mostly leased land, seasonal-only, not homestead viable",
-      "reason": "Only 3,710 of 35,000 acres are actually deeded \u2014 the rest is BLM and State lease that cannot support permanent residence or development. Seasonal-use designation and deed restrictions make year-round self-sufficient living impossible here. It ranks last because the core homesteading requirements (buildability, year-round residence, true land ownership) are fundamentally unmet.",
+      "id": "landwatch_425745128",
+      "headline": "Established pivot irrigation with strong water rights",
+      "reason": "138 acres with documented water rights and functioning pivot irrigation at $1.395M ($10,108/acre) is priced for its agricultural productivity, not raw land speculation. Carbon County's climate supports hay, grain, and grazing, and paved access with buildable homesites gives flexibility for developing a permanent residence. The price premium over raw land reflects the working water infrastructure \u2014 for a homesteader, that infrastructure is the hard part.",
       "rank": 5
+    },
+    {
+      "id": "landwatch_420353757",
+      "headline": "Yellowstone River frontage with 125 irrigated acres",
+      "reason": "230 acres in Yellowstone County with Yellowstone River access, documented water rights, and 125 acres of irrigated ground at $8,500/acre ($1.955M) delivers a turnkey agricultural base. No HOA, hunting potential, and an isolated rural setting support self-sufficient living. The listing lacks detail on existing structures and utilities, which needs verification, but the water and irrigated acreage alone justify serious consideration.",
+      "rank": 6
+    },
+    {
+      "id": "landwatch_425697431",
+      "headline": "Small irrigated ranchette with verified water rights",
+      "reason": "20.2 acres may be modest, but the Irrigated Glen Ranchette pairs paved access, confirmed water rights, year-round water, and agricultural-grade soil for $417K \u2014 a reasonable entry cost for a productive small homestead in Beaverhead County. Livestock and market gardening are viable at this scale. Utility availability and structures need verification before closing.",
+      "rank": 7
+    },
+    {
+      "id": "landwatch_426019536",
+      "headline": "347 river-access acres with ag, timber, and hunting",
+      "reason": "At $5,475/acre ($1.9M), this 347-acre Bighorn River parcel stacks paved highway access, year-round water, documented agricultural productivity, timber, and hunting into a large-enough holding for genuine food self-sufficiency. Pine-covered hills add terrain complexity and will require deliberate building site selection. Incomplete listing means utilities and deed restrictions need direct verification.",
+      "rank": 8
+    },
+    {
+      "id": "landwatch_424939440",
+      "headline": "Established Yellowstone River farm with irrigated acres",
+      "reason": "This 275-acre property with river frontage, proven irrigation, and agricultural-grade soil ($10,872/acre, $2.99M) is a functioning farm, not raw land \u2014 meaning water infrastructure and crop viability are already demonstrated. Hunting potential adds a food-security layer. The premium price is the real constraint; this suits a homesteader who can capitalize a working farm rather than someone building from scratch.",
+      "rank": 9
+    },
+    {
+      "id": "landwatch_422181765",
+      "headline": "Operating cattle ranch at 662 dollars per acre",
+      "reason": "5,736 acres with year-round water, established grazing infrastructure, paved access, and no HOA for $3.8M ($662/acre) is exceptional land value for an operating Montana ranch. The sparse listing description is a concern \u2014 water rights documentation and building readiness need direct verification before committing. For a well-capitalized buyer willing to do due diligence, the per-acre cost is the best among properties with confirmed water in this pool.",
+      "rank": 10
+    },
+    {
+      "id": "landwatch_425766646",
+      "headline": "Complete 2400-acre working ranch, all infrastructure present",
+      "reason": "Tied for highest homesteadFitScore (80), this 2,411-acre Lake County ranch includes existing residences, irrigation systems, documented water rights, year-round water, agricultural soil, and no HOA \u2014 essentially every homestead fundamental already in place at $3,712/acre. The $8.95M total price is the only barrier; this is a generational property for serious buyers. The 'motivated sellers' language in the listing warrants investigation into title or deed restriction history.",
+      "rank": 11
+    },
+    {
+      "id": "landwatch_423614462",
+      "headline": "Missouri River cabin with utilities on 10 acres",
+      "reason": "The smallest and lowest total-cost improved property in the picks at $298,850, this 10-acre Missouri riverfront parcel includes an existing cabin, utilities, year-round water, and hunting access in Chouteau County. Flood risk from the river location and small acreage limiting large-scale food production are genuine caveats. Best suited as a low-barrier first homestead for someone prioritizing water access and immediate habitability over agricultural scale.",
+      "rank": 12
     }
   ]
 }

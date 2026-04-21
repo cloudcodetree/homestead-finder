@@ -3144,7 +3144,22 @@
     "dateFound": "2026-04-20",
     "dealScore": 18,
     "description": "TBD High Ore Road, Lot#WP001, Boulder, MT, 59632, Jefferson County \u2014 Escape to your mountain retreat with this insurable and accessible property, offering sweeping views and the rugged beauty of Montana's mountains. This incredible offering is not one, but two patented mining claims with surface and mineral rights. A",
-    "daysOnMarket": null
+    "daysOnMarket": null,
+    "aiTags": [
+      "paved_access",
+      "difficult_terrain",
+      "isolated",
+      "no_water_mentioned",
+      "remote_living_viable",
+      "buildable_with_work"
+    ],
+    "homesteadFitScore": 55,
+    "redFlags": [
+      "no_water_source"
+    ],
+    "aiSummary": "40-acre parcel in Jefferson County near Boulder with preserved mineral rights from two patented mining claims and implied road access via \"accessible property.\" Water availability is completely unspecified\u2014a critical unknown for homesteading\u2014and no utilities are mentioned. Mountain terrain introduces uncertainty about buildability and infrastructure costs.",
+    "enrichedAt": "2026-04-21T02:47:19.851741+00:00",
+    "_enrichHash": "8b0e03e4f4d10c56"
   },
   {
     "id": "landwatch_425618786",
@@ -3166,7 +3181,22 @@
     "dateFound": "2026-04-20",
     "dealScore": 18,
     "description": "2167 MT HIGHWAY 28, Hot Springs, MT, 59845, Sanders County \u2014 Premium Farmstead with Commercial Development Potential A +/- 65-acre irrigated farmstead awaits at 2167 Mt Highway 28. The property offers exceptional versatility for equestrian operations, homesteading, or commercial development. With paved road fr",
-    "daysOnMarket": null
+    "daysOnMarket": null,
+    "aiTags": [
+      "paved_access",
+      "water_rights_present",
+      "year_round_water",
+      "build_ready",
+      "agricultural_potential",
+      "utilities_on_site",
+      "no_hoa",
+      "near_services"
+    ],
+    "homesteadFitScore": 78,
+    "redFlags": [],
+    "aiSummary": "An irrigated Montana farmstead with established water rights, paved road access, and existing agricultural infrastructure. Strong water availability and grazing potential make it suitable for homesteading. Listing details are incomplete, limiting full assessment of development constraints.",
+    "enrichedAt": "2026-04-21T02:47:20.890570+00:00",
+    "_enrichHash": "f1a0ccd053e2c75c"
   },
   {
     "id": "landwatch_423622092",
@@ -3189,7 +3219,24 @@
     "dateFound": "2026-04-20",
     "dealScore": 17,
     "description": "Pompeys Pillar, MT, 59064, Yellowstone County \u2014 Welcome to Pine Ridge Sanctuary, a rare offering of 640 deeded acres of prime Montana hunting land, ideally situated just 40 miles (approximately 50 minutes) from Billings, Montanas largest city and commercial hub. This remarkable property features a",
-    "daysOnMarket": null
+    "daysOnMarket": null,
+    "aiTags": [
+      "paved_access",
+      "hunting_viable",
+      "near_services",
+      "no_water_mentioned",
+      "no_hoa",
+      "remote_living_viable"
+    ],
+    "homesteadFitScore": 55,
+    "redFlags": [
+      "no_water_source",
+      "requires_well_drilling",
+      "requires_septic_install"
+    ],
+    "aiSummary": "A large Montana property with good hunting potential and reasonable proximity to Billings, but water sources and buildability are not addressed in the listing. Homesteaders would need to verify water availability and budget for well drilling and home construction. The $3,516/acre price is fair for the region, but critical infrastructure details are missing.",
+    "enrichedAt": "2026-04-21T02:47:31.554749+00:00",
+    "_enrichHash": "d5839e483aee7d49"
   },
   {
     "id": "landwatch_420212225",
@@ -3248,7 +3295,24 @@
     "dateFound": "2026-04-20",
     "dealScore": 17,
     "description": "33919 U.S. 87, Fort Benton, MT, 59442, Chouteau County \u2014 Just 8 miles from Fort Benton, these 28 acres offer the perfect blend of rural charm, scenic beauty, and practical potential. Whether you\u2019re dreaming of building a new home, adding a workshop, or keeping livestock like horses, sheep, goats, or a few",
-    "daysOnMarket": null
+    "daysOnMarket": null,
+    "aiTags": [
+      "paved_access",
+      "near_services",
+      "no_water_mentioned",
+      "buildable_with_work",
+      "grazing_suitable",
+      "remote_living_viable",
+      "infrastructure_needed"
+    ],
+    "homesteadFitScore": 58,
+    "redFlags": [
+      "requires_well_drilling",
+      "requires_septic_install"
+    ],
+    "aiSummary": "This 28-acre property near Fort Benton offers good road access and buildable potential for livestock and homesteading activities. However, water availability is not mentioned in the listing, which is critical for homesteading\u2014you'll likely need to drill a well. The 8-mile proximity to town provides good access to services while maintaining rural character.",
+    "enrichedAt": "2026-04-21T02:47:52.495599+00:00",
+    "_enrichHash": "4de2ddd6ea8c2370"
   },
   {
     "id": "landwatch_425815817",
@@ -3271,7 +3335,20 @@
     "dateFound": "2026-04-20",
     "dealScore": 17,
     "description": "2584 MT HWY 284, Townsend, MT, 59644, Broadwater County \u2014 Welcome to The Elk Meadows Ranch located in Townsend, MT. Set on 60 acres of wide-open Montana ground, this one-of-a-kind property is where freedom, functionality, and frontier living all come together. This ranch sits in one of the best recreational",
-    "daysOnMarket": null
+    "daysOnMarket": null,
+    "aiTags": [
+      "paved_access",
+      "remote_living_viable",
+      "isolated",
+      "agricultural_potential",
+      "grazing_suitable",
+      "no_water_mentioned"
+    ],
+    "homesteadFitScore": 58,
+    "redFlags": [],
+    "aiSummary": "Montana ranch property with highway access and agricultural potential, but critically incomplete listing. No water source mentioned despite being essential for homesteading; utilities and buildability remain unclear. At $27,417/acre, this significantly exceeds typical rural MT pricing and warrants detailed site inspection before commitment.",
+    "enrichedAt": "2026-04-21T02:47:39.994343+00:00",
+    "_enrichHash": "1a1eec20cc94534b"
   },
   {
     "id": "landwatch_416186850",
@@ -3293,7 +3370,21 @@
     "dateFound": "2026-04-20",
     "dealScore": 16,
     "description": "Penwell Bridge Road, Belgrade, MT, 59714, Gallatin County \u2014 Spanning 313 acres, this property features hay, grain, and other crop production, providing income opportunities while offering privacy and stunning Gallatin Valley views. A conservation easement ensures the land's agricultural and environmental value is preserved, with an 8-acre build site allowed for development",
-    "daysOnMarket": null
+    "daysOnMarket": null,
+    "aiTags": [
+      "deed_restrictions",
+      "soil_suitable_for_ag",
+      "buildable_with_work",
+      "agricultural_potential",
+      "paved_access",
+      "near_services",
+      "infrastructure_needed"
+    ],
+    "homesteadFitScore": 38,
+    "redFlags": [],
+    "aiSummary": "This 313-acre Gallatin Valley property has excellent soil and established hay/grain production, but a conservation easement severely restricts development and land use beyond farming. The 8-acre build site allows a home, but you're primarily purchasing an agricultural investment property with compliance obligations and limited flexibility for off-grid or unconventional homesteading.",
+    "enrichedAt": "2026-04-21T02:47:41.550775+00:00",
+    "_enrichHash": "f48153971cd7648a"
   },
   {
     "id": "landwatch_422755577",
@@ -3315,7 +3406,24 @@
     "dateFound": "2026-04-20",
     "dealScore": 16,
     "description": "94 Sheep Mountain Road W 614 AC State Lease), Red Lodge, MT, 59068, Carbon County \u2014 Stunning 5 BR/5.5 BA Sheep Mountain home near Red Lodge. This incredible property sits privately at the end of the road bordering State Land &amp; National Forest on 3 sides, a \"Montana Paradise\", includes 641 unspoiled deeded &amp; leased fenced acres which",
-    "daysOnMarket": null
+    "daysOnMarket": null,
+    "aiTags": [
+      "paved_access",
+      "remote_living_viable",
+      "isolated",
+      "build_ready",
+      "no_hoa",
+      "hunting_viable",
+      "utilities_on_site",
+      "deed_restrictions"
+    ],
+    "homesteadFitScore": 60,
+    "redFlags": [
+      "easement_concerns"
+    ],
+    "aiSummary": "A private mountain property with existing 5-bedroom home and access to 641 acres including state leases, bordering national forest on three sides. Strong for hunting and recreation, but state lease implies public easements, mountain terrain limits agricultural viability, and price per acre ($222k+) is prohibitively expensive. Better suited for upscale retreat than self-sufficient homestead.",
+    "enrichedAt": "2026-04-21T02:48:09.571632+00:00",
+    "_enrichHash": "429d07f7707ab07b"
   },
   {
     "id": "landwatch_425618796",
@@ -3337,7 +3445,21 @@
     "dateFound": "2026-04-20",
     "dealScore": 16,
     "description": "2503 Wild Bill Road, Kila, MT, 59920, Flathead County \u2014 Discover this quintessential Montana ranchette a custom timber-framed home with horse facilities, nestled on approximately 21 acres of sheltered land. Bordered on two sides by thousands of acres of National Forest, the property features a gently flow",
-    "daysOnMarket": null
+    "daysOnMarket": null,
+    "aiTags": [
+      "paved_access",
+      "utilities_on_site",
+      "build_ready",
+      "remote_living_viable",
+      "agricultural_potential",
+      "grazing_suitable",
+      "timber_harvestable"
+    ],
+    "homesteadFitScore": 75,
+    "redFlags": [],
+    "aiSummary": "Turnkey Montana property with established home, horse facilities, and 21 acres adjacent to National Forest\u2014strong foundation for homesteading. High price ($82.5K/acre) and incomplete listing information raise questions about water infrastructure and true off-grid potential.",
+    "enrichedAt": "2026-04-21T02:48:13.668010+00:00",
+    "_enrichHash": "33fe138351e7d481"
   },
   {
     "id": "landwatch_426368378",
@@ -3359,7 +3481,20 @@
     "dateFound": "2026-04-20",
     "dealScore": 16,
     "description": "1004 Sheep Herder Ln., Big Timber, MT, 59011, Sweet Grass County \u2014 Looking for your next home or a great investment property? Check out this townhome, proving a comfortable living space without the worry of exterior upkeep and lawncare. Located in-between Bozeman and Billings in the quaint town of Big Timber, MT. Im",
-    "daysOnMarket": null
+    "daysOnMarket": null,
+    "aiTags": [
+      "hoa_present",
+      "near_services",
+      "utilities_on_site",
+      "build_ready"
+    ],
+    "homesteadFitScore": 5,
+    "redFlags": [
+      "hoa_restrictions"
+    ],
+    "aiSummary": "This 0.05-acre townhome in Big Timber has no viable homesteading potential. HOA restrictions, no buildable land, and full dependence on municipal utilities make it unsuitable for self-sufficient living.",
+    "enrichedAt": "2026-04-21T02:47:58.536980+00:00",
+    "_enrichHash": "f776a4a3e91bb878"
   },
   {
     "id": "landwatch_425766651",
@@ -3381,7 +3516,23 @@
     "dateFound": "2026-04-20",
     "dealScore": 16,
     "description": "N Frontage Rd, Alberton, MT, 59820, Mineral County \u2014 SWITCHBACK RANCH - MINERAL COUNTY, MT Switchback Ranch encompasses +/- 840 acres just outside Alberton, Montana. The property combines scale, timber, and direct access to public land in one of Western Montana's most scenic corridors. An unimproved ea",
-    "daysOnMarket": null
+    "daysOnMarket": null,
+    "aiTags": [
+      "remote_living_viable",
+      "timber_harvestable",
+      "hunting_viable",
+      "near_services",
+      "agricultural_potential"
+    ],
+    "homesteadFitScore": 57,
+    "redFlags": [
+      "requires_well_drilling",
+      "requires_septic_install",
+      "no_water_source"
+    ],
+    "aiSummary": "Large 840-acre Montana ranch with timber resources and public land access for hunting, but the unimproved status and lack of details on water or utilities create uncertainty. The $1,800/acre price and development needs will require substantial capital before homesteading can begin.",
+    "enrichedAt": "2026-04-21T02:48:31.325135+00:00",
+    "_enrichHash": "5df7cd05b9e3ad88"
   },
   {
     "id": "landwatch_419308843",
@@ -3403,7 +3554,20 @@
     "dateFound": "2026-04-20",
     "dealScore": 15,
     "description": "31420 Montana 324, Dillon, MT, 59725, Beaverhead County \u2014 The Elk Canyon Ranch stands out as the best offering currently on the market in Montana, providing unparalleled quality and unmatched opportunities for discerning elk and big game hunters. This turnkey, top-tier elk hunting ranch is located in a gene",
-    "daysOnMarket": null
+    "daysOnMarket": null,
+    "aiTags": [
+      "hunting_viable",
+      "remote_living_viable",
+      "isolated",
+      "agricultural_potential",
+      "grazing_suitable",
+      "no_hoa"
+    ],
+    "homesteadFitScore": 58,
+    "redFlags": [],
+    "aiSummary": "This Montana elk hunting ranch offers substantial acreage in a remote area suitable for hunting and wildlife, with no apparent HOA. However, the $3,496/acre price is premium for Montana, the property is marketed for trophy hunting rather than homesteading, and the truncated description omits critical details about water access, utilities, and building status that are essential for evaluating homesteading viability.",
+    "enrichedAt": "2026-04-21T02:48:20.049904+00:00",
+    "_enrichHash": "ec027a4a68235158"
   },
   {
     "id": "landwatch_420448284",
@@ -3425,7 +3589,22 @@
     "dateFound": "2026-04-20",
     "dealScore": 15,
     "description": "5621 Quietus Rd, Decker, MT, 59025, Big Horn County \u2014 Ranch Highlights Acreage 23,665 Total 13,800 deeded 4,688 BLM (MT Allotment 00085 695 AUMs) 1,305 State (#2545, #6844, #8060) 3,875 Private Lease Features Premier grazing land All contiguous Extremely limited public access Hunting, wildlife viewing,",
-    "daysOnMarket": null
+    "daysOnMarket": null,
+    "aiTags": [
+      "grazing_suitable",
+      "agricultural_potential",
+      "hunting_viable",
+      "remote_living_viable",
+      "isolated",
+      "timber_harvestable",
+      "water_rights_present",
+      "no_hoa"
+    ],
+    "homesteadFitScore": 48,
+    "redFlags": [],
+    "aiSummary": "This is a 23,665-acre working ranch with excellent grazing and hunting potential in an isolated Montana location. However, the $21M price, complex mixed ownership (deeded, BLM allotment, state leases), and absence of residential buildability details make it unsuitable for homesteading. Better suited as an operational livestock ranch than a homestead property.",
+    "enrichedAt": "2026-04-21T02:48:37.596607+00:00",
+    "_enrichHash": "911172731681ca1b"
   },
   {
     "id": "landwatch_422915205",
@@ -3447,7 +3626,19 @@
     "dateFound": "2026-04-20",
     "dealScore": 15,
     "description": "456 Blue Jay Lane, Hamilton, MT, 59840, Ravalli County \u2014 Imagine nearly 30 million acres of wilderness out your back door. Whether your passion is hiking, hunting or horseback riding, you could not ask for a better base camp than this beautiful log home.Nestled in the heart of Western Montana, this 2.96 ac",
-    "daysOnMarket": null
+    "daysOnMarket": null,
+    "aiTags": [
+      "build_ready",
+      "near_services",
+      "hunting_viable",
+      "paved_access",
+      "utilities_on_site"
+    ],
+    "homesteadFitScore": 40,
+    "redFlags": [],
+    "aiSummary": "This premium log home property near Hamilton offers excellent hunting and outdoor access, but the 2.96-acre size, $1.2M price tag ($411k/acre), and lack of productive land make it poorly suited for homesteading. Near-town location and existing home structure contradict self-sufficiency goals.",
+    "enrichedAt": "2026-04-21T02:48:49.963057+00:00",
+    "_enrichHash": "035b152f8b2a79da"
   },
   {
     "id": "landwatch_417793952",
@@ -3469,7 +3660,23 @@
     "dateFound": "2026-04-20",
     "dealScore": 15,
     "description": "Kila, MT, 59920, Flathead County \u2014 Nestled on the southern flank of the highest peak in the region lies the 2,134+/- acre Haskill Mountain Retreat, in Flathead County, Montana. Recreational opportunities abound with healthy populations of deer, elk, and bear situated in Hunting Distri",
-    "daysOnMarket": null
+    "daysOnMarket": null,
+    "aiTags": [
+      "remote_access_concerns",
+      "off_grid_viable",
+      "difficult_terrain",
+      "isolated",
+      "timber_harvestable",
+      "hunting_viable",
+      "infrastructure_needed"
+    ],
+    "homesteadFitScore": 48,
+    "redFlags": [
+      "extreme_remote"
+    ],
+    "aiSummary": "This 2,134-acre mountain property offers hunting and timber potential, but extreme isolation and difficult terrain make self-sufficient homesteading challenging. Infrastructure costs and development feasibility are not addressed in the incomplete listing description.",
+    "enrichedAt": "2026-04-21T02:48:44.483024+00:00",
+    "_enrichHash": "fab469bde10d3c33"
   },
   {
     "id": "landwatch_425854924",
@@ -3491,7 +3698,26 @@
     "dateFound": "2026-04-20",
     "dealScore": 15,
     "description": "TBD, Winnett, MT, 59087, Petroleum County \u2014 The Breaks Hunting Camp West Unit is well known as one of the premier elk habitats in Montana and the western U.S. The Breaks Hunting Camp offers the sportsman an incredible opportunity of a lifetime to fulfill dreams and make memories. Land A sports",
-    "daysOnMarket": null
+    "daysOnMarket": null,
+    "aiTags": [
+      "remote_access_concerns",
+      "off_grid_viable",
+      "infrastructure_needed",
+      "no_water_mentioned",
+      "buildable_with_work",
+      "difficult_terrain",
+      "hunting_viable",
+      "no_hoa"
+    ],
+    "homesteadFitScore": 38,
+    "redFlags": [
+      "no_water_source",
+      "extreme_remote",
+      "requires_well_drilling"
+    ],
+    "aiSummary": "This 640-acre hunting property in Montana's remote Breaks region offers exceptional acreage and off-grid potential, but lacks critical information on water sources, road access, and existing infrastructure. The extremely remote location and rugged terrain would require substantial development investment before being suitable for homesteading, making it better suited for a remote hunting retreat than a primary residence.",
+    "enrichedAt": "2026-04-21T02:49:24.461466+00:00",
+    "_enrichHash": "157c59e57315b9ae"
   },
   {
     "id": "landwatch_423267544",
@@ -3513,7 +3739,22 @@
     "dateFound": "2026-04-20",
     "dealScore": 15,
     "description": "TBD High Ore Road, Boulder, MT, 59632, Jefferson County \u2014 This is an incredible opportunity to own two beautiful mountain lots just north of the I-15 \"High Ore\" interchange near Boulder for quick commuting. The property offers incredible hunting opportunities, with deer, elk, and bears frequently seen in th",
-    "daysOnMarket": null
+    "daysOnMarket": null,
+    "aiTags": [
+      "hunting_viable",
+      "near_services",
+      "difficult_terrain",
+      "no_water_mentioned",
+      "buildable_with_work"
+    ],
+    "homesteadFitScore": 45,
+    "redFlags": [
+      "no_water_source",
+      "requires_well_drilling"
+    ],
+    "aiSummary": "Mountain property with good hunting potential and reasonable access to services near Boulder. Water source and utility information missing, which is concerning for self-sufficient living. Terrain challenges and incomplete listing description limit full assessment.",
+    "enrichedAt": "2026-04-21T02:49:04.407850+00:00",
+    "_enrichHash": "85d1f5630b13eab0"
   },
   {
     "id": "landwatch_423076003",
@@ -3533,7 +3774,21 @@
     "dateFound": "2026-04-20",
     "dealScore": 14,
     "description": "S Whistleberry Road, Bozeman, MT, 59718, Gallatin County \u2014 Welcome to one of the most stunning parcels in the exclusive, gated 7 Ranges community - a peaceful enclave perfectly positioned between Bozeman and Big Sky. This exceptional lot offers 360-degree views of the Gallatin Valley and the surrounding moun",
-    "daysOnMarket": null
+    "daysOnMarket": null,
+    "aiTags": [
+      "hoa_present",
+      "near_services",
+      "difficult_terrain",
+      "no_water_mentioned",
+      "deed_restrictions"
+    ],
+    "homesteadFitScore": 38,
+    "redFlags": [
+      "hoa_restrictions"
+    ],
+    "aiSummary": "This premium mountain lot in an exclusive gated community likely carries HOA restrictions that directly conflict with homesteading independence goals. The incomplete listing and absence of water/utility information raise concerns, and the $37k/acre price point positions this as upscale residential rather than a working homestead. Mountainous terrain and proximity to Bozeman development make it better suited for scenic living than agricultural self-sufficiency.",
+    "enrichedAt": "2026-04-21T02:49:06.016823+00:00",
+    "_enrichHash": "85cbab89feaacdf1"
   },
   {
     "id": "landwatch_425745128",
@@ -3553,7 +3808,21 @@
     "dateFound": "2026-04-20",
     "dealScore": 14,
     "description": "West Teesdale Lane, Bridger, MT, 59014, Carbon County \u2014 This is a very productive pivot with a strong, two-year-old stand of alfalfa, ample water, and outstanding access. The property offers numerous potential homesites and improvement locations that can be developed while preserving the full productivity",
-    "daysOnMarket": null
+    "daysOnMarket": null,
+    "aiTags": [
+      "paved_access",
+      "water_rights_present",
+      "year_round_water",
+      "buildable_with_work",
+      "soil_suitable_for_ag",
+      "agricultural_potential",
+      "remote_living_viable"
+    ],
+    "homesteadFitScore": 73,
+    "redFlags": [],
+    "aiSummary": "Strong water availability via established pivot irrigation and excellent road access make this viable for homesteading with agricultural income. Large acreage (138 acres) with multiple developable homesites offers good flexibility and self-sufficiency potential. However, the high price ($10k+/acre) reflects agricultural productivity rather than typical homestead land value.",
+    "enrichedAt": "2026-04-21T02:49:12.317219+00:00",
+    "_enrichHash": "aae3ab12bc92d60a"
   },
   {
     "id": "landwatch_425605534",
@@ -3573,7 +3842,23 @@
     "dateFound": "2026-04-20",
     "dealScore": 14,
     "description": "102310 U.S. 87, Lewistown, MT, 59457, Fergus County \u2014 Set on 80 deeded acres just minutes from Lewistown, this picturesque rural property offers the space, privacy, and freedom Montana living is known for. The land is improved with a modest 3-bedroom, 1-bath ranch-style home. The acreage provides ample",
-    "daysOnMarket": null
+    "daysOnMarket": null,
+    "aiTags": [
+      "paved_access",
+      "near_services",
+      "build_ready",
+      "agricultural_potential",
+      "remote_living_viable",
+      "no_water_mentioned",
+      "grazing_suitable"
+    ],
+    "homesteadFitScore": 58,
+    "redFlags": [
+      "no_water_source"
+    ],
+    "aiSummary": "An 80-acre Montana ranch with an existing home and direct highway access near Lewistown, offering solid privacy and agricultural potential. However, the complete absence of any water source information is a critical red flag for homesteading\u2014water is non-negotiable for self-sufficient living. At $10k/acre and marketed as rural ranch property, this is better suited to traditional cattle ranching than off-grid homesteading.",
+    "enrichedAt": "2026-04-21T02:49:20.642000+00:00",
+    "_enrichHash": "6b51a85f47af3361"
   },
   {
     "id": "landwatch_423977674",
@@ -3593,7 +3878,20 @@
     "dateFound": "2026-04-20",
     "dealScore": 14,
     "description": "8663 E Panorama, Bozeman, MT, 59715, Gallatin County \u2014 Experience wide - open Montana living on this exceptional 11+ acre parcel located along the west side of the Bridger Mountain Range. This property offers sweeping panoramic views of the Gallatin Valley, surrounding mountain ranges, and unforgettable",
-    "daysOnMarket": null
+    "daysOnMarket": null,
+    "aiTags": [
+      "near_services",
+      "difficult_terrain",
+      "no_water_mentioned",
+      "buildable_with_work"
+    ],
+    "homesteadFitScore": 54,
+    "redFlags": [
+      "no_water_source"
+    ],
+    "aiSummary": "This 11.7-acre mountain valley property near Bozeman offers good acreage and proximity to services, but water availability is completely absent from the listing. The high $76k/acre price in a developed area suggests potential zoning or HOA restrictions that aren't disclosed and require verification.",
+    "enrichedAt": "2026-04-21T02:49:31.052555+00:00",
+    "_enrichHash": "b0cd88484adab4fd"
   },
   {
     "id": "landwatch_425961163",
@@ -3613,7 +3911,19 @@
     "dateFound": "2026-04-20",
     "dealScore": 14,
     "description": "Hailstone Basin Rd, Rapelje, MT, 59067, Stillwater County \u2014 Hailstone Basin Land &amp; Livestock an Efficient Grazing &amp; Agricultural Property Stillwater County Rapelje, MT DESCRIPTION: Hailstone Basin Land &amp; Livestock is an Efficient and Flexible Agricultural Property located near Rapelje, Montana. This Ranch off",
-    "daysOnMarket": null
+    "daysOnMarket": null,
+    "aiTags": [
+      "agricultural_potential",
+      "grazing_suitable",
+      "soil_suitable_for_ag",
+      "remote_living_viable",
+      "isolated"
+    ],
+    "homesteadFitScore": 70,
+    "redFlags": [],
+    "aiSummary": "Large Montana grazing property (1,637 acres) with strong agricultural potential and solid pricing ($886/acre). The incomplete listing description prevents assessment of critical infrastructure\u2014water sources, utilities, buildings, and road access\u2014essential for evaluating true homesteading viability.",
+    "enrichedAt": "2026-04-21T02:49:30.572745+00:00",
+    "_enrichHash": "071721aee227562b"
   },
   {
     "id": "landwatch_423687217",
@@ -3633,7 +3943,24 @@
     "dateFound": "2026-04-20",
     "dealScore": 14,
     "description": "Jessie Road, Ryegate, MT, 59074, Golden Valley County \u2014 Jessie Road Ranch \\| 1,546 Acres \\| Golden Valley County, Montana Welcome to Jessie Road Ranch a rare opportunity to own approximately 1,546 acres of productive rangeland in the heart of Golden Valley County, Montana. This diverse property offers a ble",
-    "daysOnMarket": null
+    "daysOnMarket": null,
+    "aiTags": [
+      "paved_access",
+      "agricultural_potential",
+      "grazing_suitable",
+      "remote_living_viable",
+      "isolated",
+      "buildable_with_work",
+      "no_hoa",
+      "difficult_terrain"
+    ],
+    "homesteadFitScore": 50,
+    "redFlags": [
+      "no_water_source"
+    ],
+    "aiSummary": "This 1,546-acre Montana rangeland offers strong agricultural and grazing potential with excellent isolation for self-sufficient living, but the $1.95M price tag limits remaining capital for infrastructure development. Water availability is not mentioned, which is a critical gap for raw land of this size. The truncated listing description prevents assessment of existing improvements, utilities, or road access details.",
+    "enrichedAt": "2026-04-21T02:49:45.837268+00:00",
+    "_enrichHash": "bc739d1074979231"
   },
   {
     "id": "landwatch_425778007",
@@ -3653,7 +3980,20 @@
     "dateFound": "2026-04-20",
     "dealScore": 14,
     "description": "3950 Floweree Drive, Helena, MT, 59602, Lewis and Clark County \u2014 Located only minutes from downtown Helena lies 39 +/- acres for you to enjoy country living in a surprisingly close proximity to town amenities. This beautiful property, set in a very comfortable rural setting, features a 2,070 sqft home with beautif",
-    "daysOnMarket": null
+    "daysOnMarket": null,
+    "aiTags": [
+      "paved_access",
+      "utilities_on_site",
+      "build_ready",
+      "no_hoa",
+      "near_services",
+      "no_water_mentioned"
+    ],
+    "homesteadFitScore": 58,
+    "redFlags": [],
+    "aiSummary": "This 39-acre property near Helena offers an existing 2,070 sqft home and convenient access to town services. However, the lack of any mention of water resources is concerning for homesteading, and the $60k/acre price suggests premium pricing rather than a homestead-focused value proposition. Its proximity to town reduces true off-grid potential despite adequate acreage.",
+    "enrichedAt": "2026-04-21T02:49:54.144389+00:00",
+    "_enrichHash": "dd636bff128c74a4"
   },
   {
     "id": "landwatch_423118078",
@@ -3673,7 +4013,22 @@
     "dateFound": "2026-04-20",
     "dealScore": 14,
     "description": "TBD County Rd 147A, Custer, MT, 59024, Big Horn County \u2014 The Custer Legacy Ranch provides a rare combination to today\u2019s market. This self-sustaining 23,500+/- acre deeded ranch is a single contiguous block, along with 1,280 acres of state lands lease totaling 24,780 acres. The ranch has extensive water res",
-    "daysOnMarket": null
+    "daysOnMarket": null,
+    "aiTags": [
+      "utilities_on_site",
+      "water_rights_present",
+      "year_round_water",
+      "build_ready",
+      "agricultural_potential",
+      "grazing_suitable",
+      "no_hoa",
+      "isolated"
+    ],
+    "homesteadFitScore": 76,
+    "redFlags": [],
+    "aiSummary": "Established 23,500-acre working ranch with extensive water resources and existing agricultural infrastructure in rural Montana. Excellent self-sufficiency fundamentals for isolation, water access, and grazing potential, but the commercial-scale size and $57M price tag place it far beyond typical homestead economics.",
+    "enrichedAt": "2026-04-21T02:49:49.125202+00:00",
+    "_enrichHash": "0163372b01f83198"
   },
   {
     "id": "landwatch_422181765",
@@ -3693,7 +4048,19 @@
     "dateFound": "2026-04-20",
     "dealScore": 14,
     "description": "NHN Straub Access Rd, Plevna, MT, 59344, Fallon County \u2014 Discover PC Ranch. Nestled in the heart of Eastern Montana\u2019s stunning landscape, this lush and beautiful cattle ranch is a testament to nature\u2019s grandeur and the harmonious coexistence between the land and its inhabitants. Spanning acres of verdant t",
-    "daysOnMarket": null
+    "daysOnMarket": null,
+    "aiTags": [
+      "paved_access",
+      "year_round_water",
+      "agricultural_potential",
+      "grazing_suitable",
+      "no_hoa"
+    ],
+    "homesteadFitScore": 71,
+    "redFlags": [],
+    "aiSummary": "Operating cattle ranch on 5,736 acres with demonstrated water availability and grazing infrastructure in Eastern Montana. Substantial acreage and agricultural productivity support self-sufficient living, though the $3.8M purchase price and incomplete listing information limit confidence in building readiness and utility status.",
+    "enrichedAt": "2026-04-21T02:49:47.735156+00:00",
+    "_enrichHash": "5503a4c8ce32cd02"
   },
   {
     "id": "landwatch_419789800",
@@ -3713,7 +4080,20 @@
     "dateFound": "2026-04-20",
     "dealScore": 14,
     "description": "Darby, MT, 59829, Ravalli County \u2014 Efficient and compact in a setting that rivals some of the best in the West, Hart Bench Ranch sets a new bar for what a hobby operation can be. Situated on an eponymous bench in the shadows of the Bitterroot Mountains' most scenic peaks lies a near-p",
-    "daysOnMarket": null
+    "daysOnMarket": null,
+    "aiTags": [
+      "difficult_terrain",
+      "isolated",
+      "remote_living_viable",
+      "no_water_mentioned",
+      "infrastructure_needed",
+      "buildable_with_work"
+    ],
+    "homesteadFitScore": 40,
+    "redFlags": [],
+    "aiSummary": "Hart Bench Ranch is a mountain property in scenic Ravalli County priced at $48,065/acre, but the listing lacks critical information on water access, utilities, and buildability. The difficult terrain and isolated location limit agricultural potential and increase construction costs. Without details on these factors, assessing genuine homestead viability is impossible.",
+    "enrichedAt": "2026-04-21T02:50:27.021195+00:00",
+    "_enrichHash": "85535c6f1b2bb22b"
   },
   {
     "id": "landwatch_425608422",
@@ -3733,7 +4113,20 @@
     "dateFound": "2026-04-20",
     "dealScore": 14,
     "description": "1481 County Line Road, Vaughn, MT, 59487, Teton County \u2014 For those ready to leave the pace of the city behind and step into a life shaped by land, water, and wide-open skies, this irrigated Vaughn ranchette offers a compelling opportunity. Set on 80 deeded acres in the heart of Montana\u2019s agricultural count",
-    "daysOnMarket": null
+    "daysOnMarket": null,
+    "aiTags": [
+      "paved_access",
+      "water_rights_present",
+      "year_round_water",
+      "soil_suitable_for_ag",
+      "agricultural_potential",
+      "build_ready"
+    ],
+    "homesteadFitScore": 70,
+    "redFlags": [],
+    "aiSummary": "This 80-acre irrigated property in Montana's agricultural heartland offers strong water rights and productive soil suitable for ranching or farming. The 'ranchette' designation indicates existing structures and some developed infrastructure. Critical information is missing\u2014utilities, zoning details, current buildings, and distance to services\u2014making a full assessment difficult.",
+    "enrichedAt": "2026-04-21T02:50:12.463295+00:00",
+    "_enrichHash": "4983020eb3513ede"
   },
   {
     "id": "landwatch_423185667",
@@ -3753,7 +4146,22 @@
     "dateFound": "2026-04-20",
     "dealScore": 14,
     "description": "Dillon, MT, 59725, Beaverhead County \u2014 The Axes Canyon Smith Unit's 3,760+/- deeded acres and 438+/- state lease acres lie along the foothills of the Ruby Mountains, just five miles from Dillon, Montana. Bordering public lands and offering a diverse landscape that transitions from foothil",
-    "daysOnMarket": null
+    "daysOnMarket": null,
+    "aiTags": [
+      "paved_access",
+      "off_grid_viable",
+      "buildable_with_work",
+      "difficult_terrain",
+      "remote_living_viable",
+      "near_services",
+      "agricultural_potential",
+      "grazing_suitable"
+    ],
+    "homesteadFitScore": 70,
+    "redFlags": [],
+    "aiSummary": "Large Montana foothills acreage (3,760 acres) with strong grazing and ranch potential, located just 5 miles from town services. Water sources and specific buildable areas are not clearly detailed, but the Ruby Mountains foothills location suggests good natural resources and agricultural viability.",
+    "enrichedAt": "2026-04-21T02:50:11.207683+00:00",
+    "_enrichHash": "1c9ff8c52f520cae"
   },
   {
     "id": "landwatch_422189477",
@@ -3773,7 +4181,19 @@
     "dateFound": "2026-04-20",
     "dealScore": 14,
     "description": "NHN Straub Access Rd, Plevna, MT, 59344, Fallon County \u2014 Discover PC Ranch. Nestled in the heart of Eastern Montana's stunning landscape, this lush and beautiful cattle ranch is a testament to nature's grandeur and the harmonious coexistence between the land and its inhabitants. Spanning acres of verdant t",
-    "daysOnMarket": null
+    "daysOnMarket": null,
+    "aiTags": [
+      "paved_access",
+      "agricultural_potential",
+      "grazing_suitable",
+      "remote_living_viable",
+      "soil_suitable_for_ag"
+    ],
+    "homesteadFitScore": 72,
+    "redFlags": [],
+    "aiSummary": "Established 5,700-acre cattle ranch with proven agricultural and grazing viability and existing infrastructure in Eastern Montana. At $3.8M it's a significant capital investment for an individual homesteader, and water rights status and zoning should be verified before purchase. Suitable for serious agricultural operations with adequate capital; completion of the property description is needed.",
+    "enrichedAt": "2026-04-21T02:50:19.824386+00:00",
+    "_enrichHash": "e533b7b19aa0a680"
   },
   {
     "id": "landwatch_426377844",
@@ -3793,7 +4213,20 @@
     "dateFound": "2026-04-20",
     "dealScore": 14,
     "description": "207 Third Street Northeast, Harlowton, MT, 59036, Wheatland County \u2014 Midtown Market is a rare chance to own an established, community-centered grocery and retail business in the heart of Harlowton, Montana. Long regarded as an essential part of everyday life in Wheatland County, the store serves local families, ranche",
-    "daysOnMarket": null
+    "daysOnMarket": null,
+    "aiTags": [
+      "paved_access",
+      "near_services",
+      "build_ready",
+      "no_hoa"
+    ],
+    "homesteadFitScore": 8,
+    "redFlags": [
+      "zoning_prohibits_residential"
+    ],
+    "aiSummary": "This is an established commercial grocery/retail business in downtown Harlowton, Montana, not homestead land. The property is zoned and operated commercially, offering no agricultural land, water rights, or remote self-sufficiency potential.",
+    "enrichedAt": "2026-04-21T02:50:32.008164+00:00",
+    "_enrichHash": "b16b0f3b844f0f61"
   },
   {
     "id": "landwatch_424060926",
@@ -3813,7 +4246,23 @@
     "dateFound": "2026-04-20",
     "dealScore": 14,
     "description": "164 Main Street, Lothair, MT, 59461, Liberty County \u2014 \\*Motivated seller offering up to $10k in closing costs. Bring all offers!\\* Nestled on 7.345 acres in the quiet community of Lothair, Montana, this unique property offers space, sustainability, and endless potential. Chemical-free for the past eight y",
-    "daysOnMarket": null
+    "daysOnMarket": null,
+    "aiTags": [
+      "no_water_mentioned",
+      "remote_living_viable",
+      "isolated",
+      "no_hoa",
+      "agricultural_potential"
+    ],
+    "homesteadFitScore": 42,
+    "redFlags": [
+      "no_water_source",
+      "requires_well_drilling",
+      "requires_septic_install"
+    ],
+    "aiSummary": "7.35 acres in rural Montana with chemical-free land history suggests homesteading potential, but the listing is incomplete and omits critical details on water, utilities, and building status. Without information on water source, utilities, and road access type, this property carries significant risk for self-sufficient living.",
+    "enrichedAt": "2026-04-21T02:51:02.770318+00:00",
+    "_enrichHash": "d35f68289ef78350"
   },
   {
     "id": "landwatch_426110803",
@@ -3833,7 +4282,22 @@
     "dateFound": "2026-04-20",
     "dealScore": 14,
     "description": "NHN Rd, Broadview, MT, 59015, Yellowstone County \u2014 Located less than 20 miles from Billings, this 8,670\u00b1 acre ranch represents a rare opportunity to own a large, contiguous block of land in one of Montana\u2019s most desirable regions. Positioned in the corridor between Billings and Roundup, the property",
-    "daysOnMarket": null
+    "daysOnMarket": null,
+    "aiTags": [
+      "near_services",
+      "agricultural_potential",
+      "paved_access",
+      "no_water_mentioned",
+      "infrastructure_needed",
+      "buildable_with_work"
+    ],
+    "homesteadFitScore": 45,
+    "redFlags": [
+      "no_water_source"
+    ],
+    "aiSummary": "This is a large commercial ranch property positioned near Billings, better suited for agricultural operations than homesteading. Water sources and utilities are not mentioned, which is a critical omission for self-sufficient living. The 8,670-acre scale and $1,269/acre cost signal a commercial opportunity rather than a homestead property.",
+    "enrichedAt": "2026-04-21T02:50:44.861200+00:00",
+    "_enrichHash": "7d3d49cfedbb1a20"
   },
   {
     "id": "landwatch_422014700",
@@ -3853,7 +4317,22 @@
     "dateFound": "2026-04-20",
     "dealScore": 14,
     "description": "Wolf Point, MT, 59201, Roosevelt County \u2014 LoMac Farms is a large farm in northeastern Montana that is 15,964+/- deeded acres consisting of 12,376+/- acres of loamy cropland and 3,582+/- acres of rangeland. The farm is characterized by flat to slightly sloping farm fields with interspersed gr",
-    "daysOnMarket": null
+    "daysOnMarket": null,
+    "aiTags": [
+      "soil_suitable_for_ag",
+      "agricultural_potential",
+      "grazing_suitable",
+      "remote_living_viable",
+      "buildable_with_work",
+      "water_rights_present",
+      "no_hoa",
+      "off_grid_viable"
+    ],
+    "homesteadFitScore": 38,
+    "redFlags": [],
+    "aiSummary": "Large commercial farm with excellent agricultural land (loamy cropland + rangeland) and remote Montana location. At $22.7M for 15,964 acres, it's priced for agribusiness operations, not homesteaders\u2014far beyond typical homesteading budgets and scale.",
+    "enrichedAt": "2026-04-21T02:50:54.181768+00:00",
+    "_enrichHash": "0c187cbc6d4a0e28"
   },
   {
     "id": "landwatch_423356432",
@@ -3873,7 +4352,25 @@
     "dateFound": "2026-04-20",
     "dealScore": 14,
     "description": "Choteau, MT, 59422, Teton County \u2014 Breathtaking views of the Rocky Mountain Front and Glacier National Park provide a stunning backdrop to this exceptional 2,541-acre ranch located just four miles northwest of the charming farm town of Choteau in north central Montana. This well-maint",
-    "daysOnMarket": null
+    "daysOnMarket": null,
+    "aiTags": [
+      "paved_access",
+      "remote_living_viable",
+      "agricultural_potential",
+      "grazing_suitable",
+      "hunting_viable",
+      "near_services",
+      "no_water_mentioned",
+      "difficult_terrain"
+    ],
+    "homesteadFitScore": 60,
+    "redFlags": [
+      "requires_well_drilling",
+      "requires_septic_install"
+    ],
+    "aiSummary": "This 2,541-acre mountain ranch offers exceptional acreage and agricultural potential with reasonable access to services via nearby Choteau. Critical homesteading details are missing from the listing (water sources, utilities, building conditions), but mountain terrain and the price point suggest this is a high-end property rather than a typical homestead opportunity.",
+    "enrichedAt": "2026-04-21T02:50:55.242532+00:00",
+    "_enrichHash": "47ecb75a52963260"
   },
   {
     "id": "landwatch_423181087",
@@ -3893,7 +4390,22 @@
     "dateFound": "2026-04-20",
     "dealScore": 14,
     "description": "Square Butte, MT, 59446, Chouteau County \u2014 10,240 Total Acres, of which 9,040 are deeded. The ranch has 1,152 productive agricultural acres, multiple developed springs and reservoirs. It is one of the most iconic, one-of-a-kind properties offered in Montana today. An imposing landmass named S",
-    "daysOnMarket": null
+    "daysOnMarket": null,
+    "aiTags": [
+      "water_rights_present",
+      "year_round_water",
+      "soil_suitable_for_ag",
+      "remote_living_viable",
+      "isolated",
+      "agricultural_potential",
+      "grazing_suitable",
+      "off_grid_viable"
+    ],
+    "homesteadFitScore": 78,
+    "redFlags": [],
+    "aiSummary": "This expansive Montana ranch offers exceptional homesteading fundamentals: year-round water from developed springs and reservoirs, 1,152 productive agricultural acres, and complete privacy on 9,040 deeded acres. The property's remote isolation and substantial size present land management complexity beyond typical homesteads, but natural water abundance and agricultural potential make it genuinely viable for self-sufficient living.",
+    "enrichedAt": "2026-04-21T02:51:06.148343+00:00",
+    "_enrichHash": "0e34b0bada1b6f9b"
   },
   {
     "id": "landwatch_422627050",
@@ -3913,7 +4425,18 @@
     "dateFound": "2026-04-20",
     "dealScore": 14,
     "description": "Pintler Vista Ranch, Philipsburg, MT, 59858, Granite County \u2014 Perched on a ridgetop with breathtaking views of the Pintler Range, Discovery Ski Area, and near 360- degree views of the surrounding valleys, this 400+/- acre retreat offers an exceptional opportunity to own a private sanctuary in the heart of Monta",
-    "daysOnMarket": null
+    "daysOnMarket": null,
+    "aiTags": [
+      "difficult_terrain",
+      "remote_living_viable",
+      "isolated",
+      "no_water_mentioned"
+    ],
+    "homesteadFitScore": 35,
+    "redFlags": [],
+    "aiSummary": "A large Montana property with scenic ridgetop views but limited homesteading practicality given the high price per acre ($12,375), difficult terrain, and complete absence of water or utility information. The truncated listing and premium pricing suggest this is marketed as a scenic investment property rather than a productive homestead.",
+    "enrichedAt": "2026-04-21T02:51:30.202236+00:00",
+    "_enrichHash": "f4087b5fdfa7b415"
   },
   {
     "id": "landwatch_426101217",
@@ -3933,7 +4456,24 @@
     "dateFound": "2026-04-20",
     "dealScore": 14,
     "description": "127 State Highway 221, Choteau, MT, 59422, Teton County \u2014 Imagine waking up to unobstructed views of the Rocky Mountain Front stretching endlessly across the horizon. This is the everyday reality that awaits on this exceptional 31.75\u00b1 acre property on the outskirts of Choteau, Montana. Perched along paved H",
-    "daysOnMarket": null
+    "daysOnMarket": null,
+    "aiTags": [
+      "paved_access",
+      "remote_living_viable",
+      "difficult_terrain",
+      "isolated",
+      "no_water_mentioned",
+      "hunting_viable"
+    ],
+    "homesteadFitScore": 58,
+    "redFlags": [
+      "no_water_source",
+      "requires_well_drilling",
+      "requires_septic_install"
+    ],
+    "aiSummary": "This 31.75-acre property on the Rocky Mountain Front offers excellent size and paved highway access for a remote Montana location. However, the incomplete listing lacks critical details about water sources, existing utilities, and buildability\u2014essential factors for homesteading viability. The terrain and isolation are suitable for self-sufficient living but require thorough due diligence on infrastructure before proceeding.",
+    "enrichedAt": "2026-04-21T02:51:17.331784+00:00",
+    "_enrichHash": "31fa5a93aa4ff694"
   },
   {
     "id": "landwatch_423749455",
@@ -3953,7 +4493,19 @@
     "dateFound": "2026-04-20",
     "dealScore": 14,
     "description": "12201 Everson Road, Denton, MT, 59430, Fergus County \u2014 Fergus County \\| North of Denton, MT This Central Montana property presents a unique opportunity to acquire a productive agricultural operation with recreational appeal in one of the states most desirable farming regions. Spanning over 3,356 total acr",
-    "daysOnMarket": null
+    "daysOnMarket": null,
+    "aiTags": [
+      "agricultural_potential",
+      "soil_suitable_for_ag",
+      "grazing_suitable",
+      "timber_harvestable",
+      "no_hoa"
+    ],
+    "homesteadFitScore": 68,
+    "redFlags": [],
+    "aiSummary": "Large productive agricultural property (3,356 acres) in Montana's premier farming region with strong grazing and timber potential. Homestead suitability depends on unspecified details: residential buildability, water sources and rights, road access quality, and zoning/deed restrictions.",
+    "enrichedAt": "2026-04-21T02:51:36.540079+00:00",
+    "_enrichHash": "842fd559d27b4d2d"
   },
   {
     "id": "landwatch_418627369",
@@ -3973,7 +4525,25 @@
     "dateFound": "2026-04-20",
     "dealScore": 14,
     "description": "Nye, MT, 59061, Stillwater County \u2014 The Beartooth Foothills Ranch is located three miles east of the small town of Nye, Montana on the north slopes of the Beartooth Mountain Range. Red Lodge is 45 miles to the southeast via Montana Highways 419 and 78 through Roscoe, one of Montana's p",
-    "daysOnMarket": null
+    "daysOnMarket": null,
+    "aiTags": [
+      "paved_access",
+      "difficult_terrain",
+      "infrastructure_needed",
+      "buildable_with_work",
+      "remote_living_viable",
+      "hunting_viable",
+      "timber_harvestable",
+      "no_hoa"
+    ],
+    "homesteadFitScore": 58,
+    "redFlags": [
+      "requires_well_drilling",
+      "requires_septic_install"
+    ],
+    "aiSummary": "This 686-acre mountain ranch offers strong hunting and timber potential with paved highway access, but steep Beartooth slopes severely limit buildable land and agricultural viability. At $5,685/acre, the property is expensive for rural Montana, and the absence of existing utilities means substantial infrastructure investment for well and septic systems.",
+    "enrichedAt": "2026-04-21T02:51:33.858344+00:00",
+    "_enrichHash": "83af24e632fb72b0"
   },
   {
     "id": "landwatch_426330507",
@@ -3993,7 +4563,21 @@
     "dateFound": "2026-04-20",
     "dealScore": 14,
     "description": "West Boulder Fishing Haven, Mcleod, MT, 59052, Park County \u2014 West Boulder Fishing Haven is a 20+/- acre property featuring a beautifully remodeled 5,000+/- square foot custom home, inspired by the iconic Old Faithful Inn at Yellowstone National Park, and includes one of only twenty exclusive memberships to the",
-    "daysOnMarket": null
+    "daysOnMarket": null,
+    "aiTags": [
+      "build_ready",
+      "utilities_on_site",
+      "water_rights_present",
+      "year_round_water",
+      "near_services",
+      "remote_living_viable",
+      "no_hoa"
+    ],
+    "homesteadFitScore": 42,
+    "redFlags": [],
+    "aiSummary": "Scenic 20-acre Montana property with an established luxury 5,000+ sq ft custom home and year-round fishing water access, positioned as an exclusive community amenity rather than a practical homesteading investment. The $3.5M price point ($171k/acre) and exclusive membership structure make this fundamentally misaligned with self-sufficient, budget-conscious homesteading goals.",
+    "enrichedAt": "2026-04-21T02:51:34.815197+00:00",
+    "_enrichHash": "a6fd5e3f4d0531c0"
   },
   {
     "id": "landwatch_423675481",
@@ -4013,7 +4597,20 @@
     "dateFound": "2026-04-20",
     "dealScore": 14,
     "description": "Roundup, MT, 59072, Musselshell County \u2014 For more information or to schedule a showing, Contact Wes Oja, Broker\\|Partner, Hall and Hall, LLP at 406-861-2501. The Lowery Ranch is a historically significant and well-managed property located just three miles west of Roundup. Encompassing 1,793+",
-    "daysOnMarket": null
+    "daysOnMarket": null,
+    "aiTags": [
+      "near_services",
+      "no_hoa",
+      "agricultural_potential",
+      "grazing_suitable",
+      "remote_living_viable",
+      "no_water_mentioned"
+    ],
+    "homesteadFitScore": 52,
+    "redFlags": [],
+    "aiSummary": "Large Montana ranch with convenient proximity to Roundup, offering potential for grazing and agricultural use. However, the listing lacks critical details about water sources, utilities, and buildability essential for homestead viability. The incomplete description and $2.8M price point require more information before serious consideration.",
+    "enrichedAt": "2026-04-21T02:51:51.064971+00:00",
+    "_enrichHash": "4bd4df4adeb020a0"
   },
   {
     "id": "landwatch_422215145",
@@ -4033,6 +4630,21 @@
     "dateFound": "2026-04-20",
     "dealScore": 14,
     "description": "Manhattan, MT, 59741, Gallatin County \u2014 Located in Gallatin County, Montana this 1,138-acre contiguous foothills property offers diverse topography just 7 miles to Manhattan and only 30 minutes from Bozeman. The property features basic improvements including roads and fences, and its eleva",
-    "daysOnMarket": null
+    "daysOnMarket": null,
+    "aiTags": [
+      "paved_access",
+      "near_services",
+      "agricultural_potential",
+      "grazing_suitable",
+      "hunting_viable",
+      "no_hoa",
+      "no_water_mentioned",
+      "buildable_with_work"
+    ],
+    "homesteadFitScore": 70,
+    "redFlags": [],
+    "aiSummary": "This 1,138-acre foothills property offers strong bones for homesteading with existing roads/fencing, excellent agricultural and grazing potential, and good proximity to services (7 miles to Manhattan, 30 min to Bozeman). Critical gap: the listing provides no information about water sources, wells, or water rights\u2014an essential unknown for self-sufficient living.",
+    "enrichedAt": "2026-04-21T02:51:57.295956+00:00",
+    "_enrichHash": "eed0cea9ff2ff4d3"
   }
 ]
