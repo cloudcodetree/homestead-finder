@@ -271,6 +271,29 @@ export interface CurationResult {
   picks: CuratedPick[];
 }
 
+/**
+ * Produced by scraper/deals.py. Same pick shape as CurationResult but
+ * with additional funnel metadata (how many listings survived the
+ * homestead-specific hard filters) and the filter summary itself so the
+ * UI can explain the rationale.
+ */
+export interface HomesteadDealsResult {
+  generatedAt: string;
+  model: string;
+  totalListings: number;
+  passedFiltersCount: number;
+  candidateCount: number;
+  pickCount: number;
+  filterSummary: {
+    minAcres: number;
+    maxPriceUsd: number;
+    criticalRedFlagsExcluded: string[];
+    sfhaZonesExcluded: string[];
+    maxSoilCapabilityClass: number;
+  };
+  picks: CuratedPick[];
+}
+
 export const US_STATES: Record<string, string> = {
   AL: 'Alabama',
   AK: 'Alaska',

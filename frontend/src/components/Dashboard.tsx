@@ -6,18 +6,20 @@ import { FilterPanel } from './FilterPanel';
 import { PropertyDetail } from './PropertyDetail';
 import { NotificationSettings } from './NotificationSettings';
 import { TopPicks } from './TopPicks';
+import { HomesteadDeals } from './HomesteadDeals';
 import { AskClaude } from './AskClaude';
 import { ErrorBoundary } from './ErrorBoundary';
 import { useProperties } from '../hooks/useProperties';
 import { useFilters } from '../hooks/useFilters';
 import { useCurated } from '../hooks/useCurated';
+import { useHomesteadDeals } from '../hooks/useHomesteadDeals';
 import { QueryResponse } from '../hooks/useQueryServer';
 import { getDealScoreColor } from '../utils/scoring';
 import { formatPrice, formatAcreage } from '../utils/formatters';
 
 const MapView = lazy(() => import('./MapView').then(m => ({ default: m.MapView })));
 
-type ViewMode = 'list' | 'map' | 'picks';
+type ViewMode = 'list' | 'map' | 'picks' | 'deals';
 
 export const Dashboard = () => {
   const { filters, updateFilter, toggleState, toggleFeature, toggleAITag, resetFilters, hasActiveFilters } = useFilters();
@@ -30,10 +32,12 @@ export const Dashboard = () => {
     isSample: listingsAreSample,
   } = useProperties(filters);
   const { curation, isSample: curationIsSample } = useCurated();
+  const { deals, isSample: dealsIsSample } = useHomesteadDeals();
   // When real listings are loaded but the curation is still from the
   // bundled sample, the sample picks reference IDs that don't exist —
   // suppress the Picks view in that case and show the "run curate" nudge.
   const curationMatchesListings = curation && !(curationIsSample && !listingsAreSample);
+  const dealsMatchListings = deals && !(dealsIsSample && !listingsAreSample);
   const [viewMode, setViewMode] = useState<ViewMode>('list');
   const [showNotifications, setShowNotifications] = useState(false);
   const [showFilters, setShowFilters] = useState(false); // mobile drawer
@@ -127,6 +131,20 @@ export const Dashboard = () => {
               {curationMatchesListings && curation && curation.picks.length > 0 && (
                 <span className="text-[10px] px-1 bg-purple-100 text-purple-700 rounded font-medium">
                   {curation.picks.length}
+                </span>
+              )}
+            </button>
+            <button
+              onClick={() => setViewMode('deals')}
+              className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors flex items-center gap-1 ${
+                viewMode === 'deals' ? 'bg-white shadow text-gray-900' : 'text-gray-500 hover:text-gray-700'
+              }`}
+              title="Homestead-specific curated deals (filtered for buildable, ≥5 acres, no floodplain, good soil)"
+            >
+              <span>Deals</span>
+              {dealsMatchListings && deals && deals.picks.length > 0 && (
+                <span className="text-[10px] px-1 bg-emerald-100 text-emerald-700 rounded font-medium">
+                  {deals.picks.length}
                 </span>
               )}
             </button>
@@ -378,6 +396,34 @@ export const Dashboard = () => {
                 onSelectProperty={openProperty}
               />
             </Suspense>
+          )}
+
+          {!loading && !error && viewMode === 'deals' && (
+            dealsMatchListings && deals ? (
+              <ErrorBoundary label="Homestead Deals">
+                <HomesteadDeals
+                  deals={deals}
+                  properties={allProperties}
+                  onSelectProperty={openProperty}
+                />
+              </ErrorBoundary>
+            ) : (
+              <div className="flex items-center justify-center h-full p-6 text-center">
+                <div className="max-w-md">
+                  <p className="text-4xl mb-3">🌾</p>
+                  <p className="text-gray-600 font-medium">No homestead deals yet</p>
+                  <p className="text-sm text-gray-500 mt-1">
+                    Run <code className="px-1.5 py-0.5 bg-gray-100 rounded text-xs">python -m scraper.deals</code> locally to generate the curated homestead list, then commit <code className="px-1.5 py-0.5 bg-gray-100 rounded text-xs">data/homestead_deals.json</code>.
+                  </p>
+                  {dealsIsSample && !listingsAreSample && (
+                    <p className="text-xs text-gray-400 mt-3">
+                      (The bundled sample was hidden because it references
+                      listing IDs that don&apos;t match your real data.)
+                    </p>
+                  )}
+                </div>
+              </div>
+            )
           )}
 
           {!loading && !error && viewMode === 'picks' && (

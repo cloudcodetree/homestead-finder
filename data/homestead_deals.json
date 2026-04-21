@@ -1,0 +1,102 @@
+{
+  "generatedAt": "2026-04-21T22:20:08.428577+00:00",
+  "model": "sonnet",
+  "totalListings": 1505,
+  "passedFiltersCount": 327,
+  "candidateCount": 40,
+  "pickCount": 12,
+  "filterSummary": {
+    "minAcres": 5.0,
+    "maxPriceUsd": 500000.0,
+    "criticalRedFlagsExcluded": [
+      "environmental_hazard",
+      "no_road_access",
+      "no_water_source",
+      "title_issues_mentioned",
+      "zoning_prohibits_residential"
+    ],
+    "sfhaZonesExcluded": [
+      "A",
+      "AE",
+      "AH",
+      "AO",
+      "V",
+      "VE"
+    ],
+    "maxSoilCapabilityClass": 6
+  },
+  "picks": [
+    {
+      "id": "landwatch_426354894",
+      "headline": "160 acres Minnesota farmland at $700/acre",
+      "reason": "At $700/acre for 160 acres in Pennington County, this is the strongest price-per-acre value for genuinely farmable northern plains land in this set. Pennington County sits in the Red River Valley agricultural corridor with Class 2-3 soils capable of grain and vegetable production. 160 acres gives room for rotational grazing, market garden, and woodlot separation. Main risk is the short growing season (roughly 110-120 frost-free days) and flat, cold winters; water will likely require drilling a well.",
+      "rank": 1
+    },
+    {
+      "id": "landwatch_420032047",
+      "headline": "446-acre Maine parcel with pond water source",
+      "reason": "At $895/acre for 446 acres in Hancock County, this is the largest single holding in the set and the only one with an implied year-round water feature (Springy Pond in the address). Hancock County sits near the coast, giving it Maine's most temperate climate\u2014longer frost-free window than inland counties and moderate snowfall. $399k at the budget ceiling buys generational scale: timber, forage, garden, and wildlife habitat on one deed. The main trade-off is high total capital outlay and that coastal Maine soils are often thin glacial till requiring soil amendments.",
+      "rank": 2
+    },
+    {
+      "id": "landwatch_424940531",
+      "headline": "62 acres near Buena Vista at $92/acre",
+      "reason": "At $5,700 for 62 acres in Chaffee County near the Arkansas River, this price is 10-15x below regional comparable raw land\u2014meaning the land almost certainly has a serious constraint such as no legal road access, extreme elevation above 9,500 feet, or no possibility of a permitted well. The Arkansas River watershed does supply water, but rights may not convey. The buy case: even if you spend $30,000 solving access and water, you end up with 62 acres of mountain land at under $600/acre. Verify road access and water source before making any offer.",
+      "rank": 3
+    },
+    {
+      "id": "landwatch_426240836",
+      "headline": "41 forested acres in northern Minnesota for $18,500",
+      "reason": "At $451/acre for 41 acres in Saint Louis County near Babbitt, this is deeply affordable forested land in the Superior National Forest border zone. The region has abundant lakes and streams, which supports well drilling and gravity-fed systems. Timber on 41 acres can provide building material and firewood indefinitely. The risk is a very short growing season (under 100 frost-free days this far north) and that agricultural soil capability will be limited\u2014this is a forest homestead, not a farm homestead.",
+      "rank": 4
+    },
+    {
+      "id": "landwatch_424689927",
+      "headline": "40 road-accessible acres in coastal Maine for $49k",
+      "reason": "At $1,225/acre for 40 acres in Washington County with a street address (suggesting actual road frontage), this is affordable and buildable Maine land. Washington County has good water tables and Maine has strong right-to-farm protections. 40 acres is adequate for a full homestead: market garden, small orchard, poultry, and a woodlot. The trade-off is that Washington County is Maine's most remote and economically depressed county\u2014services, supplies, and medical care are a long drive from most parcels.",
+      "rank": 5
+    },
+    {
+      "id": "landwatch_423987974",
+      "headline": "200 acres in Minnesota's lake-country farmland",
+      "reason": "At $1,750/acre for 200 acres in Otter Tail County, this is one of the best agricultural counties in Minnesota\u2014glacially formed soils with high organic content, numerous lakes, and a longer growing season than northern MN at 130-140 frost-free days. 200 acres enables serious mixed farming: hay, grain, livestock, and market garden at scale. At $350k it consumes nearly the full budget with little left for improvements, and the land is listed as TBD, meaning no existing infrastructure.",
+      "rank": 6
+    },
+    {
+      "id": "landwatch_425623893",
+      "headline": "122 acres in northeast Minnesota near Lake Superior",
+      "reason": "At $1,770/acre for 122 acres in Carlton County, this land benefits from Lake Superior's moderating effect on the local climate, adding roughly 10-15 frost-free days compared to central Minnesota and reducing extreme cold events. Carlton County has a mix of forest and tillable ground, and the county seat of Carlton is small but functional. At $216k there is budget remaining for a well, septic, and basic shelter. The road name (Fairview Road) suggests county-maintained access\u2014confirm legal road frontage before proceeding.",
+      "rank": 7
+    },
+    {
+      "id": "landwatch_425012979",
+      "headline": "35 acres in Colorado's San Luis Valley for $65k",
+      "reason": "At $1,857/acre for 35 acres in Alamosa County, this is San Luis Valley agricultural land\u2014one of the most productive high-altitude farming regions in the West, known for potato and cold-hardy vegetable production. The Valley floor at 7,500 feet has a 90-100 day frost-free season, which limits crop diversity but not viability. The critical risk here is water: the San Luis Valley operates on a complex adjudicated water-rights system, and raw land without attached water rights is nearly unworkable for irrigation. Confirm water rights or surface water access before buying.",
+      "rank": 8
+    },
+    {
+      "id": "landwatch_421671820",
+      "headline": "16 road-accessible Maine acres under $30k",
+      "reason": "At $1,869/acre for 16 acres in Penobscot County (Treadwell Hill Road), this is the lowest-cost entry into productive Maine land with a named road address. Penobscot County is central Maine with a 120-130 day frost-free season and reliable rainfall\u2014adequate for a serious garden, small orchard, and poultry operation. 16 acres is tight for livestock beyond chickens and goats. At $29,900, the low price leaves substantial budget for a well, cabin, and perennial plantings. Main caveat: verify that the parcel has legal road frontage and is not landlocked.",
+      "rank": 9
+    },
+    {
+      "id": "landwatch_423472517",
+      "headline": "40 acres western Oregon with temperate growing climate",
+      "reason": "At $5,025/acre for 39.6 acres in Lane County near Cottage Grove, this is the only listing in the set with a genuine maritime Pacific Northwest climate\u2014180+ frost-free days, 40-50 inches of annual rainfall, mild winters that rarely freeze hard. Lane County's Willamette Valley soils are among the most productive in the Pacific Northwest for diversified homesteading: fruit, vegetables, grains, and pasture all viable. At $199k it is mid-range in total cost. The trade-off is that Lane County land this cheap likely has slope, timber encumbrance, or access issues\u2014confirm buildable area and driveway feasibility.",
+      "rank": 10
+    },
+    {
+      "id": "landwatch_425958603",
+      "headline": "25 Maine acres with existing small structure",
+      "reason": "At $4,600/acre for 25 acres in Aroostook County with a 1-bed 320 sqft structure, this listing offers immediate shelter\u2014the only one at this price point. Aroostook County is Maine's premier agricultural county with Class 2-3 soils historically used for potato production; it has a 100-115 day frost-free season. $115k for 25 acres plus a livable structure compares well to building from scratch. The main caveat is that Aroostook County is among the most isolated counties east of the Mississippi\u2014medical care, hardware supply, and employment are 60+ minutes away.",
+      "rank": 11
+    },
+    {
+      "id": "landwatch_417206928",
+      "headline": "15 Tennessee acres near Duck River watershed",
+      "reason": "At $9,997/acre for 15 acres in Perry County ('New Era Landing' suggesting river or water proximity), this is the only Southern listing in the picks and offers the best growing climate: 180+ frost-free days, moderate rainfall, and mild winters allowing year-round food production. Perry County sits in the Duck River basin, one of Tennessee's most biodiverse and water-rich corridors. The trade-offs are clear: 15 acres is small for full self-sufficiency, and at $150k the price per acre is high relative to Northern alternatives; however, the productivity advantage of Tennessee's climate partially compensates over a multi-decade homesteading timeline.",
+      "rank": 12
+    }
+  ]
+}
