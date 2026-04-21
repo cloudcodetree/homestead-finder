@@ -10,4 +10,9 @@ export default defineConfig({
     outDir: 'dist',
     sourcemap: true,
   },
+  define: {
+    // Frozen at build time; exposed as a global constant the footer can
+    // render. ISO format — the footer formats it for display.
+    __BUILD_TIME__: JSON.stringify(new Date().toISOString()),
+  },
 })

@@ -1,4 +1,5 @@
 import { Route, Routes } from 'react-router-dom';
+import { BuildFooter } from './components/BuildFooter';
 import { Dashboard } from './components/Dashboard';
 
 /**
@@ -10,11 +11,14 @@ import { Dashboard } from './components/Dashboard';
  */
 const App = () => {
   return (
-    <Routes>
-      <Route path="/" element={<Dashboard />} />
-      <Route path="/p/:id" element={<Dashboard />} />
-      <Route path="*" element={<Dashboard />} />
-    </Routes>
+    <>
+      <Routes>
+        <Route path="/" element={<Dashboard />} />
+        <Route path="/p/:id" element={<Dashboard />} />
+        <Route path="*" element={<Dashboard />} />
+      </Routes>
+      <BuildFooter />
+    </>
   );
 };
 
