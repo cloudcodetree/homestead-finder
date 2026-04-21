@@ -21,7 +21,14 @@ type ViewMode = 'list' | 'map' | 'picks';
 
 export const Dashboard = () => {
   const { filters, updateFilter, toggleState, toggleFeature, toggleAITag, resetFilters, hasActiveFilters } = useFilters();
-  const { properties, loading, error, stats, isSample: listingsAreSample } = useProperties(filters);
+  const {
+    properties,
+    allProperties,
+    loading,
+    error,
+    stats,
+    isSample: listingsAreSample,
+  } = useProperties(filters);
   const { curation, isSample: curationIsSample } = useCurated();
   // When real listings are loaded but the curation is still from the
   // bundled sample, the sample picks reference IDs that don't exist —
@@ -45,8 +52,11 @@ export const Dashboard = () => {
   );
   const closeProperty = useCallback(() => navigate(-1), [navigate]);
 
+  // Look up the deep-linked property in the full set, not the filtered
+  // set — a direct URL must resolve even if the user's current filters
+  // would have hidden it.
   const selectedProperty = selectedId
-    ? properties.find((p: Property) => p.id === selectedId) ?? null
+    ? allProperties.find((p: Property) => p.id === selectedId) ?? null
     : null;
 
   const activeFilterCount = [
@@ -277,7 +287,10 @@ export const Dashboard = () => {
                   ) : (
                     <div className="space-y-3">
                       {queryResult.matches.map((match, i) => {
-                        const p = properties.find((x) => x.id === match.id);
+                        // Match against the full listing set — Claude picked
+                        // from all listings, so the user's filter defaults
+                        // shouldn't hide picks that matched their query.
+                        const p = allProperties.find((x) => x.id === match.id);
                         if (!p) return null;
                         return (
                           <div key={match.id} className="flex gap-3 items-start">
@@ -372,7 +385,7 @@ export const Dashboard = () => {
               <ErrorBoundary label="Top Picks">
                 <TopPicks
                   picks={curation.picks}
-                  properties={properties}
+                  properties={allProperties}
                   curatedAt={curation.curatedAt}
                   model={curation.model}
                   onSelectProperty={openProperty}

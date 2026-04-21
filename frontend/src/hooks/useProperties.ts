@@ -98,5 +98,16 @@ export const useProperties = (filters: FilterState) => {
     [allProperties, filtered]
   );
 
-  return { properties: sorted, loading, error, stats, isSample };
+  return {
+    /** Filtered + sorted listings — what the list view renders. */
+    properties: sorted,
+    /** All loaded listings regardless of filters — used by Top Picks and
+     *  Ask-Claude so their results aren't silently hidden by a narrow
+     *  filter state the user may not remember setting. */
+    allProperties,
+    loading,
+    error,
+    stats,
+    isSample,
+  };
 };
