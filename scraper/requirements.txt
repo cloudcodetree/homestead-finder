@@ -13,6 +13,7 @@ anthropic>=0.40.0
 
 # Data processing
 python-dateutil==2.9.0
+pdfplumber==0.11.4
 
 # Email notifications
 sendgrid==6.11.0

@@ -83,6 +83,96 @@ export const PropertyDetail = ({ property, onClose }: PropertyDetailProps) => {
         </div>
 
         <div className="p-4 space-y-5">
+          {/* Tax-sale banner (shown first when this is a delinquent-tax listing) */}
+          {property.status === 'tax_sale' && property.taxSale && (
+            <div className="rounded-lg border-2 border-orange-300 bg-orange-50/60 p-4">
+              <div className="flex items-center gap-2 mb-2">
+                <span className="text-lg">⚖</span>
+                <h3 className="font-bold text-orange-900">
+                  Delinquent County Tax Sale
+                </h3>
+                <span className="ml-auto text-[10px] px-1.5 py-0.5 bg-orange-200 text-orange-800 rounded font-medium uppercase tracking-wide">
+                  {property.taxSale.stateType === 'deed' ? 'Deed' : 'Lien'} State
+                </span>
+              </div>
+              <p className="text-sm text-gray-700 mb-3">
+                This is a <strong>tax-sale listing</strong>, not a traditional
+                for-sale property.{' '}
+                {property.taxSale.stateType === 'deed'
+                  ? 'Winning bidder gets the deed outright.'
+                  : 'Winning bidder gets a lien certificate; deed may be obtainable after the redemption period.'}
+                {' '}Do full title/quiet-title diligence before paying.
+              </p>
+              <dl className="grid grid-cols-2 gap-x-4 gap-y-2 text-xs">
+                <div>
+                  <dt className="text-gray-500">Minimum bid (owed)</dt>
+                  <dd className="text-lg font-bold text-orange-700">
+                    {formatPrice(property.taxSale.amountOwedUsd)}
+                  </dd>
+                </div>
+                <div>
+                  <dt className="text-gray-500">Tax year</dt>
+                  <dd className="font-semibold text-gray-800">
+                    {property.taxSale.taxYear ?? '—'}
+                  </dd>
+                </div>
+                <div className="col-span-2">
+                  <dt className="text-gray-500">Parcel ID</dt>
+                  <dd className="font-mono text-gray-800">
+                    {property.taxSale.parcelId}
+                  </dd>
+                </div>
+                {property.taxSale.owner && (
+                  <div className="col-span-2">
+                    <dt className="text-gray-500">Owner of record</dt>
+                    <dd className="text-gray-800">{property.taxSale.owner}</dd>
+                  </div>
+                )}
+                {property.taxSale.legalDescription && (
+                  <div className="col-span-2">
+                    <dt className="text-gray-500">Legal description</dt>
+                    <dd className="text-gray-800 italic text-[11px]">
+                      {property.taxSale.legalDescription}
+                    </dd>
+                  </div>
+                )}
+                {(property.taxSale.houseNumber || property.taxSale.street) && (
+                  <div className="col-span-2">
+                    <dt className="text-gray-500">Situs address</dt>
+                    <dd className="text-gray-800">
+                      {[property.taxSale.houseNumber, property.taxSale.street]
+                        .filter(Boolean)
+                        .join(' ')}
+                    </dd>
+                  </div>
+                )}
+                {property.taxSale.saleMonth && (
+                  <div>
+                    <dt className="text-gray-500">Typical sale month</dt>
+                    <dd className="text-gray-800">
+                      {new Date(2000, property.taxSale.saleMonth - 1).toLocaleString(
+                        undefined,
+                        { month: 'long' }
+                      )}
+                    </dd>
+                  </div>
+                )}
+                {property.taxSale.listUrl && (
+                  <div className="col-span-2">
+                    <a
+                      href={property.taxSale.listUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-orange-700 hover:text-orange-900 font-medium text-xs"
+                    >
+                      Open original county tax-sale list (PDF) →
+                    </a>
+                  </div>
+                )}
+              </dl>
+            </div>
+          )}
+
           {/* Key Stats */}
           <div className={`grid gap-3 ${property.acreage > 0 ? 'grid-cols-3' : 'grid-cols-1'}`}>
             <div className="bg-gray-50 rounded-lg p-3 text-center">

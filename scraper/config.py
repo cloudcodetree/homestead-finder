@@ -13,7 +13,11 @@ DATA_DIR.mkdir(exist_ok=True)
 # ── Target geography ─────────────────────────────────────────────────────────
 # States to scrape. Expand as budget/rate-limit allows.
 TARGET_STATES: list[str] = os.getenv(
-    "TARGET_STATES", "MT,ID,WY,CO,NM,OR,WA,TX,TN,MN,ME"
+    # Primary pilot: WY (smallest surface area for tax-sale framework).
+    # Secondary: MT (already has full LandWatch + geo enrichment coverage).
+    # Others trail; see context/BACKLOG.md for expansion order.
+    "TARGET_STATES",
+    "WY,MT,ID,WA,OR,CO,NM,TX,TN,MN,ME",
 ).split(",")
 
 # ── Deal criteria ────────────────────────────────────────────────────────────

@@ -103,6 +103,31 @@ export interface ExternalResearchLinks {
   coStar?: string;
 }
 
+/**
+ * Delinquent county tax-sale data. Populated by scraper/sources/county_tax.py
+ * for listings where the "for sale" is actually a tax-lien certificate
+ * auction (in lien states like WY) or tax-deed auction (in deed states).
+ * These listings have `status === 'tax_sale'`.
+ */
+export interface TaxSale {
+  owner: string;
+  parcelId: string;
+  taxDistrict?: string;
+  legalDescription?: string;
+  houseNumber?: string;
+  street?: string;
+  /** County-specific property-type code (e.g. RE = real estate, IR = other). */
+  propertyType?: string;
+  taxYear?: number;
+  /** The minimum bid — exactly what's owed for taxes + penalty + interest. */
+  amountOwedUsd: number;
+  /** Typical month the in-person sale is held (1-12). */
+  saleMonth?: number | null;
+  /** 'lien' = certificate auction (WY, MT), 'deed' = title auction (WA, TX). */
+  stateType?: 'lien' | 'deed';
+  listUrl?: string;
+}
+
 export interface Property {
   id: string;
   title: string;
@@ -120,7 +145,9 @@ export interface Property {
   imageUrl?: string;
   validated?: boolean;
   validatedAt?: string;
-  status?: 'active' | 'expired' | 'unverified';
+  status?: 'active' | 'expired' | 'unverified' | 'tax_sale';
+  /** Populated when status === 'tax_sale'. */
+  taxSale?: TaxSale;
   // AI enrichment (added by scraper/enrich.py — optional because not every
   // listing may be enriched yet)
   aiTags?: AITag[];

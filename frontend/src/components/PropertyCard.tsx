@@ -10,6 +10,13 @@ interface PropertyCardProps {
 
 const ValidationBadge = ({ status }: { status?: Property['status'] }) => {
   const s = status ?? 'unverified';
+  if (s === 'tax_sale') {
+    return (
+      <span className="inline-flex items-center gap-0.5 rounded-full bg-orange-50 border border-orange-300 px-1.5 py-0.5 text-xs font-bold text-orange-700">
+        ⚖ Tax Sale
+      </span>
+    );
+  }
   if (s === 'active') {
     return (
       <span className="inline-flex items-center gap-0.5 rounded-full bg-green-50 border border-green-200 px-1.5 py-0.5 text-xs font-medium text-green-700">
@@ -86,15 +93,40 @@ export const PropertyCard = ({ property, onClick, isSelected = false }: Property
       )}
 
       <div className="mt-3 flex items-center gap-4">
-        <div>
-          <p className="text-lg font-bold text-gray-900">{formatPrice(property.price)}</p>
-          <p className="text-xs text-gray-500">{formatPricePerAcre(property.pricePerAcre)}</p>
-        </div>
-        <div className="text-gray-300">|</div>
-        <div>
-          <p className="text-base font-semibold text-gray-700">{formatAcreage(property.acreage)}</p>
-          <p className="text-xs text-gray-500">{getDealScoreLabel(property.dealScore)}</p>
-        </div>
+        {property.status === 'tax_sale' && property.taxSale ? (
+          // Tax-sale rows don't have a listing price — they have an amount
+          // owed (the minimum bid for the lien/deed). Surface that plus the
+          // parcel ID + tax year so the card is legible without clicking in.
+          <>
+            <div>
+              <p className="text-lg font-bold text-orange-700">
+                {formatPrice(property.taxSale.amountOwedUsd)}
+              </p>
+              <p className="text-xs text-gray-500">owed (min bid)</p>
+            </div>
+            <div className="text-gray-300">|</div>
+            <div className="min-w-0">
+              <p className="text-sm font-mono font-medium text-gray-700 truncate">
+                {property.taxSale.parcelId}
+              </p>
+              <p className="text-xs text-gray-500">
+                tax year {property.taxSale.taxYear ?? '?'}
+              </p>
+            </div>
+          </>
+        ) : (
+          <>
+            <div>
+              <p className="text-lg font-bold text-gray-900">{formatPrice(property.price)}</p>
+              <p className="text-xs text-gray-500">{formatPricePerAcre(property.pricePerAcre)}</p>
+            </div>
+            <div className="text-gray-300">|</div>
+            <div>
+              <p className="text-base font-semibold text-gray-700">{formatAcreage(property.acreage)}</p>
+              <p className="text-xs text-gray-500">{getDealScoreLabel(property.dealScore)}</p>
+            </div>
+          </>
+        )}
       </div>
 
       {property.features.length > 0 && (
