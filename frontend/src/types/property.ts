@@ -38,6 +38,71 @@ export type PropertyFeature =
   | 'off_grid_ready'
   | 'owner_financing';
 
+/**
+ * Soil map-unit info from USDA SSURGO (via scraper/enrichment/soil.py).
+ * Fields are optional because older listings may have been enriched
+ * before a given field was added.
+ */
+export interface SoilInfo {
+  mapUnitKey?: string;
+  mapUnitName?: string;
+  /** e.g. "Prime farmland", "Farmland of statewide importance" */
+  farmlandClass?: string;
+  /** Non-irrigated capability class: "1" (best) through "8" (worst). */
+  capabilityClass?: string;
+  /** Human-readable class description (e.g. "Prime cropland, few limitations"). */
+  capabilityClassDescription?: string;
+  capabilityClassPercent?: number;
+  slopePercent?: number;
+  drainageClass?: string;
+  floodFrequency?: string;
+  hydrologicGroup?: string;
+  bedrockDepthInches?: number | null;
+  waterTableDepthInches?: number | null;
+}
+
+export interface FloodInfo {
+  /** FEMA zone code: A/AE/AH/AO/V/VE = 100-yr floodplain; X = outside; D = unstudied. */
+  floodZone?: string;
+  isSFHA?: boolean;
+  baseFloodElevation?: number | null;
+}
+
+export interface ElevationInfo {
+  elevationMeters?: number;
+  elevationFeet?: number;
+}
+
+export interface WatershedInfo {
+  /** 12-digit Hydrologic Unit Code. */
+  huc12?: string;
+  watershedName?: string;
+  areaAcres?: number | null;
+  states?: string;
+}
+
+export interface GeoEnrichment {
+  lat: number;
+  lng: number;
+  soil?: SoilInfo | null;
+  flood?: FloodInfo | null;
+  elevation?: ElevationInfo | null;
+  watershed?: WatershedInfo | null;
+  fetchedAt?: string;
+}
+
+/**
+ * URLs to third-party parcel research tools that LandWatch links out to.
+ * We don't scrape these (ToS prohibits), but we surface the deep links
+ * so users can click through for richer research.
+ */
+export interface ExternalResearchLinks {
+  acreValue?: string;
+  landId?: string;
+  firstStreet?: string;
+  coStar?: string;
+}
+
 export interface Property {
   id: string;
   title: string;
@@ -63,6 +128,13 @@ export interface Property {
   redFlags?: RedFlag[];
   aiSummary?: string;
   enrichedAt?: string;
+  // Detail-page enrichment (added by scraper/detail_fetcher.py) — lat/lng
+  // is merged into `location`, these fields carry the rest.
+  detailFetchedAt?: string;
+  externalLinks?: ExternalResearchLinks;
+  // Geospatial enrichment (added by scraper/enrich_geo.py) — soil, flood,
+  // elevation, watershed pulled from free US government APIs.
+  geoEnrichment?: GeoEnrichment;
 }
 
 export type SortBy =

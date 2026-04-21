@@ -8,6 +8,7 @@ import {
   RED_FLAG_DESCRIPTIONS,
   RED_FLAG_SEVERITY,
 } from '../types/property';
+import { ResearchPanel } from './ResearchPanel';
 import {
   formatPrice,
   formatAcreage,
@@ -239,6 +240,13 @@ export const PropertyDetail = ({ property, onClose }: PropertyDetailProps) => {
               </div>
             </div>
           )}
+
+          {/* Parcel research — govt enrichment + external links */}
+          <ResearchPanel
+            location={property.location}
+            geo={property.geoEnrichment}
+            links={property.externalLinks}
+          />
 
           {/* Metadata */}
           <div className="border-t border-gray-100 pt-4 grid grid-cols-2 gap-3 text-sm">
