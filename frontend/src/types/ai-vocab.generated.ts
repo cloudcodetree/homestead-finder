@@ -95,6 +95,39 @@ export const AI_TAG_LABELS: Record<AITag, string> = {
   mineral_rights_excluded: "Mineral Rights Excluded",
 };
 
+// Per-tag short descriptions — shown as tooltips so users can see
+// what each AI tag actually means.
+export const AI_TAG_DESCRIPTIONS: Record<AITag, string> = {
+  paved_access: "Reachable by paved road year-round.",
+  seasonal_access_only: "Road in/out is blocked or impassable part of the year (snow, mud, gates).",
+  remote_access_concerns: "Access route is rough, long, or depends on private easements.",
+  utilities_on_site: "At least one of power/water/septic is already installed.",
+  off_grid_viable: "Plausibly livable without connection to public grid (solar + well + septic).",
+  infrastructure_needed: "Requires major infrastructure work (road, well, septic, power) before occupancy.",
+  water_rights_present: "Listing explicitly mentions recorded water rights or shares.",
+  year_round_water: "Creek, spring, or well flows reliably through all seasons.",
+  seasonal_water_only: "Surface water present only part of the year.",
+  no_water_mentioned: "Description makes no mention of water \u2014 likely absent or unknown.",
+  build_ready: "Surveyed, percolation-tested, access cleared \u2014 ready to pour a foundation.",
+  buildable_with_work: "Buildable after some clearing, permit work, or grading.",
+  difficult_terrain: "Steep, rocky, or otherwise hard to develop.",
+  soil_suitable_for_ag: "Soil description supports growing food or pasture.",
+  remote_living_viable: "Realistic as a full-time residence despite distance from services.",
+  near_services: "Close to town, grocery, and emergency services.",
+  isolated: "Meaningfully far from neighbors or services \u2014 privacy / self-reliance oriented.",
+  agricultural_potential: "Suitable for crops, livestock, or market gardening.",
+  timber_harvestable: "Standing merchantable timber mentioned.",
+  hunting_viable: "Wildlife and habitat described; realistic for game hunting.",
+  grazing_suitable: "Pasture or range land suitable for livestock grazing.",
+  no_hoa: "Explicitly no HOA, covenants, or deed restrictions.",
+  hoa_present: "HOA mentioned \u2014 dues and rules apply.",
+  deed_restrictions: "Covenants or deed restrictions mentioned (may limit use).",
+  zoning_concerns: "Zoning is unusual, changing, or may limit intended use.",
+  flood_risk_mentioned: "Floodplain, seasonal flooding, or proximity to waterway mentioned as a concern.",
+  fire_risk_mentioned: "Wildfire exposure mentioned \u2014 high-risk zone or recent burn history.",
+  mineral_rights_excluded: "Subsurface/mineral rights are NOT included in the sale.",
+};
+
 // Red flag union — Claude's enrich.py may return only these keys.
 export type RedFlag =
   | 'hoa_restrictions'
@@ -144,6 +177,24 @@ export const RED_FLAG_LABELS: Record<RedFlag, string> = {
   zoning_prohibits_residential: "Zoning: No Residential",
   extreme_remote: "Extremely Remote",
   price_seems_too_good: "Price Too Good",
+};
+
+// Per-flag short descriptions — shown as tooltips.
+export const RED_FLAG_DESCRIPTIONS: Record<RedFlag, string> = {
+  hoa_restrictions: "Active HOA limits construction, livestock, or other homesteading activity.",
+  flood_zone_mention: "Property falls in a flood zone or has flood history.",
+  wetland_restrictions: "Wetland designation restricts building or land alteration.",
+  no_water_source: "No well, creek, or spring \u2014 critical infrastructure gap.",
+  no_road_access: "Legal or physical access to the parcel is unclear or absent.",
+  easement_concerns: "Third-party easements or right-of-way issues across the parcel.",
+  environmental_hazard: "Known contamination, mine tailings, toxic soil, etc.",
+  title_issues_mentioned: "Unresolved liens, quiet-title action, or clouded deed.",
+  tax_sale_risk: "Tax-sale or foreclosure property \u2014 redemption risk, title not guaranteed.",
+  requires_septic_install: "No existing septic system \u2014 must be permitted and installed.",
+  requires_well_drilling: "No existing well \u2014 drilling depth/yield unknown until attempted.",
+  zoning_prohibits_residential: "Current zoning does not allow a residence to be built.",
+  extreme_remote: "Very far from services \u2014 suitable only for the self-sufficient-ready.",
+  price_seems_too_good: "Price is far below comparables \u2014 diligence strongly advised.",
 };
 
 // Severity 1-5 (higher = worse). Used by UI to prioritize flag display.

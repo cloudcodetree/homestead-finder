@@ -53,12 +53,19 @@ export const PropertyCard = ({ property, onClick, isSelected = false }: Property
         </div>
         <div className="flex flex-col items-end gap-1 flex-shrink-0">
           <div className="flex items-center gap-1">
-            {property.homesteadFitScore !== undefined && (
+            {property.homesteadFitScore !== undefined ? (
               <div
                 className="rounded-full px-2 py-1 text-xs font-bold bg-purple-100 text-purple-700 border border-purple-200"
-                title={`AI Homestead Fit Score: ${property.homesteadFitScore}`}
+                title={`AI Homestead Fit: ${property.homesteadFitScore}/100${property.aiSummary ? ` — ${property.aiSummary}` : ''}`}
               >
                 ◆ {property.homesteadFitScore}
+              </div>
+            ) : (
+              <div
+                className="rounded-full px-1.5 py-1 text-[10px] font-medium bg-gray-100 text-gray-500 border border-gray-200"
+                title="Not yet AI-analyzed — run ./scripts/refresh_ai.sh locally to enrich"
+              >
+                ◇
               </div>
             )}
             <div className={`rounded-full px-2 py-1 text-xs font-bold ${scoreColor}`} title={`Deal Score: ${property.dealScore}`}>

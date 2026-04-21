@@ -1,5 +1,13 @@
 import { useState } from 'react';
-import { Property, FEATURE_LABELS, AI_TAG_LABELS, RED_FLAG_LABELS } from '../types/property';
+import {
+  Property,
+  FEATURE_LABELS,
+  AI_TAG_LABELS,
+  AI_TAG_DESCRIPTIONS,
+  RED_FLAG_LABELS,
+  RED_FLAG_DESCRIPTIONS,
+  RED_FLAG_SEVERITY,
+} from '../types/property';
 import {
   formatPrice,
   formatAcreage,
@@ -101,54 +109,109 @@ export const PropertyDetail = ({ property, onClose }: PropertyDetailProps) => {
           </div>
 
           {/* AI Analysis */}
-          {property.enrichedAt && (
+          {property.enrichedAt ? (
             <div className="rounded-lg border border-purple-100 bg-purple-50/40 p-4">
-              <div className="flex items-center gap-2 mb-3">
+              <div className="flex items-center gap-2 mb-3 flex-wrap">
                 <h3 className="text-sm font-semibold text-purple-900">AI Analysis</h3>
                 {property.homesteadFitScore !== undefined && (
                   <span className="text-xs font-bold text-purple-700 bg-white border border-purple-200 rounded-full px-2 py-0.5">
                     Fit {property.homesteadFitScore}/100
                   </span>
                 )}
+                <span
+                  className="text-[11px] text-purple-600/80"
+                  title={`Full timestamp: ${property.enrichedAt}`}
+                >
+                  analyzed {formatDate(property.enrichedAt)}
+                </span>
                 <span className="ml-auto text-[10px] text-purple-500 tracking-wide uppercase font-medium">
                   Beta
                 </span>
               </div>
-              {property.aiSummary && (
-                <p className="text-sm text-gray-700 leading-relaxed mb-3">
-                  {property.aiSummary}
+              {property.aiSummary ? (
+                <div className="mb-3">
+                  <p className="text-[11px] font-semibold text-purple-800 mb-1 uppercase tracking-wide">
+                    Why it scored this way
+                  </p>
+                  <p className="text-sm text-gray-700 leading-relaxed italic">
+                    &ldquo;{property.aiSummary}&rdquo;
+                  </p>
+                </div>
+              ) : (
+                <p className="text-xs text-gray-500 mb-3">
+                  (No written summary available for this listing.)
                 </p>
               )}
               {(property.redFlags?.length ?? 0) > 0 && (
                 <div className="mb-3">
-                  <p className="text-xs font-semibold text-amber-800 mb-1.5">⚠ Red Flags</p>
+                  <p className="text-xs font-semibold text-amber-800 mb-1.5">
+                    ⚠ Red Flags
+                    <span className="font-normal text-amber-600/70 ml-1">
+                      (hover for details)
+                    </span>
+                  </p>
                   <div className="flex flex-wrap gap-1.5">
-                    {property.redFlags!.map((flag) => (
-                      <span
-                        key={flag}
-                        className="rounded-full bg-amber-50 border border-amber-200 px-2 py-0.5 text-xs text-amber-700 font-medium"
-                      >
-                        {RED_FLAG_LABELS[flag]}
-                      </span>
-                    ))}
+                    {property.redFlags!.map((flag) => {
+                      const severity = RED_FLAG_SEVERITY[flag] ?? 3;
+                      const desc = RED_FLAG_DESCRIPTIONS[flag];
+                      return (
+                        <span
+                          key={flag}
+                          title={desc ? `${desc} (severity ${severity}/5)` : undefined}
+                          className="rounded-full bg-amber-50 border border-amber-200 px-2 py-0.5 text-xs text-amber-700 font-medium cursor-help"
+                        >
+                          {RED_FLAG_LABELS[flag]}
+                          <span className="ml-1 text-amber-500">
+                            {'•'.repeat(severity)}
+                          </span>
+                        </span>
+                      );
+                    })}
                   </div>
                 </div>
               )}
               {(property.aiTags?.length ?? 0) > 0 && (
                 <div>
-                  <p className="text-xs font-semibold text-purple-800 mb-1.5">Tags</p>
+                  <p className="text-xs font-semibold text-purple-800 mb-1.5">
+                    Tags
+                    <span className="font-normal text-purple-600/70 ml-1">
+                      (hover for details)
+                    </span>
+                  </p>
                   <div className="flex flex-wrap gap-1.5">
-                    {property.aiTags!.map((tag) => (
-                      <span
-                        key={tag}
-                        className="rounded-full bg-white border border-purple-200 px-2 py-0.5 text-xs text-purple-700 font-medium"
-                      >
-                        {AI_TAG_LABELS[tag]}
-                      </span>
-                    ))}
+                    {property.aiTags!.map((tag) => {
+                      const desc = AI_TAG_DESCRIPTIONS[tag];
+                      return (
+                        <span
+                          key={tag}
+                          title={desc || undefined}
+                          className="rounded-full bg-white border border-purple-200 px-2 py-0.5 text-xs text-purple-700 font-medium cursor-help"
+                        >
+                          {AI_TAG_LABELS[tag]}
+                        </span>
+                      );
+                    })}
                   </div>
                 </div>
               )}
+            </div>
+          ) : (
+            <div className="rounded-lg border border-gray-200 bg-gray-50 p-4">
+              <div className="flex items-center gap-2 mb-1">
+                <h3 className="text-sm font-semibold text-gray-700">AI Analysis</h3>
+                <span className="text-[10px] px-1.5 py-0.5 bg-gray-200 text-gray-600 rounded font-medium uppercase tracking-wide">
+                  Not Yet Analyzed
+                </span>
+              </div>
+              <p className="text-xs text-gray-500">
+                This listing hasn&apos;t been through the AI enrichment pass
+                yet. Run{' '}
+                <code className="px-1 py-0.5 bg-white border border-gray-200 rounded">
+                  ./scripts/refresh_ai.sh
+                </code>{' '}
+                locally to generate tags, a fit score, red flags, and a plain-
+                language summary.
+              </p>
             </div>
           )}
 

@@ -1,4 +1,5 @@
-import { useState, lazy, Suspense } from 'react';
+import { useCallback, useState, lazy, Suspense } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Property, DEFAULT_FILTERS, SortBy, SORT_LABELS } from '../types/property';
 import { PropertyCard } from './PropertyCard';
 import { FilterPanel } from './FilterPanel';
@@ -27,13 +28,26 @@ export const Dashboard = () => {
   // suppress the Picks view in that case and show the "run curate" nudge.
   const curationMatchesListings = curation && !(curationIsSample && !listingsAreSample);
   const [viewMode, setViewMode] = useState<ViewMode>('list');
-  const [selectedId, setSelectedId] = useState<string | null>(null);
   const [showNotifications, setShowNotifications] = useState(false);
   const [showFilters, setShowFilters] = useState(false); // mobile drawer
   const [sidebarOpen, setSidebarOpen] = useState(true); // desktop collapse
   const [queryResult, setQueryResult] = useState<QueryResponse | null>(null);
 
-  const selectedProperty = selectedId ? properties.find((p: Property) => p.id === selectedId) ?? null : null;
+  // URL-driven selection so property pages are deep-linkable (e.g.
+  // `/p/landwatch_101`). Clicking a card navigates into the URL; closing
+  // the detail overlay goes back one step so filter state is preserved.
+  const { id: routeId } = useParams<{ id: string }>();
+  const selectedId = routeId ?? null;
+  const navigate = useNavigate();
+  const openProperty = useCallback(
+    (id: string) => navigate(`/p/${encodeURIComponent(id)}`),
+    [navigate]
+  );
+  const closeProperty = useCallback(() => navigate(-1), [navigate]);
+
+  const selectedProperty = selectedId
+    ? properties.find((p: Property) => p.id === selectedId) ?? null
+    : null;
 
   const activeFilterCount = [
     filters.minPrice !== DEFAULT_FILTERS.minPrice ? 1 : 0,
@@ -273,7 +287,7 @@ export const Dashboard = () => {
                             <div className="flex-1 min-w-0">
                               <PropertyCard
                                 property={p}
-                                onClick={setSelectedId}
+                                onClick={openProperty}
                                 isSelected={selectedId === p.id}
                               />
                               <p className="mt-1 text-xs text-purple-700 bg-white border border-purple-200 rounded px-2 py-1">
@@ -330,7 +344,7 @@ export const Dashboard = () => {
                     <PropertyCard
                       key={property.id}
                       property={property}
-                      onClick={setSelectedId}
+                      onClick={openProperty}
                       isSelected={selectedId === property.id}
                     />
                   ))}
@@ -348,7 +362,7 @@ export const Dashboard = () => {
               <MapView
                 properties={properties}
                 selectedId={selectedId}
-                onSelectProperty={setSelectedId}
+                onSelectProperty={openProperty}
               />
             </Suspense>
           )}
@@ -361,7 +375,7 @@ export const Dashboard = () => {
                   properties={properties}
                   curatedAt={curation.curatedAt}
                   model={curation.model}
-                  onSelectProperty={setSelectedId}
+                  onSelectProperty={openProperty}
                 />
               </ErrorBoundary>
             ) : (
@@ -403,7 +417,7 @@ export const Dashboard = () => {
       {selectedProperty && (
         <PropertyDetail
           property={selectedProperty}
-          onClose={() => setSelectedId(null)}
+          onClose={closeProperty}
         />
       )}
 

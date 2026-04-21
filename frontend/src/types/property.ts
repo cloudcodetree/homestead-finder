@@ -5,8 +5,10 @@ import type { AITag, RedFlag } from './ai-vocab.generated';
 export {
   AI_TAG_KEYS,
   AI_TAG_LABELS,
+  AI_TAG_DESCRIPTIONS,
   RED_FLAG_KEYS,
   RED_FLAG_LABELS,
+  RED_FLAG_DESCRIPTIONS,
   RED_FLAG_SEVERITY,
 } from './ai-vocab.generated';
 export type { AITag, RedFlag };

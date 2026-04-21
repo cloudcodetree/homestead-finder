@@ -47,6 +47,15 @@ def render_ts(vocab: dict) -> str:
             f"export const {const_name}: Record<{key_type}, string> = {{\n{body}\n}};"
         )
 
+    def descriptions(entries: list[dict], const_name: str, key_type: str) -> str:
+        lines = [
+            f"  {e['key']}: {json.dumps(e.get('description', ''))}," for e in entries
+        ]
+        body = "\n".join(lines)
+        return (
+            f"export const {const_name}: Record<{key_type}, string> = {{\n{body}\n}};"
+        )
+
     out: list[str] = [HEADER.rstrip(), ""]
     out.append("// AI tag union — Claude's enrich.py may return only these keys.")
     out.append(f"export type AITag =\n  | {union(tag_entries)};")
@@ -58,6 +67,10 @@ def render_ts(vocab: dict) -> str:
     out.append("")
     out.append(labels(tag_entries, "AI_TAG_LABELS", "AITag"))
     out.append("")
+    out.append("// Per-tag short descriptions — shown as tooltips so users can see")
+    out.append("// what each AI tag actually means.")
+    out.append(descriptions(tag_entries, "AI_TAG_DESCRIPTIONS", "AITag"))
+    out.append("")
     out.append("// Red flag union — Claude's enrich.py may return only these keys.")
     out.append(f"export type RedFlag =\n  | {union(flag_entries)};")
     out.append("")
@@ -67,6 +80,9 @@ def render_ts(vocab: dict) -> str:
     out.append("] as const;")
     out.append("")
     out.append(labels(flag_entries, "RED_FLAG_LABELS", "RedFlag"))
+    out.append("")
+    out.append("// Per-flag short descriptions — shown as tooltips.")
+    out.append(descriptions(flag_entries, "RED_FLAG_DESCRIPTIONS", "RedFlag"))
     out.append("")
     out.append(
         "// Severity 1-5 (higher = worse). Used by UI to prioritize flag display."

@@ -52,6 +52,12 @@ jobs:
             cp data/curated.json frontend/dist/data/curated.json
           fi
 
+      # SPA fallback for GitHub Pages: serve index.html for unknown paths.
+      # Needed so deep links like /homestead-finder/p/<id> load instead of
+      # 404-ing. React Router (BrowserRouter) handles the rest client-side.
+      - name: SPA fallback 404.html
+        run: cp frontend/dist/index.html frontend/dist/404.html
+
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
