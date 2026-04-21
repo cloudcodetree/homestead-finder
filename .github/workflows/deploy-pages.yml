@@ -6,6 +6,7 @@ on:
     paths:
       - 'frontend/**'
       - 'data/listings.json'
+      - 'data/curated.json'
   workflow_dispatch:
 
 permissions:
@@ -46,6 +47,9 @@ jobs:
           mkdir -p frontend/dist/data
           if [ -f data/listings.json ]; then
             cp data/listings.json frontend/dist/data/listings.json
+          fi
+          if [ -f data/curated.json ]; then
+            cp data/curated.json frontend/dist/data/curated.json
           fi
 
       - name: Setup Pages
