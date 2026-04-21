@@ -69,6 +69,11 @@ class CountyTaxScraper(BaseScraper):
             if not raw_bytes:
                 return []
             records = parser(raw_bytes)
+        elif source.listFormat == "bid4assets_announcement":
+            markdown = self._fetch_markdown(source.listUrl)
+            if not markdown:
+                return []
+            records = parser(markdown.encode("utf-8"))
         elif source.listFormat == "html":
             log.info("[tax_sale] html parser dispatch not yet implemented")
             return []
@@ -106,6 +111,25 @@ class CountyTaxScraper(BaseScraper):
         except requests.RequestException as e:
             log.info(f"[tax_sale] download failed for {url}: {e}")
             return b""
+
+    def _fetch_markdown(self, url: str) -> str:
+        """Fetch an HTML page via Firecrawl and return its markdown. Used
+        for Bid4Assets storefronts (plain `requests` gets Cloudflare-walled)."""
+        try:
+            from strategies.firecrawl_strategy import FirecrawlStrategy
+        except ImportError:
+            log.info("[tax_sale] firecrawl strategy unavailable")
+            return ""
+        strategy = FirecrawlStrategy()
+        if not strategy.is_available():
+            log.info("[tax_sale] firecrawl not configured — skipping HTML fetch")
+            return ""
+        try:
+            result = strategy.fetch(url, formats=["markdown"])
+            return result.content or ""
+        except Exception as e:
+            log.info(f"[tax_sale] firecrawl fetch failed for {url}: {e}")
+            return ""
 
     # ── record → RawListing ────────────────────────────────────────────────
 
@@ -176,7 +200,7 @@ class CountyTaxScraper(BaseScraper):
         prop = super().to_property(raw)
         src = raw.raw or {}
         prop["status"] = "tax_sale"
-        prop["taxSale"] = {
+        tax_sale_dict: dict[str, Any] = {
             "owner": src.get("owner", ""),
             "parcelId": src.get("parcelId", ""),
             "taxDistrict": src.get("taxDistrict", ""),
@@ -188,6 +212,20 @@ class CountyTaxScraper(BaseScraper):
             "amountOwedUsd": src.get("amountOwedUsd"),
             "saleMonth": src.get("saleMonth"),
             "stateType": src.get("stateType"),
+            "state": src.get("state", ""),
+            "county": src.get("county", ""),
             "listUrl": src.get("listUrl", ""),
         }
+        # Bid4Assets sale-announcement rows carry a few extra fields we
+        # surface to the UI so users can see deposit / lot count up front.
+        if src.get("isSaleAnnouncement"):
+            tax_sale_dict.update(
+                {
+                    "isSaleAnnouncement": True,
+                    "lotCount": src.get("lotCount"),
+                    "depositUsd": src.get("depositUsd"),
+                    "premiumPct": src.get("premiumPct"),
+                }
+            )
+        prop["taxSale"] = tax_sale_dict
         return prop

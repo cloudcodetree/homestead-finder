@@ -125,7 +125,27 @@ export interface TaxSale {
   saleMonth?: number | null;
   /** 'lien' = certificate auction (WY, MT), 'deed' = title auction (WA, TX). */
   stateType?: 'lien' | 'deed';
+  state?: string;
+  county?: string;
   listUrl?: string;
+  // ── Analytics (populated by scraper/sources/tax_sale_analytics.py) ──
+  /** 'acreage' = explicit AC in legal desc, 'rural' = PLSS only,
+   *  'town_lot' = lot/block, 'unknown' otherwise. */
+  parcelType?: 'acreage' | 'rural' | 'town_lot' | 'unknown';
+  estimatedAcres?: number | null;
+  /** acres × county median $/acre from our LandWatch corpus. */
+  estimatedValueUsd?: number | null;
+  /** Deed states only. Conservative: (estValue - minBid - $5k costs) / minBid. */
+  investmentMultiple?: number | null;
+  /** Lien states only. Annualized % return, weighted for redemption probability. */
+  expectedReturnPct?: number | null;
+  /** Human-readable reasons surfaced behind the analytics numbers. */
+  analyticsNotes?: string[];
+  // ── Bid4Assets sale-announcement rows only (no per-parcel data) ──
+  isSaleAnnouncement?: boolean;
+  lotCount?: number | null;
+  depositUsd?: number | null;
+  premiumPct?: number | null;
 }
 
 export interface Property {

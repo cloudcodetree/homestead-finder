@@ -96,7 +96,8 @@ export const PropertyCard = ({ property, onClick, isSelected = false }: Property
         {property.status === 'tax_sale' && property.taxSale ? (
           // Tax-sale rows don't have a listing price — they have an amount
           // owed (the minimum bid for the lien/deed). Surface that plus the
-          // parcel ID + tax year so the card is legible without clicking in.
+          // investment analytics (multiple for deed states, return % for
+          // lien states) so the card answers "is this a good buy" at a glance.
           <>
             <div>
               <p className="text-lg font-bold text-orange-700">
@@ -105,14 +106,52 @@ export const PropertyCard = ({ property, onClick, isSelected = false }: Property
               <p className="text-xs text-gray-500">owed (min bid)</p>
             </div>
             <div className="text-gray-300">|</div>
-            <div className="min-w-0">
-              <p className="text-sm font-mono font-medium text-gray-700 truncate">
-                {property.taxSale.parcelId}
-              </p>
-              <p className="text-xs text-gray-500">
-                tax year {property.taxSale.taxYear ?? '?'}
-              </p>
-            </div>
+            {property.taxSale.investmentMultiple !== null &&
+            property.taxSale.investmentMultiple !== undefined ? (
+              <div>
+                <p
+                  className={`text-lg font-bold ${
+                    property.taxSale.investmentMultiple >= 3
+                      ? 'text-green-700'
+                      : property.taxSale.investmentMultiple >= 1
+                      ? 'text-amber-700'
+                      : 'text-red-700'
+                  }`}
+                  title={(property.taxSale.analyticsNotes ?? []).join(' • ')}
+                >
+                  {property.taxSale.investmentMultiple.toFixed(1)}×
+                </p>
+                <p className="text-xs text-gray-500">deed-sale upside</p>
+              </div>
+            ) : property.taxSale.expectedReturnPct !== null &&
+              property.taxSale.expectedReturnPct !== undefined ? (
+              <div>
+                <p
+                  className={`text-lg font-bold ${
+                    property.taxSale.expectedReturnPct >= 15
+                      ? 'text-green-700'
+                      : property.taxSale.expectedReturnPct >= 10
+                      ? 'text-amber-700'
+                      : 'text-gray-600'
+                  }`}
+                  title={(property.taxSale.analyticsNotes ?? []).join(' • ')}
+                >
+                  {property.taxSale.expectedReturnPct.toFixed(0)}%/yr
+                </p>
+                <p className="text-xs text-gray-500">lien return</p>
+              </div>
+            ) : (
+              <div className="min-w-0">
+                <p className="text-sm font-mono font-medium text-gray-700 truncate">
+                  {property.taxSale.parcelId}
+                </p>
+                <p className="text-xs text-gray-500">
+                  {property.taxSale.parcelType === 'town_lot'
+                    ? 'town lot — no est.'
+                    : 'unsized parcel'}
+                </p>
+              </div>
+            )}
           </>
         ) : (
           <>

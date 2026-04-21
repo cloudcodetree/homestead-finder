@@ -153,11 +153,102 @@ def _ocr_placeholder(pdf_bytes: bytes) -> list[dict[str, Any]]:
     return []
 
 
+# Bid4Assets auction-storefront parser. Per-parcel data on B4A is auth-
+# gated, so we scrape the *public* storefront markdown (Firecrawl) for
+# sale-announcement data only: sale date window, deposit amount, lot
+# count, buyer's premium, and the canonical storefront URL. The result
+# is ONE "sale event" row per county/sale, not per parcel. Useful so
+# users can track upcoming deed sales and click through to register /
+# bid directly on Bid4Assets.
+_B4A_STARTS_RE = re.compile(r"Starts([A-Za-z]+\s+\d+,\s*\d{4}[^-\n]*)")
+_B4A_ENDS_RE = re.compile(r"Ends([A-Za-z]+\s+\d+,\s*\d{4})")
+_B4A_LOT_COUNT_RE = re.compile(
+    r"offering\s+(\d{1,4})\s+tax[\s-]?foreclosed", re.IGNORECASE
+)
+_B4A_DEPOSIT_RE = re.compile(
+    r"\$(\d{1,3}(?:,\d{3})*|\d+)(?:\.\d{2})?\s+(?:refundable\s+)?deposit",
+    re.IGNORECASE,
+)
+_B4A_PREMIUM_RE = re.compile(r"(\d{1,2})%\s+buyer[’'`]?s?\s+premium", re.IGNORECASE)
+
+
+def _bid4assets_announcement(markdown_bytes: bytes) -> list[dict[str, Any]]:
+    """Parse a Bid4Assets storefront page (received as UTF-8 bytes) into
+    a single sale-announcement record. Returns an empty list if the page
+    doesn't look like a storefront (schedule info absent).
+    """
+    try:
+        md = markdown_bytes.decode("utf-8", errors="ignore")
+    except Exception:
+        return []
+    if not md or "Bid4Assets" not in md and "storefront" not in md.lower():
+        # Weak signal — maybe the caller handed us the wrong bytes.
+        if "Starts" not in md or "Ends" not in md:
+            return []
+
+    starts = _B4A_STARTS_RE.search(md)
+    ends = _B4A_ENDS_RE.search(md)
+    if not (starts or ends):
+        return []
+
+    lot_count_match = _B4A_LOT_COUNT_RE.search(md)
+    deposit_match = _B4A_DEPOSIT_RE.search(md)
+    premium_match = _B4A_PREMIUM_RE.search(md)
+
+    lot_count = int(lot_count_match.group(1)) if lot_count_match else None
+    deposit_usd = None
+    if deposit_match:
+        try:
+            deposit_usd = float(deposit_match.group(1).replace(",", ""))
+        except ValueError:
+            deposit_usd = None
+    premium_pct = int(premium_match.group(1)) if premium_match else None
+
+    # Free-form headline from the page H1 + H2 when available
+    h1 = re.search(r"^#\s+(.+)$", md, re.MULTILINE)
+    h2 = re.search(r"^##\s+(.+)$", md, re.MULTILINE)
+    county_label = h1.group(1).strip() if h1 else ""
+    sale_label = h2.group(1).strip() if h2 else ""
+
+    # The "minimum bid" on an announcement row is a conceptual stand-in:
+    # we use the deposit amount so the listing has a positive `price`
+    # value and renders alongside per-parcel rows. Downstream analytics
+    # skip this (no parcelId → no investment multiple).
+    min_bid_stand_in = deposit_usd or 1.0
+
+    return [
+        {
+            "owner": "",
+            "parcelId": f"sale_{starts.group(1).strip().replace(' ', '_').replace(',', '') if starts else 'upcoming'}",
+            "taxDistrict": "",
+            "legalDescription": (
+                f"Sale event: {sale_label or 'Tax-foreclosed properties auction'}."
+                f" {lot_count or '?'} lots offered."
+                f" Starts {starts.group(1).strip() if starts else '?'},"
+                f" ends {ends.group(1).strip() if ends else '?'}."
+            ),
+            "houseNumber": "",
+            "street": "",
+            "propertyType": "SALE_EVENT",
+            "taxYear": None,
+            "amountOwedUsd": min_bid_stand_in,
+            "countyLabel": county_label,
+            "lotCount": lot_count,
+            "depositUsd": deposit_usd,
+            "premiumPct": premium_pct,
+            "isSaleAnnouncement": True,
+        }
+    ]
+
+
 # Registry of parser name → implementation. Populate by adding new
-# `_foo(pdf_bytes)` functions above and registering here.
+# `_foo(bytes)` functions above and registering here. All parsers accept
+# `bytes` (PDF or UTF-8 markdown) so the dispatcher can treat them
+# uniformly.
 PARSERS: dict[str, Callable[[bytes], list[dict[str, Any]]]] = {
     "wy_semicolon_pdf": _wy_semicolon_pdf,
     "ocr_placeholder": _ocr_placeholder,
+    "bid4assets_announcement": _bid4assets_announcement,
 }
 
 

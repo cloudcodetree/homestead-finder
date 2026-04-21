@@ -11,6 +11,7 @@ from logger import get_logger
 from notifier import send_deal_alert, filter_hot_deals
 from scoring import ScoringEngine
 from sources.auction import AuctionScraper
+from sources.tax_sale_analytics import analyze_listings as analyze_tax_sale_listings
 from sources.blm import BLMScraper
 from sources.county_tax import CountyTaxScraper
 from sources.govease import GovEaseScraper
@@ -143,6 +144,17 @@ def run(
                     )
         except (OSError, json.JSONDecodeError) as e:
             print(f"  (could not merge with existing listings.json: {e})")
+
+    # Stamp investment analytics onto every tax-sale row using the full
+    # merged corpus — county $/acre medians come from the LandWatch side,
+    # so we can only compute them AFTER merging. Cheap/idempotent.
+    try:
+        analyze_tax_sale_listings(merged)
+        tax_count = sum(1 for p in merged if p.get("status") == "tax_sale")
+        if tax_count:
+            print(f"  Tax-sale analytics applied to {tax_count} records")
+    except Exception as e:
+        print(f"  (tax-sale analytics failed: {e})")
 
     output_path.write_text(json.dumps(merged, indent=2))
     print(f"\n  Written: {output_path} ({len(merged)} listings)")

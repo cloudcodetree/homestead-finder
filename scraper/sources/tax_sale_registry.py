@@ -22,7 +22,7 @@ from dataclasses import dataclass
 from typing import Literal
 
 
-ListFormat = Literal["pdf", "html", "bid4assets", "govease"]
+ListFormat = Literal["pdf", "html", "bid4assets", "bid4assets_announcement", "govease"]
 StateType = Literal["lien", "deed"]
 
 
@@ -72,9 +72,57 @@ WYOMING_COUNTIES: list[TaxSaleSource] = [
 ]
 
 
+# WA is a deed state — tax-foreclosed properties are auctioned outright,
+# no redemption period after the sale. Per-parcel data on Bid4Assets is
+# auth-gated; we scrape storefront pages for sale-event announcements
+# (date, deposit, lot count). Per-parcel coverage will follow via
+# alternative sources (GovEase for Stevens, etc.) when upcoming sales go
+# live — those storefronts return empty lists between cycles.
+WASHINGTON_COUNTIES: list[TaxSaleSource] = [
+    TaxSaleSource(
+        county="King",
+        state="WA",
+        listUrl="https://www.bid4assets.com/king",
+        listFormat="bid4assets_announcement",
+        parser="bid4assets_announcement",
+        saleMonth=9,
+        stateType="deed",
+        notes=(
+            "Uses Bid4Assets storefront. Per-parcel auction data is "
+            "auth-gated; we surface the sale event (date, lots, deposit) "
+            "and link out."
+        ),
+    ),
+    TaxSaleSource(
+        county="Pierce",
+        state="WA",
+        listUrl="https://www.bid4assets.com/storefront/PierceATNov25",
+        listFormat="bid4assets_announcement",
+        parser="bid4assets_announcement",
+        saleMonth=11,
+        stateType="deed",
+        notes="Storefront URL rotates per sale — update when next auction is posted.",
+    ),
+    TaxSaleSource(
+        county="Snohomish",
+        state="WA",
+        listUrl="https://www.bid4assets.com/storefront/SnohomishCoDec25Reoffer",
+        listFormat="bid4assets_announcement",
+        parser="bid4assets_announcement",
+        saleMonth=11,
+        stateType="deed",
+        notes=(
+            "Moved to Bid4Assets in 2022. Regular Nov sale + Dec re-offers. "
+            "URL rotates per sale event."
+        ),
+    ),
+]
+
+
 # Keyed by state for quick lookup.
 REGISTRY: dict[str, list[TaxSaleSource]] = {
     "WY": WYOMING_COUNTIES,
+    "WA": WASHINGTON_COUNTIES,
 }
 
 

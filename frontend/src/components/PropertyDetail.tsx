@@ -170,6 +170,89 @@ export const PropertyDetail = ({ property, onClose }: PropertyDetailProps) => {
                   </div>
                 )}
               </dl>
+
+              {/* Investment analysis (from scraper/sources/tax_sale_analytics.py) */}
+              {(property.taxSale.investmentMultiple != null ||
+                property.taxSale.expectedReturnPct != null ||
+                (property.taxSale.analyticsNotes ?? []).length > 0) && (
+                <div className="mt-4 pt-4 border-t border-orange-200">
+                  <h4 className="text-xs font-bold text-orange-900 uppercase tracking-wide mb-2">
+                    Investment analysis
+                  </h4>
+                  <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-xs">
+                    {property.taxSale.parcelType && (
+                      <div>
+                        <dt className="text-gray-500">Parcel type</dt>
+                        <dd className="font-semibold text-gray-800 capitalize">
+                          {property.taxSale.parcelType.replace('_', ' ')}
+                        </dd>
+                      </div>
+                    )}
+                    {property.taxSale.estimatedAcres != null && (
+                      <div>
+                        <dt className="text-gray-500">Estimated acres</dt>
+                        <dd className="font-semibold text-gray-800">
+                          {property.taxSale.estimatedAcres.toFixed(2)}
+                        </dd>
+                      </div>
+                    )}
+                    {property.taxSale.estimatedValueUsd != null && (
+                      <div>
+                        <dt className="text-gray-500">Est. market value</dt>
+                        <dd className="font-semibold text-gray-800">
+                          {formatPrice(property.taxSale.estimatedValueUsd)}
+                        </dd>
+                      </div>
+                    )}
+                    {property.taxSale.investmentMultiple != null && (
+                      <div>
+                        <dt className="text-gray-500">Upside multiple</dt>
+                        <dd
+                          className={`font-bold ${
+                            property.taxSale.investmentMultiple >= 3
+                              ? 'text-green-700'
+                              : property.taxSale.investmentMultiple >= 1
+                              ? 'text-amber-700'
+                              : 'text-red-700'
+                          }`}
+                        >
+                          {property.taxSale.investmentMultiple.toFixed(1)}× min bid
+                        </dd>
+                      </div>
+                    )}
+                    {property.taxSale.expectedReturnPct != null && (
+                      <div>
+                        <dt className="text-gray-500">Expected annual return</dt>
+                        <dd
+                          className={`font-bold ${
+                            property.taxSale.expectedReturnPct >= 15
+                              ? 'text-green-700'
+                              : property.taxSale.expectedReturnPct >= 10
+                              ? 'text-amber-700'
+                              : 'text-gray-700'
+                          }`}
+                        >
+                          {property.taxSale.expectedReturnPct.toFixed(1)}% /yr
+                        </dd>
+                      </div>
+                    )}
+                  </div>
+                  {(property.taxSale.analyticsNotes ?? []).length > 0 && (
+                    <ul className="mt-3 list-disc pl-4 text-[11px] text-gray-700 space-y-0.5">
+                      {property.taxSale.analyticsNotes!.map((note, i) => (
+                        <li key={i}>{note}</li>
+                      ))}
+                    </ul>
+                  )}
+                  <p className="mt-3 text-[10px] text-gray-500 italic">
+                    Estimates use county median $/acre from LandWatch comps minus a
+                    ~$5,000 pad for title/legal/quiet-title costs. Lien returns
+                    weight a {85}% redemption probability at the state statutory
+                    interest rate. Do your own diligence — these are rough
+                    triage numbers, not investment advice.
+                  </p>
+                </div>
+              )}
             </div>
           )}
 
