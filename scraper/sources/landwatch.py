@@ -301,33 +301,129 @@ class LandWatchScraper(BaseScraper):
 
         return results
 
+    def _extract_images_by_pid(self, soup: Any) -> dict[str, list[str]]:
+        """Walk the soup and collect image URLs grouped by PID.
+
+        Strategy: for every `<img>` element, find its nearest ancestor
+        that contains a `<a href=".../pid/N">` anchor. Map image → pid.
+        LandWatch search cards put the gallery image inside the same
+        `<article>` / `<div>` wrapper as the listing link, so this
+        catches the card thumbnail reliably even when LandWatch's DOM
+        class names rotate.
+        """
+        by_pid: dict[str, list[str]] = {}
+        for img in soup.find_all("img"):
+            src = (img.get("src") or img.get("data-src") or "").strip()
+            if not src or src.startswith("data:"):
+                continue
+            # Heuristic: LandWatch embeds tiny spacer GIFs + shared
+            # header logos. Skip anything < 50 chars (generally an
+            # inline data-uri or relative UI asset) or known non-
+            # listing domains.
+            if len(src) < 50:
+                continue
+            # Walk up until we find a node containing a /pid/ anchor
+            node = img
+            for _ in range(6):
+                if node is None or node.parent is None:
+                    break
+                node = node.parent
+                anchor = node.find("a", href=True) if hasattr(node, "find") else None
+                if anchor and "/pid/" in anchor.get("href", ""):
+                    m = re.search(r"/pid/(\d+)", anchor["href"])
+                    if m:
+                        pid = m.group(1)
+                        imgs = by_pid.setdefault(pid, [])
+                        if src not in imgs:
+                            imgs.append(src)
+                    break
+        return by_pid
+
     def _parse_html_page(self, html: str, state: str) -> list[dict[str, Any]]:
-        """Parse an HTML listing page with BeautifulSoup card selectors."""
+        """Parse an HTML listing page.
+
+        Three tiers of parsing, from most structured to most resilient:
+          1. BS4 card selectors — stable when LandWatch ships matching
+             `data-testid` / `.property-card` attributes.
+          2. JSON-LD — stable when they embed structured data.
+          3. Regex pseudo-markdown — LandWatch's HTML always has
+             `<a href=".../pid/N">` clusters around each listing. Reusing
+             the markdown parser after converting anchors to `[text](url)`
+             format keeps one regex as the source of truth and works
+             regardless of DOM changes.
+        """
         soup = self.parse_html(html)
+        images_by_pid = self._extract_images_by_pid(soup)
         cards = soup.select(
             "[data-testid='property-card'], .property-card, article.listing"
         )
         if cards:
-            return [
+            results = [
                 listing
                 for card in cards
                 if (listing := _extract_card_data(card, state)) is not None
             ]
+            if results:
+                return results
 
         # JSON-LD fallback
         import json as _json
 
-        results: list[dict[str, Any]] = []
+        jsonld_results: list[dict[str, Any]] = []
         for script in soup.find_all("script", type="application/ld+json"):
             try:
                 data = _json.loads(script.string or "")
             except (_json.JSONDecodeError, AttributeError):
                 continue
             if isinstance(data, list):
-                results.extend(data)
+                jsonld_results.extend(data)
             elif isinstance(data, dict) and data.get("@type") == "ItemList":
-                results.extend(data.get("itemListElement", []))
-        return results
+                jsonld_results.extend(data.get("itemListElement", []))
+        if jsonld_results:
+            return jsonld_results
+
+        # Regex fallback — convert every `<a href=".../pid/N">text</a>`
+        # to pseudo-markdown `[text](url)` so the markdown parser can
+        # handle both formats uniformly.
+        pseudo_md_parts: list[str] = []
+        for anchor in soup.find_all("a", href=True):
+            href = anchor["href"]
+            if "/pid/" not in href:
+                continue
+            if href.startswith("/"):
+                href = f"https://www.landwatch.com{href}"
+            text = anchor.get_text(" ", strip=True)
+            if text:
+                pseudo_md_parts.append(f"[{text}]({href})")
+        # Append raw body text so price/acres/address regexes have
+        # content to latch onto after the link clusters.
+        body_text = soup.get_text(" ", strip=True)
+        pseudo_markdown = "\n".join(pseudo_md_parts) + "\n\n" + body_text
+        listings = parse_markdown_listings(pseudo_markdown, state)
+        # Stamp captured image URLs back onto each listing by PID. Works
+        # even when the markdown parser couldn't extract images itself
+        # (it never could — the regex only handles links, not <img>
+        # tags). For PIDs where we didn't see an <img> (LandWatch lazy-
+        # loads most thumbnails via JS that curl_cffi never runs), fall
+        # back to the stable CDN URL pattern:
+        #   assets.landwatch.com/resizedimages/360/990/l/80/1-<PID>
+        # That endpoint 200s from a browser even without a Referer, so
+        # a direct <img src> hotlink works — no proxy, no storage.
+        for listing in listings:
+            pid = str(listing.get("id", ""))
+            if not pid:
+                continue
+            explicit = images_by_pid.get(pid)
+            if explicit:
+                listing["images"] = explicit
+            else:
+                # Synthesized primary thumbnail. Safe to include even if
+                # the asset is missing — the frontend falls through to
+                # the weserv proxy and then the placeholder on 404/error.
+                listing["images"] = [
+                    f"https://assets.landwatch.com/resizedimages/360/990/l/80/1-{pid}"
+                ]
+        return listings
 
     def parse(self, raw: dict[str, Any]) -> RawListing | None:
         """Parse a raw listing dict (from either path) into a RawListing."""
@@ -341,6 +437,7 @@ class LandWatchScraper(BaseScraper):
             description = raw.get("description", "")
             title = raw.get("title", "")
             combined_text = f"{title} {description}"
+            images = [u for u in (raw.get("images") or []) if isinstance(u, str) and u]
 
             return RawListing(
                 external_id=str(raw.get("id", "")),
@@ -355,6 +452,7 @@ class LandWatchScraper(BaseScraper):
                 description=description,
                 days_on_market=raw.get("daysOnMarket"),
                 url=raw.get("url", ""),
+                images=images,
                 raw=raw,
             )
         except (KeyError, ValueError, TypeError):

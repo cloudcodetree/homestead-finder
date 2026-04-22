@@ -20,8 +20,10 @@ from sources.tax_sale_analytics import analyze_listings as analyze_tax_sale_list
 from sources.blm import BLMScraper
 from sources.county_tax import CountyTaxScraper
 from sources.govease import GovEaseScraper
+from sources.homestead_crossing import HomesteadCrossingScraper
 from sources.lands_of_america import LandsOfAmericaScraper
 from sources.landwatch import LandWatchScraper
+from sources.ozarkland import OzarkLandScraper
 from sources.realtor import RealtorScraper
 from sources.zillow import ZillowScraper
 
@@ -31,6 +33,8 @@ log = get_logger("main")
 ALL_SCRAPERS = {
     "landwatch": LandWatchScraper,
     "lands_of_america": LandsOfAmericaScraper,
+    "homestead_crossing": HomesteadCrossingScraper,
+    "ozarkland": OzarkLandScraper,
     "zillow": ZillowScraper,
     "realtor": RealtorScraper,
     "county_tax": CountyTaxScraper,

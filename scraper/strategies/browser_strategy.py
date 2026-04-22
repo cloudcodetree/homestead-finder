@@ -1,4 +1,11 @@
-"""Tier 2: Playwright browser fetch strategy for JS-rendered pages."""
+"""Browser fetch strategy — Playwright Chromium with stealth patches.
+
+Our zero-cost alternative to Firecrawl. Passes Cloudflare on LandWatch,
+Lands of America, Bid4Assets, and most anti-bot walls by running a real
+Chromium from the user's residential IP with `playwright-stealth`
+patches applied to hide the automation signals Cloudflare looks for
+(navigator.webdriver, missing plugins, languages, hairline, etc).
+"""
 
 from __future__ import annotations
 
@@ -7,7 +14,10 @@ from typing import Any
 
 from strategies.base import FetchResult, FetchStrategy
 
-# Reuse browser across fetches within a single run
+# Reuse browser across fetches within a single run to amortize launch
+# cost (~1s). Context is per-fetch for isolation — cookies/storage
+# don't leak between sites, which matters because different sites set
+# conflicting bot-detection cookies.
 _browser = None
 _playwright_instance = None
 
@@ -27,16 +37,38 @@ def _get_browser(headless: bool = True) -> Any:
             "--no-sandbox",
             "--disable-dev-shm-usage",
             "--disable-blink-features=AutomationControlled",
+            "--disable-features=IsolateOrigins,site-per-process",
         ],
     )
     return _browser
 
 
-class BrowserStrategy(FetchStrategy):
-    """Fetch pages using Playwright's headless Chromium.
+def _apply_stealth(page: Any) -> None:
+    """Apply playwright-stealth patches to a page. No-op if the library
+    isn't available (older installs) — callers still get baseline
+    Playwright anti-detection but won't pass stricter CF challenges."""
+    try:
+        from playwright_stealth import Stealth
 
-    Better than Selenium for anti-bot evasion — Playwright patches
-    navigator.webdriver and other detection vectors by default.
+        # v2 API: Stealth().apply_stealth_sync(page)
+        Stealth().apply_stealth_sync(page)
+    except (ImportError, AttributeError):
+        try:
+            # v1 API fallback
+            from playwright_stealth import stealth_sync  # type: ignore[import-not-found]
+
+            stealth_sync(page)
+        except (ImportError, AttributeError):
+            # No stealth lib at all — continue with baseline Playwright.
+            pass
+
+
+class BrowserStrategy(FetchStrategy):
+    """Fetch pages using stealth-patched Playwright Chromium.
+
+    Strategy order in our chains puts this BEFORE Firecrawl: Playwright
+    runs from the user's residential IP, which Cloudflare trusts more
+    than datacenter IPs Firecrawl uses. No per-request cost either.
     """
 
     name = "browser"
@@ -49,7 +81,9 @@ class BrowserStrategy(FetchStrategy):
         self.wait_seconds = wait_seconds
 
     def is_available(self) -> bool:
-        """Check if playwright is importable and browsers are installed."""
+        """Check if playwright is importable. Browsers binary is checked
+        lazily — `_get_browser()` will raise if Chromium isn't installed,
+        and the chain will move to the next strategy."""
         try:
             import importlib.util
 
@@ -58,7 +92,7 @@ class BrowserStrategy(FetchStrategy):
             return False
 
     def fetch(self, url: str, **kwargs: Any) -> FetchResult:
-        """Load page in Chromium and return rendered HTML."""
+        """Load page in Chromium with stealth, return rendered HTML."""
         browser = _get_browser(headless=self.headless)
         context = browser.new_context(
             user_agent=(
@@ -66,8 +100,11 @@ class BrowserStrategy(FetchStrategy):
                 "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
             ),
             viewport={"width": 1920, "height": 1080},
+            locale="en-US",
+            timezone_id="America/Chicago",
         )
         page = context.new_page()
+        _apply_stealth(page)
 
         try:
             response = page.goto(
@@ -86,6 +123,13 @@ class BrowserStrategy(FetchStrategy):
 
             if status >= 400:
                 raise RuntimeError(f"HTTP {status} from {url}")
+
+            # Cloudflare challenge pages return 200 but only contain a
+            # "Just a moment..." title. Detect + wait briefly for the
+            # auto-solve to complete before giving up.
+            if "Just a moment" in html and "challenge" in html.lower():
+                time.sleep(4.0)
+                html = page.content()
 
             return FetchResult(
                 content=html,

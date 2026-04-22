@@ -13,11 +13,14 @@ DATA_DIR.mkdir(exist_ok=True)
 # ── Target geography ─────────────────────────────────────────────────────────
 # States to scrape. Expand as budget/rate-limit allows.
 TARGET_STATES: list[str] = os.getenv(
-    # Primary pilot: WY (smallest surface area for tax-sale framework).
-    # Secondary: MT (already has full LandWatch + geo enrichment coverage).
-    # Others trail; see context/BACKLOG.md for expansion order.
+    # Pivot 2026-04-21: Ozark pilot. MO is the hybrid-state flagship
+    # (lien-style 1st/2nd offerings + deed 3rd offerings in the same
+    # county). AR adds a redeemable-deed variant via the statewide
+    # Commissioner of State Lands + Carroll County (Eureka Springs) for
+    # the homestead-adjacent inventory. All prior-state listings are
+    # archived under data/archive/2026-04-21_pre_mo_ar_pivot/.
     "TARGET_STATES",
-    "WY,MT,ID,WA,OR,CO,NM,TX,TN,MN,ME",
+    "MO,AR",
 ).split(",")
 
 # ── Deal criteria ────────────────────────────────────────────────────────────
@@ -48,7 +51,15 @@ USER_AGENT = (
 # Set to False to disable a source without removing it
 ENABLED_SOURCES: dict[str, bool] = {
     "landwatch": True,
-    "lands_of_america": True,
+    # Lands of America redirects all traffic to land.com (same parent,
+    # rebranded 2025). land.com is a JS-rendered aggregator that
+    # duplicates LandWatch inventory — disabled until we verify unique
+    # inventory justifies the Playwright cost.
+    "lands_of_america": False,
+    # Ozark owner-finance specialists (MO/AR only) — tiny inventory
+    # but ICP-perfect.
+    "homestead_crossing": True,
+    "ozarkland": True,
     "zillow": False,  # Rate limiting issues — disabled by default
     "realtor": False,  # Rate limiting issues — disabled by default
     "county_tax": True,
@@ -78,14 +89,28 @@ LEARNED_SELECTORS_DIR = DATA_DIR / "learned_selectors"
 
 # Strategy chains per source — tried in order until one succeeds
 STRATEGY_CHAINS: dict[str, list[str]] = {
-    "landwatch": ["http", "selenium", "firecrawl", "firecrawl+claude"],
-    "lands_of_america": ["http", "selenium", "firecrawl", "firecrawl+claude"],
-    "county_tax": ["selenium", "http", "firecrawl"],
-    "auction": ["selenium", "firecrawl+claude"],
-    "blm": ["http", "firecrawl"],
-    "govease": ["http", "selenium"],
-    "zillow": ["http"],
-    "realtor": ["http", "selenium"],
+    # Order is cheapest → most expensive. Strategies:
+    #   - http:        plain requests. Good for server-rendered sites.
+    #   - curl_cffi:   Chrome-TLS impersonation. Beats Cloudflare WAF
+    #                  (LandWatch, LOA, Bid4Assets) for the price of a
+    #                  plain HTTP call. ~0.8s/page, free.
+    #   - selenium:    Playwright Chromium + stealth patches. Handles
+    #                  JS-rendered sites (HomesteadCrossing, COSL .NET)
+    #                  and harder CF challenges. ~8s/page, free.
+    #   - firecrawl:   metered third-party. Paid fallback only.
+    "landwatch": ["curl_cffi", "http", "selenium", "firecrawl"],
+    "lands_of_america": ["curl_cffi", "http", "selenium", "firecrawl"],
+    # Owner-finance boutique sites. OzarkLand is server-side WP — plain
+    # HTTP works. HomesteadCrossing is JS-rendered (Rent Manager) so
+    # skip curl_cffi and go straight to Playwright.
+    "homestead_crossing": ["selenium", "firecrawl"],
+    "ozarkland": ["http", "curl_cffi", "selenium"],
+    "county_tax": ["http", "curl_cffi", "selenium", "firecrawl"],
+    "auction": ["curl_cffi", "selenium", "firecrawl+claude"],
+    "blm": ["http", "curl_cffi", "selenium"],
+    "govease": ["http", "curl_cffi", "selenium"],
+    "zillow": ["curl_cffi", "http", "selenium"],
+    "realtor": ["curl_cffi", "http", "selenium"],
 }
 
 # ── Output ───────────────────────────────────────────────────────────────────

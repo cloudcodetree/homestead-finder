@@ -51,3 +51,7 @@ data/scraper.log
 data/cache/
 data/ai_costs.jsonl
 .claude/worktrees/
+
+# Dev-only convenience symlink — Vite serves data/ via this in dev;
+# CI deploys copy data/*.json into frontend/dist/data/ explicitly.
+frontend/public/data

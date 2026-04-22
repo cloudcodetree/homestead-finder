@@ -23,7 +23,17 @@ from typing import Literal
 
 
 ListFormat = Literal["pdf", "html", "bid4assets", "bid4assets_announcement", "govease"]
-StateType = Literal["lien", "deed"]
+# - lien: certificate auction, multi-year redemption, then optional deed
+# - deed: title auction, no post-sale redemption (WA model)
+# - redeemable_deed: title auction with a short post-sale redemption
+#     window during which the prior owner can buy the property back at a
+#     statutory premium. Reverts to clean deed after the window. AR, TN,
+#     GA, TX (non-homestead) follow this pattern.
+# - hybrid: multi-stage pipeline where early offerings act lien-like
+#     (certificate + redemption) and later offerings transition to deed
+#     outright. MO's 1st/2nd/3rd Collector offerings are the canonical
+#     example.
+StateType = Literal["lien", "deed", "redeemable_deed", "hybrid"]
 
 
 @dataclass(frozen=True)
@@ -119,8 +129,119 @@ WASHINGTON_COUNTIES: list[TaxSaleSource] = [
 ]
 
 
-# Keyed by state for quick lookup.
+# MO is a hybrid state — Collector of Revenue holds 1st/2nd/3rd offerings
+# for delinquent parcels. 1st and 2nd behave lien-like (certificate of
+# purchase, 1-yr redemption period, 10% annual return if redeemed).
+# Unsold parcels roll to 3rd offering which conveys a Collector's Deed
+# with a 90-day quiet-title window — fastest clean-title path in the
+# registry. All three pilot counties hold their sale on the 4th Monday
+# of August per state statute (Aug 24, 2026).
+MISSOURI_COUNTIES: list[TaxSaleSource] = [
+    TaxSaleSource(
+        county="Texas",
+        state="MO",
+        # Direct PDF URL discovered 2026-04-22. Texas County mirrors the
+        # annual delinquent list on an eadn-wc01-* edge CDN; filename
+        # is stable-ish ("Land-Tax-Sale-Update-4-1.pdf") but rotates
+        # per sale year. Verify + refresh in July before the Aug sale.
+        listUrl="https://eadn-wc01-3627135.nxedge.io/wp-content/uploads/Land-Tax-Sale-Update-4-1.pdf",
+        listFormat="pdf",
+        parser="missouri_collector_pdf",
+        saleMonth=8,
+        stateType="hybrid",
+        notes=(
+            "Largest MO county by area, Ozark core. 4th Monday of August "
+            "sale at Courthouse (Aug 24, 2026). PDF rotates per year; "
+            "landing page at texascountymissouri.gov/.../land-tax-sale/."
+        ),
+    ),
+    TaxSaleSource(
+        county="Reynolds",
+        state="MO",
+        listUrl="http://reynoldscountycollector.com/Delinquent.aspx",
+        listFormat="html",
+        parser="missouri_collector_aspx",
+        saleMonth=8,
+        stateType="hybrid",
+        notes=(
+            "Aspx-rendered delinquent list — parser fetches via Firecrawl "
+            "to get server-rendered HTML. Tiny population (~6k), heavy "
+            "forest, frequent 3rd-offering deed parcels. Sale Aug 24 2026."
+        ),
+    ),
+    TaxSaleSource(
+        county="Douglas",
+        state="MO",
+        listUrl="https://douglascountycollector.com/taxsale.php",
+        listFormat="html",
+        parser="missouri_collector_php",
+        saleMonth=8,
+        stateType="hybrid",
+        notes=(
+            "PHP-rendered sale page. Douglas requires 3 years delinquent "
+            "before listing, so volume is lower but 3rd-offering deed "
+            "conversion is high. Spring-fed Ozark water, Amish "
+            "owner-finance belt. Sale Aug 24 2026 at the Ava courthouse."
+        ),
+    ),
+]
+
+
+# AR uses a statewide Commissioner of State Lands (COSL) program: all
+# tax-delinquent parcels statewide certify to the state, which then
+# auctions them by county-group catalog. Redeemable-deed state — 30-day
+# post-sale redemption, then deed ripens clean. Carroll County's 2026
+# sale is Aug 12; parcels populate closer to the auction date. COSL
+# also runs post-auction/negotiated sales at auction.cosl.org — the
+# app's "unadvertised gems" mandate fits this perfectly.
+ARKANSAS_SOURCES: list[TaxSaleSource] = [
+    TaxSaleSource(
+        county="Carroll",
+        state="AR",
+        # COSL publishes per-county/per-date catalog pages. URL format
+        # verified live 2026-04-22: county=CARR, saledate URL-encoded.
+        # Parcel list populates closer to auction (Aug 12 2026) — before
+        # then the page shows "check back closer to sale date".
+        listUrl="https://www.cosl.org/Home/CatalogView?county=CARR&saledate=8%2F12%2F2026%2012%3A00%3A00%20AM",
+        listFormat="html",
+        parser="arkansas_cosl_catalog_html",
+        saleMonth=8,
+        stateType="redeemable_deed",
+        notes=(
+            "Eureka Springs (Carroll County) — 2026 COSL sale Aug 12. "
+            "DataScoutPro powers the per-parcel links. Redemption window "
+            "30 days post-sale, then clean deed. Update saledate in "
+            "listUrl when the 2027 date is posted."
+        ),
+    ),
+    TaxSaleSource(
+        county="Carroll",
+        state="AR",
+        # Online post-auction/negotiated sale platform. Inventory rolls
+        # here when parcels don't move at the public auction.
+        listUrl="https://auction.cosl.org/Auctions/ListingsView",
+        listFormat="html",
+        parser="arkansas_cosl_negotiated",
+        saleMonth=None,  # Year-round inventory
+        stateType="redeemable_deed",
+        notes=(
+            "COSL online post-auction sale — year-round min-bid "
+            "inventory of parcels that failed the public auction. "
+            "Needs Firecrawl (JS-heavy .NET app). Filter to Carroll."
+        ),
+    ),
+]
+
+
+# Keyed by state for quick lookup. Registration ≠ active scraping — what
+# runs daily is determined by `config.TARGET_STATES` (currently MO,AR
+# for the Ozark pilot). WY/WA stay registered so the framework's
+# reference-implementation tests (Park County fixture, Bid4Assets
+# announcement shape) still execute; they just don't produce data
+# because the state codes aren't in TARGET_STATES.
 REGISTRY: dict[str, list[TaxSaleSource]] = {
+    "MO": MISSOURI_COUNTIES,
+    "AR": ARKANSAS_SOURCES,
     "WY": WYOMING_COUNTIES,
     "WA": WASHINGTON_COUNTIES,
 }

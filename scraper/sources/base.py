@@ -43,6 +43,12 @@ class RawListing:
     features: list[str] = field(default_factory=list)
     description: str = ""
     days_on_market: int | None = None
+    # Image URLs captured from the source page. `images[0]` is the
+    # primary thumbnail for card views; when the scraper has access to
+    # a gallery (detail-page fetch) later entries are ordered as the
+    # source rendered them. Empty list is fine — the frontend falls
+    # through to a placeholder SVG.
+    images: list[str] = field(default_factory=list)
     raw: dict[str, Any] = field(default_factory=dict)
 
 
@@ -54,6 +60,13 @@ def _build_strategy_chain(source_name: str, rate_limit: float) -> FetchStrategyC
     for name in chain_names:
         if name == "http":
             strategies.append(SimpleHTTPStrategy(rate_limit=rate_limit))
+        elif name in ("curl_cffi", "tls"):
+            # TLS-fingerprint impersonation via curl-cffi. Faster than
+            # Playwright, free, and passes the CF wall on LandWatch /
+            # LOA / Bid4Assets where plain requests gets a flat 403.
+            from strategies.curl_cffi_strategy import CurlCffiStrategy
+
+            strategies.append(CurlCffiStrategy(rate_limit=rate_limit))
         elif name in ("selenium", "browser"):
             from strategies.browser_strategy import BrowserStrategy
 
@@ -130,7 +143,16 @@ class BaseScraper(ABC):
         return BeautifulSoup(html, "lxml")
 
     def to_property(self, raw: RawListing) -> dict[str, Any]:
-        """Convert RawListing to the standard Property schema."""
+        """Convert RawListing to the standard Property schema.
+
+        `status="active"` is the default — every row in today's scrape
+        was by definition listed-for-sale at fetch time. The county-tax
+        subclass overrides this to "tax_sale". A future detail-verify
+        step could demote stale rows to "expired" if an HTTP fetch of
+        the listing page 404s, but without that signal we start active
+        (avoids the frontend defaulting everything to the yellow
+        "⚠ Unverified" badge).
+        """
         price_per_acre = raw.price / raw.acreage if raw.acreage > 0 else 0
         return {
             "id": f"{self.SOURCE_NAME}_{raw.external_id}",
@@ -151,6 +173,11 @@ class BaseScraper(ABC):
             "dealScore": 0,  # Set by scoring engine after normalization
             "description": raw.description,
             "daysOnMarket": raw.days_on_market,
+            "status": "active",
+            # Only include `images` when we actually captured some —
+            # keeps the JSON diff small for sources that don't (yet)
+            # extract gallery URLs. Frontend treats absent == empty.
+            **({"images": raw.images} if raw.images else {}),
         }
 
     @abstractmethod

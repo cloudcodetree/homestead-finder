@@ -6,6 +6,14 @@ scrapy==2.11.2
 selenium==4.21.0
 webdriver-manager==4.0.1
 playwright==1.52.0
+# Stealth patches for Playwright — hides navigator.webdriver +
+# language/plugin/hairline signals that Cloudflare anti-bot uses.
+# Lets local Playwright replace Firecrawl for JS-rendered sites.
+playwright-stealth==2.0.3
+# Chrome TLS-fingerprint impersonation — passes Cloudflare WAF walls
+# on LandWatch / LOA / Bid4Assets for $0. See
+# scraper/strategies/curl_cffi_strategy.py for the rationale.
+curl-cffi==0.13.0
 
 # AI-powered fallback strategies
 firecrawl-py==1.5.0

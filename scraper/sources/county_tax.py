@@ -75,8 +75,21 @@ class CountyTaxScraper(BaseScraper):
                 return []
             records = parser(markdown.encode("utf-8"))
         elif source.listFormat == "html":
-            log.info("[tax_sale] html parser dispatch not yet implemented")
-            return []
+            # Generic HTML fetcher. First tries the scraper's normal
+            # strategy chain (curl_cffi → Playwright → Firecrawl) so
+            # JS-rendered .NET portals like AR COSL's Kendo grid get
+            # the rendered DOM, not the Blazor shell. Falls back to
+            # the bid4assets-style Firecrawl markdown path if the
+            # chain produces nothing.
+            html = self._fetch_html(source.listUrl)
+            if not html:
+                # Final fallback: Firecrawl markdown (bid4assets path)
+                markdown = self._fetch_markdown(source.listUrl)
+                if not markdown:
+                    return []
+                records = parser(markdown.encode("utf-8"))
+            else:
+                records = parser(html.encode("utf-8"))
         else:
             log.info(f"[tax_sale] list format {source.listFormat!r} not yet supported")
             return []
@@ -85,10 +98,13 @@ class CountyTaxScraper(BaseScraper):
             f"[tax_sale] {source.county} {source.state}: "
             f"{len(records)} parcel records"
         )
-        # Stamp every record with the county/state from the registry so the
-        # parser can stay agnostic.
+        # Stamp every record with the source-level metadata. For records
+        # that carry their own per-parcel county (e.g. COSL statewide
+        # feeds include Owner/County/Parcel columns), prefer that —
+        # otherwise fall back to the registry's source.county.
         for rec in records:
-            rec["county"] = source.county
+            per_row_county = (rec.get("countyLabel") or "").strip() or rec.get("county")
+            rec["county"] = per_row_county or source.county
             rec["state"] = source.state
             rec["saleMonth"] = source.saleMonth
             rec["stateType"] = source.stateType
@@ -111,6 +127,26 @@ class CountyTaxScraper(BaseScraper):
         except requests.RequestException as e:
             log.info(f"[tax_sale] download failed for {url}: {e}")
             return b""
+
+    def _fetch_html(self, url: str) -> str:
+        """Fetch a URL with Playwright directly — every HTML tax-sale
+        source registered so far is a .NET/Blazor app (AR COSL Kendo
+        grid, MO Reynolds .aspx, MO Douglas .php with JS) where plain
+        requests returns a 200-but-empty shell. Going straight to the
+        browser strategy avoids false-success on the HTTP path.
+        Returns "" on total failure so callers can fall back."""
+        try:
+            from strategies.browser_strategy import BrowserStrategy
+
+            strategy = BrowserStrategy(headless=True, timeout=40000, wait_seconds=5.0)
+            if not strategy.is_available():
+                log.info("[tax_sale] Playwright not installed — skipping HTML fetch")
+                return ""
+            result = strategy.fetch(url)
+            return result.content if result.content_type == "html" else ""
+        except Exception as e:
+            log.info(f"[tax_sale] Playwright fetch failed for {url}: {e}")
+            return ""
 
     def _fetch_markdown(self, url: str) -> str:
         """Fetch an HTML page via Firecrawl and return its markdown. Used
