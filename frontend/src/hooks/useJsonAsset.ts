@@ -29,11 +29,7 @@ interface Result<T> {
   isSample: boolean;
 }
 
-export const useJsonAsset = <T>({
-  assetPath,
-  loadFallback,
-  isEmpty,
-}: Options<T>): Result<T> => {
+export const useJsonAsset = <T>({ assetPath, loadFallback, isEmpty }: Options<T>): Result<T> => {
   const [data, setData] = useState<T | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -46,9 +42,7 @@ export const useJsonAsset = <T>({
         let result: T;
         let fromSample = false;
         try {
-          const response = await fetch(
-            `${import.meta.env.BASE_URL}${assetPath}`
-          );
+          const response = await fetch(`${import.meta.env.BASE_URL}${assetPath}`);
           if (!response.ok) throw new Error(`HTTP ${response.status}`);
           const fetched = (await response.json()) as T;
           if (isEmpty?.(fetched)) throw new Error('empty');

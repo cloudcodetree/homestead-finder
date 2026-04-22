@@ -15,14 +15,7 @@
       "title_issues_mentioned",
       "zoning_prohibits_residential"
     ],
-    "sfhaZonesExcluded": [
-      "A",
-      "AE",
-      "AH",
-      "AO",
-      "V",
-      "VE"
-    ],
+    "sfhaZonesExcluded": ["A", "AE", "AH", "AO", "V", "VE"],
     "maxSoilCapabilityClass": 6
   },
   "picks": [

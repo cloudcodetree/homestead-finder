@@ -183,7 +183,21 @@ export interface Property {
   dealScore: number;
   description?: string;
   daysOnMarket?: number;
+  /**
+   * Legacy single-image field (pre-gallery). Kept for any rows that
+   * still carry just a primary thumbnail; new scrapes populate
+   * `images[]` instead. Frontend thumbnail component falls through
+   * this when `images[]` is absent.
+   */
   imageUrl?: string;
+  /**
+   * Ordered list of image URLs as captured by the source scraper
+   * (search-card thumb first, then gallery). Rendered via the
+   * images.weserv.nl proxy so hotlink-blocking CDNs (LandWatch,
+   * Land.com) don't break the UI. Empty array / omitted = show the
+   * placeholder.
+   */
+  images?: string[];
   validated?: boolean;
   validatedAt?: string;
   status?: 'active' | 'expired' | 'unverified' | 'tax_sale';

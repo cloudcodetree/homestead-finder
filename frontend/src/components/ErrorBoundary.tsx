@@ -26,11 +26,7 @@ export class ErrorBoundary extends Component<Props, State> {
   }
 
   componentDidCatch(error: Error, info: { componentStack?: string }) {
-    console.error(
-      `[ErrorBoundary:${this.props.label ?? 'unknown'}]`,
-      error,
-      info.componentStack
-    );
+    console.error(`[ErrorBoundary:${this.props.label ?? 'unknown'}]`, error, info.componentStack);
   }
 
   reset = () => this.setState({ error: null });
@@ -47,8 +43,7 @@ export class ErrorBoundary extends Component<Props, State> {
             <span className="font-mono">{this.props.label ?? 'this section'}</span>
           </p>
           <p className="text-amber-800 mb-2">
-            The rest of the dashboard kept working. Check the browser console for
-            details.
+            The rest of the dashboard kept working. Check the browser console for details.
           </p>
           <button
             onClick={this.reset}

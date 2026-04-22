@@ -1,4 +1,4 @@
-import { useCallback, useState, lazy, Suspense } from 'react';
+import { useCallback, useMemo, useState, lazy, Suspense } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Property, DEFAULT_FILTERS, SortBy, SORT_LABELS } from '../types/property';
 import { PropertyCard } from './PropertyCard';
@@ -17,12 +17,20 @@ import { QueryResponse } from '../hooks/useQueryServer';
 import { getDealScoreColor } from '../utils/scoring';
 import { formatPrice, formatAcreage } from '../utils/formatters';
 
-const MapView = lazy(() => import('./MapView').then(m => ({ default: m.MapView })));
+const MapView = lazy(() => import('./MapView').then((m) => ({ default: m.MapView })));
 
 type ViewMode = 'list' | 'map' | 'picks' | 'deals';
 
 export const Dashboard = () => {
-  const { filters, updateFilter, toggleState, toggleFeature, toggleAITag, resetFilters, hasActiveFilters } = useFilters();
+  const {
+    filters,
+    updateFilter,
+    toggleState,
+    toggleFeature,
+    toggleAITag,
+    resetFilters,
+    hasActiveFilters,
+  } = useFilters();
   const {
     properties,
     allProperties,
@@ -43,6 +51,20 @@ export const Dashboard = () => {
   const [showFilters, setShowFilters] = useState(false); // mobile drawer
   const [sidebarOpen, setSidebarOpen] = useState(true); // desktop collapse
   const [queryResult, setQueryResult] = useState<QueryResponse | null>(null);
+  // States present in the loaded corpus — feeds the state filter so it
+  // reflects actual inventory (not a hardcoded list). Stable reference
+  // via useMemo so FilterPanel doesn't thrash.
+  const availableStates = useMemo(
+    () =>
+      Array.from(
+        new Set(
+          allProperties
+            .map((p) => p.location?.state)
+            .filter((s): s is string => typeof s === 'string' && s.length > 0)
+        )
+      ),
+    [allProperties]
+  );
 
   // URL-driven selection so property pages are deep-linkable (e.g.
   // `/p/landwatch_101`). Clicking a card navigates into the URL; closing
@@ -60,7 +82,7 @@ export const Dashboard = () => {
   // set — a direct URL must resolve even if the user's current filters
   // would have hidden it.
   const selectedProperty = selectedId
-    ? allProperties.find((p: Property) => p.id === selectedId) ?? null
+    ? (allProperties.find((p: Property) => p.id === selectedId) ?? null)
     : null;
 
   const activeFilterCount = [
@@ -107,7 +129,9 @@ export const Dashboard = () => {
             <button
               onClick={() => setViewMode('list')}
               className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
-                viewMode === 'list' ? 'bg-white shadow text-gray-900' : 'text-gray-500 hover:text-gray-700'
+                viewMode === 'list'
+                  ? 'bg-white shadow text-gray-900'
+                  : 'text-gray-500 hover:text-gray-700'
               }`}
             >
               List
@@ -115,7 +139,9 @@ export const Dashboard = () => {
             <button
               onClick={() => setViewMode('map')}
               className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
-                viewMode === 'map' ? 'bg-white shadow text-gray-900' : 'text-gray-500 hover:text-gray-700'
+                viewMode === 'map'
+                  ? 'bg-white shadow text-gray-900'
+                  : 'text-gray-500 hover:text-gray-700'
               }`}
             >
               Map
@@ -123,7 +149,9 @@ export const Dashboard = () => {
             <button
               onClick={() => setViewMode('picks')}
               className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors flex items-center gap-1 ${
-                viewMode === 'picks' ? 'bg-white shadow text-gray-900' : 'text-gray-500 hover:text-gray-700'
+                viewMode === 'picks'
+                  ? 'bg-white shadow text-gray-900'
+                  : 'text-gray-500 hover:text-gray-700'
               }`}
               title="AI-curated top picks"
             >
@@ -137,7 +165,9 @@ export const Dashboard = () => {
             <button
               onClick={() => setViewMode('deals')}
               className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors flex items-center gap-1 ${
-                viewMode === 'deals' ? 'bg-white shadow text-gray-900' : 'text-gray-500 hover:text-gray-700'
+                viewMode === 'deals'
+                  ? 'bg-white shadow text-gray-900'
+                  : 'text-gray-500 hover:text-gray-700'
               }`}
               title="Homestead-specific curated deals (filtered for buildable, ≥5 acres, no floodplain, good soil)"
             >
@@ -163,13 +193,15 @@ export const Dashboard = () => {
       {/* Main layout */}
       <div className="flex flex-1 overflow-hidden">
         {/* Desktop collapsible sidebar */}
-        <aside className={`hidden lg:flex flex-col flex-shrink-0 bg-white border-r border-gray-200 overflow-hidden transition-[width] duration-300 ease-in-out ${sidebarOpen ? 'w-72' : 'w-10'}`}>
+        <aside
+          className={`hidden lg:flex flex-col flex-shrink-0 bg-white border-r border-gray-200 overflow-hidden transition-[width] duration-300 ease-in-out ${sidebarOpen ? 'w-72' : 'w-10'}`}
+        >
           {/* Inner container — always w-72 so content clips when collapsed */}
           <div className="w-72 flex flex-col h-full">
             {/* Collapse toggle row — button is left-anchored so it stays visible when collapsed */}
             <div className="flex-shrink-0 flex items-center gap-2 px-2 h-12 border-b border-gray-100">
               <button
-                onClick={() => setSidebarOpen(s => !s)}
+                onClick={() => setSidebarOpen((s) => !s)}
                 className="flex-shrink-0 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded p-1 transition-colors"
                 title={sidebarOpen ? 'Collapse filters' : 'Expand filters'}
               >
@@ -202,6 +234,7 @@ export const Dashboard = () => {
                 onReset={resetFilters}
                 hasActiveFilters={hasActiveFilters}
                 resultCount={properties.length}
+                availableStates={availableStates}
                 hideHeader
               />
             </div>
@@ -215,7 +248,9 @@ export const Dashboard = () => {
         />
 
         {/* Mobile filter drawer */}
-        <div className={`lg:hidden fixed top-0 left-0 bottom-0 z-50 w-80 max-w-[85vw] bg-white shadow-2xl flex flex-col transition-transform duration-300 ease-in-out ${showFilters ? 'translate-x-0' : '-translate-x-full'}`}>
+        <div
+          className={`lg:hidden fixed top-0 left-0 bottom-0 z-50 w-80 max-w-[85vw] bg-white shadow-2xl flex flex-col transition-transform duration-300 ease-in-out ${showFilters ? 'translate-x-0' : '-translate-x-full'}`}
+        >
           <div className="flex-shrink-0 flex items-center justify-between px-4 py-3 border-b border-gray-100">
             <div>
               <h2 className="font-semibold text-gray-900">
@@ -225,7 +260,10 @@ export const Dashboard = () => {
             </div>
             <div className="flex items-center gap-3">
               {hasActiveFilters && (
-                <button onClick={resetFilters} className="text-xs text-green-600 hover:text-green-700 font-medium">
+                <button
+                  onClick={resetFilters}
+                  className="text-xs text-green-600 hover:text-green-700 font-medium"
+                >
                   Clear all
                 </button>
               )}
@@ -247,6 +285,7 @@ export const Dashboard = () => {
               onReset={resetFilters}
               hasActiveFilters={hasActiveFilters}
               resultCount={properties.length}
+              availableStates={availableStates}
               hideHeader
             />
           </div>
@@ -293,14 +332,12 @@ export const Dashboard = () => {
                       </em>
                     </span>
                     <span className="text-xs text-purple-600">
-                      {queryResult.matches.length} of{' '}
-                      {queryResult.totalConsidered}
+                      {queryResult.matches.length} of {queryResult.totalConsidered}
                     </span>
                   </header>
                   {queryResult.matches.length === 0 ? (
                     <p className="text-sm text-gray-600 py-2">
-                      No listings matched. Try rephrasing or broadening your
-                      criteria.
+                      No listings matched. Try rephrasing or broadening your criteria.
                     </p>
                   ) : (
                     <div className="space-y-3">
@@ -342,11 +379,13 @@ export const Dashboard = () => {
                   {queryResult ? 'All listings' : `${sortedProperties.length} properties`}
                 </p>
                 <div className="flex items-center gap-2">
-                  <label className="text-sm text-gray-600 hidden sm:block" htmlFor="sort-select">Sort:</label>
+                  <label className="text-sm text-gray-600 hidden sm:block" htmlFor="sort-select">
+                    Sort:
+                  </label>
                   <select
                     id="sort-select"
                     value={filters.sortBy}
-                    onChange={e => updateFilter('sortBy', e.target.value as SortBy)}
+                    onChange={(e) => updateFilter('sortBy', e.target.value as SortBy)}
                     className="border border-gray-200 rounded-lg px-3 py-1.5 text-sm bg-white focus:ring-1 focus:ring-green-500 focus:outline-none"
                   >
                     {(Object.keys(SORT_LABELS) as SortBy[]).map((option) => (
@@ -385,11 +424,13 @@ export const Dashboard = () => {
           )}
 
           {!loading && !error && viewMode === 'map' && (
-            <Suspense fallback={
-              <div className="flex items-center justify-center h-full">
-                <p className="text-gray-500">Loading map...</p>
-              </div>
-            }>
+            <Suspense
+              fallback={
+                <div className="flex items-center justify-center h-full">
+                  <p className="text-gray-500">Loading map...</p>
+                </div>
+              }
+            >
               <MapView
                 properties={properties}
                 selectedId={selectedId}
@@ -398,8 +439,10 @@ export const Dashboard = () => {
             </Suspense>
           )}
 
-          {!loading && !error && viewMode === 'deals' && (
-            dealsMatchListings && deals ? (
+          {!loading &&
+            !error &&
+            viewMode === 'deals' &&
+            (dealsMatchListings && deals ? (
               <ErrorBoundary label="Homestead Deals">
                 <HomesteadDeals
                   deals={deals}
@@ -413,21 +456,30 @@ export const Dashboard = () => {
                   <p className="text-4xl mb-3">🌾</p>
                   <p className="text-gray-600 font-medium">No homestead deals yet</p>
                   <p className="text-sm text-gray-500 mt-1">
-                    Run <code className="px-1.5 py-0.5 bg-gray-100 rounded text-xs">python -m scraper.deals</code> locally to generate the curated homestead list, then commit <code className="px-1.5 py-0.5 bg-gray-100 rounded text-xs">data/homestead_deals.json</code>.
+                    Run{' '}
+                    <code className="px-1.5 py-0.5 bg-gray-100 rounded text-xs">
+                      python -m scraper.deals
+                    </code>{' '}
+                    locally to generate the curated homestead list, then commit{' '}
+                    <code className="px-1.5 py-0.5 bg-gray-100 rounded text-xs">
+                      data/homestead_deals.json
+                    </code>
+                    .
                   </p>
                   {dealsIsSample && !listingsAreSample && (
                     <p className="text-xs text-gray-400 mt-3">
-                      (The bundled sample was hidden because it references
-                      listing IDs that don&apos;t match your real data.)
+                      (The bundled sample was hidden because it references listing IDs that
+                      don&apos;t match your real data.)
                     </p>
                   )}
                 </div>
               </div>
-            )
-          )}
+            ))}
 
-          {!loading && !error && viewMode === 'picks' && (
-            curationMatchesListings && curation ? (
+          {!loading &&
+            !error &&
+            viewMode === 'picks' &&
+            (curationMatchesListings && curation ? (
               <ErrorBoundary label="Top Picks">
                 <TopPicks
                   picks={curation.picks}
@@ -443,19 +495,25 @@ export const Dashboard = () => {
                   <p className="text-4xl mb-3">✨</p>
                   <p className="text-gray-600 font-medium">No curated picks yet</p>
                   <p className="text-sm text-gray-500 mt-1">
-                    Run <code className="px-1.5 py-0.5 bg-gray-100 rounded text-xs">python -m scraper.curate</code> locally to generate top picks and commit <code className="px-1.5 py-0.5 bg-gray-100 rounded text-xs">data/curated.json</code>.
+                    Run{' '}
+                    <code className="px-1.5 py-0.5 bg-gray-100 rounded text-xs">
+                      python -m scraper.curate
+                    </code>{' '}
+                    locally to generate top picks and commit{' '}
+                    <code className="px-1.5 py-0.5 bg-gray-100 rounded text-xs">
+                      data/curated.json
+                    </code>
+                    .
                   </p>
                   {curationIsSample && !listingsAreSample && (
                     <p className="text-xs text-gray-400 mt-3">
-                      (The bundled sample curation was hidden because it
-                      references sample listing IDs that don&apos;t match your
-                      real data.)
+                      (The bundled sample curation was hidden because it references sample listing
+                      IDs that don&apos;t match your real data.)
                     </p>
                   )}
                 </div>
               </div>
-            )
-          )}
+            ))}
         </main>
       </div>
 
@@ -464,7 +522,16 @@ export const Dashboard = () => {
         onClick={() => setShowFilters(true)}
         className={`lg:hidden fixed bottom-6 left-4 z-30 flex items-center gap-2 px-4 py-2.5 bg-green-600 hover:bg-green-700 text-white rounded-full shadow-lg font-medium text-sm transition-all duration-200 ${showFilters ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
       >
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          className="h-4 w-4"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
           <line x1="4" y1="6" x2="20" y2="6" />
           <line x1="8" y1="12" x2="16" y2="12" />
           <line x1="11" y1="18" x2="13" y2="18" />
@@ -473,32 +540,30 @@ export const Dashboard = () => {
       </button>
 
       {/* Property detail modal */}
-      {selectedProperty && (
-        <PropertyDetail
-          property={selectedProperty}
-          onClose={closeProperty}
-        />
-      )}
+      {selectedProperty && <PropertyDetail property={selectedProperty} onClose={closeProperty} />}
 
       {/* Notification settings modal */}
-      {showNotifications && (
-        <NotificationSettings onClose={() => setShowNotifications(false)} />
-      )}
+      {showNotifications && <NotificationSettings onClose={() => setShowNotifications(false)} />}
 
       {/* Quick peek bar when map is open and property selected */}
       {viewMode === 'map' && selectedProperty && (
         <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-3 flex items-center gap-3">
-          <div className={`rounded-full w-10 h-10 flex items-center justify-center text-xs font-bold flex-shrink-0 ${getDealScoreColor(selectedProperty.dealScore)}`}>
+          <div
+            className={`rounded-full w-10 h-10 flex items-center justify-center text-xs font-bold flex-shrink-0 ${getDealScoreColor(selectedProperty.dealScore)}`}
+          >
             {selectedProperty.dealScore}
           </div>
           <div className="flex-1 min-w-0">
             <p className="font-semibold text-sm text-gray-900 truncate">{selectedProperty.title}</p>
             <p className="text-xs text-gray-500">
-              {formatPrice(selectedProperty.price)} &middot; {formatAcreage(selectedProperty.acreage)}
+              {formatPrice(selectedProperty.price)} &middot;{' '}
+              {formatAcreage(selectedProperty.acreage)}
             </p>
           </div>
           <button
-            onClick={() => {/* handled by map popup */}}
+            onClick={() => {
+              /* handled by map popup */
+            }}
             className="text-green-600 text-sm font-medium"
           >
             Details →

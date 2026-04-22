@@ -52,5 +52,13 @@ export const useFilters = () => {
     filters.maxAcreage < DEFAULT_FILTERS.maxAcreage ||
     filters.maxPricePerAcre < DEFAULT_FILTERS.maxPricePerAcre;
 
-  return { filters, updateFilter, toggleState, toggleFeature, toggleAITag, resetFilters, hasActiveFilters };
+  return {
+    filters,
+    updateFilter,
+    toggleState,
+    toggleFeature,
+    toggleAITag,
+    resetFilters,
+    hasActiveFilters,
+  };
 };

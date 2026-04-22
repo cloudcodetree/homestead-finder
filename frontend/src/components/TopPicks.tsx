@@ -3,6 +3,7 @@ import {
   formatAcreage,
   formatPrice,
   formatPricePerAcre,
+  formatCountyState,
   formatSourceName,
 } from '../utils/formatters';
 import { getDealScoreColor } from '../utils/scoring';
@@ -59,16 +60,13 @@ export const TopPicks = ({
         {/* Header */}
         <div className="mb-6">
           <div className="flex items-center gap-2">
-            <h2 className="text-xl sm:text-2xl font-bold text-gray-900">
-              Top Picks
-            </h2>
+            <h2 className="text-xl sm:text-2xl font-bold text-gray-900">Top Picks</h2>
             <span className="text-[10px] px-1.5 py-0.5 bg-purple-100 text-purple-700 rounded font-medium tracking-wide uppercase">
               AI Curated
             </span>
           </div>
           <p className="text-sm text-gray-500 mt-1">
-            {picks.length} hand-picked listings · Claude {model} ·{' '}
-            {formatCuratedAt(curatedAt)}
+            {picks.length} hand-picked listings · Claude {model} · {formatCuratedAt(curatedAt)}
           </p>
         </div>
 
@@ -81,9 +79,7 @@ export const TopPicks = ({
                 key={pick.id}
                 onClick={() => p && onSelectProperty(pick.id)}
                 className={`group relative bg-white rounded-lg border border-gray-200 p-4 sm:p-5 flex gap-4 transition-all ${
-                  p
-                    ? 'cursor-pointer hover:border-purple-300 hover:shadow-md'
-                    : 'opacity-60'
+                  p ? 'cursor-pointer hover:border-purple-300 hover:shadow-md' : 'opacity-60'
                 }`}
               >
                 {/* Rank */}
@@ -114,7 +110,7 @@ export const TopPicks = ({
                   {p ? (
                     <p className="text-xs text-gray-500 mb-2">
                       {p.title.length > 80 ? p.title.slice(0, 77) + '…' : p.title} ·{' '}
-                      {p.location.county} County, {p.location.state} ·{' '}
+                      {formatCountyState(p.location.county, p.location.state)} ·{' '}
                       {formatSourceName(p.source)}
                     </p>
                   ) : (
@@ -123,19 +119,13 @@ export const TopPicks = ({
                     </p>
                   )}
 
-                  <p className="text-sm text-gray-700 leading-relaxed mb-3">
-                    {pick.reason}
-                  </p>
+                  <p className="text-sm text-gray-700 leading-relaxed mb-3">{pick.reason}</p>
 
                   {p && (
                     <div className="flex items-center gap-4 text-sm">
-                      <span className="text-gray-900 font-semibold">
-                        {formatPrice(p.price)}
-                      </span>
+                      <span className="text-gray-900 font-semibold">{formatPrice(p.price)}</span>
                       <span className="text-gray-400">·</span>
-                      <span className="text-gray-700">
-                        {formatAcreage(p.acreage)}
-                      </span>
+                      <span className="text-gray-700">{formatAcreage(p.acreage)}</span>
                       <span className="text-gray-400">·</span>
                       <span className="text-gray-600 text-xs">
                         {formatPricePerAcre(p.pricePerAcre)}

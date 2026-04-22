@@ -54,44 +54,86 @@ interface MapViewProps {
   onSelectProperty: (id: string) => void;
 }
 
+// A listing is mappable only when it has non-zero coords — scraper
+// output seeds `lat/lng = 0` until the geo-enrichment pass runs, and
+// stacking 100+ markers at Null Island is worse than hiding them.
+const hasValidCoords = (p: Property): boolean =>
+  p.location?.lat !== 0 &&
+  p.location?.lng !== 0 &&
+  p.location?.lat !== undefined &&
+  p.location?.lng !== undefined;
+
 export const MapView = ({ properties, onSelectProperty }: MapViewProps) => {
+  const mappable = properties.filter(hasValidCoords);
+  const missingCoords = properties.length - mappable.length;
+
   return (
-    <MapContainer center={[39.5, -98.35]} zoom={4} className="h-full w-full" scrollWheelZoom={true}>
-      <TileLayer
-        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-      />
-      <FitBounds properties={properties} />
-      {properties.map((property) => (
-        <Marker
-          key={property.id}
-          position={[property.location.lat, property.location.lng]}
-          icon={createScoreIcon(property.dealScore)}
-          eventHandlers={{ click: () => onSelectProperty(property.id) }}
+    <div className="relative h-full w-full">
+      {missingCoords > 0 && (
+        <div className="absolute top-3 left-1/2 -translate-x-1/2 z-[500] max-w-[90%] rounded-md bg-amber-50 border border-amber-200 px-3 py-2 text-xs text-amber-800 shadow">
+          <strong>{missingCoords}</strong> listing{missingCoords === 1 ? '' : 's'} hidden — no
+          coordinates yet. Run{' '}
+          <code className="bg-amber-100 px-1 rounded">python -m scraper.enrich_geo</code> to geocode
+          them.
+        </div>
+      )}
+      {mappable.length === 0 ? (
+        <div className="flex h-full w-full items-center justify-center bg-gray-50 text-sm text-gray-500">
+          <div className="text-center max-w-md px-6">
+            <p className="font-medium text-gray-700 mb-1">No mappable listings</p>
+            <p className="text-xs">
+              None of the {properties.length} current listing{properties.length === 1 ? '' : 's'} ha
+              {properties.length === 1 ? 's' : 've'} been geocoded yet. The List view still shows
+              everything.
+            </p>
+          </div>
+        </div>
+      ) : (
+        <MapContainer
+          center={[39.5, -98.35]}
+          zoom={4}
+          className="h-full w-full"
+          scrollWheelZoom={true}
         >
-          <Popup maxWidth={280}>
-            <div className="text-sm">
-              <p className="font-semibold text-gray-900 mb-1">{property.title}</p>
-              <p className="text-gray-600">
-                {formatPrice(property.price)} &middot; {formatAcreage(property.acreage)}
-              </p>
-              <p className="text-gray-500 text-xs">{formatPricePerAcre(property.pricePerAcre)}</p>
-              <p className="mt-1 text-xs">
-                <span className="font-medium">Score: {property.dealScore}</span> —{' '}
-                {getDealScoreLabel(property.dealScore)}
-              </p>
-              <a
-                href={property.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="mt-2 block text-green-600 hover:text-green-700 text-xs font-medium"
-              >
-                View listing →
-              </a>
-            </div>
-          </Popup>
-        </Marker>
-      ))}
-    </MapContainer>
+          <TileLayer
+            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          />
+          <FitBounds properties={mappable} />
+          {mappable.map((property) => (
+            <Marker
+              key={property.id}
+              position={[property.location.lat, property.location.lng]}
+              icon={createScoreIcon(property.dealScore)}
+              eventHandlers={{ click: () => onSelectProperty(property.id) }}
+            >
+              <Popup maxWidth={280}>
+                <div className="text-sm">
+                  <p className="font-semibold text-gray-900 mb-1">{property.title}</p>
+                  <p className="text-gray-600">
+                    {formatPrice(property.price)} &middot; {formatAcreage(property.acreage)}
+                  </p>
+                  <p className="text-gray-500 text-xs">
+                    {formatPricePerAcre(property.pricePerAcre)}
+                  </p>
+                  <p className="mt-1 text-xs">
+                    <span className="font-medium">Score: {property.dealScore}</span> —{' '}
+                    {getDealScoreLabel(property.dealScore)}
+                  </p>
+                  <a
+                    href={property.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-2 block text-green-600 hover:text-green-700 text-xs font-medium"
+                  >
+                    View listing →
+                  </a>
+                </div>
+              </Popup>
+            </Marker>
+          ))}
+        </MapContainer>
+      )}
+    </div>
   );
 };

@@ -56,12 +56,12 @@ const SoilBlock = ({ soil }: { soil: NonNullable<GeoEnrichment['soil']> }) => {
   const capColor = !cap
     ? 'bg-gray-100 text-gray-700'
     : ['1', '2'].includes(cap)
-    ? 'bg-green-100 text-green-800 border-green-200'
-    : ['3', '4'].includes(cap)
-    ? 'bg-lime-100 text-lime-800 border-lime-200'
-    : ['5', '6'].includes(cap)
-    ? 'bg-amber-100 text-amber-800 border-amber-200'
-    : 'bg-red-100 text-red-800 border-red-200';
+      ? 'bg-green-100 text-green-800 border-green-200'
+      : ['3', '4'].includes(cap)
+        ? 'bg-lime-100 text-lime-800 border-lime-200'
+        : ['5', '6'].includes(cap)
+          ? 'bg-amber-100 text-amber-800 border-amber-200'
+          : 'bg-red-100 text-red-800 border-red-200';
 
   return (
     <div className="bg-white border border-gray-200 rounded-lg p-3">
@@ -78,9 +78,7 @@ const SoilBlock = ({ soil }: { soil: NonNullable<GeoEnrichment['soil']> }) => {
           </span>
         )}
       </div>
-      {soil.mapUnitName && (
-        <p className="text-sm text-gray-800 mb-1">{soil.mapUnitName}</p>
-      )}
+      {soil.mapUnitName && <p className="text-sm text-gray-800 mb-1">{soil.mapUnitName}</p>}
       <div className="grid grid-cols-2 gap-x-3 gap-y-1 text-xs text-gray-600">
         {soil.farmlandClass && (
           <div>
@@ -120,9 +118,7 @@ const SoilBlock = ({ soil }: { soil: NonNullable<GeoEnrichment['soil']> }) => {
         )}
       </div>
       {soil.capabilityClassDescription && (
-        <p className="mt-2 text-[11px] text-gray-500 italic">
-          {soil.capabilityClassDescription}
-        </p>
+        <p className="mt-2 text-[11px] text-gray-500 italic">{soil.capabilityClassDescription}</p>
       )}
     </div>
   );
@@ -133,8 +129,8 @@ const FloodBlock = ({ flood }: { flood: NonNullable<GeoEnrichment['flood']> }) =
   const zoneColor = isSFHA
     ? 'bg-red-100 text-red-800 border-red-200'
     : flood.floodZone === 'X'
-    ? 'bg-green-100 text-green-800 border-green-200'
-    : 'bg-gray-100 text-gray-700 border-gray-200';
+      ? 'bg-green-100 text-green-800 border-green-200'
+      : 'bg-gray-100 text-gray-700 border-gray-200';
 
   return (
     <div className="bg-white border border-gray-200 rounded-lg p-3">
@@ -143,9 +139,7 @@ const FloodBlock = ({ flood }: { flood: NonNullable<GeoEnrichment['flood']> }) =
           Flood zone (FEMA)
         </h4>
         {flood.floodZone && (
-          <span
-            className={`text-xs font-bold rounded-full px-2 py-0.5 border ${zoneColor}`}
-          >
+          <span className={`text-xs font-bold rounded-full px-2 py-0.5 border ${zoneColor}`}>
             Zone {flood.floodZone}
           </span>
         )}
@@ -153,8 +147,8 @@ const FloodBlock = ({ flood }: { flood: NonNullable<GeoEnrichment['flood']> }) =
       <p className="text-xs text-gray-600">
         {isSFHA ? (
           <>
-            <strong>Inside the 100-year floodplain.</strong> Federal flood
-            insurance generally required if financing.
+            <strong>Inside the 100-year floodplain.</strong> Federal flood insurance generally
+            required if financing.
           </>
         ) : flood.floodZone === 'X' ? (
           <>Outside mapped flood hazard areas.</>
@@ -190,9 +184,7 @@ const ElevationWatershedBlock = ({
           <div className="text-gray-400">Elevation</div>
           <div className="text-gray-800 font-medium">
             {elevation.elevationFeet.toFixed(0)} ft
-            <span className="text-gray-400 ml-1">
-              ({elevation.elevationMeters?.toFixed(0)} m)
-            </span>
+            <span className="text-gray-400 ml-1">({elevation.elevationMeters?.toFixed(0)} m)</span>
           </div>
         </div>
       )}
@@ -209,21 +201,17 @@ const ElevationWatershedBlock = ({
   </div>
 );
 
-const ProximityBlock = ({
-  proximity,
-}: {
-  proximity: NonNullable<GeoEnrichment['proximity']>;
-}) => {
+const ProximityBlock = ({ proximity }: { proximity: NonNullable<GeoEnrichment['proximity']> }) => {
   const distMi = proximity.nearestTownDistanceMiles;
   // Color-code how remote this is — a homestead-specific signal
   const remoteColor =
     distMi == null
       ? 'text-gray-600'
       : distMi < 10
-      ? 'text-green-700'
-      : distMi < 25
-      ? 'text-amber-700'
-      : 'text-red-700';
+        ? 'text-green-700'
+        : distMi < 25
+          ? 'text-amber-700'
+          : 'text-red-700';
 
   return (
     <div className="bg-white border border-gray-200 rounded-lg p-3">
@@ -236,12 +224,8 @@ const ProximityBlock = ({
             <div className="text-gray-400">Nearest town</div>
             <div className={`font-medium ${remoteColor}`}>
               {proximity.nearestTownName}
-              <span className="text-gray-500 font-normal ml-1">
-                ({proximity.nearestTownKind})
-              </span>
-              {distMi != null && (
-                <span className="ml-2 font-semibold">{distMi.toFixed(0)} mi</span>
-              )}
+              <span className="text-gray-500 font-normal ml-1">({proximity.nearestTownKind})</span>
+              {distMi != null && <span className="ml-2 font-semibold">{distMi.toFixed(0)} mi</span>}
             </div>
             {proximity.nearestTownPopulation != null && (
               <div className="text-[11px] text-gray-500">
@@ -266,8 +250,8 @@ const ProximityBlock = ({
             )}
             {proximity.waterFeatureCount === 0 && (
               <div className="text-[11px] text-gray-500 italic mt-0.5">
-                (OSM coverage is sparse in rural US — watershed and soil
-                drainage above are more reliable water signals)
+                (OSM coverage is sparse in rural US — watershed and soil drainage above are more
+                reliable water signals)
               </div>
             )}
           </div>
@@ -288,10 +272,8 @@ export const ResearchPanel = ({ location, geo, links }: ResearchPanelProps) => {
         <h3 className="text-sm font-semibold text-gray-700 mb-1">Parcel research</h3>
         <p className="text-xs text-gray-500">
           Coordinate data not yet scraped for this listing. Run{' '}
-          <code className="px-1 bg-white rounded">
-            python -m scraper.detail_fetcher
-          </code>{' '}
-          locally to fetch lat/lng + richer details.
+          <code className="px-1 bg-white rounded">python -m scraper.detail_fetcher</code> locally to
+          fetch lat/lng + richer details.
         </p>
       </div>
     );
@@ -347,7 +329,10 @@ export const ResearchPanel = ({ location, geo, links }: ResearchPanelProps) => {
       {geo?.soil && <SoilBlock soil={geo.soil} />}
       {geo?.flood && <FloodBlock flood={geo.flood} />}
       {(geo?.elevation || geo?.watershed) && (
-        <ElevationWatershedBlock elevation={geo.elevation ?? undefined} watershed={geo.watershed ?? undefined} />
+        <ElevationWatershedBlock
+          elevation={geo.elevation ?? undefined}
+          watershed={geo.watershed ?? undefined}
+        />
       )}
       {geo?.proximity && <ProximityBlock proximity={geo.proximity} />}
 
@@ -376,8 +361,8 @@ export const ResearchPanel = ({ location, geo, links }: ResearchPanelProps) => {
 
       {!geo && hasCoord && (
         <p className="text-[11px] text-gray-500 italic">
-          Government enrichment (soil, flood, elevation, watershed) not yet
-          populated. Run <code className="bg-white px-1 rounded">python -m scraper.enrich_geo</code> locally.
+          Government enrichment (soil, flood, elevation, watershed) not yet populated. Run{' '}
+          <code className="bg-white px-1 rounded">python -m scraper.enrich_geo</code> locally.
         </p>
       )}
     </div>

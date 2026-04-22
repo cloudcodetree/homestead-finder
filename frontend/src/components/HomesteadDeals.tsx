@@ -3,6 +3,7 @@ import {
   formatAcreage,
   formatPrice,
   formatPricePerAcre,
+  formatCountyState,
   formatSourceName,
 } from '../utils/formatters';
 import { getDealScoreColor } from '../utils/scoring';
@@ -27,10 +28,8 @@ const formatDate = (iso: string) => {
 
 const FunnelBadge = ({ deals }: { deals: HomesteadDealsResult }) => (
   <div className="text-xs text-emerald-700 bg-emerald-50 border border-emerald-200 rounded px-3 py-2">
-    <span className="font-semibold">Funnel:</span>{' '}
-    {deals.totalListings.toLocaleString()} listings →{' '}
-    <span className="font-medium">{deals.passedFiltersCount}</span> passed
-    homestead filters →{' '}
+    <span className="font-semibold">Funnel:</span> {deals.totalListings.toLocaleString()} listings →{' '}
+    <span className="font-medium">{deals.passedFiltersCount}</span> passed homestead filters →{' '}
     <span className="font-medium">{deals.candidateCount}</span> candidates ranked →{' '}
     <span className="font-bold">{deals.pickCount}</span> picks
   </div>
@@ -62,9 +61,7 @@ const DealCard = ({
       </div>
       <div className="flex-1 min-w-0">
         <div className="flex items-start justify-between gap-2 mb-1 flex-wrap">
-          <h3 className="font-semibold text-gray-900 text-base leading-snug">
-            {pick.headline}
-          </h3>
+          <h3 className="font-semibold text-gray-900 text-base leading-snug">{pick.headline}</h3>
           {property && (
             <div
               className={`rounded-full px-2 py-0.5 text-xs font-bold flex-shrink-0 ${getDealScoreColor(
@@ -79,13 +76,12 @@ const DealCard = ({
 
         {property ? (
           <p className="text-xs text-gray-500 mb-2">
-            {property.location.county} County, {property.location.state} ·{' '}
+            {formatCountyState(property.location.county, property.location.state)} ·{' '}
             {formatSourceName(property.source)}
           </p>
         ) : (
           <p className="text-xs text-gray-400 italic mb-2">
-            (Listing {pick.id} not currently loaded — may have been removed since
-            curation.)
+            (Listing {pick.id} not currently loaded — may have been removed since curation.)
           </p>
         )}
 
@@ -93,13 +89,9 @@ const DealCard = ({
 
         {property && (
           <div className="flex items-center gap-3 text-sm flex-wrap">
-            <span className="text-gray-900 font-semibold">
-              {formatPrice(property.price)}
-            </span>
+            <span className="text-gray-900 font-semibold">{formatPrice(property.price)}</span>
             <span className="text-gray-400">·</span>
-            <span className="text-gray-700">
-              {formatAcreage(property.acreage)}
-            </span>
+            <span className="text-gray-700">{formatAcreage(property.acreage)}</span>
             <span className="text-gray-400">·</span>
             <span className="text-gray-600 text-xs">
               {formatPricePerAcre(property.pricePerAcre)}
@@ -116,11 +108,7 @@ const DealCard = ({
   );
 };
 
-export const HomesteadDeals = ({
-  deals,
-  properties,
-  onSelectProperty,
-}: HomesteadDealsProps) => {
+export const HomesteadDeals = ({ deals, properties, onSelectProperty }: HomesteadDealsProps) => {
   const byId = new Map(properties.map((p) => [p.id, p]));
 
   if (!deals.picks || deals.picks.length === 0) {
@@ -130,9 +118,7 @@ export const HomesteadDeals = ({
         <p className="text-gray-600 font-medium">No homestead deals yet</p>
         <p className="text-sm text-gray-500 mt-1">
           Run{' '}
-          <code className="px-1.5 py-0.5 bg-gray-100 rounded text-xs">
-            python -m scraper.deals
-          </code>{' '}
+          <code className="px-1.5 py-0.5 bg-gray-100 rounded text-xs">python -m scraper.deals</code>{' '}
           locally to generate the curated list.
         </p>
       </div>
@@ -145,16 +131,14 @@ export const HomesteadDeals = ({
         {/* Header */}
         <div className="mb-5">
           <div className="flex items-center gap-2 flex-wrap">
-            <h2 className="text-xl sm:text-2xl font-bold text-gray-900">
-              Homestead Deals
-            </h2>
+            <h2 className="text-xl sm:text-2xl font-bold text-gray-900">Homestead Deals</h2>
             <span className="text-[10px] px-1.5 py-0.5 bg-emerald-100 text-emerald-700 rounded font-medium tracking-wide uppercase">
               AI curated
             </span>
           </div>
           <p className="text-sm text-gray-500 mt-1">
-            Genuinely-buildable, reasonably-priced land for self-sufficient
-            living. Claude {deals.model} · {formatDate(deals.generatedAt)}
+            Genuinely-buildable, reasonably-priced land for self-sufficient living. Claude{' '}
+            {deals.model} · {formatDate(deals.generatedAt)}
           </p>
         </div>
 
@@ -171,12 +155,10 @@ export const HomesteadDeals = ({
                 {deals.filterSummary.minAcres}
               </li>
               <li>
-                Not inside a FEMA floodplain (
-                {deals.filterSummary.sfhaZonesExcluded.join(', ')})
+                Not inside a FEMA floodplain ({deals.filterSummary.sfhaZonesExcluded.join(', ')})
               </li>
               <li>
-                Soil capability class ≤{' '}
-                {deals.filterSummary.maxSoilCapabilityClass}/8 (actually
+                Soil capability class ≤ {deals.filterSummary.maxSoilCapabilityClass}/8 (actually
                 buildable / arable)
               </li>
               <li>

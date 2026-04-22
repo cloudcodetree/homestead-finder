@@ -12,13 +12,7 @@
       "county": "Deer Lodge",
       "address": "Near Warm Springs, MT"
     },
-    "features": [
-      "water_creek",
-      "road_dirt",
-      "timber",
-      "hunting",
-      "no_hoa"
-    ],
+    "features": ["water_creek", "road_dirt", "timber", "hunting", "no_hoa"],
     "source": "landwatch",
     "url": "https://www.landwatch.com/listing/101",
     "dateFound": "2024-01-10",
@@ -55,14 +49,7 @@
       "county": "Custer",
       "address": "Near Mackay, ID"
     },
-    "features": [
-      "water_well",
-      "electric",
-      "owner_financing",
-      "road_dirt",
-      "pasture",
-      "no_hoa"
-    ],
+    "features": ["water_well", "electric", "owner_financing", "road_dirt", "pasture", "no_hoa"],
     "source": "landwatch",
     "url": "https://www.landwatch.com/listing/205",
     "dateFound": "2024-01-08",
@@ -99,13 +86,7 @@
       "county": "Broadwater",
       "address": "Broadwater County, MT"
     },
-    "features": [
-      "water_creek",
-      "timber",
-      "mineral_rights",
-      "hunting",
-      "road_dirt"
-    ],
+    "features": ["water_creek", "timber", "mineral_rights", "hunting", "road_dirt"],
     "source": "county_tax",
     "url": "https://broadwatercounty.mt.gov/tax-sales/304",
     "dateFound": "2024-01-12",
@@ -124,10 +105,7 @@
       "no_hoa"
     ],
     "homesteadFitScore": 68,
-    "redFlags": [
-      "tax_sale_risk",
-      "requires_well_drilling"
-    ],
+    "redFlags": ["tax_sale_risk", "requires_well_drilling"],
     "aiSummary": "Excellent acreage (120 acres) at exceptional price with included mineral rights and National Forest borders, strong for timber and hunting potential. Seasonal creek means year-round water would require well drilling investment. Tax deed sale status carries title and insurance complications that require thorough investigation before purchase.",
     "enrichedAt": "2026-04-20T22:16:05.986891+00:00",
     "_enrichHash": "234864f3ce6ef962"
@@ -145,14 +123,7 @@
       "county": "Creek",
       "address": "Near Bristow, OK"
     },
-    "features": [
-      "water_pond",
-      "electric",
-      "septic",
-      "structures",
-      "pasture",
-      "road_paved"
-    ],
+    "features": ["water_pond", "electric", "septic", "structures", "pasture", "road_paved"],
     "source": "lands_of_america",
     "url": "https://www.landsofamerica.com/property/507",
     "dateFound": "2024-01-09",
@@ -189,11 +160,7 @@
       "county": "Costilla",
       "address": "San Luis Valley, CO"
     },
-    "features": [
-      "road_dirt",
-      "off_grid_ready",
-      "no_hoa"
-    ],
+    "features": ["road_dirt", "off_grid_ready", "no_hoa"],
     "source": "zillow",
     "url": "https://www.zillow.com/homes/889",
     "dateFound": "2024-01-11",
@@ -210,10 +177,7 @@
       "hoa_present"
     ],
     "homesteadFitScore": 62,
-    "redFlags": [
-      "no_water_source",
-      "hoa_restrictions"
-    ],
+    "redFlags": ["no_water_source", "hoa_restrictions"],
     "aiSummary": "An off-grid subdivision property specifically designed for alternative living with year-round access and typical solar/propane infrastructure. Water source is unspecified and HOA restrictions should be clarified before purchase.",
     "enrichedAt": "2026-04-20T22:17:07.449005+00:00",
     "_enrichHash": "c6cc5db94de32aa9"
@@ -231,12 +195,7 @@
       "county": "Sweetwater",
       "address": "Near Rock Springs, WY"
     },
-    "features": [
-      "hunting",
-      "mineral_rights",
-      "road_dirt",
-      "no_hoa"
-    ],
+    "features": ["hunting", "mineral_rights", "road_dirt", "no_hoa"],
     "source": "blm",
     "url": "https://www.blm.gov/sale/wy-012",
     "dateFound": "2024-01-07",
@@ -255,11 +214,7 @@
       "infrastructure_needed"
     ],
     "homesteadFitScore": 40,
-    "redFlags": [
-      "no_water_source",
-      "extreme_remote",
-      "requires_well_drilling"
-    ],
+    "redFlags": ["no_water_source", "extreme_remote", "requires_well_drilling"],
     "aiSummary": "This remote 160-acre parcel offers hunting, grazing potential, and freedom from restrictions, but critically lacks any mention of water sources. The 30-mile distance to town combined with undisclosed water availability makes self-sufficient living risky without significant upfront well drilling and infrastructure investment.",
     "enrichedAt": "2026-04-20T22:17:38.451688+00:00",
     "_enrichHash": "11c1e8b94c5ecaf2"
@@ -322,12 +277,7 @@
       "county": "Wheeler",
       "address": "Wheeler County, TX"
     },
-    "features": [
-      "pasture",
-      "road_dirt",
-      "mineral_rights",
-      "hunting"
-    ],
+    "features": ["pasture", "road_dirt", "mineral_rights", "hunting"],
     "source": "auction",
     "url": "https://www.hubzu.com/property/223",
     "dateFound": "2024-01-13",
@@ -370,13 +320,7 @@
       "county": "Meigs",
       "address": "Near Decatur, TN"
     },
-    "features": [
-      "water_creek",
-      "road_paved",
-      "timber",
-      "no_hoa",
-      "hunting"
-    ],
+    "features": ["water_creek", "road_paved", "timber", "no_hoa", "hunting"],
     "source": "landwatch",
     "url": "https://www.landwatch.com/listing/667",
     "dateFound": "2024-01-05",
@@ -439,9 +383,7 @@
       "remote_living_viable"
     ],
     "homesteadFitScore": 74,
-    "redFlags": [
-      "extreme_remote"
-    ],
+    "redFlags": ["extreme_remote"],
     "aiSummary": "This 640-acre property has solid off-grid infrastructure (well, solar, cabin) and exceptional hunting potential, making it viable for remote homesteading. At 40 miles from the nearest town, it's extremely isolated, which is both an asset for privacy and a liability for access to services. Best suited for experienced homesteaders comfortable with genuine remoteness.",
     "enrichedAt": "2026-04-20T22:19:18.286337+00:00",
     "_enrichHash": "60459ba099a0f2b5"

@@ -8,12 +8,14 @@ import {
   RED_FLAG_DESCRIPTIONS,
   RED_FLAG_SEVERITY,
 } from '../types/property';
+import { PropertyThumbnail } from './PropertyThumbnail';
 import { ResearchPanel } from './ResearchPanel';
 import {
-  formatPrice,
   formatAcreage,
-  formatPricePerAcre,
+  formatCountyState,
   formatDate,
+  formatPrice,
+  formatPricePerAcre,
   formatSourceName,
 } from '../utils/formatters';
 import { getDealScoreColor, getDealScoreLabel } from '../utils/scoring';
@@ -60,12 +62,17 @@ export const PropertyDetail = ({ property, onClose }: PropertyDetailProps) => {
   return (
     <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black/50">
       <div className="bg-white w-full sm:max-w-2xl sm:rounded-xl shadow-2xl max-h-[90vh] overflow-y-auto">
+        {/* Hero image — full-bleed banner above the sticky header.
+            Phase 1 shows the primary image only; Phase 2 will replace
+            this with a swipeable carousel when the scraper captures
+            galleries during detail-page fetch. */}
+        <PropertyThumbnail property={property} width={768} className="w-full h-48 sm:h-56" />
         {/* Header */}
         <div className="sticky top-0 bg-white border-b border-gray-100 p-4 flex items-start gap-3">
           <div className="flex-1 min-w-0">
             <h2 className="font-bold text-gray-900 text-base leading-tight">{property.title}</h2>
             <p className="text-sm text-gray-500 mt-0.5">
-              {property.location.county} County, {property.location.state}
+              {formatCountyState(property.location.county, property.location.state)}
             </p>
           </div>
           <div className="flex items-center gap-2 flex-shrink-0">
@@ -88,20 +95,17 @@ export const PropertyDetail = ({ property, onClose }: PropertyDetailProps) => {
             <div className="rounded-lg border-2 border-orange-300 bg-orange-50/60 p-4">
               <div className="flex items-center gap-2 mb-2">
                 <span className="text-lg">⚖</span>
-                <h3 className="font-bold text-orange-900">
-                  Delinquent County Tax Sale
-                </h3>
+                <h3 className="font-bold text-orange-900">Delinquent County Tax Sale</h3>
                 <span className="ml-auto text-[10px] px-1.5 py-0.5 bg-orange-200 text-orange-800 rounded font-medium uppercase tracking-wide">
                   {property.taxSale.stateType === 'deed' ? 'Deed' : 'Lien'} State
                 </span>
               </div>
               <p className="text-sm text-gray-700 mb-3">
-                This is a <strong>tax-sale listing</strong>, not a traditional
-                for-sale property.{' '}
+                This is a <strong>tax-sale listing</strong>, not a traditional for-sale property.{' '}
                 {property.taxSale.stateType === 'deed'
                   ? 'Winning bidder gets the deed outright.'
-                  : 'Winning bidder gets a lien certificate; deed may be obtainable after the redemption period.'}
-                {' '}Do full title/quiet-title diligence before paying.
+                  : 'Winning bidder gets a lien certificate; deed may be obtainable after the redemption period.'}{' '}
+                Do full title/quiet-title diligence before paying.
               </p>
               <dl className="grid grid-cols-2 gap-x-4 gap-y-2 text-xs">
                 <div>
@@ -112,15 +116,11 @@ export const PropertyDetail = ({ property, onClose }: PropertyDetailProps) => {
                 </div>
                 <div>
                   <dt className="text-gray-500">Tax year</dt>
-                  <dd className="font-semibold text-gray-800">
-                    {property.taxSale.taxYear ?? '—'}
-                  </dd>
+                  <dd className="font-semibold text-gray-800">{property.taxSale.taxYear ?? '—'}</dd>
                 </div>
                 <div className="col-span-2">
                   <dt className="text-gray-500">Parcel ID</dt>
-                  <dd className="font-mono text-gray-800">
-                    {property.taxSale.parcelId}
-                  </dd>
+                  <dd className="font-mono text-gray-800">{property.taxSale.parcelId}</dd>
                 </div>
                 {property.taxSale.owner && (
                   <div className="col-span-2">
@@ -150,10 +150,9 @@ export const PropertyDetail = ({ property, onClose }: PropertyDetailProps) => {
                   <div>
                     <dt className="text-gray-500">Typical sale month</dt>
                     <dd className="text-gray-800">
-                      {new Date(2000, property.taxSale.saleMonth - 1).toLocaleString(
-                        undefined,
-                        { month: 'long' }
-                      )}
+                      {new Date(2000, property.taxSale.saleMonth - 1).toLocaleString(undefined, {
+                        month: 'long',
+                      })}
                     </dd>
                   </div>
                 )}
@@ -212,8 +211,8 @@ export const PropertyDetail = ({ property, onClose }: PropertyDetailProps) => {
                             property.taxSale.investmentMultiple >= 3
                               ? 'text-green-700'
                               : property.taxSale.investmentMultiple >= 1
-                              ? 'text-amber-700'
-                              : 'text-red-700'
+                                ? 'text-amber-700'
+                                : 'text-red-700'
                           }`}
                         >
                           {property.taxSale.investmentMultiple.toFixed(1)}× min bid
@@ -228,8 +227,8 @@ export const PropertyDetail = ({ property, onClose }: PropertyDetailProps) => {
                             property.taxSale.expectedReturnPct >= 15
                               ? 'text-green-700'
                               : property.taxSale.expectedReturnPct >= 10
-                              ? 'text-amber-700'
-                              : 'text-gray-700'
+                                ? 'text-amber-700'
+                                : 'text-gray-700'
                           }`}
                         >
                           {property.taxSale.expectedReturnPct.toFixed(1)}% /yr
@@ -245,11 +244,10 @@ export const PropertyDetail = ({ property, onClose }: PropertyDetailProps) => {
                     </ul>
                   )}
                   <p className="mt-3 text-[10px] text-gray-500 italic">
-                    Estimates use county median $/acre from LandWatch comps minus a
-                    ~$5,000 pad for title/legal/quiet-title costs. Lien returns
-                    weight a {85}% redemption probability at the state statutory
-                    interest rate. Do your own diligence — these are rough
-                    triage numbers, not investment advice.
+                    Estimates use county median $/acre from LandWatch comps minus a ~$5,000 pad for
+                    title/legal/quiet-title costs. Lien returns weight a {85}% redemption
+                    probability at the state statutory interest rate. Do your own diligence — these
+                    are rough triage numbers, not investment advice.
                   </p>
                 </div>
               )}
@@ -320,9 +318,7 @@ export const PropertyDetail = ({ property, onClose }: PropertyDetailProps) => {
                 <div className="mb-3">
                   <p className="text-xs font-semibold text-amber-800 mb-1.5">
                     ⚠ Red Flags
-                    <span className="font-normal text-amber-600/70 ml-1">
-                      (hover for details)
-                    </span>
+                    <span className="font-normal text-amber-600/70 ml-1">(hover for details)</span>
                   </p>
                   <div className="flex flex-wrap gap-1.5">
                     {property.redFlags!.map((flag) => {
@@ -335,9 +331,7 @@ export const PropertyDetail = ({ property, onClose }: PropertyDetailProps) => {
                           className="rounded-full bg-amber-50 border border-amber-200 px-2 py-0.5 text-xs text-amber-700 font-medium cursor-help"
                         >
                           {RED_FLAG_LABELS[flag]}
-                          <span className="ml-1 text-amber-500">
-                            {'•'.repeat(severity)}
-                          </span>
+                          <span className="ml-1 text-amber-500">{'•'.repeat(severity)}</span>
                         </span>
                       );
                     })}
@@ -348,9 +342,7 @@ export const PropertyDetail = ({ property, onClose }: PropertyDetailProps) => {
                 <div>
                   <p className="text-xs font-semibold text-purple-800 mb-1.5">
                     Tags
-                    <span className="font-normal text-purple-600/70 ml-1">
-                      (hover for details)
-                    </span>
+                    <span className="font-normal text-purple-600/70 ml-1">(hover for details)</span>
                   </p>
                   <div className="flex flex-wrap gap-1.5">
                     {property.aiTags!.map((tag) => {
@@ -378,13 +370,11 @@ export const PropertyDetail = ({ property, onClose }: PropertyDetailProps) => {
                 </span>
               </div>
               <p className="text-xs text-gray-500">
-                This listing hasn&apos;t been through the AI enrichment pass
-                yet. Run{' '}
+                This listing hasn&apos;t been through the AI enrichment pass yet. Run{' '}
                 <code className="px-1 py-0.5 bg-white border border-gray-200 rounded">
                   ./scripts/refresh_ai.sh
                 </code>{' '}
-                locally to generate tags, a fit score, red flags, and a plain-
-                language summary.
+                locally to generate tags, a fit score, red flags, and a plain- language summary.
               </p>
             </div>
           )}
@@ -431,7 +421,7 @@ export const PropertyDetail = ({ property, onClose }: PropertyDetailProps) => {
               <p className="text-gray-500 text-xs">Found</p>
               <p className="text-gray-800 font-medium">{formatDate(property.dateFound)}</p>
             </div>
-            {property.daysOnMarket !== undefined && (
+            {property.daysOnMarket != null && (
               <div>
                 <p className="text-gray-500 text-xs">Days on Market</p>
                 <p className="text-gray-800 font-medium">{property.daysOnMarket} days</p>
@@ -466,9 +456,20 @@ export const PropertyDetail = ({ property, onClose }: PropertyDetailProps) => {
                 className="flex-shrink-0 text-gray-400 hover:text-gray-600 transition-colors"
               >
                 {copied ? (
-                  <span className="text-xs text-green-600 font-medium whitespace-nowrap">Copied!</span>
+                  <span className="text-xs text-green-600 font-medium whitespace-nowrap">
+                    Copied!
+                  </span>
                 ) : (
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-4 w-4"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
                     <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
                     <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
                   </svg>

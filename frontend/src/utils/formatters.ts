@@ -39,6 +39,8 @@ export const formatSourceName = (source: string): string => {
   const names: Record<string, string> = {
     landwatch: 'LandWatch',
     lands_of_america: 'Lands of America',
+    homestead_crossing: 'Homestead Crossing',
+    ozarkland: 'OzarkLand',
     zillow: 'Zillow',
     realtor: 'Realtor.com',
     county_tax: 'County Tax Sale',
@@ -47,4 +49,17 @@ export const formatSourceName = (source: string): string => {
     blm: 'BLM/USDA',
   };
   return names[source] ?? source;
+};
+
+/**
+ * Format "Howell County, MO" correctly whether the raw county field is
+ * already suffixed ("Howell County") or bare ("Howell"). Prevents the
+ * "Howell County County, MO" doubling we saw when different scrapers
+ * stored the county name in different shapes.
+ */
+export const formatCountyState = (county: string, state: string): string => {
+  const trimmed = (county ?? '').trim();
+  if (!trimmed) return state;
+  const withSuffix = /\bcounty\b/i.test(trimmed) ? trimmed : `${trimmed} County`;
+  return state ? `${withSuffix}, ${state}` : withSuffix;
 };

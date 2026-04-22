@@ -41,10 +41,7 @@ export const useQueryServer = () => {
   const check = useCallback(async () => {
     try {
       const controller = new AbortController();
-      const timer = setTimeout(
-        () => controller.abort(),
-        HEALTH_REQUEST_TIMEOUT_MS
-      );
+      const timer = setTimeout(() => controller.abort(), HEALTH_REQUEST_TIMEOUT_MS);
       const res = await fetch(`${QUERY_SERVER_URL}/health`, {
         signal: controller.signal,
       });
@@ -80,21 +77,18 @@ export const useQueryServer = () => {
     };
   }, [check]);
 
-  const ask = useCallback(
-    async (question: string, limit = 15): Promise<QueryResponse> => {
-      const res = await fetch(`${QUERY_SERVER_URL}/query`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ question, limit }),
-      });
-      if (!res.ok) {
-        const body = await res.json().catch(() => ({ error: res.statusText }));
-        throw new Error(body.error || `HTTP ${res.status}`);
-      }
-      return (await res.json()) as QueryResponse;
-    },
-    []
-  );
+  const ask = useCallback(async (question: string, limit = 15): Promise<QueryResponse> => {
+    const res = await fetch(`${QUERY_SERVER_URL}/query`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ question, limit }),
+    });
+    if (!res.ok) {
+      const body = await res.json().catch(() => ({ error: res.statusText }));
+      throw new Error(body.error || `HTTP ${res.status}`);
+    }
+    return (await res.json()) as QueryResponse;
+  }, []);
 
   return { status, model, ask };
 };

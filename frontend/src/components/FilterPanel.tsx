@@ -17,28 +17,18 @@ interface FilterPanelProps {
   onReset: () => void;
   hasActiveFilters: boolean;
   resultCount: number;
+  /** States present in the currently-loaded data. Drives the state filter
+   * buttons so they reflect actual inventory instead of a stale hardcoded
+   * list. Falls back to a sensible default if empty (e.g. first paint). */
+  availableStates?: string[];
   /** When true, the panel's built-in header is suppressed (parent renders its own) */
   hideHeader?: boolean;
 }
 
-const TARGET_STATES = [
-  'AL',
-  'AZ',
-  'CO',
-  'ID',
-  'ME',
-  'MN',
-  'MT',
-  'NM',
-  'OK',
-  'OR',
-  'TN',
-  'TX',
-  'UT',
-  'WA',
-  'WI',
-  'WY',
-];
+// Fallback shown only when `availableStates` is empty (pre-load or total
+// scrape failure). Ordered alphabetically so buttons don't reshuffle as
+// data loads.
+const FALLBACK_STATES = ['AR', 'MO'];
 
 export const FilterPanel = ({
   filters,
@@ -49,8 +39,11 @@ export const FilterPanel = ({
   onReset,
   hasActiveFilters,
   resultCount,
+  availableStates,
   hideHeader = false,
 }: FilterPanelProps) => {
+  const statesToShow =
+    availableStates && availableStates.length > 0 ? [...availableStates].sort() : FALLBACK_STATES;
   return (
     <div className="bg-white h-full">
       {!hideHeader && (
@@ -75,7 +68,7 @@ export const FilterPanel = ({
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">Sort By</label>
           <div className="flex flex-wrap gap-1.5">
-            {(Object.keys(SORT_LABELS) as SortBy[]).map(option => (
+            {(Object.keys(SORT_LABELS) as SortBy[]).map((option) => (
               <button
                 key={option}
                 onClick={() => onUpdateFilter('sortBy', option)}
@@ -194,7 +187,7 @@ export const FilterPanel = ({
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">States</label>
           <div className="flex flex-wrap gap-1.5">
-            {TARGET_STATES.map((state) => (
+            {statesToShow.map((state) => (
               <button
                 key={state}
                 onClick={() => onToggleState(state)}
@@ -246,9 +239,7 @@ export const FilterPanel = ({
           <div className="mb-5">
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Min Homestead Fit:{' '}
-              <span className="text-purple-600 font-bold">
-                {filters.minHomesteadFit}
-              </span>
+              <span className="text-purple-600 font-bold">{filters.minHomesteadFit}</span>
             </label>
             <input
               type="range"
@@ -256,9 +247,7 @@ export const FilterPanel = ({
               max={100}
               step={5}
               value={filters.minHomesteadFit}
-              onChange={(e) =>
-                onUpdateFilter('minHomesteadFit', Number(e.target.value))
-              }
+              onChange={(e) => onUpdateFilter('minHomesteadFit', Number(e.target.value))}
               className="w-full accent-purple-600"
             />
             <div className="flex justify-between text-xs text-gray-400 mt-1">
@@ -267,9 +256,7 @@ export const FilterPanel = ({
               <span>100</span>
             </div>
             {filters.minHomesteadFit > 0 && (
-              <p className="text-xs text-gray-500 mt-1">
-                Hides un-analyzed listings.
-              </p>
+              <p className="text-xs text-gray-500 mt-1">Hides un-analyzed listings.</p>
             )}
           </div>
 
@@ -279,9 +266,7 @@ export const FilterPanel = ({
               <input
                 type="checkbox"
                 checked={filters.hideWithRedFlags}
-                onChange={(e) =>
-                  onUpdateFilter('hideWithRedFlags', e.target.checked)
-                }
+                onChange={(e) => onUpdateFilter('hideWithRedFlags', e.target.checked)}
                 className="rounded border-gray-300 text-purple-600 focus:ring-purple-500"
               />
               <span className="text-sm text-gray-700">Hide listings with red flags</span>

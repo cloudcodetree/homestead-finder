@@ -51,10 +51,7 @@ export const useProperties = (filters: FilterState) => {
   // change every render.
   const allProperties = useMemo(() => data ?? [], [data]);
 
-  const filtered = useMemo(
-    () => applyFilters(allProperties, filters),
-    [allProperties, filters]
-  );
+  const filtered = useMemo(() => applyFilters(allProperties, filters), [allProperties, filters]);
 
   const sorted = useMemo(
     () =>
@@ -90,8 +87,7 @@ export const useProperties = (filters: FilterState) => {
       avgScore:
         allProperties.length > 0
           ? Math.round(
-              allProperties.reduce((sum, p) => sum + p.dealScore, 0) /
-                allProperties.length
+              allProperties.reduce((sum, p) => sum + p.dealScore, 0) / allProperties.length
             )
           : 0,
     }),

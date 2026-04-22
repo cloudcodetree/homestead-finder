@@ -50,9 +50,7 @@ export const AskClaude = ({ onResult, activeQuestion }: AskClaudeProps) => {
       className="mb-4 max-w-6xl mx-auto rounded-lg border border-purple-200 bg-purple-50/40 p-3"
     >
       <div className="flex items-center gap-2 mb-2">
-        <span className="text-xs font-semibold text-purple-800">
-          Ask Claude
-        </span>
+        <span className="text-xs font-semibold text-purple-800">Ask Claude</span>
         <span className="text-[10px] px-1.5 py-0.5 bg-purple-100 text-purple-700 rounded font-medium tracking-wide uppercase">
           Local · {model}
         </span>
@@ -85,13 +83,11 @@ export const AskClaude = ({ onResult, activeQuestion }: AskClaudeProps) => {
         </button>
       </div>
       {error && (
-        <p className="mt-2 text-xs text-red-600">
-          {error}. Is query_server.py still running?
-        </p>
+        <p className="mt-2 text-xs text-red-600">{error}. Is query_server.py still running?</p>
       )}
       <p className="mt-2 text-[11px] text-purple-600/70">
-        Uses your Claude Max subscription via the local proxy. Results re-rank
-        the full listing set — clear to return to the normal view.
+        Uses your Claude Max subscription via the local proxy. Results re-rank the full listing set
+        — clear to return to the normal view.
       </p>
     </form>
   );
