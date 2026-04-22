@@ -11,16 +11,17 @@ from typing import Any
 
 from .elevation import lookup_elevation
 from .flood import lookup_flood_zone
+from .proximity import lookup_proximity
 from .soil import lookup_soil
 from .watershed import lookup_watershed
 
 
 def enrich_point(lat: float, lng: float) -> dict[str, Any]:
-    """Look up soil, flood, elevation, and watershed data for a point.
+    """Look up soil, flood, elevation, watershed, and proximity data.
 
-    All four queries run in parallel (they hit different hosts). Missing
-    data for a given source becomes `null` in the returned dict rather
-    than an exception — consumers should handle partial results.
+    All five queries run in parallel (different hosts). Missing data for
+    a given source becomes `null` in the returned dict rather than an
+    exception — consumers should handle partial results.
 
     Shape:
         {
@@ -30,14 +31,16 @@ def enrich_point(lat: float, lng: float) -> dict[str, Any]:
           "flood": {...} | None,
           "elevation": {...} | None,
           "watershed": {...} | None,
+          "proximity": {...} | None,
         }
     """
-    with ThreadPoolExecutor(max_workers=4) as pool:
+    with ThreadPoolExecutor(max_workers=5) as pool:
         futures = {
             "soil": pool.submit(lookup_soil, lat, lng),
             "flood": pool.submit(lookup_flood_zone, lat, lng),
             "elevation": pool.submit(lookup_elevation, lat, lng),
             "watershed": pool.submit(lookup_watershed, lat, lng),
+            "proximity": pool.submit(lookup_proximity, lat, lng),
         }
         results = {key: fut.result() for key, fut in futures.items()}
 

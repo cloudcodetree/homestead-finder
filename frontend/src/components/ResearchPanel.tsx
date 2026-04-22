@@ -209,6 +209,74 @@ const ElevationWatershedBlock = ({
   </div>
 );
 
+const ProximityBlock = ({
+  proximity,
+}: {
+  proximity: NonNullable<GeoEnrichment['proximity']>;
+}) => {
+  const distMi = proximity.nearestTownDistanceMiles;
+  // Color-code how remote this is — a homestead-specific signal
+  const remoteColor =
+    distMi == null
+      ? 'text-gray-600'
+      : distMi < 10
+      ? 'text-green-700'
+      : distMi < 25
+      ? 'text-amber-700'
+      : 'text-red-700';
+
+  return (
+    <div className="bg-white border border-gray-200 rounded-lg p-3">
+      <h4 className="text-xs font-semibold text-gray-700 uppercase tracking-wide mb-2">
+        Proximity (OpenStreetMap)
+      </h4>
+      <div className="space-y-2 text-xs">
+        {proximity.nearestTownName && (
+          <div>
+            <div className="text-gray-400">Nearest town</div>
+            <div className={`font-medium ${remoteColor}`}>
+              {proximity.nearestTownName}
+              <span className="text-gray-500 font-normal ml-1">
+                ({proximity.nearestTownKind})
+              </span>
+              {distMi != null && (
+                <span className="ml-2 font-semibold">{distMi.toFixed(0)} mi</span>
+              )}
+            </div>
+            {proximity.nearestTownPopulation != null && (
+              <div className="text-[11px] text-gray-500">
+                pop. ~{proximity.nearestTownPopulation.toLocaleString()}
+              </div>
+            )}
+          </div>
+        )}
+        {proximity.waterFeatureCount != null && (
+          <div>
+            <div className="text-gray-400">
+              OSM water features within {proximity.searchRadiusMiles ?? 5} mi
+            </div>
+            <div className="text-gray-800 font-medium">
+              {proximity.waterFeatureCount} feature
+              {proximity.waterFeatureCount === 1 ? '' : 's'}
+            </div>
+            {proximity.namedWaterFeatures && proximity.namedWaterFeatures.length > 0 && (
+              <div className="text-[11px] text-gray-500 mt-0.5">
+                {proximity.namedWaterFeatures.slice(0, 5).join(' · ')}
+              </div>
+            )}
+            {proximity.waterFeatureCount === 0 && (
+              <div className="text-[11px] text-gray-500 italic mt-0.5">
+                (OSM coverage is sparse in rural US — watershed and soil
+                drainage above are more reliable water signals)
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
 export const ResearchPanel = ({ location, geo, links }: ResearchPanelProps) => {
   const lat = location.lat || geo?.lat;
   const lng = location.lng || geo?.lng;
@@ -281,6 +349,7 @@ export const ResearchPanel = ({ location, geo, links }: ResearchPanelProps) => {
       {(geo?.elevation || geo?.watershed) && (
         <ElevationWatershedBlock elevation={geo.elevation ?? undefined} watershed={geo.watershed ?? undefined} />
       )}
+      {geo?.proximity && <ProximityBlock proximity={geo.proximity} />}
 
       {/* External research links */}
       {merged.length > 0 && (

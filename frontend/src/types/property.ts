@@ -81,6 +81,26 @@ export interface WatershedInfo {
   states?: string;
 }
 
+/**
+ * OSM / Overpass-sourced "how remote is this really" signals. Nearest
+ * populated town + a sample of water features within a few miles.
+ * Rural US coverage in OSM is uneven; the absence of named water
+ * features does NOT imply the absence of water — use SoilInfo.drainageClass
+ * and WatershedInfo.watershedName as primary water signals.
+ */
+export interface ProximityInfo {
+  /** Nearest OSM place tagged city/town/village within the search radius. */
+  nearestTownName?: string;
+  nearestTownDistanceMiles?: number;
+  nearestTownPopulation?: number;
+  nearestTownKind?: string;
+  searchRadiusMiles?: number;
+  /** Count of OSM-tagged water features within the water search radius. */
+  waterFeatureCount?: number;
+  /** Sample of named water features nearby (creeks, rivers, ponds, lakes). */
+  namedWaterFeatures?: string[];
+}
+
 export interface GeoEnrichment {
   lat: number;
   lng: number;
@@ -88,6 +108,7 @@ export interface GeoEnrichment {
   flood?: FloodInfo | null;
   elevation?: ElevationInfo | null;
   watershed?: WatershedInfo | null;
+  proximity?: ProximityInfo | null;
   fetchedAt?: string;
 }
 
