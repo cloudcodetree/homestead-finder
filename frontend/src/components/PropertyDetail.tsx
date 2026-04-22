@@ -67,7 +67,11 @@ export const PropertyDetail = ({ property, onClose }: PropertyDetailProps) => {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black/50">
+    // `z-[9999]` beats Leaflet's internal pane z-indexes (up to 700)
+    // so the detail modal always stacks above an active Map view.
+    // Tailwind's `z-50` (= 50) wasn't enough — markers were painting
+    // through the overlay when a listing was opened from the map.
+    <div className="fixed inset-0 z-[9999] flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black/50">
       <div className="relative bg-white w-full sm:max-w-2xl sm:rounded-xl shadow-2xl max-h-[90vh] overflow-y-auto">
         {/* Floating close button — positioned over the hero image so
             it's always reachable, even before the sticky header comes
