@@ -65,6 +65,10 @@ ENABLED_SOURCES: dict[str, bool] = {
     # Inventory largely absent from LandWatch / Land.com aggregators,
     # high "hidden gem" ratio per homestead thesis.
     "united_country": True,
+    # Mossy Oak Properties — hunting/rec land specialist franchise.
+    # Server-rendered, lat/lng baked into card data attributes, heavy
+    # Ozark coverage. Hidden-gem yield similar to United Country.
+    "mossy_oak": True,
     "zillow": False,  # Rate limiting issues — disabled by default
     "realtor": False,  # Rate limiting issues — disabled by default
     "county_tax": True,
@@ -113,6 +117,9 @@ STRATEGY_CHAINS: dict[str, list[str]] = {
     # UCRE is a React SPA — Playwright is the only reliable fetch
     # (curl_cffi gets the empty shell, no listing data).
     "united_country": ["selenium", "firecrawl"],
+    # Mossy Oak is server-rendered HTML — curl_cffi handles CF TLS
+    # wall at ~0.8s per state. Playwright as a backup only.
+    "mossy_oak": ["curl_cffi", "http", "selenium"],
     "county_tax": ["http", "curl_cffi", "selenium", "firecrawl"],
     "auction": ["curl_cffi", "selenium", "firecrawl+claude"],
     "blm": ["http", "curl_cffi", "selenium"],
