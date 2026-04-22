@@ -149,6 +149,24 @@
 
 ---
 
+## P2 — OCR for scanned tax-sale PDFs
+
+- [ ] **Wire OCR pipeline for MO Collector PDFs**
+  - The 2025 Texas County MO Land Tax Sale PDF (the one already in
+    tax_sale_registry.py) is fully image-scanned — pdfplumber
+    returns zero text. Most MO Collectors publish scans.
+  - Options:
+    1. System tesseract + pdf2image/pypdfium2 (free, offline, ~10 min setup)
+    2. Claude vision via `claude -p --image` (uses Max quota; easy
+       one-listing-per-page prompt; high accuracy on typed text)
+  - Blocks real MO tax-sale data until mid-July when 2026 lists
+    publish. Currently missing ~50-80 Texas County parcels + similar
+    from Reynolds + Douglas whenever their lists drop.
+  - Files: scraper/sources/tax_sale_parser.py (`_missouri_collector_pdf`
+    currently a scaffold)
+
+---
+
 ## Tech Debt
 
 - [ ] **Tune Overpass (OpenStreetMap) rate-limit handling in proximity enrichment**

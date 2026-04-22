@@ -89190,5 +89190,526 @@
       "https://images.realstack.com/w440xh330xcrop/uploads/user/4534/gallery-file/fz6jnpwNLQi75XwnQvy79VSrxLbEDlYLpPaXVmos/HYH9sNSWprxZr9tQ.jpg",
       "https://images.realstack.com/w440xh330xcrop/uploads/user/4534/gallery-file/fz6jnpwNLQi75XwnQvy79VSrxLbEDlYLpPaXVmos/xIc143k4Yzj5ikzf.jpg"
     ]
+  },
+  {
+    "id": "craigslist_3221688",
+    "title": "Land For Sale.  40 Acres in Washington County, Missouri.  $3450/Acre",
+    "price": 3450.0,
+    "acreage": 40.0,
+    "pricePerAcre": 86.25,
+    "location": {
+      "lat": 38.0845,
+      "lng": -90.8834,
+      "state": "MO",
+      "county": ""
+    },
+    "features": [
+      "owner_financing"
+    ],
+    "source": "craigslist",
+    "url": "https://craigslist.org/reo/d/richwoods-land-for-sale-40-acres-in/3221688.html",
+    "dateFound": "2026-04-22",
+    "dealScore": 58,
+    "description": "Land For Sale.  40 Acres in Washington County, Missouri.  $3450/Acre",
+    "daysOnMarket": null,
+    "status": "active",
+    "images": [
+      "https://images.craigslist.org/kB3qK7wzuwCsztM1mMQQW2_600x450.jpg",
+      "https://images.craigslist.org/00R0R_eHOrIENayBk_600x450.jpg"
+    ]
+  },
+  {
+    "id": "craigslist_2266221",
+    "title": "Land for Sale. Great Deal. Wont last.",
+    "price": 100.0,
+    "acreage": 0.0,
+    "pricePerAcre": 0,
+    "location": {
+      "lat": 35.6027,
+      "lng": -92.2742,
+      "state": "AR",
+      "county": ""
+    },
+    "features": [
+      "owner_financing"
+    ],
+    "source": "craigslist",
+    "url": "https://craigslist.org/reo/d/fairfield-bay-land-for-sale-great-deal/2266221.html",
+    "dateFound": "2026-04-22",
+    "dealScore": 48,
+    "description": "Land for Sale. Great Deal. Wont last.",
+    "daysOnMarket": null,
+    "status": "active",
+    "images": [
+      "https://images.craigslist.org/wj1ZoNmw2mrEwppw3zjaWb_600x450.jpg",
+      "https://images.craigslist.org/00v0v_ee64uGpuymt_600x450.jpg",
+      "https://images.craigslist.org/00x0x_gIaFSjybIIm_600x450.jpg",
+      "https://images.craigslist.org/00e0e_7AFEyrqCjzm_600x450.jpg"
+    ]
+  },
+  {
+    "id": "craigslist_3616436",
+    "title": "Wooded lots - land with / without zoning. $50 down + $50 / month",
+    "price": 999.0,
+    "acreage": 0.0,
+    "pricePerAcre": 0,
+    "location": {
+      "lat": 36.2884,
+      "lng": -91.5958,
+      "state": "MO",
+      "county": ""
+    },
+    "features": [
+      "owner_financing"
+    ],
+    "source": "craigslist",
+    "url": "https://craigslist.org/reo/d/cherokee-village-wooded-lots-land-with/3616436.html",
+    "dateFound": "2026-04-22",
+    "dealScore": 43,
+    "description": "Wooded lots - land with / without zoning. $50 down + $50 / month",
+    "daysOnMarket": null,
+    "status": "active",
+    "images": [
+      "https://images.craigslist.org/gNMfDf5evzpjn6owuCgAvv_600x450.jpg",
+      "https://images.craigslist.org/00101_hVzuDShJIbb_600x450.jpg",
+      "https://images.craigslist.org/00H0H_blU8O7p44dG_600x450.jpg"
+    ]
+  },
+  {
+    "id": "craigslist_1642695",
+    "title": "Izard County, AR Land for Sale",
+    "price": 2997.0,
+    "acreage": 0.0,
+    "pricePerAcre": 0,
+    "location": {
+      "lat": 36.1151,
+      "lng": -94.0489,
+      "state": "MO",
+      "county": ""
+    },
+    "features": [
+      "owner_financing"
+    ],
+    "source": "craigslist",
+    "url": "https://craigslist.org/reo/d/fayetteville-izard-county-ar-land-for/1642695.html",
+    "dateFound": "2026-04-22",
+    "dealScore": 38,
+    "description": "Izard County, AR Land for Sale",
+    "daysOnMarket": null,
+    "status": "active",
+    "images": [
+      "https://images.craigslist.org/twrCMPnSSRXkrpGRR5E12d_600x450.jpg",
+      "https://images.craigslist.org/01313_h7WfV1tCuZ6_600x450.jpg"
+    ]
+  },
+  {
+    "id": "craigslist_681861",
+    "title": ".85 ACRES OF LAND FOR SALE",
+    "price": 15000.0,
+    "acreage": 0.0,
+    "pricePerAcre": 0,
+    "location": {
+      "lat": 33.9748,
+      "lng": -93.8097,
+      "state": "AR",
+      "county": ""
+    },
+    "features": [
+      "owner_financing"
+    ],
+    "source": "craigslist",
+    "url": "https://craigslist.org/reo/d/nashville-85-acres-of-land-for-sale/681861.html",
+    "dateFound": "2026-04-22",
+    "dealScore": 33,
+    "description": ".85 ACRES OF LAND FOR SALE",
+    "daysOnMarket": null,
+    "status": "active",
+    "images": [
+      "https://images.craigslist.org/ceMpWmqjWRyz4MHkX2HNL6_600x450.jpg"
+    ]
+  },
+  {
+    "id": "craigslist_1164241",
+    "title": "LAND FOR SALE IN MEMPHIS, TN",
+    "price": 8000.0,
+    "acreage": 0.0,
+    "pricePerAcre": 0,
+    "location": {
+      "lat": 35.151,
+      "lng": -89.963,
+      "state": "AR",
+      "county": ""
+    },
+    "features": [
+      "owner_financing"
+    ],
+    "source": "craigslist",
+    "url": "https://craigslist.org/reo/d/memphis-land-for-sale-in-memphis-tn/1164241.html",
+    "dateFound": "2026-04-22",
+    "dealScore": 33,
+    "description": "LAND FOR SALE IN MEMPHIS, TN",
+    "daysOnMarket": null,
+    "status": "active",
+    "images": [
+      "https://images.craigslist.org/i4jFDAB8NL1vfHh72KEXm8_600x450.jpg"
+    ]
+  },
+  {
+    "id": "craigslist_3388922",
+    "title": "TWO Mobile Homes with land, on  Lake View Lot",
+    "price": 75000.0,
+    "acreage": 0.0,
+    "pricePerAcre": 0,
+    "location": {
+      "lat": 36.6453,
+      "lng": -94.8902,
+      "state": "MO",
+      "county": ""
+    },
+    "features": [
+      "water_pond",
+      "owner_financing"
+    ],
+    "source": "craigslist",
+    "url": "https://craigslist.org/reo/d/afton-two-mobile-homes-with-land-on/3388922.html",
+    "dateFound": "2026-04-22",
+    "dealScore": 28,
+    "description": "TWO Mobile Homes with land, on  Lake View Lot",
+    "daysOnMarket": null,
+    "status": "active",
+    "images": [
+      "https://images.craigslist.org/wt4c8MNJcvQdBTDkpNjuJc_600x450.jpg",
+      "https://images.craigslist.org/01515_a16E37SO9qP_600x450.jpg",
+      "https://images.craigslist.org/00404_hzM5gUV5ll8_600x450.jpg",
+      "https://images.craigslist.org/00l0l_aQtcX1hVSZf_600x450.jpg",
+      "https://images.craigslist.org/00E0E_RB5d86NVKY_600x450.jpg",
+      "https://images.craigslist.org/00g0g_7lvVPuikJOx_600x450.jpg"
+    ]
+  },
+  {
+    "id": "craigslist_3621890",
+    "title": "20 acres of unrestricted land, old house, elec, old well and septic",
+    "price": 99000.0,
+    "acreage": 20.0,
+    "pricePerAcre": 4950.0,
+    "location": {
+      "lat": 36.7794,
+      "lng": -90.383,
+      "state": "MO",
+      "county": ""
+    },
+    "features": [
+      "septic",
+      "structures",
+      "no_hoa",
+      "owner_financing"
+    ],
+    "source": "craigslist",
+    "url": "https://craigslist.org/reo/d/poplar-bluff-20-acres-of-unrestricted/3621890.html",
+    "dateFound": "2026-04-22",
+    "dealScore": 25,
+    "description": "20 acres of unrestricted land, old house, elec, old well and septic",
+    "daysOnMarket": null,
+    "status": "active",
+    "images": [
+      "https://images.craigslist.org/trBktxt1Joq8naeDU3K2SL_600x450.jpg",
+      "https://images.craigslist.org/00H0H_cYd3ezPUXT0_600x450.jpg",
+      "https://images.craigslist.org/01616_dXTdFlOhg72_600x450.jpg",
+      "https://images.craigslist.org/00X0X_bVTLdiQk4Ok_600x450.jpg",
+      "https://images.craigslist.org/00M0M_aZFM5fd3o5q_600x450.jpg",
+      "https://images.craigslist.org/00k0k_cnb8SfyJS15_600x450.jpg"
+    ]
+  },
+  {
+    "id": "craigslist_3602898",
+    "title": "Stunning 2.1 Acres of Missouri Riverfront Land",
+    "price": 77500.0,
+    "acreage": 2.1,
+    "pricePerAcre": 36904.76,
+    "location": {
+      "lat": 38.2105,
+      "lng": -92.9551,
+      "state": "MO",
+      "county": ""
+    },
+    "features": [
+      "water_creek",
+      "owner_financing"
+    ],
+    "source": "craigslist",
+    "url": "https://craigslist.org/reo/d/climax-springs-stunning-21-acres-of/3602898.html",
+    "dateFound": "2026-04-22",
+    "dealScore": 25,
+    "description": "Stunning 2.1 Acres of Missouri Riverfront Land",
+    "daysOnMarket": null,
+    "status": "active",
+    "images": [
+      "https://images.craigslist.org/aZSbbbKTCaLxwMQ3VAx76a_600x450.jpg",
+      "https://images.craigslist.org/00F0F_c7XfFDacfWy_600x450.jpg"
+    ]
+  },
+  {
+    "id": "craigslist_3533315",
+    "title": "Large, wooded lot land w/ underground electric & gated entrance",
+    "price": 175000.0,
+    "acreage": 0.0,
+    "pricePerAcre": 0,
+    "location": {
+      "lat": 37.1447,
+      "lng": -92.9111,
+      "state": "MO",
+      "county": ""
+    },
+    "features": [
+      "electric",
+      "owner_financing"
+    ],
+    "source": "craigslist",
+    "url": "https://craigslist.org/reo/d/fordland-large-wooded-lot-land/3533315.html",
+    "dateFound": "2026-04-22",
+    "dealScore": 22,
+    "description": "Large, wooded lot land w/ underground electric & gated entrance",
+    "daysOnMarket": null,
+    "status": "active",
+    "images": [
+      "https://images.craigslist.org/5vpDSnbprmjQcvFjFU6Jo8_600x450.jpg",
+      "https://images.craigslist.org/01515_eFaBmtYW4ga_600x450.jpg",
+      "https://images.craigslist.org/00I0I_9mFYz26JaTw_600x450.jpg",
+      "https://images.craigslist.org/00P0P_f3215ORFMf_600x450.jpg",
+      "https://images.craigslist.org/00M0M_cfWKgYYqDHE_600x450.jpg",
+      "https://images.craigslist.org/00x0x_l5eqpUWPcKa_600x450.jpg"
+    ]
+  },
+  {
+    "id": "craigslist_3621890",
+    "title": "10 acres of land near Hot Springs Village, elec, well, septic, private",
+    "price": 85000.0,
+    "acreage": 10.0,
+    "pricePerAcre": 8500.0,
+    "location": {
+      "lat": 34.6484,
+      "lng": -92.983,
+      "state": "AR",
+      "county": ""
+    },
+    "features": [
+      "septic",
+      "owner_financing"
+    ],
+    "source": "craigslist",
+    "url": "https://craigslist.org/reo/d/hot-springs-village-10-acres-of-land/3621890.html",
+    "dateFound": "2026-04-22",
+    "dealScore": 20,
+    "description": "10 acres of land near Hot Springs Village, elec, well, septic, private",
+    "daysOnMarket": null,
+    "status": "active",
+    "images": [
+      "https://images.craigslist.org/eSiy3CR4KXdsm6WVyTjydb_600x450.jpg",
+      "https://images.craigslist.org/00c0c_4jKfGDZEMvE_600x450.jpg",
+      "https://images.craigslist.org/00u0u_7Esyn3djg9j_600x450.jpg",
+      "https://images.craigslist.org/00B0B_ltEiRajVdWp_600x450.jpg",
+      "https://images.craigslist.org/01313_cz4w7mMFYYi_600x450.jpg",
+      "https://images.craigslist.org/00P0P_fjI3xzveb6y_600x450.jpg"
+    ]
+  },
+  {
+    "id": "craigslist_3198351",
+    "title": "1.36 Acre land in Carroll County AR Mercury Ln, Holiday Island, AR",
+    "price": 12000.0,
+    "acreage": 1.36,
+    "pricePerAcre": 8823.53,
+    "location": {
+      "lat": 36.435,
+      "lng": -93.7673,
+      "state": "MO",
+      "county": ""
+    },
+    "features": [
+      "owner_financing"
+    ],
+    "source": "craigslist",
+    "url": "https://craigslist.org/reo/d/eureka-springs-136-acre-land-in-carroll/3198351.html",
+    "dateFound": "2026-04-22",
+    "dealScore": 18,
+    "description": "1.36 Acre land in Carroll County AR Mercury Ln, Holiday Island, AR",
+    "daysOnMarket": null,
+    "status": "active",
+    "images": [
+      "https://images.craigslist.org/bjhAYq64C3X2SRkMJA3re3_600x450.jpg"
+    ]
+  },
+  {
+    "id": "craigslist_2341771",
+    "title": "Land in Ottawa County OK",
+    "price": 484900.0,
+    "acreage": 0.0,
+    "pricePerAcre": 0,
+    "location": {
+      "lat": 36.779,
+      "lng": -94.7624,
+      "state": "MO",
+      "county": ""
+    },
+    "features": [
+      "owner_financing"
+    ],
+    "source": "craigslist",
+    "url": "https://craigslist.org/reo/d/wyandotte-land-in-ottawa-county-ok/2341771.html",
+    "dateFound": "2026-04-22",
+    "dealScore": 18,
+    "description": "Land in Ottawa County OK",
+    "daysOnMarket": null,
+    "status": "active",
+    "images": [
+      "https://images.craigslist.org/jU7HLpAQtCXLwgB7VxyUEo_600x450.jpg",
+      "https://images.craigslist.org/01212_j4F48TOyCFM_600x450.jpg"
+    ]
+  },
+  {
+    "id": "craigslist_2576952",
+    "title": "4 Acres of Land in Rural Washington County Missouri No Zoning or Codes",
+    "price": 12000.0,
+    "acreage": 4.0,
+    "pricePerAcre": 3000.0,
+    "location": {
+      "lat": 38.0366,
+      "lng": -90.929,
+      "state": "MO",
+      "county": ""
+    },
+    "features": [
+      "owner_financing"
+    ],
+    "source": "craigslist",
+    "url": "https://craigslist.org/reo/d/potosi-acres-of-land-in-rural/2576952.html",
+    "dateFound": "2026-04-22",
+    "dealScore": 18,
+    "description": "4 Acres of Land in Rural Washington County Missouri No Zoning or Codes",
+    "daysOnMarket": null,
+    "status": "active",
+    "images": [
+      "https://images.craigslist.org/n5V9TaMEp5z6BcrADWit6V_600x450.jpg",
+      "https://images.craigslist.org/00I0I_j1lxJYbIN2z_600x450.jpg",
+      "https://images.craigslist.org/00o0o_fNpacTcoCIC_600x450.jpg",
+      "https://images.craigslist.org/00b0b_4eKpkqyidwG_600x450.jpg",
+      "https://images.craigslist.org/00c0c_jpyG2oPgW57_600x450.jpg",
+      "https://images.craigslist.org/00A0A_b8MRESogVvS_600x450.jpg"
+    ]
+  },
+  {
+    "id": "craigslist_3714562",
+    "title": "10 Acres of wooded land with 300ft of Shoreline 45 Mile Marker FSBO",
+    "price": 95900.0,
+    "acreage": 10.0,
+    "pricePerAcre": 9590.0,
+    "location": {
+      "lat": 38.2584,
+      "lng": -92.823,
+      "state": "MO",
+      "county": ""
+    },
+    "features": [
+      "owner_financing"
+    ],
+    "source": "craigslist",
+    "url": "https://craigslist.org/reo/d/gravois-mills-10-acres-of-wooded-land/3714562.html",
+    "dateFound": "2026-04-22",
+    "dealScore": 18,
+    "description": "10 Acres of wooded land with 300ft of Shoreline 45 Mile Marker FSBO",
+    "daysOnMarket": null,
+    "status": "active",
+    "images": [
+      "https://images.craigslist.org/wGDMoWYNdjiq6DB5ambfXk_600x450.jpg",
+      "https://images.craigslist.org/00B0B_1SmlCIbcjSt_600x450.jpg"
+    ]
+  },
+  {
+    "id": "craigslist_3714563",
+    "title": "FSBO 10 Acres of wooded land with 300ft of Shoreline 45 Mile Marker",
+    "price": 95900.0,
+    "acreage": 10.0,
+    "pricePerAcre": 9590.0,
+    "location": {
+      "lat": 38.2584,
+      "lng": -92.823,
+      "state": "MO",
+      "county": ""
+    },
+    "features": [
+      "owner_financing"
+    ],
+    "source": "craigslist",
+    "url": "https://craigslist.org/reo/d/gravois-mills-fsbo-10-acres-of-wooded/3714563.html",
+    "dateFound": "2026-04-22",
+    "dealScore": 18,
+    "description": "FSBO 10 Acres of wooded land with 300ft of Shoreline 45 Mile Marker",
+    "daysOnMarket": null,
+    "status": "active",
+    "images": [
+      "https://images.craigslist.org/qGZBSU1BNqWy1gKZrnC1sK_600x450.jpg",
+      "https://images.craigslist.org/00B0B_1SmlCIbcjSt_600x450.jpg"
+    ]
+  },
+  {
+    "id": "craigslist_3020919",
+    "title": "Land/Home in Clark Co For Sale Owner Financed! 209 E Maple St",
+    "price": 129900.0,
+    "acreage": 0.0,
+    "pricePerAcre": 0,
+    "location": {
+      "lat": 33.9125,
+      "lng": -93.1417,
+      "state": "AR",
+      "county": ""
+    },
+    "features": [
+      "owner_financing"
+    ],
+    "source": "craigslist",
+    "url": "https://craigslist.org/reo/d/gurdon-land-home-in-clark-co-for-sale/3020919.html",
+    "dateFound": "2026-04-22",
+    "dealScore": 18,
+    "description": "Land/Home in Clark Co For Sale Owner Financed! 209 E Maple St",
+    "daysOnMarket": null,
+    "status": "active",
+    "images": [
+      "https://images.craigslist.org/1K5sJkSpaEWRTd3TnSmcWY_600x450.jpg",
+      "https://images.craigslist.org/00C0C_agUZuhcLobU_600x450.jpg",
+      "https://images.craigslist.org/00202_kv1fLZSdktQ_600x450.jpg",
+      "https://images.craigslist.org/00H0H_k5FOGgQH7cU_600x450.jpg",
+      "https://images.craigslist.org/01111_8zMc8Elx1rW_600x450.jpg",
+      "https://images.craigslist.org/00Y0Y_kz1qqgVnvdS_600x450.jpg"
+    ]
+  },
+  {
+    "id": "craigslist_3357373",
+    "title": "**BUY DIRT** 30 Acres +\\- Land \u2014Holmes County, MS",
+    "price": 98500.0,
+    "acreage": 30.0,
+    "pricePerAcre": 3283.33,
+    "location": {
+      "lat": 33.0828,
+      "lng": -89.8612,
+      "state": "AR",
+      "county": ""
+    },
+    "features": [
+      "owner_financing"
+    ],
+    "source": "craigslist",
+    "url": "https://craigslist.org/reo/d/durant-buy-dirt-30-acres-land-holmes/3357373.html",
+    "dateFound": "2026-04-22",
+    "dealScore": 18,
+    "description": "**BUY DIRT** 30 Acres +\\- Land \u2014Holmes County, MS",
+    "daysOnMarket": null,
+    "status": "active",
+    "images": [
+      "https://images.craigslist.org/jNDsedArbRPtaB6kJzpFuQ_600x450.jpg",
+      "https://images.craigslist.org/00b0b_d999fzlPnqA_600x450.jpg",
+      "https://images.craigslist.org/00D0D_fifqgpWyq05_600x450.jpg",
+      "https://images.craigslist.org/00l0l_5uMWlxUXNE1_600x450.jpg",
+      "https://images.craigslist.org/00X0X_bihYeAVKXC6_600x450.jpg",
+      "https://images.craigslist.org/00P0P_8c8bCf50fVS_600x450.jpg"
+    ]
   }
 ]

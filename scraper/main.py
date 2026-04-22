@@ -20,6 +20,7 @@ from sources.tax_sale_analytics import analyze_listings as analyze_tax_sale_list
 from sources.blm import BLMScraper
 from sources.county_tax import CountyTaxScraper
 from sources.govease import GovEaseScraper
+from sources.craigslist import CraigslistScraper
 from sources.homestead_crossing import HomesteadCrossingScraper
 from sources.lands_of_america import LandsOfAmericaScraper
 from sources.landwatch import LandWatchScraper
@@ -39,6 +40,7 @@ ALL_SCRAPERS = {
     "ozarkland": OzarkLandScraper,
     "united_country": UnitedCountryScraper,
     "mossy_oak": MossyOakScraper,
+    "craigslist": CraigslistScraper,
     "zillow": ZillowScraper,
     "realtor": RealtorScraper,
     "county_tax": CountyTaxScraper,

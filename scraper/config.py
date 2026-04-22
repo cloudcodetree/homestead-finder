@@ -69,6 +69,10 @@ ENABLED_SOURCES: dict[str, bool] = {
     # Server-rendered, lat/lng baked into card data attributes, heavy
     # Ozark coverage. Hidden-gem yield similar to United Country.
     "mossy_oak": True,
+    # Craigslist FSBO land — small volume (~5-15 hits/state/day) but
+    # the cheapest inventory in the corpus. Hidden gems that big
+    # aggregators skip entirely.
+    "craigslist": True,
     "zillow": False,  # Rate limiting issues — disabled by default
     "realtor": False,  # Rate limiting issues — disabled by default
     "county_tax": True,
@@ -120,6 +124,9 @@ STRATEGY_CHAINS: dict[str, list[str]] = {
     # Mossy Oak is server-rendered HTML — curl_cffi handles CF TLS
     # wall at ~0.8s per state. Playwright as a backup only.
     "mossy_oak": ["curl_cffi", "http", "selenium"],
+    # Craigslist hits sapi.craigslist.org directly — handled inside
+    # the scraper module. Strategy chain not used.
+    "craigslist": ["curl_cffi"],
     "county_tax": ["http", "curl_cffi", "selenium", "firecrawl"],
     "auction": ["curl_cffi", "selenium", "firecrawl+claude"],
     "blm": ["http", "curl_cffi", "selenium"],
