@@ -8,12 +8,15 @@ import { NotificationSettings } from './NotificationSettings';
 import { TopPicks } from './TopPicks';
 import { HomesteadDeals } from './HomesteadDeals';
 import { AskClaude } from './AskClaude';
+import { AuthButton } from './AuthButton';
 import { ErrorBoundary } from './ErrorBoundary';
 import { useProperties } from '../hooks/useProperties';
 import { useFilters } from '../hooks/useFilters';
 import { useCurated } from '../hooks/useCurated';
 import { useHomesteadDeals } from '../hooks/useHomesteadDeals';
 import { QueryResponse } from '../hooks/useQueryServer';
+import { useAuth } from '../hooks/useAuth';
+import { useSavedListings } from '../hooks/useSavedListings';
 import { getDealScoreColor } from '../utils/scoring';
 import { getListingTypeStyle } from '../utils/listingType';
 import { formatPrice, formatAcreage } from '../utils/formatters';
@@ -54,6 +57,9 @@ export const Dashboard = () => {
   const [showFilters, setShowFilters] = useState(false); // mobile drawer
   const [sidebarOpen, setSidebarOpen] = useState(true); // desktop collapse
   const [queryResult, setQueryResult] = useState<QueryResponse | null>(null);
+  const [onlySaved, setOnlySaved] = useState(false);
+  const { user: currentUser } = useAuth();
+  const { savedIds } = useSavedListings();
   // States present in the loaded corpus — feeds the state filter so it
   // reflects actual inventory (not a hardcoded list). Stable reference
   // via useMemo so FilterPanel doesn't thrash.
@@ -121,8 +127,18 @@ export const Dashboard = () => {
     filters.sources.length,
   ].reduce((a, b) => a + b, 0);
 
-  // `properties` is already sorted by the hook using filters.sortBy
-  const sortedProperties = properties;
+  // `properties` is already sorted by the hook using filters.sortBy.
+  // If "Only saved" is on we layer an additional filter — Dashboard-
+  // local rather than part of useFilters because saved IDs are
+  // per-user state from Supabase, orthogonal to the shareable filter
+  // URL state that lives in useFilters.
+  const sortedProperties = useMemo(
+    () => (onlySaved ? properties.filter((p) => savedIds.has(p.id)) : properties),
+    [onlySaved, properties, savedIds]
+  );
+  // Offer a "Saved" toggle whenever the user is signed in — always
+  // visible but functionally off when their saved list is empty.
+  const showSavedToggle = currentUser !== null;
 
   return (
     <div className="flex flex-col h-screen bg-gray-50">
@@ -208,6 +224,7 @@ export const Dashboard = () => {
           >
             🔔
           </button>
+          <AuthButton />
         </div>
       </header>
 
@@ -404,9 +421,39 @@ export const Dashboard = () => {
                   their filters + sort context even when a query is active. */}
               {/* Sort + count bar */}
               <div className="flex items-center justify-between mb-4 max-w-6xl mx-auto">
-                <p className="text-sm text-gray-500">
-                  {queryResult ? 'All listings' : `${sortedProperties.length} properties`}
-                </p>
+                <div className="flex items-center gap-3">
+                  <p className="text-sm text-gray-500">
+                    {queryResult ? 'All listings' : `${sortedProperties.length} properties`}
+                  </p>
+                  {showSavedToggle && (
+                    <button
+                      onClick={() => setOnlySaved((v) => !v)}
+                      className={`inline-flex items-center gap-1 rounded-full border px-2.5 py-0.5 text-xs font-medium transition-colors ${
+                        onlySaved
+                          ? 'bg-amber-400 border-amber-500 text-white'
+                          : 'bg-white border-gray-200 text-gray-600 hover:bg-gray-50'
+                      }`}
+                      title={
+                        onlySaved
+                          ? 'Showing saved only — click to show all'
+                          : `Show only your saved listings (${savedIds.size})`
+                      }
+                    >
+                      <svg
+                        viewBox="0 0 24 24"
+                        className="w-3 h-3"
+                        fill={onlySaved ? 'currentColor' : 'none'}
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      >
+                        <path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z" />
+                      </svg>
+                      <span>Saved {savedIds.size > 0 ? savedIds.size : ''}</span>
+                    </button>
+                  )}
+                </div>
                 <div className="flex items-center gap-2">
                   <label className="text-sm text-gray-600 hidden sm:block" htmlFor="sort-select">
                     Sort:

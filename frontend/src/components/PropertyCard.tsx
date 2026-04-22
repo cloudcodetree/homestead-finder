@@ -1,4 +1,6 @@
 import { Property, FEATURE_LABELS } from '../types/property';
+import { useAuth } from '../hooks/useAuth';
+import { useSavedListings } from '../hooks/useSavedListings';
 import { PropertyThumbnail } from './PropertyThumbnail';
 import {
   formatAcreage,
@@ -58,14 +60,51 @@ export const PropertyCard = ({ property, onClick, isSelected = false }: Property
   const scoreColor = getDealScoreColor(property.dealScore);
   const scoreBorder = getDealScoreBorderColor(property.dealScore);
   const typeStyle = getListingTypeStyle(property);
+  const { user, loginWithGoogle } = useAuth();
+  const { isSaved, toggle } = useSavedListings();
+  const saved = isSaved(property.id);
 
   return (
     <div
-      className={`rounded-lg border-2 bg-white cursor-pointer transition-all hover:shadow-md overflow-hidden ${
+      className={`relative rounded-lg border-2 bg-white cursor-pointer transition-all hover:shadow-md overflow-hidden ${
         isSelected ? `${scoreBorder} shadow-md` : 'border-gray-200 hover:border-gray-300'
       }`}
       onClick={() => onClick(property.id)}
     >
+      {/* Bookmark button — floats over the top-right corner of the
+          thumbnail. Prompts login when clicked anonymously (Google
+          OAuth round-trip via useAuth). Optimistic-update semantics
+          inherited from useSavedListings. */}
+      <button
+        onClick={(e) => {
+          e.stopPropagation();
+          if (!user) {
+            // Anonymous click on the bookmark → quickest path to login
+            // is Google (one tap). If that user would rather use email
+            // they can hit Sign-in in the header and see the full sheet.
+            void loginWithGoogle();
+            return;
+          }
+          void toggle(property.id);
+        }}
+        aria-label={saved ? 'Remove from saved' : 'Save listing'}
+        title={
+          user
+            ? saved
+              ? 'Saved — click to remove'
+              : 'Save this listing'
+            : 'Sign in to save listings'
+        }
+        className={`absolute top-2 right-2 z-10 w-8 h-8 rounded-full backdrop-blur-sm flex items-center justify-center transition-colors shadow ${
+          saved
+            ? 'bg-amber-400/90 hover:bg-amber-500 text-white'
+            : 'bg-black/40 hover:bg-black/60 text-white'
+        }`}
+      >
+        <svg viewBox="0 0 24 24" className="w-4 h-4" fill={saved ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z" />
+        </svg>
+      </button>
       {/* Listing-type accent stripe — colored bar above the thumbnail
           signals tax sale vs owner-finance vs standard for-sale at a
           glance. Full-width, 4px tall. */}
