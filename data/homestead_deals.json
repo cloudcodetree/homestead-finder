@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-04-22T16:55:28.305813+00:00",
+  "generatedAt": "2026-04-22T20:03:06.068054+00:00",
   "model": "sonnet",
-  "totalListings": 278,
-  "passedFiltersCount": 51,
+  "totalListings": 514,
+  "passedFiltersCount": 120,
   "candidateCount": 40,
   "pickCount": 12,
   "filterSummary": {
@@ -27,75 +27,75 @@
   },
   "picks": [
     {
-      "id": "landwatch_426170882",
-      "headline": "40-acre Ozark parcel with proven water infrastructure",
-      "reason": "The only candidate combining Class 3 soil (Linker Mountainburg, 5% slopes), confirmed year-round creeks and waterfall, grid utilities already run, and existing cabins for immediate occupancy in the Tomahawk Creek\u2013Little Red River watershed. At $396,500 ($9,912/acre) it is the most expensive per-acre pick, but no other listing eliminates build cost, water risk, and soil risk simultaneously. The trade-off is price and grid dependence\u2014this is comfort homesteading, not off-grid pioneering.",
+      "id": "landwatch_426302076",
+      "headline": "67-acre Ozark spring and creek homestead",
+      "reason": "67.5 acres at $4,133/acre with an existing well, septic, spring, and creek eliminates the two most expensive infrastructure hurdles. Mixed timber and open ground in the Tomahawk Creek watershed support both resource harvesting and cultivation. The truncated listing leaves road access and electricity unconfirmed \u2014 those must be verified before closing, as they are the only material unknowns on an otherwise strong buy.",
       "rank": 1
     },
     {
-      "id": "landwatch_419681713",
-      "headline": "172-acre Class 2 farmland at $1,512 per acre",
-      "reason": "Ruston fine sandy loam (USDA Class 2, 1\u20133% slopes) is the best agricultural soil in the entire candidate pool, and 172 acres at $260,000 ($1,512/acre) gives production scale that no other listing approaches. No flood risk, elevation 183 ft in Dunn Creek\u2013Champagnolle Creek watershed. The serious risks are real: no well, no septic, no structures, and the hunting-focused marketing raises a zoning question that must be resolved before purchase\u2014residential development could be restricted.",
+      "id": "landwatch_422366319",
+      "headline": "53 acres with creek, pond, and springs",
+      "reason": "53 acres at $4,000/acre in Madison County, AR delivers creek frontage, a pond, and springs \u2014 three independent water sources that underpin genuine off-grid self-sufficiency. Paved access and a build-ready classification reduce startup friction. Soil quality and whether a residential permit is straightforward in this county are the critical unknowns requiring due diligence before purchase.",
       "rank": 2
     },
     {
-      "id": "ozarkland_jacks-fork-farmsteads-parcel-l",
-      "headline": "8.78-acre spring-fed parcel with Class 3 ag soil",
-      "reason": "A natural spring combined with Weller silt loam (USDA Class 3, farmland of statewide importance, 6.2% slopes) gives this 8.78-acre parcel the best water-plus-soil combination available under $100k. Flood zone X, well-drained, elevation 776 ft in the Pisgah Creek\u2013Moniteau Creek watershed. At $78,900 ($8,986/acre) it is not cheap per acre, but road access and utility hookup are the only unknowns\u2014the land fundamentals are sound for off-grid development.",
+      "id": "landwatch_426170882",
+      "headline": "40-acre Ozark waterfall retreat with cabins",
+      "reason": "Year-round creeks and a waterfall in the Tomahawk Creek\u2013Little Red River watershed provide reliable water on Class 3 (well-drained, 5% slope) Linker-Mountainburg soil suitable for small-scale agriculture. Existing cabins and on-site utilities enable immediate occupancy without a development phase. At $9,913/acre the price is the main trade-off \u2014 this is comfort homesteading, not a pioneer land play, and grid infrastructure means true off-grid operation would require retrofit.",
       "rank": 3
     },
     {
-      "id": "ozarkland_jacks-fork-farmsteads-parcel-w",
-      "headline": "6-acre Jacks Fork stream parcel with ag-grade soil",
-      "reason": "At $45,900 ($7,537/acre) this is the lowest entry price for a Class 3 soil parcel with year-round stream access and confirmed water rights in the entire candidate pool. Same Weller silt loam and Pisgah Creek watershed as Parcel L above. The 6.09-acre size is the main constraint\u2014small acreage limits livestock scale and resilience. Septic and utility installation are required, adding $20\u201340k to the true cost.",
+      "id": "landwatch_419681713",
+      "headline": "172 acres Class 2 soil, pioneer infrastructure build",
+      "reason": "172 acres at $1,512/acre with Ruston fine sandy loam (USDA Class 2, 2% slope, excellent drainage) is the best soil-per-dollar combination in this set. No flood risk and solid agricultural ground give this genuine long-term homesteading upside. The catch is real: no well, no septic, no utilities, and the listing emphasizes hunting use \u2014 zoning for residential homestead must be confirmed before treating this as a buildable property, and infrastructure costs could run $50\u2013100k.",
       "rank": 4
     },
     {
-      "id": "homestead_crossing_1398",
-      "headline": "26-acre Oregon County parcel at $3,037 per acre",
-      "reason": "Best price-per-acre among candidates with confirmed utilities and stated year-round water: 26.31 acres at $79,900 ($3,037/acre) in Oregon County, MO. Alred-Gatewood complex (Class 4, 12% slopes) rules out row crops but the acreage gives room for timber, foraging, and livestock on gentler terrain pockets. The 12% average slope means site selection for a building pad and garden requires field-walking. Trade-off: remote, steep, marginal soil\u2014but the raw value and scale at this price are unmatched among serviced parcels.",
+      "id": "landwatch_425424825",
+      "headline": "61 acres with four ponds near Highway 21",
+      "reason": "61 acres at $6,250/acre in Madison County, AR comes with four ponds providing redundant water storage and livestock infrastructure without needing a drilled well. Less than 1 mile from Highway 21 and utilities available at the county road reduce both isolation and development cost. Soil quality is undisclosed and must be verified; at this price per acre the budget for soil amendment or raised-bed systems is limited.",
       "rank": 5
     },
     {
-      "id": "homestead_crossing_1157",
-      "headline": "18-acre Wildcat Hill with utilities and water",
-      "reason": "18 acres with utilities on-site and year-round water at $62,900 ($3,494/acre) in Oregon County, MO makes this the second-best value for a serviced mid-size parcel. Alred-Gatewood Class 4 soil at 12% slopes constrains agriculture similarly to Ruby Ridge West, but the 18 acres, flood zone X, and confirmed water give enough working room for a livestock-focused homestead. The 12% slope is the recurring practical challenge for any tillage or heavy equipment.",
+      "id": "landwatch_425688197",
+      "headline": "40-acre farm with house, workshop, and pond",
+      "reason": "40.8 acres at $7,353/acre in Howell County, MO includes a farmhouse, workshop, fenced pasture, and pond \u2014 a functional livestock operation on day one. The 2-mile proximity to Willow Springs provides healthcare, feed, and hardware access without compromising rural character. Soil data is absent and the farmhouse age and condition are unverified; a structural inspection and soil sample should be conditions of any offer.",
       "rank": 6
     },
     {
-      "id": "homestead_crossing_1552",
-      "headline": "21-acre serviced parcel, largest in the cluster",
-      "reason": "Sand Hollow #18 offers the most acreage (21.34 acres) of any utilities-confirmed parcel in the Bendavis-Poynor cluster at $107,900 ($5,056/acre) in Texas County, MO, elevation 1,190 ft in the Burton Branch\u2013Big Piney River watershed. Class 4 soil with severe limitations means food production relies on raised beds and pasture rather than row crops. This listing lacks the year-round water and paved-access tags that stronger picks carry, so water source verification is critical before offer.",
+      "id": "landwatch_422743078",
+      "headline": "30-acre farmstead with barns and spring pond",
+      "reason": "Existing farmhouse, barns, and agricultural infrastructure with a spring-fed pond 10 minutes from town make this the most immediately livable option in the set. At $13,967/acre for 30 developed acres in Texas County, MO it is priced for the improvements, not raw land. The main risk is that spring reliability and soil suitability are unverified \u2014 a dry year or soil test revealing poor ground could undermine the agricultural case at this price.",
       "rank": 7
     },
     {
-      "id": "homestead_crossing_1472",
-      "headline": "19.57-acre Ozarks parcel near county services",
-      "reason": "Dog's Bluff North B at 19.57 acres and $97,900 ($5,003/acre) pairs reasonable acreage with utilities, water, and a near-services tag\u2014useful for medical emergencies and supply runs during a homestead build-out phase. Bendavis-Poynor Class 4 soil at 5% slope is manageable for construction and grazing but not crop farming. The near-services attribute differentiates it from more isolated parcels at similar prices in the same watershed.",
+      "id": "ozarkland_jacks-fork-farmsteads-parcel-l",
+      "headline": "8.78-acre spring parcel with Class 3 soil",
+      "reason": "A natural spring combined with Weller silt loam (Class 3, farmland of statewide importance, 6.2% slope, flood zone X) is an unusually strong combination at this price point in Missouri. Off-grid viability is tagged and the terrain is buildable with minimal earthwork. The acreage is tight at 8.78 acres \u2014 barely enough for a full homestead without intensive management \u2014 and road access and utility hookup must be confirmed with the seller before closing.",
       "rank": 8
     },
     {
-      "id": "homestead_crossing_1556",
-      "headline": "20-acre build-ready parcel with year-round water",
-      "reason": "Sand Hollow #22 at 20.29 acres and $105,900 ($5,219/acre) carries build_ready and year-round water tags alongside utilities, giving slightly more confidence in immediate habitability than other large Bendavis-Poynor parcels. Class 4 soil is the persistent limitation across this cluster. At over 20 acres in the Burton Branch\u2013Big Piney River watershed, there is enough land to experiment with soil amendment and food forest strategies even if row-crop yields will be poor.",
+      "id": "landwatch_425832953",
+      "headline": "21-acre build-ready parcel with fiber and water",
+      "reason": "21.8 acres at $11,927/acre in Newton County (Ozarks, AR) with water, electric, and fiber internet already on site eliminates the three most common rural development delays. Highway access on both sides simplifies easement and logistics. Soil data and water rights detail are absent, which matters at this price \u2014 agricultural potential cannot be confirmed without a site visit and soil test, so this suits a homesteader who prioritizes connectivity and infrastructure over farming.",
       "rank": 9
     },
     {
-      "id": "homestead_crossing_1430",
-      "headline": "11.81-acre paved-access parcel, highest fit score",
-      "reason": "Dogs Bluff South #7 carries the highest homesteadFitScore (72) among the Bendavis-Poynor cluster, with paved access, confirmed water rights, and utilities at $54,900 ($4,649/acre) in Texas County. Class 4 soil at 5% slope limits farming but supports a buildable, habitable homestead. The listing notes are sparse on whether utilities are at the road or on-site\u2014that distinction should be confirmed before closing.",
+      "id": "ozarkland_jacks-fork-farmsteads-parcel-w",
+      "headline": "6-acre stream parcel with agricultural soil",
+      "reason": "6.09 acres with a year-round stream and Class 3 Weller silt loam (6.2% slope, flood zone X) at $7,537/acre provides quality agricultural ground and reliable water in a buildable configuration. Infrastructure needs (septic, utilities) add startup cost but the land fundamentals are sound. At just over 6 acres there is minimal buffer for mistakes or expansion \u2014 this works best as a compact, intensive kitchen-garden homestead rather than a livestock or grain operation.",
       "rank": 10
     },
     {
-      "id": "homestead_crossing_1500",
-      "headline": "10.81-acre paved-access parcel, lowest cluster price",
-      "reason": "Shelton Road #4 at $47,900 ($4,431/acre) is the lowest-priced per-acre option in the Bendavis-Poynor group with paved access, utilities, and year-round water all tagged. The 10.81 acres at elevation 1,190 ft in the Burton Branch\u2013Big Piney River watershed gives just enough room for a home site, small outbuildings, and modest grazing. Class 4 soil is the standard limitation here\u2014productive gardening will require heavy soil amendment and raised beds.",
+      "id": "homestead_crossing_1157",
+      "headline": "18 acres with utilities and year-round water",
+      "reason": "18 acres at $3,494/acre in Oregon County, MO is the lowest price per acre in this set that still includes confirmed utilities and year-round water \u2014 making it the clearest budget entry point for a functional homestead. Class 4 Alred-Gatewood soil at 12% slopes significantly limits row-crop agriculture and complicates construction planning, restricting this to pasture, hay, and livestock-based production. Remote Oregon County location means a long drive for medical care or major supply runs.",
       "rank": 11
     },
     {
-      "id": "homestead_crossing_1426",
-      "headline": "10.31-acre grazing parcel with water rights",
-      "reason": "Dogs Bluff South #3 at $49,900 ($4,840/acre) rounds out the list with explicit water rights and a grazing_suitable tag, making it the most livestock-credible of the small Bendavis-Poynor parcels. homesteadFitScore of 70 sits above most peers in the cluster. The Class 4 soil and 10.31-acre scale are genuine limitations\u2014this works as a starter homestead for someone focusing on a few goats or chickens rather than crop self-sufficiency. Road access specifics and whether the water source is on-lot need verification.",
+      "id": "homestead_crossing_1552",
+      "headline": "21-acre parcel with utilities in Burton Branch watershed",
+      "reason": "Sand Hollow #18 offers the most acreage among the Bendavis-Poynor Class 4 cluster \u2014 21.34 acres at $5,056/acre with electric and water available in the Burton Branch\u2013Big Piney River watershed. Class 4 soil with severe agricultural limitations is the persistent weakness across this parcel group, making serious food production impractical and constraining the homestead to livestock, raised beds, and residential self-sufficiency. It is included as the strongest representative of a large group of similar parcels, but food-focused buyers should prioritize the higher-ranked options.",
       "rank": 12
     }
   ]
