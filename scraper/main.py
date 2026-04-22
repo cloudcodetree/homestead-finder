@@ -182,10 +182,9 @@ def run(
                     # Preserve lat/lng when the fresh row has zeros.
                     prev_loc = prev.get("location") or {}
                     cur_loc = current.setdefault("location", {})
-                    if (
-                        prev_loc.get("lat") not in (None, 0, 0.0)
-                        and cur_loc.get("lat") in (None, 0, 0.0)
-                    ):
+                    if prev_loc.get("lat") not in (None, 0, 0.0) and cur_loc.get(
+                        "lat"
+                    ) in (None, 0, 0.0):
                         cur_loc["lat"] = prev_loc["lat"]
                         cur_loc["lng"] = prev_loc.get("lng", cur_loc.get("lng"))
                         carried = True
