@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import App from './App';
 import { AuthProvider } from './hooks/useAuth';
+import { SavedListingsProvider } from './hooks/useSavedListings';
 import './index.css';
 
 // `import.meta.env.BASE_URL` is "/homestead-finder/" under GitHub Pages
@@ -17,7 +18,9 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <BrowserRouter basename={import.meta.env.BASE_URL}>
       <AuthProvider>
-        <App />
+        <SavedListingsProvider>
+          <App />
+        </SavedListingsProvider>
       </AuthProvider>
     </BrowserRouter>
   </React.StrictMode>
