@@ -24,6 +24,7 @@ from sources.homestead_crossing import HomesteadCrossingScraper
 from sources.lands_of_america import LandsOfAmericaScraper
 from sources.landwatch import LandWatchScraper
 from sources.ozarkland import OzarkLandScraper
+from sources.united_country import UnitedCountryScraper
 from sources.realtor import RealtorScraper
 from sources.zillow import ZillowScraper
 
@@ -35,6 +36,7 @@ ALL_SCRAPERS = {
     "lands_of_america": LandsOfAmericaScraper,
     "homestead_crossing": HomesteadCrossingScraper,
     "ozarkland": OzarkLandScraper,
+    "united_country": UnitedCountryScraper,
     "zillow": ZillowScraper,
     "realtor": RealtorScraper,
     "county_tax": CountyTaxScraper,

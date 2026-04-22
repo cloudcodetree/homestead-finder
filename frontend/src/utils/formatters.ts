@@ -41,6 +41,7 @@ export const formatSourceName = (source: string): string => {
     lands_of_america: 'Lands of America',
     homestead_crossing: 'Homestead Crossing',
     ozarkland: 'OzarkLand',
+    united_country: 'United Country',
     zillow: 'Zillow',
     realtor: 'Realtor.com',
     county_tax: 'County Tax Sale',

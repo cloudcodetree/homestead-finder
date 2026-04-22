@@ -256,12 +256,39 @@ class LandWatchScraper(BaseScraper):
     # state-default search sort (ranked by "featured" listings, which
     # over-weights metropolitan fringe over rural Ozarks).
     PRIORITY_COUNTY_SLUGS: dict[str, list[str]] = {
-        # Eureka Springs is in Carroll County; nearby Ozark counties
-        # follow the same land-market profile (small rural acreage,
-        # owner-finance deals, spring-fed water).
-        "AR": ["carroll-county", "boone-county", "madison-county", "newton-county"],
-        # MO Ozark belt around the MO-AR border — homestead country.
-        "MO": ["howell-county", "texas-county", "oregon-county", "douglas-county", "ozark-county"],
+        # AR Ozark belt — Eureka Springs (Carroll) anchor + adjacent
+        # counties that share land-market profile (small rural
+        # acreage, owner-finance, spring-fed water). Expanded 2026-04
+        # to include Ozark foothills south/east of the core.
+        "AR": [
+            "carroll-county",    # Eureka Springs
+            "boone-county",      # Harrison, Buffalo River
+            "madison-county",    # Huntsville
+            "newton-county",     # Jasper, remote Ozark
+            "benton-county",     # Bentonville — urbanizing but large
+            "searcy-county",     # Marshall, deep rural
+            "marion-county",     # Yellville, White River
+            "baxter-county",     # Mountain Home, Bull Shoals
+            "stone-county",      # Mountain View
+            "izard-county",      # Melbourne, Ozark plateau
+            "fulton-county",     # Salem, cheap acreage
+        ],
+        # MO Ozark belt — MO-AR border + eastern Ozarks. Shannon/
+        # Wright/Wayne/Dent add the Current River + Mark Twain
+        # National Forest fringe to the existing Howell/Texas core.
+        "MO": [
+            "howell-county",     # West Plains
+            "texas-county",      # Houston, MO's largest county
+            "oregon-county",     # Alton, Eleven Point River
+            "douglas-county",    # Ava, Amish community
+            "ozark-county",      # Gainesville, North Fork White
+            "shannon-county",    # Eminence, Current River
+            "wright-county",     # Hartville
+            "wayne-county",      # Piedmont
+            "dent-county",       # Salem, MO Mark Twain forest
+            "carter-county",     # Van Buren, Ozark highlands
+            "reynolds-county",   # Centerville, Black River
+        ],
     }
 
     def _state_url(self, state: str, page: int) -> str:

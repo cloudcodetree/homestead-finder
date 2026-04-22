@@ -60,6 +60,11 @@ ENABLED_SOURCES: dict[str, bool] = {
     # but ICP-perfect.
     "homestead_crossing": True,
     "ozarkland": True,
+    # United Country Real Estate — rural-specialist franchise with
+    # Ozark offices (Willow Springs MO, Mountain Home AR, etc).
+    # Inventory largely absent from LandWatch / Land.com aggregators,
+    # high "hidden gem" ratio per homestead thesis.
+    "united_country": True,
     "zillow": False,  # Rate limiting issues — disabled by default
     "realtor": False,  # Rate limiting issues — disabled by default
     "county_tax": True,
@@ -105,6 +110,9 @@ STRATEGY_CHAINS: dict[str, list[str]] = {
     # skip curl_cffi and go straight to Playwright.
     "homestead_crossing": ["selenium", "firecrawl"],
     "ozarkland": ["http", "curl_cffi", "selenium"],
+    # UCRE is a React SPA — Playwright is the only reliable fetch
+    # (curl_cffi gets the empty shell, no listing data).
+    "united_country": ["selenium", "firecrawl"],
     "county_tax": ["http", "curl_cffi", "selenium", "firecrawl"],
     "auction": ["curl_cffi", "selenium", "firecrawl+claude"],
     "blm": ["http", "curl_cffi", "selenium"],
