@@ -40,6 +40,13 @@ jobs:
       - name: Build
         env:
           GITHUB_PAGES: 'true'
+          # Supabase client env vars — baked into the static bundle at
+          # build time. Both values are safe to expose (anon key is
+          # designed for public client use; RLS policies gate the DB).
+          # If either is unset, AuthButton silently renders nothing and
+          # the site works as a read-only public tool.
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
         run: npm run build
         working-directory: frontend
 
