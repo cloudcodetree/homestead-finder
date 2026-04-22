@@ -216,21 +216,23 @@
       ]
     },
     "aiTags": [
+      "difficult_terrain",
       "no_water_mentioned",
-      "remote_access_concerns",
+      "no_hoa",
       "infrastructure_needed",
-      "zoning_concerns"
+      "isolated",
+      "timber_harvestable"
     ],
-    "aiSummary": "This Phillips County tax sale lacks essential data: the acreage is listed as 0.0 acres, and there is no documentation of water, road access, or improvements. Tax sales often carry title complications and underlying issues, making the true property condition unknown. Without a proper survey, documented access, and water source confirmation, homesteading viability cannot be meaningfully assessed.",
-    "homesteadFitScore": 20,
+    "aiSummary": "This tax-sale parcel has severe limitations for homesteading: 30% slopes, USDA soil class 7 (forestry/grazing only, not prime farmland), and no water source mentioned. The listing's 0.0-acre designation suggests this may be a data error or unbuildable tax certificate rather than a viable homestead property.",
+    "homesteadFitScore": 12,
     "redFlags": [
       "tax_sale_risk",
-      "price_seems_too_good",
-      "no_road_access",
-      "no_water_source"
+      "no_water_source",
+      "requires_well_drilling",
+      "price_seems_too_good"
     ],
-    "enrichedAt": "2026-04-22T16:13:25.488684+00:00",
-    "_enrichHash": "31ba41b391f2e374",
+    "enrichedAt": "2026-04-22T19:17:13.897548+00:00",
+    "_enrichHash": "e4036f0b52597098",
     "geoEnrichment": {
       "lat": 34.532208537407094,
       "lng": -90.60963362323722,
@@ -564,20 +566,23 @@
       ]
     },
     "aiTags": [
+      "difficult_terrain",
+      "remote_access_concerns",
       "no_water_mentioned",
-      "agricultural_potential",
-      "soil_suitable_for_ag",
-      "deed_restrictions",
-      "zoning_concerns"
+      "infrastructure_needed",
+      "isolated"
     ],
-    "aiSummary": "This tax sale shows 0.0 acres and provides no information on access, utilities, or buildability, making it unsuitable for homesteading as listed. Tax sale properties carry title complexity, redemption rights, and potential encumbrances that require legal review. The acreage data likely represents a database error\u2014without correction, the property cannot be evaluated.",
-    "homesteadFitScore": 10,
+    "aiSummary": "This tax sale parcel is listed as 0.0 acres, making it essentially non-buildable or a data error. The 30% slope and Class 7 soil (severely limited for all uses except forestry/grazing) eliminate agricultural viability. No water source is described, and tax sales often carry title complications and undisclosed liens.",
+    "homesteadFitScore": 8,
     "redFlags": [
       "tax_sale_risk",
+      "extreme_remote",
+      "requires_well_drilling",
+      "requires_septic_install",
       "no_water_source"
     ],
-    "enrichedAt": "2026-04-22T16:14:13.154686+00:00",
-    "_enrichHash": "5ac0240076345f61",
+    "enrichedAt": "2026-04-22T19:16:59.465279+00:00",
+    "_enrichHash": "91c33654a4430c7e",
     "geoEnrichment": {
       "lat": 34.532208537407094,
       "lng": -90.60963362323722,
@@ -666,21 +671,24 @@
       ]
     },
     "aiTags": [
+      "difficult_terrain",
       "no_water_mentioned",
-      "deed_restrictions",
       "no_hoa",
+      "infrastructure_needed",
       "isolated",
-      "remote_access_concerns"
+      "timber_harvestable",
+      "grazing_suitable"
     ],
-    "aiSummary": "This property is listed as 0 acres, which is unsuitable for any homesteading. As a delinquent tax sale, it carries title risk and financial complications. The absence of acreage and infrastructure data suggests either a data quality issue or a non-viable parcel.",
-    "homesteadFitScore": 0,
+    "aiSummary": "Class 7 soil (worst category, suitable only for grazing/forestry) combined with 30% slopes makes this property unsuitable for agriculture or comfortable building. No water source is mentioned or indicated in the objective data. The $321 price and 0.0-acre listing in a tax sale context raise serious concerns about title clarity and legal encumbrances that would make homesteading development highly risky.",
+    "homesteadFitScore": 22,
     "redFlags": [
       "tax_sale_risk",
+      "price_seems_too_good",
       "no_water_source",
-      "no_road_access"
+      "extreme_remote"
     ],
-    "enrichedAt": "2026-04-22T16:14:44.390710+00:00",
-    "_enrichHash": "b80f5ed73c884f6c",
+    "enrichedAt": "2026-04-22T19:17:03.621691+00:00",
+    "_enrichHash": "c42cdbb664ba4fb5",
     "geoEnrichment": {
       "lat": 34.532208537407094,
       "lng": -90.60963362323722,
@@ -773,21 +781,25 @@
       ]
     },
     "aiTags": [
+      "difficult_terrain",
       "no_water_mentioned",
+      "buildable_with_work",
+      "infrastructure_needed",
       "remote_access_concerns",
-      "isolated"
+      "grazing_suitable",
+      "timber_harvestable",
+      "no_hoa"
     ],
-    "aiSummary": "This parcel is listed as 0.0 acres, suggesting either a data entry error or a parcel too small to develop for homesteading. As a delinquent tax sale, it carries significant title uncertainty and legal complications. No information is provided about water access, road frontage, or utilities\u2014all critical for homesteading viability.",
-    "homesteadFitScore": 10,
+    "aiSummary": "This tax sale lists 0.0 acres\u2014a critical data error that makes the property essentially unassessable for homesteading. Soil Class 7 (severely limited, only grazing/forestry) with 30% slope, no mentioned water sources, no utilities, and uncertain title from tax lien status compound the issues. If acreage is corrected, it might serve timber or grazing, but poor soil and steep terrain severely limit residential or agricultural viability.",
+    "homesteadFitScore": 18,
     "redFlags": [
-      "tax_sale_risk",
-      "no_water_source",
-      "no_road_access",
       "price_seems_too_good",
-      "extreme_remote"
+      "no_water_source",
+      "tax_sale_risk",
+      "requires_well_drilling"
     ],
-    "enrichedAt": "2026-04-22T16:14:46.898954+00:00",
-    "_enrichHash": "73b90eac07b3d624",
+    "enrichedAt": "2026-04-22T19:17:08.033362+00:00",
+    "_enrichHash": "97891b613d229943",
     "geoEnrichment": {
       "lat": 34.532208537407094,
       "lng": -90.60963362323722,
@@ -870,18 +882,24 @@
       ]
     },
     "aiTags": [
+      "isolated",
+      "difficult_terrain",
       "no_water_mentioned",
-      "deed_restrictions",
-      "infrastructure_needed",
-      "zoning_concerns"
+      "zoning_concerns",
+      "seasonal_access_only",
+      "no_hoa"
     ],
-    "aiSummary": "This delinquent tax sale in Phillips County lists 0.0 acres with no geospatial or infrastructure data available, making it effectively unassessable. Tax sales carry inherent title complications that require legal review. Without confirmed acreage, utilities, water access, or road connectivity, this property cannot support homesteading.",
-    "homesteadFitScore": 5,
+    "aiSummary": "Tax sale parcel listed as 0.0 acres, making it unbuildable in current form\u2014likely a data error or fractional parcel with severe title issues. Class 7 soils (severe agricultural limitations) and 30% slopes provide no homesteading value. The $201 price reflects distress, not opportunity; delinquent tax status signals years of abandonment and unknown encumbrances.",
+    "homesteadFitScore": 8,
     "redFlags": [
-      "tax_sale_risk"
+      "tax_sale_risk",
+      "price_seems_too_good",
+      "no_water_source",
+      "no_road_access",
+      "extreme_remote"
     ],
-    "enrichedAt": "2026-04-22T16:14:46.754453+00:00",
-    "_enrichHash": "15de945556b4e575",
+    "enrichedAt": "2026-04-22T19:17:12.200575+00:00",
+    "_enrichHash": "75fc5e9df19d48a2",
     "geoEnrichment": {
       "lat": 34.532208537407094,
       "lng": -90.60963362323722,
@@ -970,21 +988,24 @@
       ]
     },
     "aiTags": [
+      "difficult_terrain",
       "no_water_mentioned",
-      "deed_restrictions",
       "infrastructure_needed",
-      "zoning_concerns",
-      "remote_access_concerns"
+      "remote_access_concerns",
+      "isolated"
     ],
-    "aiSummary": "This tax sale property lists 0.0 acres, making it unsuitable for homesteading regardless of location or price. The extremely low sale price ($365) combined with no water access information, unknown zoning, and tax sale status with potential redemption claims create substantial development and title concerns. Not viable as presented.",
-    "homesteadFitScore": 5,
+    "aiSummary": "This tax sale parcel in Phillips County's delta region is severely limited for homesteading. The listed size of 0.0 acres appears to be a data error, and Class 7 soils with 30% slopes are unsuitable for agriculture and difficult for building. No water source, utilities, or road access are documented.",
+    "homesteadFitScore": 10,
     "redFlags": [
       "tax_sale_risk",
-      "price_seems_too_good",
-      "no_water_source"
+      "no_water_source",
+      "no_road_access",
+      "extreme_remote",
+      "requires_septic_install",
+      "requires_well_drilling"
     ],
-    "enrichedAt": "2026-04-22T16:15:01.024072+00:00",
-    "_enrichHash": "bdca628cf0c8ca47",
+    "enrichedAt": "2026-04-22T19:17:27.976085+00:00",
+    "_enrichHash": "cd1d5ac787e63812",
     "geoEnrichment": {
       "lat": 34.53431449266166,
       "lng": -90.60227774591246,
@@ -1077,22 +1098,21 @@
       ]
     },
     "aiTags": [
-      "deed_restrictions",
       "no_water_mentioned",
+      "difficult_terrain",
       "no_hoa",
-      "remote_access_concerns",
-      "zoning_concerns",
-      "isolated"
+      "deed_restrictions",
+      "infrastructure_needed"
     ],
-    "aiSummary": "This delinquent tax sale is listed with 0.0 acres, making it impossible to assess or develop for homesteading\u2014the actual parcel size is unknown. Without confirmed acreage, water source, utilities, or resolved title issues from the tax sale, this property is unviable as presented.",
+    "aiSummary": "This delinquent tax sale property is essentially unbuildable\u2014listed as 0.0 acres with only $348.33 owed, it appears to be a remainder parcel or data error. The underlying soil (Class 7 with 30% slope, not prime farmland) precludes agricultural use, and no water sources are mentioned. Tax sale purchases carry significant title and mechanics lien risk that would require legal review before proceeding.",
     "homesteadFitScore": 15,
     "redFlags": [
       "tax_sale_risk",
       "no_water_source",
-      "title_issues_mentioned"
+      "price_seems_too_good"
     ],
-    "enrichedAt": "2026-04-22T16:15:04.856383+00:00",
-    "_enrichHash": "b6d79562ee757e35",
+    "enrichedAt": "2026-04-22T19:17:39.757752+00:00",
+    "_enrichHash": "2a43f3933a95893b",
     "geoEnrichment": {
       "lat": 34.53431449266166,
       "lng": -90.60227774591246,
@@ -1175,19 +1195,25 @@
       ]
     },
     "aiTags": [
-      "no_hoa",
-      "infrastructure_needed",
+      "difficult_terrain",
       "no_water_mentioned",
+      "infrastructure_needed",
+      "deed_restrictions",
       "zoning_concerns",
-      "deed_restrictions"
+      "isolated",
+      "grazing_suitable",
+      "no_hoa"
     ],
-    "aiSummary": "This tax sale parcel is listed at 0.0 acres with no property description, making it unsuitable for homesteading evaluation. The zero acreage is likely a data error or placeholder, and the tax sale status introduces unresolved title and legal complications.",
-    "homesteadFitScore": 4,
+    "aiSummary": "Tax-delinquent property with no recorded acreage, making it fundamentally unviable for homesteading. Steep slopes (30%) on poor-quality soils (USDA Class 7) limit buildability and agricultural use. No water source identified, combined with inherent title concerns from tax sale status, creates substantial legal and practical obstacles.",
+    "homesteadFitScore": 15,
     "redFlags": [
-      "tax_sale_risk"
+      "no_water_source",
+      "requires_well_drilling",
+      "tax_sale_risk",
+      "price_seems_too_good"
     ],
-    "enrichedAt": "2026-04-22T16:15:28.759465+00:00",
-    "_enrichHash": "d4b5d7c0defaa56f",
+    "enrichedAt": "2026-04-22T19:17:34.390015+00:00",
+    "_enrichHash": "e218ac3be5c3d002",
     "geoEnrichment": {
       "lat": 34.532208537407094,
       "lng": -90.60963362323722,
@@ -1276,19 +1302,22 @@
       ]
     },
     "aiTags": [
-      "no_water_mentioned",
+      "difficult_terrain",
+      "seasonal_access_only",
       "infrastructure_needed",
-      "remote_access_concerns",
-      "isolated"
+      "no_water_mentioned",
+      "buildable_with_work",
+      "zoning_concerns",
+      "no_hoa",
+      "remote_access_concerns"
     ],
-    "aiSummary": "This delinquent tax-sale property in Phillips County, AR is listed as 0.0 acres with no description, making homesteading assessment impossible. Typical tax-sale risks (title clouds, unclear conditions) are compounded by missing critical data on access, water availability, and buildability. Any development would require specialized legal navigation and on-site verification before realistic evaluation.",
-    "homesteadFitScore": 10,
+    "aiSummary": "This property is severely limited for homesteading. The listing shows 0.0 acres (likely data error), making true buildability impossible to assess, and the 30% slope severely constrains building and access. As a tax sale with no documented water source and poor soil classification (Class 7), significant title resolution and infrastructure challenges would be required.",
+    "homesteadFitScore": 20,
     "redFlags": [
-      "tax_sale_risk",
-      "title_issues_mentioned"
+      "tax_sale_risk"
     ],
-    "enrichedAt": "2026-04-22T16:15:26.864379+00:00",
-    "_enrichHash": "53ee3673c2cec400",
+    "enrichedAt": "2026-04-22T19:17:43.104547+00:00",
+    "_enrichHash": "fefe209704146a99",
     "geoEnrichment": {
       "lat": 34.532208537407094,
       "lng": -90.60963362323722,
@@ -1377,18 +1406,24 @@
       ]
     },
     "aiTags": [
+      "difficult_terrain",
       "no_water_mentioned",
-      "deed_restrictions",
-      "zoning_concerns"
+      "remote_access_concerns",
+      "infrastructure_needed",
+      "timber_harvestable",
+      "grazing_suitable",
+      "no_hoa"
     ],
-    "aiSummary": "Listed as 0.0 acres with minimal description, making any homesteading use impossible. Tax sale status adds title and lien complications. Property is not viable for self-sufficient living.",
-    "homesteadFitScore": 5,
+    "aiSummary": "This delinquent tax sale is listed with 0.0 acres on extremely steep terrain (30% slope) in rural Arkansas with no stated water source or utilities. Land capability class 7 and the tax sale status create prohibitive barriers\u2014not suitable for homesteading.",
+    "homesteadFitScore": 18,
     "redFlags": [
       "tax_sale_risk",
-      "no_water_source"
+      "no_water_source",
+      "title_issues_mentioned",
+      "extreme_remote"
     ],
-    "enrichedAt": "2026-04-22T16:15:20.851911+00:00",
-    "_enrichHash": "f5e23db9046df697",
+    "enrichedAt": "2026-04-22T19:17:54.597440+00:00",
+    "_enrichHash": "1811d4d18b39687c",
     "geoEnrichment": {
       "lat": 34.532208537407094,
       "lng": -90.60963362323722,
@@ -1477,15 +1512,21 @@
       ]
     },
     "aiTags": [
-      "no_water_mentioned"
+      "difficult_terrain",
+      "no_water_mentioned",
+      "infrastructure_needed",
+      "isolated",
+      "no_hoa",
+      "remote_access_concerns"
     ],
-    "aiSummary": "This listing is non-viable for homesteading\u2014it shows 0.0 acres, meaning there is no usable land. The tax-sale status adds legal and title risks that would require professional review before any consideration.",
-    "homesteadFitScore": 5,
+    "aiSummary": "This property is fundamentally unsuitable for homesteading. The listing shows 0.0 acres, making it unclear what's actually being sold, and as a delinquent tax sale it carries significant title and redemption risk. The 30% slopes make building difficult, and Class 7 soil provides minimal agricultural potential.",
+    "homesteadFitScore": 12,
     "redFlags": [
-      "tax_sale_risk"
+      "tax_sale_risk",
+      "title_issues_mentioned"
     ],
-    "enrichedAt": "2026-04-22T16:15:16.040133+00:00",
-    "_enrichHash": "ae7a5b38fc38c09b",
+    "enrichedAt": "2026-04-22T19:17:56.521907+00:00",
+    "_enrichHash": "a7086fa14d2de77e",
     "geoEnrichment": {
       "lat": 34.532208537407094,
       "lng": -90.60963362323722,
@@ -1574,16 +1615,24 @@
       ]
     },
     "aiTags": [
-      "no_water_mentioned"
+      "difficult_terrain",
+      "timber_harvestable",
+      "grazing_suitable",
+      "no_water_mentioned",
+      "remote_access_concerns"
     ],
-    "aiSummary": "This tax sale listing reports 0.0 acres, rendering it unsuitable for homesteading. Combined with minimal property information and foreclosure status, there is significant uncertainty about what is actually being sold and what title issues may exist. This appears to be either a data error or a fractional lot with no homesteading viability.",
-    "homesteadFitScore": 5,
+    "aiSummary": "The listing shows 0.0 acres\u2014either a critical data error or a remainder parcel with no usable land. Even if acreage exists, USDA soil class 7 (worst: severe limitations for agriculture) combined with 30% slope makes building and food production extremely difficult. Tax sale status, no water/utility details, and complete absence of access information compound the risk.",
+    "homesteadFitScore": 18,
     "redFlags": [
+      "tax_sale_risk",
+      "price_seems_too_good",
+      "extreme_remote",
       "no_water_source",
-      "tax_sale_risk"
+      "no_road_access",
+      "requires_well_drilling"
     ],
-    "enrichedAt": "2026-04-22T16:15:36.404938+00:00",
-    "_enrichHash": "cf5fa06661790e94",
+    "enrichedAt": "2026-04-22T19:18:00.783709+00:00",
+    "_enrichHash": "fc30add083b85183",
     "geoEnrichment": {
       "lat": 34.532208537407094,
       "lng": -90.60963362323722,
@@ -1672,18 +1721,25 @@
       ]
     },
     "aiTags": [
-      "no_water_mentioned",
-      "infrastructure_needed"
+      "difficult_terrain",
+      "flood_risk_mentioned",
+      "year_round_water",
+      "infrastructure_needed",
+      "no_hoa",
+      "deed_restrictions",
+      "agricultural_potential",
+      "zoning_concerns"
     ],
-    "aiSummary": "This Phillips County, AR tax sale lists 0.0 acres with no property description or geospatial data. Title complications from delinquent status combined with missing fundamental parcel information make homesteading assessment impossible. Avoid without extensive due diligence and title clearing.",
+    "aiSummary": "This tax-sale parcel offers no clear path to homesteading due to a confluence of fatal issues: the 0.0 recorded acreage suggests the parcel may be invalid or unmeasurable, it sits in a 100-year floodplain (AE zone) with severe building restrictions, and the tax delinquency creates title uncertainty. The underlying Henry silt loam soil has agricultural potential, but the flood risk and possible legal/surveying problems make this unsuitable for any productive use.",
     "homesteadFitScore": 12,
     "redFlags": [
       "tax_sale_risk",
+      "flood_zone_mention",
       "title_issues_mentioned",
-      "price_seems_too_good"
+      "zoning_prohibits_residential"
     ],
-    "enrichedAt": "2026-04-22T16:15:45.185248+00:00",
-    "_enrichHash": "f077210ca7d25b7e",
+    "enrichedAt": "2026-04-22T19:18:18.783270+00:00",
+    "_enrichHash": "59f7145bc9337753",
     "geoEnrichment": {
       "lat": 34.54933972915094,
       "lng": -90.65111970454467,
@@ -1776,19 +1832,24 @@
       ]
     },
     "aiTags": [
-      "no_water_mentioned",
-      "no_hoa",
-      "remote_access_concerns",
-      "infrastructure_needed"
+      "flood_risk_mentioned",
+      "infrastructure_needed",
+      "soil_suitable_for_ag",
+      "agricultural_potential",
+      "year_round_water",
+      "deed_restrictions"
     ],
-    "aiSummary": "Tax sale with completely unknown property characteristics\u20140.0 acres listed and zero description provided. Without water access, buildability, acreage, or legal status clarity, homestead suitability cannot be assessed. Delinquent tax status creates significant title risk and potential hidden liabilities.",
-    "homesteadFitScore": 15,
+    "aiSummary": "This delinquent tax-sale parcel (0.0 acres listed) sits in FEMA flood zone AE, inside the 100-year floodplain with poorly drained soil\u2014unsuitable for residential building. While Henry silt loam is prime farmland if drained, the $339 price tag and tax sale status suggest serious title or access complications. The property lacks documented water rights or road access.",
+    "homesteadFitScore": 18,
     "redFlags": [
+      "flood_zone_mention",
       "tax_sale_risk",
-      "price_seems_too_good"
+      "price_seems_too_good",
+      "requires_septic_install",
+      "requires_well_drilling"
     ],
-    "enrichedAt": "2026-04-22T16:15:52.886963+00:00",
-    "_enrichHash": "b558355a53bed33d",
+    "enrichedAt": "2026-04-22T19:18:14.280592+00:00",
+    "_enrichHash": "4a8242d0299e225f",
     "geoEnrichment": {
       "lat": 34.54933972915094,
       "lng": -90.65111970454467,
@@ -1877,19 +1938,25 @@
       ]
     },
     "aiTags": [
-      "no_water_mentioned",
+      "flood_risk_mentioned",
+      "agricultural_potential",
+      "soil_suitable_for_ag",
+      "buildable_with_work",
+      "infrastructure_needed",
       "deed_restrictions",
-      "zoning_concerns",
-      "infrastructure_needed"
+      "no_water_mentioned"
     ],
-    "aiSummary": "This listing appears to be a data entry error\u2014it shows 0.0 acres, making it non-viable for any land use. The delinquent tax sale status adds significant legal and title encumbrance, requiring professional legal review before any consideration. Without accurate acreage, property details, access information, or utility/water data, this cannot be assessed for homesteading.",
-    "homesteadFitScore": 5,
+    "aiSummary": "This tax sale parcel sits in the 100-year floodplain (AE flood zone) with poorly drained Henry silt loam soil, creating persistent water management challenges despite prime farmland potential under improved drainage. Title risks typical of tax-delinquent properties, combined with necessary infrastructure work (drainage, well, septic), make it unsuitable for reliable homesteading.",
+    "homesteadFitScore": 28,
     "redFlags": [
+      "flood_zone_mention",
       "tax_sale_risk",
+      "requires_well_drilling",
+      "environmental_hazard",
       "title_issues_mentioned"
     ],
-    "enrichedAt": "2026-04-22T16:15:57.037077+00:00",
-    "_enrichHash": "f86e90deb124a71d",
+    "enrichedAt": "2026-04-22T19:18:21.436775+00:00",
+    "_enrichHash": "454444c13f09019c",
     "geoEnrichment": {
       "lat": 34.54933972915094,
       "lng": -90.65111970454467,
@@ -1982,20 +2049,24 @@
       ]
     },
     "aiTags": [
-      "isolated",
-      "no_hoa",
-      "agricultural_potential",
+      "flood_risk_mentioned",
+      "difficult_terrain",
+      "soil_suitable_for_ag",
+      "buildable_with_work",
       "no_water_mentioned",
-      "remote_access_concerns"
+      "no_hoa",
+      "infrastructure_needed"
     ],
-    "aiSummary": "This property cannot be assessed for homesteading: the listing shows 0.0 acres with no description or property characteristics. Tax sale properties carry significant title and legal risk. The $332 price is implausibly low, suggesting data corruption or severe encumbrances.",
-    "homesteadFitScore": 18,
+    "aiSummary": "This Phillips County tax sale sits in the 100-year floodplain (FEMA AE zone) with poorly drained soil, making construction and drainage work extremely difficult. Although the soil has prime agricultural potential if drained, no water rights are specified and the delinquent tax status poses title risk. The suspiciously low $332 price for unknown acreage warrants caution\u2014likely a data error or unviable parcel.",
+    "homesteadFitScore": 28,
     "redFlags": [
+      "flood_zone_mention",
       "tax_sale_risk",
+      "no_water_source",
       "price_seems_too_good"
     ],
-    "enrichedAt": "2026-04-22T16:16:09.851117+00:00",
-    "_enrichHash": "80de97a63e07da68",
+    "enrichedAt": "2026-04-22T19:18:37.689107+00:00",
+    "_enrichHash": "5906c69b8967daca",
     "geoEnrichment": {
       "lat": 34.54933972915094,
       "lng": -90.65111970454467,
@@ -2088,22 +2159,25 @@
       ]
     },
     "aiTags": [
+      "flood_risk_mentioned",
       "no_water_mentioned",
-      "deed_restrictions",
       "infrastructure_needed",
-      "remote_access_concerns",
-      "zoning_concerns",
-      "isolated"
+      "difficult_terrain",
+      "soil_suitable_for_ag",
+      "deed_restrictions",
+      "remote_access_concerns"
     ],
-    "aiSummary": "Tax sale property listed at 0.0 acres\u2014unsuitable for homesteading. No documentation of access, water, utilities, or buildability. The combination of zero acreage, minimal legal description, and tax sale complications makes this non-viable.",
-    "homesteadFitScore": 15,
+    "aiSummary": "Located in FEMA flood zone AE within the 100-year floodplain, this property faces severe building restrictions and would require expensive mitigation. The Henry silt loam soil is prime farmland-capable but poorly drained, and no water source is documented. Tax sale status adds title uncertainty, making this unsuitable for homesteading without substantial investment and regulatory hurdles.",
+    "homesteadFitScore": 18,
     "redFlags": [
-      "tax_sale_risk",
+      "flood_zone_mention",
       "no_water_source",
-      "no_road_access"
+      "requires_well_drilling",
+      "tax_sale_risk",
+      "wetland_restrictions"
     ],
-    "enrichedAt": "2026-04-22T16:16:18.554291+00:00",
-    "_enrichHash": "3262e06c137db270",
+    "enrichedAt": "2026-04-22T19:18:37.037090+00:00",
+    "_enrichHash": "c2afa4825cf1e899",
     "geoEnrichment": {
       "lat": 34.54933972915094,
       "lng": -90.65111970454467,
@@ -2186,18 +2260,22 @@
       ]
     },
     "aiTags": [
-      "no_water_mentioned",
-      "remote_access_concerns",
-      "infrastructure_needed"
+      "agricultural_potential",
+      "soil_suitable_for_ag",
+      "year_round_water",
+      "isolated",
+      "no_hoa",
+      "grazing_suitable",
+      "remote_access_concerns"
     ],
-    "aiSummary": "Tax sale with $386 price tag and 0.0 acres listed\u2014likely indicates a data error or unresolved title/boundary issue. Minimal property information combined with delinquent tax status creates substantial legal uncertainty. Unsuitable for homesteading without extensive due diligence and title resolution.",
-    "homesteadFitScore": 15,
+    "aiSummary": "Excellent prime farmland in the Arkansas Delta with strong agricultural potential, but listed with 0.0 acres makes it unsuitable for homesteading as shown. Tax sale status with $386 debt matching the asking price creates legal and title risk; actual property size and buildability require verification.",
+    "homesteadFitScore": 35,
     "redFlags": [
       "tax_sale_risk",
       "price_seems_too_good"
     ],
-    "enrichedAt": "2026-04-22T16:16:15.331144+00:00",
-    "_enrichHash": "23d66563d3923ac1",
+    "enrichedAt": "2026-04-22T19:18:42.026144+00:00",
+    "_enrichHash": "5e32b47faad5bf1e",
     "geoEnrichment": {
       "lat": 34.54839974660622,
       "lng": -90.63484139589372,
@@ -2290,21 +2368,20 @@
       ]
     },
     "aiTags": [
+      "agricultural_potential",
+      "soil_suitable_for_ag",
       "no_water_mentioned",
-      "infrastructure_needed",
-      "no_hoa",
-      "remote_access_concerns",
-      "isolated"
+      "infrastructure_needed"
     ],
-    "aiSummary": "This 0.0-acre parcel is non-viable for homesteading. The delinquent tax sale status and suspiciously low price ($380) raise serious ownership and title concerns. No information on water, access, or utilities makes any productive use impossible.",
-    "homesteadFitScore": 5,
+    "aiSummary": "Despite excellent prime farmland soil (USDA class 2, flat 1.9% slope) and no flood risk, the listing shows 0.0 acres making the property effectively unusable for homesteading. As a tax-delinquent sale priced at $380 with no mention of utilities or water access, this presents significant title risk and lacks essential infrastructure.",
+    "homesteadFitScore": 22,
     "redFlags": [
       "price_seems_too_good",
       "tax_sale_risk",
-      "no_water_source"
+      "title_issues_mentioned"
     ],
-    "enrichedAt": "2026-04-22T16:16:28.073529+00:00",
-    "_enrichHash": "3c48ce23549510a6",
+    "enrichedAt": "2026-04-22T19:18:43.815001+00:00",
+    "_enrichHash": "cfa55f07b4b294a6",
     "geoEnrichment": {
       "lat": 34.54839974660622,
       "lng": -90.63484139589372,
@@ -2389,18 +2466,20 @@
       ]
     },
     "aiTags": [
+      "soil_suitable_for_ag",
+      "agricultural_potential",
       "no_water_mentioned",
       "no_hoa",
-      "isolated",
       "deed_restrictions"
     ],
-    "aiSummary": "This listing is non-viable: it lists 0 acres, meaning there is no actual land to build on or develop. As a delinquent tax-sale property with minimal description and no objective data available, it presents substantial title and lien complexity. Not suitable for homesteading.",
-    "homesteadFitScore": 5,
+    "aiSummary": "Prime farmland soil (USDA Class 2) with excellent drainage and no flood risk, but the tax-sale status and missing parcel acreage data prevent reliable assessment. Homesteading viability depends on confirming actual size, water availability, and access.",
+    "homesteadFitScore": 32,
     "redFlags": [
-      "tax_sale_risk"
+      "tax_sale_risk",
+      "no_water_source"
     ],
-    "enrichedAt": "2026-04-22T16:16:36.463406+00:00",
-    "_enrichHash": "d035370e4e4a5a55",
+    "enrichedAt": "2026-04-22T19:19:10.064197+00:00",
+    "_enrichHash": "97643e75989d23cc",
     "geoEnrichment": {
       "lat": 34.54839974660622,
       "lng": -90.63484139589372,
@@ -2493,21 +2572,28 @@
       ]
     },
     "aiTags": [
-      "no_water_mentioned",
-      "remote_access_concerns",
+      "agricultural_potential",
+      "buildable_with_work",
+      "difficult_terrain",
       "infrastructure_needed",
-      "isolated"
+      "isolated",
+      "no_hoa",
+      "no_water_mentioned",
+      "seasonal_water_only"
     ],
-    "aiSummary": "This property listing appears invalid\u2014it reports 0.0 acres with no geospatial data, making it unsuitable for homesteading. The delinquent tax sale status carries title risk, and the absence of information on water or road access makes viability assessment impossible.",
-    "homesteadFitScore": 8,
+    "aiSummary": "This tax-sale parcel sits in a 100-year floodplain (AE zone) with poorly drained soil\u2014both serious obstacles for homesteading. Although the soil qualifies as prime farmland, the flood risk and drainage challenges would demand extensive remediation before any building or septic system could work. Most critically, the 0.0-acre listing suggests a data error or non-viable parcel.",
+    "homesteadFitScore": 18,
     "redFlags": [
-      "tax_sale_risk",
-      "price_seems_too_good",
+      "flood_zone_mention",
       "no_water_source",
-      "no_road_access"
+      "price_seems_too_good",
+      "requires_septic_install",
+      "requires_well_drilling",
+      "tax_sale_risk",
+      "wetland_restrictions"
     ],
-    "enrichedAt": "2026-04-22T16:16:43.825757+00:00",
-    "_enrichHash": "d27916e68e9ec5fe",
+    "enrichedAt": "2026-04-22T19:19:18.507764+00:00",
+    "_enrichHash": "75c7b006a8468129",
     "geoEnrichment": {
       "lat": 34.54933972915094,
       "lng": -90.65111970454467,
@@ -2596,17 +2682,24 @@
       ]
     },
     "aiTags": [
+      "flood_risk_mentioned",
       "no_water_mentioned",
-      "isolated"
+      "difficult_terrain",
+      "soil_suitable_for_ag",
+      "infrastructure_needed",
+      "zoning_concerns",
+      "no_hoa"
     ],
-    "aiSummary": "This property cannot be meaningfully evaluated\u2014it is listed with zero acres and contains no description of access, utilities, water, or improvements. The $332 price combined with delinquent tax status suggests either a data entry error or a property requiring significant legal investigation before acquisition is viable.",
-    "homesteadFitScore": 7,
+    "aiSummary": "This tax-sale parcel sits in FEMA flood zone AE (100-year floodplain), making residential building infeasible or heavily restricted. No water source or access is mentioned, and the reported 0.0 acreage suggests data or title issues. While the underlying Henry silt loam is prime agricultural land if properly drained, the flood restriction, tax-sale status, and ambiguities make this unsuitable for homesteading.",
+    "homesteadFitScore": 20,
     "redFlags": [
-      "price_seems_too_good",
-      "tax_sale_risk"
+      "flood_zone_mention",
+      "tax_sale_risk",
+      "zoning_prohibits_residential",
+      "price_seems_too_good"
     ],
-    "enrichedAt": "2026-04-22T16:17:02.970946+00:00",
-    "_enrichHash": "dd06df815fc5fdb5",
+    "enrichedAt": "2026-04-22T19:19:10.207998+00:00",
+    "_enrichHash": "1aca88f7bb434de5",
     "geoEnrichment": {
       "lat": 34.54933972915094,
       "lng": -90.65111970454467,
@@ -2695,16 +2788,24 @@
       ]
     },
     "aiTags": [
-      "agricultural_potential"
+      "no_water_mentioned",
+      "difficult_terrain",
+      "infrastructure_needed",
+      "soil_suitable_for_ag",
+      "agricultural_potential",
+      "no_hoa"
     ],
-    "aiSummary": "Tax sale with critical data issues: 0.0 acres listed with no property description. The suspiciously low price ($228) suggests data corruption or serious title concerns. Cannot assess for homesteading without complete property information.",
-    "homesteadFitScore": 5,
+    "aiSummary": "Listed at 0.0 acres, this tax sale property is non-viable for homesteading. The poorly drained Amagon silt loam soil indicates significant wetland and regulatory concerns; even if it qualifies as prime farmland, it requires costly drainage infrastructure. No utilities or water access mentioned, and the $228 price reflects serious underlying defects.",
+    "homesteadFitScore": 8,
     "redFlags": [
-      "tax_sale_risk",
-      "price_seems_too_good"
+      "price_seems_too_good",
+      "no_water_source",
+      "wetland_restrictions",
+      "requires_well_drilling",
+      "tax_sale_risk"
     ],
-    "enrichedAt": "2026-04-22T16:17:02.190328+00:00",
-    "_enrichHash": "a7889188dd8e4681",
+    "enrichedAt": "2026-04-22T19:19:13.985655+00:00",
+    "_enrichHash": "b990f0f2dabc845d",
     "geoEnrichment": {
       "lat": 34.52201093612493,
       "lng": -90.67389296602543,
