@@ -7,6 +7,7 @@ import {
   SortBy,
   SORT_LABELS,
 } from '../types/property';
+import { formatSourceName } from '../utils/formatters';
 import { ALL_LISTING_VARIANTS } from '../utils/listingType';
 
 interface FilterPanelProps {
@@ -16,6 +17,7 @@ interface FilterPanelProps {
   onToggleFeature: (feature: PropertyFeature) => void;
   onToggleAITag: (tag: AITag) => void;
   onToggleListingVariant: (variant: string) => void;
+  onToggleSource: (source: string) => void;
   onReset: () => void;
   hasActiveFilters: boolean;
   resultCount: number;
@@ -26,6 +28,10 @@ interface FilterPanelProps {
   /** Listing-type variants present in the currently-loaded data. Hides
    * filter buttons for categories with zero inventory. */
   availableListingVariants?: string[];
+  /** Source → listing-count map, derived from the loaded corpus.
+   * Only sources with ≥1 listing are surfaced, and we show the count
+   * so the user knows what they're toggling. */
+  sourceCounts?: Record<string, number>;
   /** When true, the panel's built-in header is suppressed (parent renders its own) */
   hideHeader?: boolean;
 }
@@ -42,13 +48,24 @@ export const FilterPanel = ({
   onToggleFeature,
   onToggleAITag,
   onToggleListingVariant,
+  onToggleSource,
   onReset,
   hasActiveFilters,
   resultCount,
   availableStates,
   availableListingVariants,
+  sourceCounts,
   hideHeader = false,
 }: FilterPanelProps) => {
+  // Sorted list of sources present in the loaded data (desc by count so
+  // the biggest feeds float to the top of the pill row). Skips zero-count
+  // entries so we don't render a button that matches nothing.
+  const sourcesToShow = sourceCounts
+    ? Object.entries(sourceCounts)
+        .filter(([, n]) => n > 0)
+        .sort((a, b) => b[1] - a[1])
+        .map(([source]) => source)
+    : [];
   const statesToShow =
     availableStates && availableStates.length > 0 ? [...availableStates].sort() : FALLBACK_STATES;
   // Only surface variant buttons for categories actually present in
@@ -223,6 +240,54 @@ export const FilterPanel = ({
             })}
           </div>
         </div>
+
+        {/* Sources — include-only toggle: no selection = show all;
+            clicking a source pill narrows the list to THAT source (and
+            any other selected sources). So "ignore HomesteadCrossing"
+            = click LandWatch + OzarkLand + County Tax etc. except HC.
+            The count on each pill is the full corpus count, not the
+            filtered count — helps users calibrate what they'd be
+            showing/hiding before committing. */}
+        {sourcesToShow.length > 0 && (
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Sources
+              {filters.sources.length > 0 ? (
+                <span className="ml-2 text-xs font-normal text-gray-500">
+                  showing only selected
+                </span>
+              ) : (
+                <span className="ml-2 text-xs font-normal text-gray-400">
+                  (all shown when none selected)
+                </span>
+              )}
+            </label>
+            <div className="flex flex-wrap gap-1.5">
+              {sourcesToShow.map((source) => {
+                const active = filters.sources.includes(source);
+                const count = sourceCounts?.[source] ?? 0;
+                return (
+                  <button
+                    key={source}
+                    onClick={() => onToggleSource(source)}
+                    className={`inline-flex items-center gap-1 rounded px-2 py-0.5 text-xs font-medium transition-colors ${
+                      active
+                        ? 'bg-green-600 text-white'
+                        : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                    }`}
+                  >
+                    <span>{formatSourceName(source)}</span>
+                    <span
+                      className={`text-[10px] ${active ? 'text-green-100' : 'text-gray-400'}`}
+                    >
+                      {count}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        )}
 
         {/* States */}
         <div>

@@ -44,6 +44,15 @@ export const useFilters = () => {
     }));
   }, []);
 
+  const toggleSource = useCallback((source: string) => {
+    setFilters((prev) => ({
+      ...prev,
+      sources: prev.sources.includes(source)
+        ? prev.sources.filter((s) => s !== source)
+        : [...prev.sources, source],
+    }));
+  }, []);
+
   const resetFilters = useCallback(() => {
     setFilters(DEFAULT_FILTERS);
   }, []);
@@ -53,6 +62,7 @@ export const useFilters = () => {
     filters.features.length > 0 ||
     filters.aiTags.length > 0 ||
     filters.listingVariants.length > 0 ||
+    filters.sources.length > 0 ||
     filters.minDealScore > 0 ||
     filters.minHomesteadFit > 0 ||
     filters.hideWithRedFlags ||
@@ -69,6 +79,7 @@ export const useFilters = () => {
     toggleFeature,
     toggleAITag,
     toggleListingVariant,
+    toggleSource,
     resetFilters,
     hasActiveFilters,
   };

@@ -30,6 +30,7 @@ export const Dashboard = () => {
     toggleFeature,
     toggleAITag,
     toggleListingVariant,
+    toggleSource,
     resetFilters,
     hasActiveFilters,
   } = useFilters();
@@ -74,6 +75,17 @@ export const Dashboard = () => {
     () => Array.from(new Set(allProperties.map((p) => getListingTypeStyle(p).variant))),
     [allProperties]
   );
+  // Source → count map for the Sources filter pill row. Stable
+  // reference via useMemo so FilterPanel doesn't re-render on every
+  // filter change (only when allProperties changes).
+  const sourceCounts = useMemo(() => {
+    const counts: Record<string, number> = {};
+    for (const p of allProperties) {
+      const s = p.source || 'unknown';
+      counts[s] = (counts[s] ?? 0) + 1;
+    }
+    return counts;
+  }, [allProperties]);
 
   // URL-driven selection so property pages are deep-linkable (e.g.
   // `/p/landwatch_101`). Clicking a card navigates into the URL; closing
@@ -241,11 +253,13 @@ export const Dashboard = () => {
                 onToggleFeature={toggleFeature}
                 onToggleAITag={toggleAITag}
                 onToggleListingVariant={toggleListingVariant}
+                onToggleSource={toggleSource}
                 onReset={resetFilters}
                 hasActiveFilters={hasActiveFilters}
                 resultCount={properties.length}
                 availableStates={availableStates}
                 availableListingVariants={availableListingVariants}
+                sourceCounts={sourceCounts}
                 hideHeader
               />
             </div>
@@ -294,11 +308,13 @@ export const Dashboard = () => {
               onToggleFeature={toggleFeature}
               onToggleAITag={toggleAITag}
               onToggleListingVariant={toggleListingVariant}
+              onToggleSource={toggleSource}
               onReset={resetFilters}
               hasActiveFilters={hasActiveFilters}
               resultCount={properties.length}
               availableStates={availableStates}
               availableListingVariants={availableListingVariants}
+              sourceCounts={sourceCounts}
               hideHeader
             />
           </div>
