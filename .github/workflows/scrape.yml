@@ -53,7 +53,10 @@ jobs:
           FIRECRAWL_API_KEY: ${{ secrets.FIRECRAWL_API_KEY }}
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           SELENIUM_HEADLESS: 'true'
-          TARGET_STATES: ${{ github.event.inputs.states || 'MT,ID,WY,CO,NM,OR,TX,TN,MN,ME' }}
+          # Must match scraper/config.py TARGET_STATES — if the two
+          # disagree, the workflow env wins and we scrape the wrong
+          # states. Kept explicit here so reviewers see it in PR diffs.
+          TARGET_STATES: ${{ github.event.inputs.states || 'MO,AR' }}
         run: |
           cd scraper
           ARGS=""
