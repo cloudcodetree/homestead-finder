@@ -1,0 +1,80 @@
+{
+  "curatedAt": "2026-04-22T16:54:00.116170+00:00",
+  "model": "sonnet",
+  "candidateCount": 50,
+  "pickCount": 12,
+  "picks": [
+    {
+      "id": "landwatch_424865268",
+      "headline": "Turnkey 750-acre ranch at lowest cost per acre",
+      "reason": "At $3,313/acre, this is the most land per dollar among fully developed properties \u2014 modern homes, utilities already in place, and proven year-round water. Class 6 soil means no row crops, but the property ran 2,500 head of cattle, so grazing-based self-sufficiency is well-documented. $2.485M is a capital ask, but infrastructure replacement cost alone would exceed that.",
+      "rank": 1
+    },
+    {
+      "id": "landwatch_425872108",
+      "headline": "Live creek, lodge, and 313 acres of Ozark privacy",
+      "reason": "Year-round creek plus existing utilities and a lodge means no infrastructure build-out required \u2014 move in and start producing. Class 4 soil limits row cropping but pasture and timber are viable on 313 acres. At $5,910/acre the premium reflects built infrastructure; buyers get scale, seclusion, and genuine water security.",
+      "rank": 2
+    },
+    {
+      "id": "landwatch_426170882",
+      "headline": "Ozark waterfall property with class 3 soil",
+      "reason": "Year-round creeks and a waterfall provide exceptional water security, and class 3 well-drained soil is the strongest agricultural rating in this candidate set for a sub-$400k property. Modern utilities and existing cabins eliminate first-year housing costs. The $9,912/acre is high for Arkansas but justified by dual water sources and immediate habitability.",
+      "rank": 3
+    },
+    {
+      "id": "landwatch_425071838",
+      "headline": "Class 2 soil farm with lake and year-round ponds",
+      "reason": "USDA Class 2 soil is rare in this dataset \u2014 it supports genuine crop production alongside grazing and timber on 319 acres. Natural ponds and year-round water solve the most critical homestead dependency. At $8,516/acre the price is steep, and utilities and residential zoning should be confirmed, but the underlying land quality is the strongest in the set.",
+      "rank": 4
+    },
+    {
+      "id": "ozarkland_jacks-fork-farmsteads-parcel-w",
+      "headline": "Year-round stream on statewide-importance farmland",
+      "reason": "Class 3 soil rated of statewide importance combined with a year-round stream is an unusually strong combination for a $45,900 parcel. Terrain is buildable at 6.2% slope with no flood risk. The main costs are septic and utility installation, which are predictable and manageable \u2014 not structural barriers.",
+      "rank": 5
+    },
+    {
+      "id": "ozarkland_jacks-fork-farmsteads-parcel-l",
+      "headline": "Natural spring and class 3 farmland off-grid ready",
+      "reason": "A confirmed natural spring is one of the most valuable homestead assets in this entire list \u2014 it eliminates well-drilling risk and provides gravity-fed water potential. Class 3 agricultural soil supports small-scale farming, and 6.2% slopes are workable. Road access should be verified with seller, but at $78,900 for 8.78 acres with this water and soil profile, it competes with far pricier options.",
+      "rank": 6
+    },
+    {
+      "id": "landwatch_424131466",
+      "headline": "400-acre riverfront with springs and existing farm",
+      "reason": "Year-round springs, lakes, and river frontage give this property redundant water security across 400 acres. Existing improvements mean immediate occupancy. Class 4 soil is a real limitation for crop agriculture, so the $6,500/acre price is buying location, water, and infrastructure \u2014 not soil productivity. Best for buyers who can generate income beyond subsistence farming.",
+      "rank": 7
+    },
+    {
+      "id": "homestead_crossing_1430",
+      "headline": "Paved access, year-round water, lowest Ozark price",
+      "reason": "Dogs Bluff South #7 offers the strongest combination in the budget parcel tier: paved access, explicit year-round water, electric on-site, no HOA, and 11.81 acres at $4,649/acre ($54,900 total). Class 4 soil rules out serious crop farming, but the infrastructure and access quality beat most other small parcels in this set. Sparse listing warrants an in-person visit to confirm utility specifics.",
+      "rank": 8
+    },
+    {
+      "id": "homestead_crossing_1500",
+      "headline": "Paved road, 10 acres, lowest budget price per acre",
+      "reason": "At $4,431/acre with paved access, year-round water, and electric on-site, Shelton Road #4 is the best value among infrastructure-complete small parcels. Deep soil at 79 inches to bedrock means well drilling is viable. Class 4 soil limits farming to grazing and livestock; with 10.81 acres that's manageable for a small herd or chickens/pigs.",
+      "rank": 9
+    },
+    {
+      "id": "homestead_crossing_1439",
+      "headline": "Nearly 10 acres, utilities in, build-ready today",
+      "reason": "Dogs Bluff South #17 is build-ready with electric and water available, no HOA, year-round water access, and grazing-suitable terrain on 9.83 acres at $47,900. Class 4 Bendavis-Poynor soil caps agricultural ambition, but the hunting viability and grazing suitability give practical self-sufficiency options. Solid entry-level homestead parcel.",
+      "rank": 10
+    },
+    {
+      "id": "homestead_crossing_1157",
+      "headline": "18 acres with water and electric at lowest per-acre",
+      "reason": "At $3,494/acre, Wildcat Hill SW offers the most land per dollar among parcels with confirmed utilities and year-round water \u2014 $62,900 total for 18 acres. The 12% slope and class 4 soil are real constraints: steep terrain limits where you can build and farm, but grazing is viable. Best for a buyer who can work with challenging terrain and wants maximum acreage on a tight budget.",
+      "rank": 11
+    },
+    {
+      "id": "homestead_crossing_1398",
+      "headline": "26 acres and cheapest price in the entire set",
+      "reason": "Ruby Ridge West #15 at $3,037/acre is the lowest per-acre price in the candidate pool, with 26.31 acres, electric access, stated year-round water, no HOA, and isolation for $79,900. Class 4 marginal soil and 12% slope limit farming and require thoughtful site selection for any build. Water source reliability is vague and should be the first thing verified \u2014 but for sheer acreage at this price, it has no competition.",
+      "rank": 12
+    }
+  ]
+}

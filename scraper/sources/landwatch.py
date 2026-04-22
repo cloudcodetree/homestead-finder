@@ -417,11 +417,16 @@ class LandWatchScraper(BaseScraper):
             if explicit:
                 listing["images"] = explicit
             else:
-                # Synthesized primary thumbnail. Safe to include even if
-                # the asset is missing — the frontend falls through to
-                # the weserv proxy and then the placeholder on 404/error.
+                # Synthesized gallery. LandWatch's CDN serves
+                # `{N}-{PID}` for the Nth photo (1-indexed). Real
+                # listings usually have 5-10 photos; rows with fewer
+                # return a "Photo not provided" jpeg at the same size,
+                # which renders harmlessly in the carousel — the user
+                # sees what's actually in the listing. Capped at 8 to
+                # balance coverage vs payload.
                 listing["images"] = [
-                    f"https://assets.landwatch.com/resizedimages/360/990/l/80/1-{pid}"
+                    f"https://assets.landwatch.com/resizedimages/360/990/l/80/{n}-{pid}"
+                    for n in range(1, 9)
                 ]
         return listings
 

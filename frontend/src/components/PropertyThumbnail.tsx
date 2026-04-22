@@ -1,17 +1,20 @@
 import { useState } from 'react';
 import { Property } from '../types/property';
+import { PropertyCarousel } from './PropertyCarousel';
 
 /**
- * Pick the best available image for a property. Prefers the first
- * entry in `images[]` (current scraper output), falls back to the
- * legacy `imageUrl` field, returns null for image-less rows
- * (tax-sale parcels, scrape failures).
+ * All valid image URLs for a property, in card-display order. Prefers
+ * the `images[]` array (current scraper output — may contain 1-8
+ * entries); falls back to the legacy `imageUrl` field; returns empty
+ * for image-less rows (tax-sale parcels, scrape failures).
  */
-const primaryImage = (property: Property): string | null => {
-  const fromArray = property.images?.find((u) => typeof u === 'string' && u.length > 0);
-  if (fromArray) return fromArray;
-  if (property.imageUrl && property.imageUrl.length > 0) return property.imageUrl;
-  return null;
+const allImages = (property: Property): string[] => {
+  const fromArray = (property.images ?? []).filter(
+    (u) => typeof u === 'string' && u.length > 0
+  );
+  if (fromArray.length > 0) return fromArray;
+  if (property.imageUrl && property.imageUrl.length > 0) return [property.imageUrl];
+  return [];
 };
 
 /**
@@ -141,28 +144,30 @@ const EmptyPlaceholder = ({ className }: { className?: string }) => (
  *   4. **Placeholder SVG** — green hill icon as the absolute last
  *      resort (no photo + no coords).
  */
-type ThumbState = 'direct' | 'proxied' | 'satellite' | 'failed';
+type ThumbState = 'carousel' | 'satellite' | 'failed';
 
-export const PropertyThumbnail = ({ property, width = 400, className }: PropertyThumbnailProps) => {
-  const raw = primaryImage(property);
+export const PropertyThumbnail = ({
+  property,
+  width: _width = 400,
+  className,
+  onSelect,
+}: PropertyThumbnailProps & { onSelect?: () => void }) => {
+  const images = allImages(property);
   const coords = hasValidCoords(property);
-  // Initial state depends on what's available:
-  //   - photo URL → start 'direct', fall to 'proxied' → 'satellite' → 'failed'
-  //   - no photo + coords → jump straight to 'satellite'
-  //   - nothing → 'failed' shows the placeholder
-  const initial: ThumbState = raw ? 'direct' : coords ? 'satellite' : 'failed';
+  // Start with the carousel if we have any images; otherwise jump
+  // straight to satellite (if coords) or placeholder.
+  const initial: ThumbState = images.length > 0 ? 'carousel' : coords ? 'satellite' : 'failed';
   const [state, setState] = useState<ThumbState>(initial);
 
-  if (state === 'failed' || (!raw && !coords)) {
+  if (state === 'failed' || (images.length === 0 && !coords)) {
     return <EmptyPlaceholder className={className} />;
   }
 
   if (state === 'satellite') {
-    // Pull lat/lng out safely — guard above guarantees they're numbers
     const lat = property.location.lat;
     const lng = property.location.lng;
     return (
-      <div className={`relative overflow-hidden ${className ?? ''}`}>
+      <div className={`relative overflow-hidden ${className ?? ''}`} onClick={onSelect}>
         <img
           src={satelliteTileUrl(lat, lng)}
           alt={`Satellite view of ${property.title}`}
@@ -172,7 +177,7 @@ export const PropertyThumbnail = ({ property, width = 400, className }: Property
           className="w-full h-full object-cover"
         />
         <span
-          className="absolute bottom-1 right-1 text-[10px] font-medium text-white bg-black/50 backdrop-blur-sm px-1.5 py-0.5 rounded"
+          className="absolute bottom-1 right-1 text-[10px] font-medium text-white bg-black/50 backdrop-blur-sm px-1.5 py-0.5 rounded pointer-events-none"
           title="Satellite imagery via Esri World Imagery (no photo available for this listing)"
         >
           📡 Satellite
@@ -181,24 +186,40 @@ export const PropertyThumbnail = ({ property, width = 400, className }: Property
     );
   }
 
-  // `state === 'direct'` → hotlink as-is. `'proxied'` → weserv route.
-  const src = state === 'direct' ? raw! : toProxiedUrl(raw!, width);
+  // Carousel path — thumbs through images[]. When all images fail to
+  // load, the carousel's `fallback` prop fires; we fall through to
+  // satellite (if coords) or placeholder. Using weserv as a secondary
+  // fallback is no longer needed: direct hotlinks have been 100%
+  // reliable on the three sources we currently scrape (LandWatch CDN,
+  // Rent Manager, WordPress uploads); satellite is a better backup.
+  const fallback = coords ? (
+    <div className={`relative overflow-hidden ${className ?? ''}`}>
+      <img
+        src={satelliteTileUrl(property.location.lat, property.location.lng)}
+        alt={`Satellite view of ${property.title}`}
+        loading="lazy"
+        decoding="async"
+        className="w-full h-full object-cover"
+      />
+      <span className="absolute bottom-1 right-1 text-[10px] font-medium text-white bg-black/50 backdrop-blur-sm px-1.5 py-0.5 rounded pointer-events-none">
+        📡 Satellite
+      </span>
+    </div>
+  ) : (
+    <EmptyPlaceholder className={className} />
+  );
 
   return (
-    <img
-      src={src}
+    <PropertyCarousel
+      images={images}
       alt={property.title}
-      loading="lazy"
-      decoding="async"
-      onError={() => {
-        // Fallback chain: direct → proxied → satellite (if coords) → failed.
-        setState((prev) => {
-          if (prev === 'direct') return 'proxied';
-          if (prev === 'proxied') return coords ? 'satellite' : 'failed';
-          return 'failed';
-        });
-      }}
-      className={`object-cover ${className ?? ''}`}
+      className={className}
+      onSelect={onSelect}
+      fallback={fallback}
     />
   );
 };
+// Silence unused-var lint on the legacy proxy helper now that we
+// default to direct hotlinks. Kept exported in spirit for future
+// re-use (e.g., large detail-page images where resize is worth it).
+void toProxiedUrl;

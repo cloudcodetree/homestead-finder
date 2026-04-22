@@ -55,3 +55,6 @@ data/ai_costs.jsonl
 # Dev-only convenience symlink — Vite serves data/ via this in dev;
 # CI deploys copy data/*.json into frontend/dist/data/ explicitly.
 frontend/public/data
+
+# Local scheduler state
+.claude/scheduled_tasks.lock
