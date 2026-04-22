@@ -122,6 +122,60 @@
 
 ---
 
+## P2 — Images Phase 2: Detail-page Carousel
+
+- [ ] **Per-listing gallery on PropertyDetail**
+  - Phase 1 (shipped 2026-04-22): primary thumbnail via `PropertyThumbnail`
+    component. LandWatch URLs synthesized from PID; HomesteadCrossing +
+    OzarkLand scraped from cards directly. Direct hotlink → weserv
+    fallback → placeholder.
+  - Phase 2 scope: a swipeable 5-15 image carousel on the modal/page
+    instead of a single hero image.
+  - Requires: capturing the full gallery, which lives on per-listing
+    detail pages (not search cards). Today `detail_fetcher.py` uses
+    Firecrawl for LandWatch detail pages — but Firecrawl quota is
+    expensive at 1490 listings/month. Rewrite against Playwright so
+    it's free; ran ad-hoc once a week instead of daily.
+  - HomesteadCrossing detail pages already render the gallery
+    server-side (Rent Manager) — can extract via plain curl_cffi.
+  - OzarkLand detail pages are WP, also server-rendered.
+  - Frontend component: use a small carousel library (Swiper.js is
+    the obvious choice) or ~50 lines of custom code; no need for a
+    heavy dep.
+  - Files touched: `scraper/detail_fetcher.py` (rework), new
+    `scraper/sources/<source>_detail.py` per source, and a
+    `<PropertyCarousel>` React component replacing the hero
+    `PropertyThumbnail` call in `PropertyDetail.tsx`.
+
+---
+
+## Tech Debt
+
+- [ ] **Tune Overpass (OpenStreetMap) rate-limit handling in proximity enrichment**
+  - Current behavior: 176-listing backfill at `concurrency=2` still 429s on
+    a meaningful fraction of `lookup_proximity` calls. The code handles
+    failures gracefully (treats missing data as unknown, not zero) so
+    soil/flood/elevation/watershed still reach 100% coverage, but proximity
+    (nearest-town distance + named water features) ends up missing on
+    roughly 20-30% of rows.
+  - Options to evaluate:
+    - Raise the internal sleep in `lookup_proximity` from 1.2s → 2.5s
+      between the town + water queries (same wall clock at concurrency=2,
+      fewer 429s)
+    - Drop default concurrency to 1 in `enrich_geo` (doubles wall clock
+      from ~9min → ~18min for 176 listings but zero 429s)
+    - Add exponential-backoff retry on 429 inside `_post_overpass` (costs
+      a bit of latency per retry, recovers most missing rows)
+    - Self-host an Overpass instance (unlimited queries but needs 50GB+
+      OSM pbf + a VPS — only worth it past ~5k listings)
+  - Files: [scraper/enrichment/proximity.py](scraper/enrichment/proximity.py),
+    [scraper/enrich_geo.py](scraper/enrich_geo.py)
+  - Non-urgent — partial proximity coverage is still useful for the
+    homestead-fit score, and the gap is in the nice-to-have layer rather
+    than the gating layer (soil/flood).
+
+---
+
 ## Completed
 
 - [x] **LandWatch Firecrawl+markdown parser** — restored real data flow, 125 MT listings verified in CI (2026-04-20)

@@ -1,0 +1,357 @@
+{"ts": "2026-04-20T23:09:00.520429+00:00", "model": "haiku", "input_tokens": 100, "output_tokens": 50, "cost_usd": 0.001, "cached": false}
+{"ts": "2026-04-20T23:09:00.522429+00:00", "model": "haiku", "input_tokens": 100, "output_tokens": 50, "cost_usd": 0.001, "cached": false}
+{"ts": "2026-04-20T23:09:00.522723+00:00", "model": "haiku", "input_tokens": 100, "output_tokens": 50, "cost_usd": 0.0, "cached": true}
+{"ts": "2026-04-20T23:09:00.524051+00:00", "model": "haiku", "input_tokens": 100, "output_tokens": 50, "cost_usd": 0.001, "cached": false}
+{"ts": "2026-04-20T23:09:00.524314+00:00", "model": "sonnet", "input_tokens": 100, "output_tokens": 50, "cost_usd": 0.001, "cached": false}
+{"ts": "2026-04-20T23:09:00.525689+00:00", "model": "haiku", "input_tokens": 100, "output_tokens": 50, "cost_usd": 0.001, "cached": false}
+{"ts": "2026-04-20T23:09:00.525962+00:00", "model": "haiku", "input_tokens": 100, "output_tokens": 50, "cost_usd": 0.001, "cached": false}
+{"ts": "2026-04-20T23:09:00.527382+00:00", "model": "haiku", "input_tokens": 100, "output_tokens": 50, "cost_usd": 0.001, "cached": false}
+{"ts": "2026-04-20T23:09:00.529451+00:00", "model": "haiku", "input_tokens": 100, "output_tokens": 50, "cost_usd": 0.001, "cached": false}
+{"ts": "2026-04-20T23:09:00.529743+00:00", "model": "haiku", "input_tokens": 100, "output_tokens": 50, "cost_usd": 0.001, "cached": false}
+{"ts": "2026-04-20T23:09:12.580752+00:00", "model": "haiku", "input_tokens": 100, "output_tokens": 50, "cost_usd": 0.001, "cached": false}
+{"ts": "2026-04-20T23:09:12.586538+00:00", "model": "haiku", "input_tokens": 100, "output_tokens": 50, "cost_usd": 0.001, "cached": false}
+{"ts": "2026-04-20T23:09:12.590393+00:00", "model": "haiku", "input_tokens": 100, "output_tokens": 50, "cost_usd": 0.001, "cached": false}
+{"ts": "2026-04-20T23:09:12.594652+00:00", "model": "haiku", "input_tokens": 100, "output_tokens": 50, "cost_usd": 0.001, "cached": false}
+{"ts": "2026-04-20T23:09:44.738990+00:00", "model": "haiku", "input_tokens": 100, "output_tokens": 50, "cost_usd": 0.001, "cached": false}
+{"ts": "2026-04-20T23:09:44.740717+00:00", "model": "haiku", "input_tokens": 100, "output_tokens": 50, "cost_usd": 0.001, "cached": false}
+{"ts": "2026-04-20T23:09:44.740964+00:00", "model": "haiku", "input_tokens": 100, "output_tokens": 50, "cost_usd": 0.0, "cached": true}
+{"ts": "2026-04-20T23:09:44.742179+00:00", "model": "haiku", "input_tokens": 100, "output_tokens": 50, "cost_usd": 0.001, "cached": false}
+{"ts": "2026-04-20T23:09:44.742444+00:00", "model": "sonnet", "input_tokens": 100, "output_tokens": 50, "cost_usd": 0.001, "cached": false}
+{"ts": "2026-04-20T23:09:44.743890+00:00", "model": "haiku", "input_tokens": 100, "output_tokens": 50, "cost_usd": 0.001, "cached": false}
+{"ts": "2026-04-20T23:09:44.744230+00:00", "model": "haiku", "input_tokens": 100, "output_tokens": 50, "cost_usd": 0.001, "cached": false}
+{"ts": "2026-04-20T23:09:44.745787+00:00", "model": "haiku", "input_tokens": 100, "output_tokens": 50, "cost_usd": 0.001, "cached": false}
+{"ts": "2026-04-20T23:09:44.747157+00:00", "model": "haiku", "input_tokens": 100, "output_tokens": 50, "cost_usd": 0.001, "cached": false}
+{"ts": "2026-04-20T23:09:44.747426+00:00", "model": "haiku", "input_tokens": 100, "output_tokens": 50, "cost_usd": 0.001, "cached": false}
+{"ts": "2026-04-20T23:09:56.791572+00:00", "model": "haiku", "input_tokens": 100, "output_tokens": 50, "cost_usd": 0.001, "cached": false}
+{"ts": "2026-04-20T23:09:56.797401+00:00", "model": "haiku", "input_tokens": 100, "output_tokens": 50, "cost_usd": 0.001, "cached": false}
+{"ts": "2026-04-20T23:09:56.802372+00:00", "model": "haiku", "input_tokens": 100, "output_tokens": 50, "cost_usd": 0.001, "cached": false}
+{"ts": "2026-04-20T23:09:56.805945+00:00", "model": "haiku", "input_tokens": 100, "output_tokens": 50, "cost_usd": 0.001, "cached": false}
+{"ts": "2026-04-20T23:12:52.737260+00:00", "model": "haiku", "input_tokens": 100, "output_tokens": 50, "cost_usd": 0.001, "cached": false}
+{"ts": "2026-04-20T23:12:52.739374+00:00", "model": "haiku", "input_tokens": 100, "output_tokens": 50, "cost_usd": 0.001, "cached": false}
+{"ts": "2026-04-20T23:12:52.739808+00:00", "model": "haiku", "input_tokens": 100, "output_tokens": 50, "cost_usd": 0.0, "cached": true}
+{"ts": "2026-04-20T23:12:52.741306+00:00", "model": "haiku", "input_tokens": 100, "output_tokens": 50, "cost_usd": 0.001, "cached": false}
+{"ts": "2026-04-20T23:12:52.741713+00:00", "model": "sonnet", "input_tokens": 100, "output_tokens": 50, "cost_usd": 0.001, "cached": false}
+{"ts": "2026-04-20T23:12:52.743673+00:00", "model": "haiku", "input_tokens": 100, "output_tokens": 50, "cost_usd": 0.001, "cached": false}
+{"ts": "2026-04-20T23:12:52.744106+00:00", "model": "haiku", "input_tokens": 100, "output_tokens": 50, "cost_usd": 0.001, "cached": false}
+{"ts": "2026-04-20T23:12:52.746274+00:00", "model": "haiku", "input_tokens": 100, "output_tokens": 50, "cost_usd": 0.001, "cached": false}
+{"ts": "2026-04-20T23:12:52.748279+00:00", "model": "haiku", "input_tokens": 100, "output_tokens": 50, "cost_usd": 0.001, "cached": false}
+{"ts": "2026-04-20T23:12:52.748711+00:00", "model": "haiku", "input_tokens": 100, "output_tokens": 50, "cost_usd": 0.001, "cached": false}
+{"ts": "2026-04-20T23:13:04.793216+00:00", "model": "haiku", "input_tokens": 100, "output_tokens": 50, "cost_usd": 0.001, "cached": false}
+{"ts": "2026-04-20T23:13:04.799953+00:00", "model": "haiku", "input_tokens": 100, "output_tokens": 50, "cost_usd": 0.001, "cached": false}
+{"ts": "2026-04-20T23:13:04.804321+00:00", "model": "haiku", "input_tokens": 100, "output_tokens": 50, "cost_usd": 0.001, "cached": false}
+{"ts": "2026-04-20T23:13:04.808349+00:00", "model": "haiku", "input_tokens": 100, "output_tokens": 50, "cost_usd": 0.001, "cached": false}
+{"ts": "2026-04-20T23:13:04.826925+00:00", "model": "haiku", "input_tokens": 100, "output_tokens": 50, "cost_usd": 0.001, "cached": false}
+{"ts": "2026-04-20T23:14:15.626144+00:00", "model": "haiku", "input_tokens": 100, "output_tokens": 50, "cost_usd": 0.001, "cached": false}
+{"ts": "2026-04-20T23:14:15.629450+00:00", "model": "haiku", "input_tokens": 100, "output_tokens": 50, "cost_usd": 0.001, "cached": false}
+{"ts": "2026-04-20T23:14:15.629972+00:00", "model": "haiku", "input_tokens": 100, "output_tokens": 50, "cost_usd": 0.0, "cached": true}
+{"ts": "2026-04-20T23:14:15.631317+00:00", "model": "haiku", "input_tokens": 100, "output_tokens": 50, "cost_usd": 0.001, "cached": false}
+{"ts": "2026-04-20T23:14:15.631725+00:00", "model": "sonnet", "input_tokens": 100, "output_tokens": 50, "cost_usd": 0.001, "cached": false}
+{"ts": "2026-04-20T23:14:15.633345+00:00", "model": "haiku", "input_tokens": 100, "output_tokens": 50, "cost_usd": 0.001, "cached": false}
+{"ts": "2026-04-20T23:14:15.633754+00:00", "model": "haiku", "input_tokens": 100, "output_tokens": 50, "cost_usd": 0.001, "cached": false}
+{"ts": "2026-04-20T23:14:15.635469+00:00", "model": "haiku", "input_tokens": 100, "output_tokens": 50, "cost_usd": 0.001, "cached": false}
+{"ts": "2026-04-20T23:14:15.637423+00:00", "model": "haiku", "input_tokens": 100, "output_tokens": 50, "cost_usd": 0.001, "cached": false}
+{"ts": "2026-04-20T23:14:15.638355+00:00", "model": "haiku", "input_tokens": 100, "output_tokens": 50, "cost_usd": 0.001, "cached": false}
+{"ts": "2026-04-20T23:14:27.677662+00:00", "model": "haiku", "input_tokens": 100, "output_tokens": 50, "cost_usd": 0.001, "cached": false}
+{"ts": "2026-04-20T23:14:27.685831+00:00", "model": "haiku", "input_tokens": 100, "output_tokens": 50, "cost_usd": 0.001, "cached": false}
+{"ts": "2026-04-20T23:14:27.690766+00:00", "model": "haiku", "input_tokens": 100, "output_tokens": 50, "cost_usd": 0.001, "cached": false}
+{"ts": "2026-04-20T23:14:27.697280+00:00", "model": "haiku", "input_tokens": 100, "output_tokens": 50, "cost_usd": 0.001, "cached": false}
+{"ts": "2026-04-20T23:14:27.716765+00:00", "model": "haiku", "input_tokens": 100, "output_tokens": 50, "cost_usd": 0.001, "cached": false}
+{"ts": "2026-04-20T23:25:16.951090+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 2363, "cost_usd": 0.0225, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-20T23:25:21.871622+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 2893, "cost_usd": 0.025153, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-20T23:25:28.385270+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 3738, "cost_usd": 0.029398, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-20T23:25:57.831452+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 3826, "cost_usd": 0.029793, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-20T23:26:04.371374+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 5296, "cost_usd": 0.03717, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-20T23:26:43.028583+00:00", "model": "sonnet", "input_tokens": 2, "output_tokens": 1647, "cost_usd": 0.096823, "cached": false, "tag": "curate"}
+{"ts": "2026-04-21T02:38:20.873395+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 2594, "cost_usd": 0.023655, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T02:38:24.000990+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 2809, "cost_usd": 0.0247, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T02:38:26.023998+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 3457, "cost_usd": 0.027961, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T02:38:44.344557+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 1946, "cost_usd": 0.02043, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T02:38:44.535556+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 2483, "cost_usd": 0.023112, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T02:38:46.493909+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 5484, "cost_usd": 0.038056, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T02:38:59.880684+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 3514, "cost_usd": 0.028248, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T02:39:04.056678+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 1885, "cost_usd": 0.02012, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T02:39:13.124284+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 2782, "cost_usd": 0.024623, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T02:39:24.235754+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 2681, "cost_usd": 0.024108, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T02:39:28.048614+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 4639, "cost_usd": 0.033911, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T02:39:28.533275+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 2415, "cost_usd": 0.022776, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T02:39:34.238835+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 2653, "cost_usd": 0.023948, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T02:39:45.944534+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 1858, "cost_usd": 0.020066, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T02:40:01.199768+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 3567, "cost_usd": 0.028592, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T02:40:09.362775+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 3994, "cost_usd": 0.030748, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T02:40:10.059059+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 5112, "cost_usd": 0.036332, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T02:40:17.066170+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 3310, "cost_usd": 0.027292, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T02:40:28.902502+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 2127, "cost_usd": 0.021375, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T02:40:30.680390+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 2328, "cost_usd": 0.022343, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T02:40:35.891723+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 3290, "cost_usd": 0.027202, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T02:40:42.704224+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 2931, "cost_usd": 0.025407, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T02:40:54.858811+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 2039, "cost_usd": 0.020962, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T02:41:01.097336+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 3377, "cost_usd": 0.027648, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T02:41:02.572658+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 3636, "cost_usd": 0.028902, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T02:41:08.247514+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 2845, "cost_usd": 0.024957, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T02:41:27.262346+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 1962, "cost_usd": 0.020601, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T02:41:27.783250+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 3096, "cost_usd": 0.026281, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T02:41:32.942290+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 4176, "cost_usd": 0.031633, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T02:41:44.568081+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 4337, "cost_usd": 0.032451, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T02:41:47.016815+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 1991, "cost_usd": 0.020751, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T02:41:53.706814+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 2765, "cost_usd": 0.024622, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T02:42:07.623276+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 3820, "cost_usd": 0.029897, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T02:42:14.540786+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 3526, "cost_usd": 0.028397, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T02:42:19.361491+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 3611, "cost_usd": 0.028857, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T02:42:23.341655+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 3291, "cost_usd": 0.027243, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T02:42:24.934882+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 1686, "cost_usd": 0.019233, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T02:42:34.149164+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 2137, "cost_usd": 0.021455, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T02:42:41.550919+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 2282, "cost_usd": 0.022172, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T02:42:44.548847+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 2016, "cost_usd": 0.020843, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T02:42:50.626692+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 2992, "cost_usd": 0.025741, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T02:42:50.848135+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 1691, "cost_usd": 0.019275, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T02:42:56.657780+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 1556, "cost_usd": 0.018603, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T02:43:06.187231+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 2262, "cost_usd": 0.022103, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T02:43:07.645467+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 1723, "cost_usd": 0.01941, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T02:43:12.065201+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 2355, "cost_usd": 0.022567, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T02:43:22.159624+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 1411, "cost_usd": 0.01788, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T02:43:30.688104+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 3551, "cost_usd": 0.028577, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T02:43:45.316806+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 3623, "cost_usd": 0.028927, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T02:43:54.693949+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 3776, "cost_usd": 0.029685, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T02:43:55.310848+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 2778, "cost_usd": 0.024681, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T02:43:55.943705+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 5620, "cost_usd": 0.038931, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T02:44:04.805187+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 1802, "cost_usd": 0.019843, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T02:44:15.993813+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 2271, "cost_usd": 0.022173, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T02:44:23.496322+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 3117, "cost_usd": 0.026407, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T02:44:26.175811+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 2522, "cost_usd": 0.023423, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T02:44:40.002322+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 4968, "cost_usd": 0.035646, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T02:44:41.144983+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 2822, "cost_usd": 0.024925, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T02:44:54.519417+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 3606, "cost_usd": 0.028863, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T02:45:00.535495+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 2048, "cost_usd": 0.021067, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T02:45:05.370217+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 2553, "cost_usd": 0.023596, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T02:45:08.822118+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 4850, "cost_usd": 0.03509, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T02:45:27.189037+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 2943, "cost_usd": 0.025597, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T02:45:32.988675+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 3951, "cost_usd": 0.030588, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T02:45:39.288610+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 5447, "cost_usd": 0.038102, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T02:45:43.377130+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 4589, "cost_usd": 0.03377, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T02:46:02.397157+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 2591, "cost_usd": 0.023845, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T02:46:04.336819+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 4120, "cost_usd": 0.031477, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T02:46:14.759578+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 3539, "cost_usd": 0.028587, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T02:46:17.301957+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 5602, "cost_usd": 0.038871, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T02:46:31.137854+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 3155, "cost_usd": 0.026675, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T02:46:33.577684+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 3177, "cost_usd": 0.026792, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T02:46:40.714687+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 2436, "cost_usd": 0.023075, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T02:46:51.233546+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 2009, "cost_usd": 0.020966, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T02:46:56.772804+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 1701, "cost_usd": 0.019428, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T02:46:58.085137+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 2911, "cost_usd": 0.02548, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T02:46:58.773597+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 4427, "cost_usd": 0.033016, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T02:47:15.439667+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 1772, "cost_usd": 0.019802, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T02:47:19.848221+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 3160, "cost_usd": 0.026698, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T02:47:20.886925+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 2992, "cost_usd": 0.025876, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T02:47:31.551076+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 3849, "cost_usd": 0.030156, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T02:47:39.990439+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 2218, "cost_usd": 0.021832, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T02:47:41.546727+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 2197, "cost_usd": 0.021703, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T02:47:52.492111+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 4594, "cost_usd": 0.033901, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T02:47:58.533780+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 1778, "cost_usd": 0.019632, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T02:48:09.568276+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 4345, "cost_usd": 0.032481, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T02:48:13.664397+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 3359, "cost_usd": 0.027518, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T02:48:20.046311+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 2151, "cost_usd": 0.021485, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T02:48:31.321765+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 4523, "cost_usd": 0.033343, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T02:48:37.593237+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 3134, "cost_usd": 0.026438, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T02:48:44.479028+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 2643, "cost_usd": 0.023936, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T02:48:49.959175+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 4114, "cost_usd": 0.031295, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T02:49:04.404287+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 3254, "cost_usd": 0.026978, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T02:49:06.012630+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 2388, "cost_usd": 0.022666, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T02:49:12.313513+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 2508, "cost_usd": 0.023251, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T02:49:20.638154+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 1912, "cost_usd": 0.020302, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T02:49:24.457538+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 4199, "cost_usd": 0.031706, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T02:49:30.568671+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 1938, "cost_usd": 0.02043, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T02:49:31.050808+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 2361, "cost_usd": 0.022527, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T02:49:45.833489+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 2723, "cost_usd": 0.024338, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T02:49:47.731160+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 1581, "cost_usd": 0.018633, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T02:49:49.121101+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 1694, "cost_usd": 0.019211, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T02:49:54.140765+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 3084, "cost_usd": 0.026147, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T02:50:11.203962+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 2100, "cost_usd": 0.021226, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T02:50:12.459479+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 2717, "cost_usd": 0.024315, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T02:50:19.820043+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 2864, "cost_usd": 0.025048, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T02:50:27.017610+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 4362, "cost_usd": 0.032526, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T02:50:32.004332+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 2181, "cost_usd": 0.021636, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T02:50:44.856680+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 1994, "cost_usd": 0.020697, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T02:50:54.177795+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 3281, "cost_usd": 0.027128, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T02:50:55.238600+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 2648, "cost_usd": 0.02395, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T02:51:02.766377+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 5607, "cost_usd": 0.038756, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T02:51:06.144592+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 2388, "cost_usd": 0.022672, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T02:51:17.327327+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 2699, "cost_usd": 0.024225, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T02:51:30.198054+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 3967, "cost_usd": 0.030561, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T02:51:33.854535+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 3188, "cost_usd": 0.026665, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T02:51:34.811447+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 1723, "cost_usd": 0.019337, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T02:51:36.536363+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 3552, "cost_usd": 0.028482, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T02:51:51.061405+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 2197, "cost_usd": 0.02172, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T02:51:57.292186+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 2557, "cost_usd": 0.023496, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T02:54:38.955945+00:00", "model": "sonnet", "input_tokens": 2, "output_tokens": 8182, "cost_usd": 0.240092, "cached": false, "tag": "curate"}
+{"ts": "2026-04-21T04:44:19.341313+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 4103, "cost_usd": 0.031803, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T04:44:31.939669+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 6191, "cost_usd": 0.042026, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T04:44:33.174032+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 6105, "cost_usd": 0.041677, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T04:45:00.567932+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 2976, "cost_usd": 0.02598, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T04:45:08.494421+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 10604, "cost_usd": 0.064533, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T04:45:12.801976+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 6461, "cost_usd": 0.043772, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T04:45:29.372727+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 6709, "cost_usd": 0.044798, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T04:45:38.441595+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 4284, "cost_usd": 0.032575, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T04:45:44.755429+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 3413, "cost_usd": 0.029382, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T04:45:57.597134+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 2943, "cost_usd": 0.025853, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T04:46:06.630070+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 6338, "cost_usd": 0.044032, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T04:46:11.710156+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 3495, "cost_usd": 0.029815, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T04:46:23.511408+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 1727, "cost_usd": 0.019817, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T04:46:28.876834+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 3469, "cost_usd": 0.028763, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T04:46:32.040157+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 2093, "cost_usd": 0.021898, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T04:46:33.038269+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 5570, "cost_usd": 0.038922, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T04:46:54.870393+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 3484, "cost_usd": 0.028725, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T04:47:13.225618+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 4607, "cost_usd": 0.034157, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T04:47:13.260632+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 4771, "cost_usd": 0.035318, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T04:47:13.379226+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 4366, "cost_usd": 0.034163, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T04:47:39.824109+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 2860, "cost_usd": 0.025611, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T04:47:45.131019+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 5452, "cost_usd": 0.039621, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T04:47:46.952111+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 3562, "cost_usd": 0.029076, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T04:47:53.553632+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 4452, "cost_usd": 0.033355, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T04:48:00.617415+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 2686, "cost_usd": 0.024572, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T04:48:26.253636+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 3847, "cost_usd": 0.030681, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T04:48:39.152513+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 6462, "cost_usd": 0.043321, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T04:48:42.787612+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 6493, "cost_usd": 0.043515, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T04:48:51.133386+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 6084, "cost_usd": 0.041507, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T04:48:57.875855+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 3741, "cost_usd": 0.029833, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T04:49:01.377262+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 2117, "cost_usd": 0.022043, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T04:49:32.924684+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 5658, "cost_usd": 0.039492, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T04:49:36.375372+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 3874, "cost_usd": 0.030368, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T04:49:37.113078+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 4483, "cost_usd": 0.033812, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T04:49:38.208405+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 4641, "cost_usd": 0.035596, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T04:49:58.322439+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 2078, "cost_usd": 0.021743, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T04:50:04.434099+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 3575, "cost_usd": 0.029205, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T04:50:14.265695+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 4254, "cost_usd": 0.032368, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T04:50:14.924568+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 4298, "cost_usd": 0.032766, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T04:50:32.388040+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 2983, "cost_usd": 0.026055, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T04:50:42.260527+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 3245, "cost_usd": 0.027712, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T04:50:45.736209+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 5457, "cost_usd": 0.038815, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T04:50:56.672220+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 2712, "cost_usd": 0.024612, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T04:51:09.250804+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 6444, "cost_usd": 0.043666, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T04:51:25.708792+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 4988, "cost_usd": 0.036261, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T04:51:32.096750+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 5801, "cost_usd": 0.040023, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T04:51:43.660675+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 5009, "cost_usd": 0.036695, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T04:51:53.736883+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 5150, "cost_usd": 0.036895, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T04:52:11.624817+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 5612, "cost_usd": 0.03911, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T04:52:17.474632+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 5232, "cost_usd": 0.037353, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T04:52:20.837823+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 2772, "cost_usd": 0.02493, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T04:52:27.339029+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 4670, "cost_usd": 0.034868, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T04:52:38.868934+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 2859, "cost_usd": 0.026651, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T04:52:48.093249+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 2967, "cost_usd": 0.026417, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T04:53:08.003225+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 5708, "cost_usd": 0.039507, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T04:53:11.988334+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 3710, "cost_usd": 0.029545, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T04:53:16.757086+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 3046, "cost_usd": 0.026332, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T04:53:23.809829+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 6890, "cost_usd": 0.04557, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T04:53:44.445720+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 3954, "cost_usd": 0.03081, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T04:53:48.209403+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 3703, "cost_usd": 0.029737, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T04:53:54.135295+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 3373, "cost_usd": 0.028003, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T04:54:15.425241+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 2714, "cost_usd": 0.024842, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T04:54:21.898970+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 2437, "cost_usd": 0.023478, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T04:54:23.867238+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 7204, "cost_usd": 0.047391, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T04:54:30.029828+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 4608, "cost_usd": 0.034156, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T04:54:48.452873+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 3765, "cost_usd": 0.029973, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T04:55:00.153978+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 4124, "cost_usd": 0.03194, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T04:55:03.532904+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 4627, "cost_usd": 0.035471, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T04:55:12.793232+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 5088, "cost_usd": 0.036575, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T04:55:26.391985+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 4211, "cost_usd": 0.032152, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T04:55:37.352574+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 3729, "cost_usd": 0.030072, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T04:55:37.584997+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 4508, "cost_usd": 0.033785, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T04:55:48.003026+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 3854, "cost_usd": 0.030786, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T04:55:51.445587+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 2663, "cost_usd": 0.025688, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T04:56:08.216980+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 3657, "cost_usd": 0.029508, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T04:56:34.080188+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 4721, "cost_usd": 0.034697, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T04:56:34.786420+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 5104, "cost_usd": 0.036835, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T04:56:39.274902+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 3061, "cost_usd": 0.027645, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T04:56:40.833518+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 7487, "cost_usd": 0.048956, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T04:56:55.459731+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 2379, "cost_usd": 0.024296, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T04:57:01.085740+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 2682, "cost_usd": 0.025781, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T04:57:10.320568+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 3288, "cost_usd": 0.027646, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T04:57:15.491486+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 3807, "cost_usd": 0.030101, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T04:57:18.661401+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 2545, "cost_usd": 0.024047, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T04:57:35.460123+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 2660, "cost_usd": 0.02452, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T04:57:43.691964+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 5071, "cost_usd": 0.036412, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T04:57:54.499593+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 3970, "cost_usd": 0.031085, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T04:58:07.872753+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 2369, "cost_usd": 0.024205, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T04:58:10.529338+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 6669, "cost_usd": 0.04459, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T04:58:11.406251+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 4454, "cost_usd": 0.033313, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T04:58:26.399859+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 1827, "cost_usd": 0.020246, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T04:58:38.654668+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 5325, "cost_usd": 0.03781, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T04:58:56.965176+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 5106, "cost_usd": 0.036808, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T04:58:59.165528+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 3902, "cost_usd": 0.03063, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T04:59:04.665807+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 6342, "cost_usd": 0.043165, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T04:59:18.234408+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 4360, "cost_usd": 0.033168, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T04:59:35.887184+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 4230, "cost_usd": 0.032225, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T04:59:36.745794+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 3312, "cost_usd": 0.027711, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T04:59:44.584173+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 5490, "cost_usd": 0.038638, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T04:59:57.502379+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 2174, "cost_usd": 0.021897, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T05:00:07.753587+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 2476, "cost_usd": 0.024792, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T05:00:09.417093+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 5611, "cost_usd": 0.040395, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T05:00:10.041116+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 3679, "cost_usd": 0.029563, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T05:00:17.601060+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 2419, "cost_usd": 0.0234, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T05:00:31.675232+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 2748, "cost_usd": 0.02473, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T05:00:40.454763+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 2990, "cost_usd": 0.026056, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T05:00:52.274720+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 4720, "cost_usd": 0.034648, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T05:01:08.743727+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 3321, "cost_usd": 0.02767, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T05:01:11.759802+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 4332, "cost_usd": 0.032723, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T05:01:14.430107+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 6967, "cost_usd": 0.045912, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T05:01:17.659916+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 2860, "cost_usd": 0.025456, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T05:01:39.415526+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 3179, "cost_usd": 0.027042, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T05:01:43.895554+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 3486, "cost_usd": 0.028691, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T05:01:44.349035+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 3745, "cost_usd": 0.030146, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T05:01:54.573432+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 5028, "cost_usd": 0.03615, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T05:02:10.437190+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 2747, "cost_usd": 0.026466, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T05:02:15.242714+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 3599, "cost_usd": 0.028997, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T05:02:33.974509+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 6668, "cost_usd": 0.044467, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T05:02:40.376513+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 3387, "cost_usd": 0.028443, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T05:02:51.220608+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 6623, "cost_usd": 0.044198, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T05:02:56.867441+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 4262, "cost_usd": 0.032166, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T05:03:10.974539+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 2514, "cost_usd": 0.023668, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T05:03:12.715165+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 4745, "cost_usd": 0.034855, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T05:03:25.477114+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 3133, "cost_usd": 0.026935, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T05:03:48.924363+00:00", "model": "haiku", "input_tokens": 10, "output_tokens": 7579, "cost_usd": 0.049055, "cached": false, "tag": "enrich"}
+{"ts": "2026-04-21T05:07:11.225887+00:00", "model": "sonnet", "input_tokens": 2, "output_tokens": 8367, "cost_usd": 0.24745, "cached": false, "tag": "curate"}
+{"ts": "2026-04-21T19:26:24.438093+00:00", "model": "haiku", "input_tokens": 100, "output_tokens": 50, "cost_usd": 0.001, "cached": false}
+{"ts": "2026-04-21T19:26:24.459444+00:00", "model": "haiku", "input_tokens": 100, "output_tokens": 50, "cost_usd": 0.001, "cached": false}
+{"ts": "2026-04-21T19:26:24.461235+00:00", "model": "haiku", "input_tokens": 100, "output_tokens": 50, "cost_usd": 0.0, "cached": true}
+{"ts": "2026-04-21T19:26:24.462438+00:00", "model": "haiku", "input_tokens": 100, "output_tokens": 50, "cost_usd": 0.001, "cached": false}
+{"ts": "2026-04-21T19:26:24.464310+00:00", "model": "sonnet", "input_tokens": 100, "output_tokens": 50, "cost_usd": 0.001, "cached": false}
+{"ts": "2026-04-21T19:26:24.467206+00:00", "model": "haiku", "input_tokens": 100, "output_tokens": 50, "cost_usd": 0.001, "cached": false}
+{"ts": "2026-04-21T19:26:24.469094+00:00", "model": "haiku", "input_tokens": 100, "output_tokens": 50, "cost_usd": 0.001, "cached": false}
+{"ts": "2026-04-21T19:26:24.471862+00:00", "model": "haiku", "input_tokens": 100, "output_tokens": 50, "cost_usd": 0.001, "cached": false}
+{"ts": "2026-04-21T19:26:24.474789+00:00", "model": "haiku", "input_tokens": 100, "output_tokens": 50, "cost_usd": 0.001, "cached": false}
+{"ts": "2026-04-21T19:26:24.476622+00:00", "model": "haiku", "input_tokens": 100, "output_tokens": 50, "cost_usd": 0.001, "cached": false}
+{"ts": "2026-04-21T19:26:36.518924+00:00", "model": "haiku", "input_tokens": 100, "output_tokens": 50, "cost_usd": 0.001, "cached": false}
+{"ts": "2026-04-21T19:26:36.529344+00:00", "model": "haiku", "input_tokens": 100, "output_tokens": 50, "cost_usd": 0.001, "cached": false}
+{"ts": "2026-04-21T19:26:36.537000+00:00", "model": "haiku", "input_tokens": 100, "output_tokens": 50, "cost_usd": 0.001, "cached": false}
+{"ts": "2026-04-21T19:26:36.545253+00:00", "model": "haiku", "input_tokens": 100, "output_tokens": 50, "cost_usd": 0.001, "cached": false}
+{"ts": "2026-04-21T19:26:36.562428+00:00", "model": "haiku", "input_tokens": 100, "output_tokens": 50, "cost_usd": 0.001, "cached": false}
+{"ts": "2026-04-21T20:32:40.520754+00:00", "model": "haiku", "input_tokens": 100, "output_tokens": 50, "cost_usd": 0.001, "cached": false}
+{"ts": "2026-04-21T20:32:40.525240+00:00", "model": "haiku", "input_tokens": 100, "output_tokens": 50, "cost_usd": 0.001, "cached": false}
+{"ts": "2026-04-21T20:32:40.526975+00:00", "model": "haiku", "input_tokens": 100, "output_tokens": 50, "cost_usd": 0.0, "cached": true}
+{"ts": "2026-04-21T20:32:40.528225+00:00", "model": "haiku", "input_tokens": 100, "output_tokens": 50, "cost_usd": 0.001, "cached": false}
+{"ts": "2026-04-21T20:32:40.530438+00:00", "model": "sonnet", "input_tokens": 100, "output_tokens": 50, "cost_usd": 0.001, "cached": false}
+{"ts": "2026-04-21T20:32:40.533701+00:00", "model": "haiku", "input_tokens": 100, "output_tokens": 50, "cost_usd": 0.001, "cached": false}
+{"ts": "2026-04-21T20:32:40.535640+00:00", "model": "haiku", "input_tokens": 100, "output_tokens": 50, "cost_usd": 0.001, "cached": false}
+{"ts": "2026-04-21T20:32:40.538493+00:00", "model": "haiku", "input_tokens": 100, "output_tokens": 50, "cost_usd": 0.001, "cached": false}
+{"ts": "2026-04-21T20:32:40.541395+00:00", "model": "haiku", "input_tokens": 100, "output_tokens": 50, "cost_usd": 0.001, "cached": false}
+{"ts": "2026-04-21T20:32:40.543232+00:00", "model": "haiku", "input_tokens": 100, "output_tokens": 50, "cost_usd": 0.001, "cached": false}
+{"ts": "2026-04-21T20:32:52.608136+00:00", "model": "haiku", "input_tokens": 100, "output_tokens": 50, "cost_usd": 0.001, "cached": false}
+{"ts": "2026-04-21T20:32:52.620331+00:00", "model": "haiku", "input_tokens": 100, "output_tokens": 50, "cost_usd": 0.001, "cached": false}
+{"ts": "2026-04-21T20:32:52.627735+00:00", "model": "haiku", "input_tokens": 100, "output_tokens": 50, "cost_usd": 0.001, "cached": false}
+{"ts": "2026-04-21T20:32:52.634954+00:00", "model": "haiku", "input_tokens": 100, "output_tokens": 50, "cost_usd": 0.001, "cached": false}
+{"ts": "2026-04-21T20:32:52.652667+00:00", "model": "haiku", "input_tokens": 100, "output_tokens": 50, "cost_usd": 0.001, "cached": false}
+{"ts": "2026-04-21T22:20:08.419885+00:00", "model": "sonnet", "input_tokens": 2, "output_tokens": 7752, "cost_usd": 0.20926, "cached": false, "tag": "deals"}
+{"ts": "2026-04-22T03:02:58.198137+00:00", "model": "haiku", "input_tokens": 100, "output_tokens": 50, "cost_usd": 0.001, "cached": false}
+{"ts": "2026-04-22T03:02:58.206071+00:00", "model": "haiku", "input_tokens": 100, "output_tokens": 50, "cost_usd": 0.001, "cached": false}
+{"ts": "2026-04-22T03:02:58.209151+00:00", "model": "haiku", "input_tokens": 100, "output_tokens": 50, "cost_usd": 0.0, "cached": true}
+{"ts": "2026-04-22T03:02:58.211139+00:00", "model": "haiku", "input_tokens": 100, "output_tokens": 50, "cost_usd": 0.001, "cached": false}
+{"ts": "2026-04-22T03:02:58.214499+00:00", "model": "sonnet", "input_tokens": 100, "output_tokens": 50, "cost_usd": 0.001, "cached": false}
+{"ts": "2026-04-22T03:02:58.219794+00:00", "model": "haiku", "input_tokens": 100, "output_tokens": 50, "cost_usd": 0.001, "cached": false}
+{"ts": "2026-04-22T03:02:58.222561+00:00", "model": "haiku", "input_tokens": 100, "output_tokens": 50, "cost_usd": 0.001, "cached": false}
+{"ts": "2026-04-22T03:02:58.226619+00:00", "model": "haiku", "input_tokens": 100, "output_tokens": 50, "cost_usd": 0.001, "cached": false}
+{"ts": "2026-04-22T03:02:58.230477+00:00", "model": "haiku", "input_tokens": 100, "output_tokens": 50, "cost_usd": 0.001, "cached": false}
+{"ts": "2026-04-22T03:02:58.233375+00:00", "model": "haiku", "input_tokens": 100, "output_tokens": 50, "cost_usd": 0.001, "cached": false}
+{"ts": "2026-04-22T03:03:10.279673+00:00", "model": "haiku", "input_tokens": 100, "output_tokens": 50, "cost_usd": 0.001, "cached": false}
+{"ts": "2026-04-22T03:03:10.290748+00:00", "model": "haiku", "input_tokens": 100, "output_tokens": 50, "cost_usd": 0.001, "cached": false}
+{"ts": "2026-04-22T03:03:10.298161+00:00", "model": "haiku", "input_tokens": 100, "output_tokens": 50, "cost_usd": 0.001, "cached": false}
+{"ts": "2026-04-22T03:03:10.305455+00:00", "model": "haiku", "input_tokens": 100, "output_tokens": 50, "cost_usd": 0.001, "cached": false}
+{"ts": "2026-04-22T03:03:10.323852+00:00", "model": "haiku", "input_tokens": 100, "output_tokens": 50, "cost_usd": 0.001, "cached": false}

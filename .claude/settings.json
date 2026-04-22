@@ -57,7 +57,8 @@
       "Bash(mkdir -p /workspaces/homestead-finder/frontend/public/data)",
       "Bash(cp /workspaces/homestead-finder/data/listings.json /workspaces/homestead-finder/frontend/public/data/listings.json)",
       "Bash(curl -s http://localhost:5173/data/listings.json)",
-      "Read(//home/vscode/.claude/**)"
+      "Read(//home/vscode/.claude/**)",
+      "mcp__chrome-devtools__*"
     ],
     "additionalDirectories": [
       "/workspaces/homestead-finder/data/source_registry",
