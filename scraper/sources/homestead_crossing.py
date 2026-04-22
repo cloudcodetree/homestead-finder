@@ -44,9 +44,19 @@ def parse_homestead_crossing_html(
     soup = BeautifulSoup(html, "lxml")
     results: list[dict[str, Any]] = []
     for card in soup.select(".rmwb_listing-wrapper"):
-        status = (card.get("data-status") or "").lower()
-        if status in ("sold", "pending", "under contract"):
-            continue
+        raw_status = (card.get("data-status") or "").strip().lower()
+        # Map source-side statuses onto the app's status vocabulary.
+        # We no longer drop sold/pending — including them as
+        # under-contract / expired rows lets the frontend offer a
+        # filter toggle (default hides them) while still surfacing
+        # the inventory in the data file for anyone who wants to
+        # dig through recent market activity.
+        if raw_status in ("sold",):
+            listing_status = "expired"
+        elif raw_status in ("pending", "under contract", "contract"):
+            listing_status = "pending"
+        else:
+            listing_status = "active"
 
         link = card.select_one("a[href*='/detail/?uid=']")
         if not link:
@@ -145,6 +155,7 @@ def parse_homestead_crossing_html(
                 "county": county,
                 "description": description,
                 "images": images,
+                "listingStatus": listing_status,
             }
         )
     return results
@@ -342,6 +353,10 @@ class HomesteadCrossingScraper(BaseScraper):
             return None
         description = str(raw.get("description", ""))[:1500]
         images = [u for u in (raw.get("images") or []) if isinstance(u, str) and u]
+        # Carry source-declared listingStatus through to the RawListing
+        # so base.to_property can stamp it onto the final dict, overriding
+        # the default "active". Sold/pending rows keep their flag.
+        raw.setdefault("listingStatus", "active")
         return RawListing(
             external_id=str(raw.get("id", "")),
             title=title,

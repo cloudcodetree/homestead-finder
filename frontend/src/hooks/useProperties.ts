@@ -31,6 +31,12 @@ const applyFilters = (properties: Property[], filters: FilterState): Property[] 
       if (!hasAll) return false;
     }
     if (filters.hideWithRedFlags && (p.redFlags?.length ?? 0) > 0) return false;
+    // Hide listings marked expired/pending/under-contract by the
+    // source. Tax-sale rows keep their own `status="tax_sale"` which
+    // is never treated as inactive.
+    if (filters.hideInactive && (p.status === 'expired' || p.status === 'pending')) {
+      return false;
+    }
     return true;
   });
 };

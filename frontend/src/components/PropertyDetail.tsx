@@ -37,7 +37,14 @@ const ValidationBadge = ({ status }: { status?: Property['status'] }) => {
   if (s === 'expired') {
     return (
       <span className="inline-flex items-center gap-1 rounded-full bg-red-50 border border-red-200 px-2 py-0.5 text-xs font-medium text-red-600">
-        ✗ Expired
+        ✗ Sold
+      </span>
+    );
+  }
+  if (s === 'pending') {
+    return (
+      <span className="inline-flex items-center gap-1 rounded-full bg-blue-50 border border-blue-200 px-2 py-0.5 text-xs font-medium text-blue-700">
+        ⟳ Pending / Under Contract
       </span>
     );
   }

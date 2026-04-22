@@ -169,14 +169,31 @@ class CountyTaxScraper(BaseScraper):
 
     # ── record → RawListing ────────────────────────────────────────────────
 
+    def _plss_lookup(self, raw: dict[str, Any]) -> tuple[float, float] | None:
+        """Convert a tax-sale record's legal description to lat/lng via
+        BLM's PLSS cadastral service. Imported lazily so the module
+        stays importable in minimal envs (tests don't need BLM)."""
+        legal = raw.get("legalDescription") or ""
+        state = (raw.get("state") or "").upper()
+        if not legal or not state:
+            return None
+        try:
+            from plss_lookup import lookup_from_legal
+        except ImportError:
+            return None
+        return lookup_from_legal(state, legal)
+
     def parse(self, raw: dict[str, Any]) -> RawListing | None:
         """Map a parsed tax-sale record into the shared RawListing shape.
 
         These rows don't have a listing price per se — they have an amount
         owed. We place that in `price` as a useful stand-in (it's the
         minimum bid to claim the lien certificate) and set `acreage=0`
-        since the PDF lists don't carry parcel size. Geocoding + county
-        parcel lookup will enrich downstream.
+        since the PDF lists don't carry parcel size. If the legal
+        description contains PLSS tokens (Section/Township/Range), we
+        resolve lat/lng via BLM's national cadastral dataset so the
+        parcel lands on the Map + gets geo-enriched just like a normal
+        for-sale listing.
         """
         owner = str(raw.get("owner", "")).strip()
         parcel = str(raw.get("parcelId", "")).strip()
@@ -216,6 +233,11 @@ class CountyTaxScraper(BaseScraper):
             if list_url
             else f"parcel://{state}/{county}/{parcel}"
         )
+        # PLSS → lat/lng via BLM's national cadastral dataset. Falls
+        # back cleanly to (None, None) on any lookup failure so rows
+        # with non-standard legals or missing township polygons still
+        # get stored — just without map pins.
+        latlng = self._plss_lookup(raw)
         return RawListing(
             external_id=f"{state}_{county}_{parcel}".lower().replace(" ", "_"),
             title=title,
@@ -223,6 +245,8 @@ class CountyTaxScraper(BaseScraper):
             acreage=0.0,  # unknown until parcel lookup
             state=state,
             county=county,
+            lat=latlng[0] if latlng else None,
+            lng=latlng[1] if latlng else None,
             features=extract_features(f"{title} {description}"),
             description=description,
             url=parcel_url,

@@ -50,12 +50,16 @@ SAMPLE_HTML = """
 """
 
 
-def test_html_parser_skips_sold_listings():
+def test_html_parser_includes_sold_rows_with_expired_status():
+    """Sold rows used to be filtered out at parse time. They're now
+    kept with listingStatus="expired" so the frontend can offer a
+    filter toggle instead of losing the inventory entirely."""
     items = parse_homestead_crossing_html(SAMPLE_HTML, default_state="MO")
-    ids = {item["id"] for item in items}
-    # Sold row (uid=1135) filtered out
-    assert "1135" not in ids
-    assert ids == {"1001", "2001"}
+    by_id = {item["id"]: item for item in items}
+    assert "1135" in by_id
+    assert by_id["1135"]["listingStatus"] == "expired"
+    assert by_id["1001"]["listingStatus"] == "active"
+    assert by_id["2001"]["listingStatus"] == "active"
 
 
 def test_html_parser_extracts_price_and_acreage():

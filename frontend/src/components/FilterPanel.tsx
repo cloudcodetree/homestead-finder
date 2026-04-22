@@ -302,7 +302,7 @@ export const FilterPanel = ({
           </div>
 
           {/* Hide red flags */}
-          <div className="mb-5">
+          <div className="mb-3">
             <label className="flex items-center gap-2 cursor-pointer">
               <input
                 type="checkbox"
@@ -311,6 +311,21 @@ export const FilterPanel = ({
                 className="rounded border-gray-300 text-purple-600 focus:ring-purple-500"
               />
               <span className="text-sm text-gray-700">Hide listings with red flags</span>
+            </label>
+          </div>
+
+          {/* Hide inactive (sold / pending / under contract) */}
+          <div className="mb-5">
+            <label className="flex items-center gap-2 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={filters.hideInactive}
+                onChange={(e) => onUpdateFilter('hideInactive', e.target.checked)}
+                className="rounded border-gray-300 text-gray-600 focus:ring-gray-500"
+              />
+              <span className="text-sm text-gray-700">
+                Hide sold / pending / under contract
+              </span>
             </label>
           </div>
 

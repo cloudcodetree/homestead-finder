@@ -173,7 +173,13 @@ class BaseScraper(ABC):
             "dealScore": 0,  # Set by scoring engine after normalization
             "description": raw.description,
             "daysOnMarket": raw.days_on_market,
-            "status": "active",
+            # Default = "active"; sources that detect sold/pending/
+            # under-contract on the card (HomesteadCrossing, OzarkLand
+            # with data-status attrs) bubble that up via raw.raw and
+            # we promote it here. Tax-sale subclass overrides to
+            # "tax_sale" regardless. Frontend offers a filter toggle
+            # to hide expired/pending when set.
+            "status": (raw.raw or {}).get("listingStatus") or "active",
             # Only include `images` when we actually captured some —
             # keeps the JSON diff small for sources that don't (yet)
             # extract gallery URLs. Frontend treats absent == empty.

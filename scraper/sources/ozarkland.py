@@ -203,11 +203,18 @@ def parse_ozarkland_html(html: str) -> list[dict[str, Any]]:
 
         card_text = card.get_text(" ", strip=True)
 
-        # Status
+        # Status — Oz cards use `<div class="sale">available|sold|pending
+        # </div>`. We keep the listing but map source-side status to our
+        # vocabulary so the frontend can hide expired / pending rows via
+        # a filter toggle.
         sale_div = card.select_one(".sale")
-        status = (sale_div.get_text(strip=True) if sale_div else "").lower()
-        if status in ("sold", "pending", "off market"):
-            continue
+        status_raw = (sale_div.get_text(strip=True) if sale_div else "").lower()
+        if status_raw == "sold":
+            listing_status = "expired"
+        elif status_raw in ("pending", "off market", "under contract"):
+            listing_status = "pending"
+        else:
+            listing_status = "active"
 
         # Price — first <span class="page-price">NN,NNN</span>
         price_span = card.select_one(".page-price, .price .page-price")
@@ -270,6 +277,7 @@ def parse_ozarkland_html(html: str) -> list[dict[str, Any]]:
                 "county": county,
                 "description": description[:1500],
                 "images": images,
+                "listingStatus": listing_status,
             }
         )
     return results

@@ -207,7 +207,7 @@ export interface Property {
   images?: string[];
   validated?: boolean;
   validatedAt?: string;
-  status?: 'active' | 'expired' | 'unverified' | 'tax_sale';
+  status?: 'active' | 'expired' | 'pending' | 'unverified' | 'tax_sale';
   /** Populated when status === 'tax_sale'. */
   taxSale?: TaxSale;
   // AI enrichment (added by scraper/enrich.py — optional because not every
@@ -266,6 +266,10 @@ export interface FilterState {
   aiTags: AITag[];
   minHomesteadFit: number;
   hideWithRedFlags: boolean;
+  /** Hide listings whose source marked them sold / pending / under
+   * contract. Default true so the List view stays focused on things
+   * a buyer could actually pursue. */
+  hideInactive: boolean;
 }
 
 export const DEFAULT_FILTERS: FilterState = {
@@ -283,6 +287,7 @@ export const DEFAULT_FILTERS: FilterState = {
   aiTags: [],
   minHomesteadFit: 0,
   hideWithRedFlags: false,
+  hideInactive: true,
 };
 
 export const FEATURE_LABELS: Record<PropertyFeature, string> = {
