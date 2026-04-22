@@ -73,17 +73,23 @@ export const PropertyDetail = ({ property, onClose }: PropertyDetailProps) => {
     // through the overlay when a listing was opened from the map.
     <div className="fixed inset-0 z-[9999] flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black/50">
       <div className="relative bg-white w-full sm:max-w-2xl sm:rounded-xl shadow-2xl max-h-[90vh] overflow-y-auto">
-        {/* Floating close button — positioned over the hero image so
-            it's always reachable, even before the sticky header comes
-            into view. Dark-glass backdrop keeps it legible over both
-            bright skies and dark forest photos. */}
-        <button
-          onClick={onClose}
-          aria-label="Close"
-          className="absolute top-3 right-3 z-20 w-9 h-9 rounded-full bg-black/40 hover:bg-black/60 backdrop-blur-sm text-white text-lg leading-none flex items-center justify-center transition-colors shadow-lg"
-        >
-          ✕
-        </button>
+        {/* Sticky close-button anchor — a zero-height sticky container
+            keeps the absolutely-positioned button pinned to the top of
+            the modal's viewport as the user scrolls. Previously the
+            button was absolute-positioned over the hero image and
+            scrolled away with content; users had to scroll back up to
+            dismiss the modal. Now it floats at top-right regardless of
+            scroll position. Dark-glass backdrop keeps it legible over
+            the hero image at the top AND the white content below. */}
+        <div className="sticky top-0 z-20 h-0">
+          <button
+            onClick={onClose}
+            aria-label="Close"
+            className="absolute top-3 right-3 w-9 h-9 rounded-full bg-black/50 hover:bg-black/70 backdrop-blur-sm text-white text-lg leading-none flex items-center justify-center transition-colors shadow-lg"
+          >
+            ✕
+          </button>
+        </div>
         {/* Hero image — full-bleed banner above the sticky header.
             Phase 1 shows the primary image only; Phase 2 will replace
             this with a swipeable carousel when the scraper captures
