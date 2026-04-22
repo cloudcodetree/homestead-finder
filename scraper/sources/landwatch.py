@@ -250,6 +250,20 @@ class LandWatchScraper(BaseScraper):
     BASE_URL = "https://www.landwatch.com"
     RATE_LIMIT_SECONDS = 2.5
 
+    # Counties where we want deeper coverage than the state-wide default.
+    # Each entry maps a state code → list of LandWatch county URL slugs.
+    # Useful when a homestead-target area is underrepresented on the
+    # state-default search sort (ranked by "featured" listings, which
+    # over-weights metropolitan fringe over rural Ozarks).
+    PRIORITY_COUNTY_SLUGS: dict[str, list[str]] = {
+        # Eureka Springs is in Carroll County; nearby Ozark counties
+        # follow the same land-market profile (small rural acreage,
+        # owner-finance deals, spring-fed water).
+        "AR": ["carroll-county", "boone-county", "madison-county", "newton-county"],
+        # MO Ozark belt around the MO-AR border — homestead country.
+        "MO": ["howell-county", "texas-county", "oregon-county", "douglas-county", "ozark-county"],
+    }
+
     def _state_url(self, state: str, page: int) -> str:
         slug = slug_for(state)
         if not slug:
@@ -257,47 +271,89 @@ class LandWatchScraper(BaseScraper):
         base = f"{self.BASE_URL}/{slug}-land-for-sale"
         return base if page == 1 else f"{base}/page-{page}"
 
+    def _county_url(self, state: str, county_slug: str, page: int) -> str:
+        """Build a LandWatch county-specific search URL.
+
+        Verified URL shape (2026-04-22):
+            /arkansas-land-for-sale/carroll-county
+            /arkansas-land-for-sale/carroll-county/page-2
+        The `{county}-{state}-land-for-sale` shape (which looked natural)
+        silently redirects to a generic `/land` page with listings from
+        all over the country, so we use the explicit `{state}-land-for-
+        sale/{county}-county` form.
+        """
+        state_name = slug_for(state)
+        if not state_name:
+            return ""
+        base = f"{self.BASE_URL}/{state_name}-land-for-sale/{county_slug}"
+        return base if page == 1 else f"{base}/page-{page}"
+
     def get_page_urls(self, state: str, max_pages: int = 5) -> list[str]:
         """Return search URLs — used by AI fallback when fetch() returns 0."""
         urls = [self._state_url(state, p) for p in range(1, max_pages + 1)]
         return [u for u in urls if u]
 
-    def fetch(self, state: str, max_pages: int = 5) -> list[dict[str, Any]]:
-        """Fetch listings via the adaptive strategy chain.
+    def _fetch_url_page(
+        self, url: str, state: str, context: str
+    ) -> list[dict[str, Any]]:
+        """Fetch one search URL and parse to listing dicts. Returns
+        empty list on any failure (logged) so callers can stop
+        pagination cleanly."""
+        try:
+            fetch_result = self.fetch_page(url)
+        except AllStrategiesFailed as e:
+            log.info(f"[landwatch] all strategies failed for {url}: {e}")
+            return []
+        except Exception as e:  # pragma: no cover — defensive
+            log.info(f"[landwatch] fetch error for {url}: {e}")
+            return []
+        if fetch_result.content_type == "markdown":
+            page_results = parse_markdown_listings(fetch_result.content, state)
+        else:
+            page_results = self._parse_html_page(fetch_result.content, state)
+        log.info(
+            f"[landwatch] {context}: {len(page_results)} listings "
+            f"(via {fetch_result.strategy_name}, {fetch_result.content_type})"
+        )
+        return page_results
 
-        Dispatches parsing based on the content type returned by the chain:
-        HTML → BeautifulSoup card parser; markdown → markdown regex parser.
+    def fetch(self, state: str, max_pages: int = 5) -> list[dict[str, Any]]:
+        """Fetch listings from the state-wide search + any priority
+        county URLs registered for the state.
+
+        Priority counties ensure our homestead-target regions (Ozark
+        belt in MO+AR, Eureka Springs corridor) aren't drowned out by
+        LandWatch's default "featured" sort that tends to over-weight
+        metropolitan fringe properties. Each priority county is
+        scraped at max_pages/2 depth (or 1 if max_pages is 1) — the
+        county feeds are narrower, so fewer pages go further.
         """
         results: list[dict[str, Any]] = []
+
+        # 1. State-wide sweep
         for page in range(1, max_pages + 1):
             url = self._state_url(state, page)
             if not url:
                 log.info(f"[landwatch] unknown state {state}; skipping")
                 return results
-
-            try:
-                fetch_result = self.fetch_page(url)
-            except AllStrategiesFailed as e:
-                log.info(f"[landwatch] all strategies failed for {url}: {e}")
-                break
-            except Exception as e:  # pragma: no cover — defensive
-                log.info(f"[landwatch] fetch error for {url}: {e}")
-                break
-
-            if fetch_result.content_type == "markdown":
-                page_results = parse_markdown_listings(fetch_result.content, state)
-            else:
-                page_results = self._parse_html_page(fetch_result.content, state)
-
-            log.info(
-                f"[landwatch] {state} page {page}: "
-                f"{len(page_results)} listings "
-                f"(via {fetch_result.strategy_name}, {fetch_result.content_type})"
-            )
+            page_results = self._fetch_url_page(url, state, f"{state} state p{page}")
             if not page_results:
-                # Empty page — stop paginating to save quota
                 break
             results.extend(page_results)
+
+        # 2. Priority county deep-dive
+        county_pages = max(1, max_pages // 2)
+        for county_slug in self.PRIORITY_COUNTY_SLUGS.get(state.upper(), []):
+            for page in range(1, county_pages + 1):
+                url = self._county_url(state, county_slug, page)
+                if not url:
+                    break
+                page_results = self._fetch_url_page(
+                    url, state, f"{state}/{county_slug} p{page}"
+                )
+                if not page_results:
+                    break
+                results.extend(page_results)
 
         return results
 
