@@ -1,5 +1,5 @@
-import { useCallback, useMemo, useState, lazy, Suspense } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useCallback, useEffect, useMemo, useState, lazy, Suspense } from 'react';
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { Property, DEFAULT_FILTERS, SortBy, SORT_LABELS } from '../types/property';
 import { PropertyCard } from './PropertyCard';
 import { FilterPanel } from './FilterPanel';
@@ -60,6 +60,21 @@ export const Dashboard = () => {
   const [onlySaved, setOnlySaved] = useState(false);
   const { user: currentUser } = useAuth();
   const { savedIds } = useSavedListings();
+
+  // Deep-linkable "show only saved" flag — the account menu navigates
+  // to /?saved=1 when the user clicks "My saved listings" so bookmark
+  // links land them on the filtered view immediately. Stripped from the
+  // URL once consumed so reloading doesn't re-apply the flag when the
+  // user has toggled it off manually.
+  const [searchParams, setSearchParams] = useSearchParams();
+  useEffect(() => {
+    if (searchParams.get('saved') === '1') {
+      setOnlySaved(true);
+      const next = new URLSearchParams(searchParams);
+      next.delete('saved');
+      setSearchParams(next, { replace: true });
+    }
+  }, [searchParams, setSearchParams]);
   // States present in the loaded corpus — feeds the state filter so it
   // reflects actual inventory (not a hardcoded list). Stable reference
   // via useMemo so FilterPanel doesn't thrash.
@@ -224,7 +239,7 @@ export const Dashboard = () => {
           >
             🔔
           </button>
-          <AuthButton />
+          <AuthButton onOpenNotifications={() => setShowNotifications(true)} />
         </div>
       </header>
 

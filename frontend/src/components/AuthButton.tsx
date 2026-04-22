@@ -1,20 +1,30 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
+
+interface AuthButtonProps {
+  /** Called when the user clicks "Notification settings" — parent
+   * owns the modal state (it's the same modal the bell icon opens)
+   * so there's one notifications surface regardless of entry point. */
+  onOpenNotifications?: () => void;
+}
 
 /**
  * Auth entry point for the top-right header. Three visual states:
  *
- *   - Supabase not configured → render nothing. Keeps a public fork
- *     deploy clean when the env vars aren't set.
+ *   - Supabase not configured → render nothing.
  *   - Not signed in → "Sign in" pill that opens a modal sheet with
- *     two options: email magic-link (primary) and Google OAuth. The
- *     sheet is modal so it's dismissable with a click outside.
- *   - Signed in → avatar + dropdown with the user's email + sign-out.
+ *     email magic-link (primary) and Google OAuth.
+ *   - Signed in → avatar + account menu (name/email, quick links,
+ *     notification settings, sign out). Menu items here consolidate
+ *     the settings surface the user asked for in an hamburger-style
+ *     dropdown.
  */
-export const AuthButton = () => {
+export const AuthButton = ({ onOpenNotifications }: AuthButtonProps) => {
   const { user, loading, configured, loginWithGoogle, loginWithEmail, logout } = useAuth();
   const [sheetOpen, setSheetOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const navigate = useNavigate();
 
   if (!configured || loading) return null;
 
@@ -34,46 +44,143 @@ export const AuthButton = () => {
   }
 
   const avatarUrl = (user.user_metadata?.avatar_url as string | undefined) ?? null;
-  const initials = (user.email ?? '?')[0]?.toUpperCase() ?? '?';
+  const displayName =
+    (user.user_metadata?.full_name as string | undefined) ??
+    (user.user_metadata?.name as string | undefined) ??
+    user.email ??
+    'Signed in';
+  const initials = (displayName[0] ?? '?').toUpperCase();
+
+  const closeMenu = () => setMenuOpen(false);
 
   return (
     <div className="relative">
       <button
         onClick={() => setMenuOpen((v) => !v)}
-        className="flex items-center gap-2 rounded-full border border-gray-200 bg-white px-1 py-1 hover:border-gray-300 transition-colors"
-        title={user.email ?? 'Signed in'}
+        aria-label="Account menu"
+        aria-expanded={menuOpen}
+        className={`flex items-center gap-1 rounded-full border bg-white pl-1 pr-1.5 py-1 transition-colors ${
+          menuOpen ? 'border-gray-400 shadow-sm' : 'border-gray-200 hover:border-gray-300'
+        }`}
+        title={user.email ?? 'Account'}
       >
         {avatarUrl ? (
-          <img src={avatarUrl} alt="" className="w-7 h-7 rounded-full" />
+          <img src={avatarUrl} alt="" className="w-7 h-7 rounded-full" referrerPolicy="no-referrer" />
         ) : (
           <span className="w-7 h-7 rounded-full bg-gradient-to-br from-green-500 to-green-700 text-white text-xs font-bold flex items-center justify-center">
             {initials}
           </span>
         )}
+        {/* Chevron — gives users the affordance that this is a menu.
+            Earlier design was just a bare avatar; some users didn't
+            realize it was clickable. */}
+        <svg
+          viewBox="0 0 20 20"
+          className={`w-3.5 h-3.5 text-gray-500 transition-transform ${menuOpen ? 'rotate-180' : ''}`}
+          fill="currentColor"
+          aria-hidden="true"
+        >
+          <path d="M5.8 7.5a.75.75 0 011.06 0L10 10.64l3.14-3.14a.75.75 0 111.06 1.06l-3.67 3.67a.75.75 0 01-1.06 0L5.8 8.56a.75.75 0 010-1.06z" />
+        </svg>
       </button>
       {menuOpen && (
         <>
-          <div className="fixed inset-0 z-30" onClick={() => setMenuOpen(false)} />
-          <div className="absolute right-0 mt-1 z-40 w-56 rounded-lg bg-white border border-gray-200 shadow-lg py-1 text-sm">
-            <div className="px-3 py-2 border-b border-gray-100">
-              <p className="text-xs text-gray-500">Signed in as</p>
-              <p className="font-medium text-gray-900 truncate">{user.email}</p>
+          <div className="fixed inset-0 z-30" onClick={closeMenu} />
+          <div
+            role="menu"
+            className="absolute right-0 mt-1 z-40 w-64 rounded-lg bg-white border border-gray-200 shadow-xl overflow-hidden text-sm"
+          >
+            {/* Identity header */}
+            <div className="px-3 py-3 border-b border-gray-100 flex items-center gap-2.5">
+              {avatarUrl ? (
+                <img
+                  src={avatarUrl}
+                  alt=""
+                  className="w-9 h-9 rounded-full"
+                  referrerPolicy="no-referrer"
+                />
+              ) : (
+                <span className="w-9 h-9 rounded-full bg-gradient-to-br from-green-500 to-green-700 text-white font-bold flex items-center justify-center">
+                  {initials}
+                </span>
+              )}
+              <div className="min-w-0 flex-1">
+                <p className="font-medium text-gray-900 truncate">{displayName}</p>
+                {displayName !== user.email && (
+                  <p className="text-xs text-gray-500 truncate">{user.email}</p>
+                )}
+              </div>
             </div>
-            <button
+
+            {/* Actions */}
+            <MenuItem
               onClick={() => {
-                void logout();
-                setMenuOpen(false);
+                closeMenu();
+                navigate('/?saved=1');
               }}
-              className="w-full text-left px-3 py-2 hover:bg-gray-50 text-gray-700"
-            >
-              Sign out
-            </button>
+              icon={
+                <svg viewBox="0 0 24 24" className="w-4 h-4" fill="currentColor">
+                  <path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z" />
+                </svg>
+              }
+              label="My saved listings"
+            />
+            {onOpenNotifications && (
+              <MenuItem
+                onClick={() => {
+                  closeMenu();
+                  onOpenNotifications();
+                }}
+                icon={<span>🔔</span>}
+                label="Notification settings"
+              />
+            )}
+            <div className="border-t border-gray-100" />
+            <MenuItem
+              onClick={() => {
+                closeMenu();
+                void logout();
+              }}
+              icon={
+                <svg viewBox="0 0 24 24" className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4" />
+                  <polyline points="16 17 21 12 16 7" />
+                  <line x1="21" y1="12" x2="9" y2="12" />
+                </svg>
+              }
+              label="Sign out"
+              tone="danger"
+            />
           </div>
         </>
       )}
     </div>
   );
 };
+
+interface MenuItemProps {
+  onClick: () => void;
+  icon: React.ReactNode;
+  label: string;
+  tone?: 'default' | 'danger';
+}
+
+const MenuItem = ({ onClick, icon, label, tone = 'default' }: MenuItemProps) => (
+  <button
+    onClick={onClick}
+    role="menuitem"
+    className={`w-full flex items-center gap-2.5 px-3 py-2 text-left transition-colors ${
+      tone === 'danger'
+        ? 'text-red-600 hover:bg-red-50'
+        : 'text-gray-700 hover:bg-gray-50'
+    }`}
+  >
+    <span className={`w-5 flex items-center justify-center ${tone === 'danger' ? 'text-red-500' : 'text-gray-400'}`}>
+      {icon}
+    </span>
+    <span>{label}</span>
+  </button>
+);
 
 interface SignInSheetProps {
   onClose: () => void;
