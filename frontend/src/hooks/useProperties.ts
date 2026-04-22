@@ -1,5 +1,6 @@
 import { useCallback, useMemo } from 'react';
 import { Property, FilterState } from '../types/property';
+import { getListingTypeStyle } from '../utils/listingType';
 import { useJsonAsset } from './useJsonAsset';
 
 const applyFilters = (properties: Property[], filters: FilterState): Property[] => {
@@ -9,6 +10,10 @@ const applyFilters = (properties: Property[], filters: FilterState): Property[] 
     if (p.pricePerAcre > filters.maxPricePerAcre) return false;
     if (p.dealScore < filters.minDealScore) return false;
     if (filters.states.length > 0 && !filters.states.includes(p.location.state)) return false;
+    if (filters.listingVariants.length > 0) {
+      const variant = getListingTypeStyle(p).variant;
+      if (!filters.listingVariants.includes(variant)) return false;
+    }
     if (filters.features.length > 0) {
       const hasAll = filters.features.every((f) => p.features.includes(f));
       if (!hasAll) return false;

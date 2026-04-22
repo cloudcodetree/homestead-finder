@@ -61,7 +61,18 @@ export const PropertyDetail = ({ property, onClose }: PropertyDetailProps) => {
 
   return (
     <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black/50">
-      <div className="bg-white w-full sm:max-w-2xl sm:rounded-xl shadow-2xl max-h-[90vh] overflow-y-auto">
+      <div className="relative bg-white w-full sm:max-w-2xl sm:rounded-xl shadow-2xl max-h-[90vh] overflow-y-auto">
+        {/* Floating close button — positioned over the hero image so
+            it's always reachable, even before the sticky header comes
+            into view. Dark-glass backdrop keeps it legible over both
+            bright skies and dark forest photos. */}
+        <button
+          onClick={onClose}
+          aria-label="Close"
+          className="absolute top-3 right-3 z-20 w-9 h-9 rounded-full bg-black/40 hover:bg-black/60 backdrop-blur-sm text-white text-lg leading-none flex items-center justify-center transition-colors shadow-lg"
+        >
+          ✕
+        </button>
         {/* Hero image — full-bleed banner above the sticky header.
             Phase 1 shows the primary image only; Phase 2 will replace
             this with a swipeable carousel when the scraper captures
@@ -80,12 +91,6 @@ export const PropertyDetail = ({ property, onClose }: PropertyDetailProps) => {
             <div className={`rounded-full px-3 py-1 text-sm font-bold ${scoreColor}`}>
               {property.dealScore} — {getDealScoreLabel(property.dealScore)}
             </div>
-            <button
-              onClick={onClose}
-              className="text-gray-400 hover:text-gray-600 text-xl font-light leading-none"
-            >
-              ✕
-            </button>
           </div>
         </div>
 

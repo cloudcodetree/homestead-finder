@@ -35,6 +35,15 @@ export const useFilters = () => {
     }));
   }, []);
 
+  const toggleListingVariant = useCallback((variant: string) => {
+    setFilters((prev) => ({
+      ...prev,
+      listingVariants: prev.listingVariants.includes(variant)
+        ? prev.listingVariants.filter((v) => v !== variant)
+        : [...prev.listingVariants, variant],
+    }));
+  }, []);
+
   const resetFilters = useCallback(() => {
     setFilters(DEFAULT_FILTERS);
   }, []);
@@ -43,6 +52,7 @@ export const useFilters = () => {
     filters.states.length > 0 ||
     filters.features.length > 0 ||
     filters.aiTags.length > 0 ||
+    filters.listingVariants.length > 0 ||
     filters.minDealScore > 0 ||
     filters.minHomesteadFit > 0 ||
     filters.hideWithRedFlags ||
@@ -58,6 +68,7 @@ export const useFilters = () => {
     toggleState,
     toggleFeature,
     toggleAITag,
+    toggleListingVariant,
     resetFilters,
     hasActiveFilters,
   };

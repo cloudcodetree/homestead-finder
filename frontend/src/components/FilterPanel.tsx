@@ -7,6 +7,7 @@ import {
   SortBy,
   SORT_LABELS,
 } from '../types/property';
+import { ALL_LISTING_VARIANTS } from '../utils/listingType';
 
 interface FilterPanelProps {
   filters: FilterState;
@@ -14,6 +15,7 @@ interface FilterPanelProps {
   onToggleState: (state: string) => void;
   onToggleFeature: (feature: PropertyFeature) => void;
   onToggleAITag: (tag: AITag) => void;
+  onToggleListingVariant: (variant: string) => void;
   onReset: () => void;
   hasActiveFilters: boolean;
   resultCount: number;
@@ -21,6 +23,9 @@ interface FilterPanelProps {
    * buttons so they reflect actual inventory instead of a stale hardcoded
    * list. Falls back to a sensible default if empty (e.g. first paint). */
   availableStates?: string[];
+  /** Listing-type variants present in the currently-loaded data. Hides
+   * filter buttons for categories with zero inventory. */
+  availableListingVariants?: string[];
   /** When true, the panel's built-in header is suppressed (parent renders its own) */
   hideHeader?: boolean;
 }
@@ -36,14 +41,23 @@ export const FilterPanel = ({
   onToggleState,
   onToggleFeature,
   onToggleAITag,
+  onToggleListingVariant,
   onReset,
   hasActiveFilters,
   resultCount,
   availableStates,
+  availableListingVariants,
   hideHeader = false,
 }: FilterPanelProps) => {
   const statesToShow =
     availableStates && availableStates.length > 0 ? [...availableStates].sort() : FALLBACK_STATES;
+  // Only surface variant buttons for categories actually present in
+  // the data — hides "Tax Lien" when there are no WY-style parcels,
+  // etc. Falls back to all variants during first paint.
+  const variantsToShow =
+    availableListingVariants && availableListingVariants.length > 0
+      ? ALL_LISTING_VARIANTS.filter((v) => availableListingVariants.includes(v.variant))
+      : ALL_LISTING_VARIANTS;
   return (
     <div className="bg-white h-full">
       {!hideHeader && (
@@ -180,6 +194,33 @@ export const FilterPanel = ({
             <span>$100</span>
             <span>$5k</span>
             <span>$10k</span>
+          </div>
+        </div>
+
+        {/* Listing Type — colored pills matching the card accent stripes
+            + the map marker outer rings, so the UI tells one consistent
+            story across views. */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Listing Type</label>
+          <div className="flex flex-wrap gap-1.5">
+            {variantsToShow.map((v) => {
+              const active = filters.listingVariants.includes(v.variant);
+              return (
+                <button
+                  key={v.variant}
+                  onClick={() => onToggleListingVariant(v.variant)}
+                  title={v.description}
+                  className={`inline-flex items-center gap-1.5 rounded border px-2 py-0.5 text-xs font-medium transition-colors ${
+                    active
+                      ? `${v.badgePill} ring-2 ring-offset-1 ring-current/40`
+                      : 'bg-gray-100 text-gray-600 border-gray-200 hover:bg-gray-200'
+                  }`}
+                >
+                  <span className={`inline-block w-2 h-2 rounded-full ${v.accentBar}`} />
+                  {v.label}
+                </button>
+              );
+            })}
           </div>
         </div>
 

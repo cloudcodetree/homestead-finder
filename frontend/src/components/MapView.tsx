@@ -4,6 +4,7 @@ import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { Property } from '../types/property';
 import { formatPrice, formatAcreage, formatPricePerAcre } from '../utils/formatters';
+import { getListingTypeStyle } from '../utils/listingType';
 import { getDealScoreLabel } from '../utils/scoring';
 
 // Fix Leaflet default marker icons broken by Vite
@@ -14,21 +15,31 @@ L.Icon.Default.mergeOptions({
   shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
 });
 
-const createScoreIcon = (score: number) => {
-  const color =
-    score >= 80 ? '#22c55e' : score >= 65 ? '#eab308' : score >= 50 ? '#f97316' : '#9ca3af';
+/**
+ * Marker icon composition:
+ *   - Outer fill = deal-score color (green/yellow/orange/gray). Keeps
+ *     the at-a-glance "hot deal" cue.
+ *   - Inner ring = listing-type color (tax-sale variants, owner-finance,
+ *     standard). Tells the user whether they're looking at a marketplace
+ *     listing, an owner-finance parcel, or a tax-sale parcel.
+ *   - Center text = the deal score number.
+ */
+const createScoreIcon = (property: Property) => {
+  const s = property.dealScore;
+  const scoreColor = s >= 80 ? '#22c55e' : s >= 65 ? '#eab308' : s >= 50 ? '#f97316' : '#9ca3af';
+  const typeColor = getListingTypeStyle(property).markerHex;
   return L.divIcon({
     className: '',
     html: `<div style="
-      background:${color};
+      background:${scoreColor};
       color:white;
       border-radius:50%;
       width:32px;height:32px;
       display:flex;align-items:center;justify-content:center;
       font-size:11px;font-weight:700;
-      border:2px solid white;
-      box-shadow:0 1px 4px rgba(0,0,0,0.3);
-    ">${score}</div>`,
+      border:3px solid ${typeColor};
+      box-shadow:0 1px 4px rgba(0,0,0,0.35);
+    ">${s}</div>`,
     iconSize: [32, 32],
     iconAnchor: [16, 16],
   });
@@ -104,7 +115,7 @@ export const MapView = ({ properties, onSelectProperty }: MapViewProps) => {
             <Marker
               key={property.id}
               position={[property.location.lat, property.location.lng]}
-              icon={createScoreIcon(property.dealScore)}
+              icon={createScoreIcon(property)}
               eventHandlers={{ click: () => onSelectProperty(property.id) }}
             >
               <Popup maxWidth={280}>

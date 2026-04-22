@@ -15,6 +15,7 @@ import { useCurated } from '../hooks/useCurated';
 import { useHomesteadDeals } from '../hooks/useHomesteadDeals';
 import { QueryResponse } from '../hooks/useQueryServer';
 import { getDealScoreColor } from '../utils/scoring';
+import { getListingTypeStyle } from '../utils/listingType';
 import { formatPrice, formatAcreage } from '../utils/formatters';
 
 const MapView = lazy(() => import('./MapView').then((m) => ({ default: m.MapView })));
@@ -28,6 +29,7 @@ export const Dashboard = () => {
     toggleState,
     toggleFeature,
     toggleAITag,
+    toggleListingVariant,
     resetFilters,
     hasActiveFilters,
   } = useFilters();
@@ -63,6 +65,13 @@ export const Dashboard = () => {
             .filter((s): s is string => typeof s === 'string' && s.length > 0)
         )
       ),
+    [allProperties]
+  );
+  // Listing-type variants present in the corpus — drives which
+  // Listing Type filter buttons render (hides categories with zero
+  // inventory, e.g. "Tax Lien" when there are no WY parcels).
+  const availableListingVariants = useMemo(
+    () => Array.from(new Set(allProperties.map((p) => getListingTypeStyle(p).variant))),
     [allProperties]
   );
 
@@ -231,10 +240,12 @@ export const Dashboard = () => {
                 onToggleState={toggleState}
                 onToggleFeature={toggleFeature}
                 onToggleAITag={toggleAITag}
+                onToggleListingVariant={toggleListingVariant}
                 onReset={resetFilters}
                 hasActiveFilters={hasActiveFilters}
                 resultCount={properties.length}
                 availableStates={availableStates}
+                availableListingVariants={availableListingVariants}
                 hideHeader
               />
             </div>
@@ -282,10 +293,12 @@ export const Dashboard = () => {
               onToggleState={toggleState}
               onToggleFeature={toggleFeature}
               onToggleAITag={toggleAITag}
+              onToggleListingVariant={toggleListingVariant}
               onReset={resetFilters}
               hasActiveFilters={hasActiveFilters}
               resultCount={properties.length}
               availableStates={availableStates}
+              availableListingVariants={availableListingVariants}
               hideHeader
             />
           </div>

@@ -8,6 +8,7 @@ import {
   formatPricePerAcre,
   formatSourceName,
 } from '../utils/formatters';
+import { getListingTypeStyle } from '../utils/listingType';
 import { getDealScoreColor, getDealScoreLabel, getDealScoreBorderColor } from '../utils/scoring';
 
 interface PropertyCardProps {
@@ -49,6 +50,7 @@ const ValidationBadge = ({ status }: { status?: Property['status'] }) => {
 export const PropertyCard = ({ property, onClick, isSelected = false }: PropertyCardProps) => {
   const scoreColor = getDealScoreColor(property.dealScore);
   const scoreBorder = getDealScoreBorderColor(property.dealScore);
+  const typeStyle = getListingTypeStyle(property);
 
   return (
     <div
@@ -57,6 +59,10 @@ export const PropertyCard = ({ property, onClick, isSelected = false }: Property
       }`}
       onClick={() => onClick(property.id)}
     >
+      {/* Listing-type accent stripe — colored bar above the thumbnail
+          signals tax sale vs owner-finance vs standard for-sale at a
+          glance. Full-width, 4px tall. */}
+      <div className={`h-1 ${typeStyle.accentBar}`} aria-hidden="true" />
       <PropertyThumbnail property={property} width={400} className="w-full h-32" />
       <div className="p-4">
         <div className="flex items-start justify-between gap-2">
@@ -64,9 +70,17 @@ export const PropertyCard = ({ property, onClick, isSelected = false }: Property
             <h3 className="font-semibold text-gray-900 text-sm leading-tight truncate">
               {property.title}
             </h3>
-            <p className="text-xs text-gray-500 mt-0.5">
-              {formatCountyState(property.location.county, property.location.state)} &middot;{' '}
-              {formatSourceName(property.source)}
+            <p className="text-xs text-gray-500 mt-0.5 flex items-center gap-1.5 flex-wrap">
+              <span className="truncate">
+                {formatCountyState(property.location.county, property.location.state)} &middot;{' '}
+                {formatSourceName(property.source)}
+              </span>
+              <span
+                title={typeStyle.description}
+                className={`inline-flex items-center rounded border px-1.5 py-0 text-[10px] font-medium whitespace-nowrap ${typeStyle.badgePill}`}
+              >
+                {typeStyle.label}
+              </span>
             </p>
           </div>
           <div className="flex flex-col items-end gap-1 flex-shrink-0">

@@ -144,8 +144,15 @@ export interface TaxSale {
   amountOwedUsd: number;
   /** Typical month the in-person sale is held (1-12). */
   saleMonth?: number | null;
-  /** 'lien' = certificate auction (WY, MT), 'deed' = title auction (WA, TX). */
-  stateType?: 'lien' | 'deed';
+  /** Transaction type at auction:
+   *   - 'lien': certificate auction + redemption period (WY, MT)
+   *   - 'deed': title auction, no redemption (WA, TX)
+   *   - 'redeemable_deed': title auction + short post-sale redemption
+   *     window (AR 30-day, TN 1-yr, GA 1-yr)
+   *   - 'hybrid': mixed — early offerings lien-like, later convert to
+   *     deed (MO Collector's 1st/2nd/3rd offerings)
+   */
+  stateType?: 'lien' | 'deed' | 'redeemable_deed' | 'hybrid';
   state?: string;
   county?: string;
   listUrl?: string;
@@ -250,6 +257,10 @@ export interface FilterState {
   features: PropertyFeature[];
   minDealScore: number;
   sources: string[];
+  /** Listing-type filter (e.g. "tax_sale_redeemable_deed",
+   * "for_sale_owner_finance"). Empty array = no filter. Variants are
+   * derived per-row by `getListingTypeStyle` in utils/listingType.ts. */
+  listingVariants: string[];
   sortBy: SortBy;
   // AI-derived filters (all optional — default behavior is no filtering)
   aiTags: AITag[];
@@ -267,6 +278,7 @@ export const DEFAULT_FILTERS: FilterState = {
   features: [],
   minDealScore: 0,
   sources: [],
+  listingVariants: [],
   sortBy: 'dealScore',
   aiTags: [],
   minHomesteadFit: 0,
