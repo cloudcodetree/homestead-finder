@@ -36,3 +36,5 @@ responses==0.25.3
 
 # Utilities
 python-dotenv==1.0.1
+# seeds.yml parsing for the source-discovery pipeline
+PyYAML>=6.0

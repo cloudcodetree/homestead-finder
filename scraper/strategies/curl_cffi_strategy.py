@@ -25,6 +25,7 @@ import random
 import time
 from typing import Any
 
+import throttle
 from config import DEFAULT_RATE_LIMIT
 from strategies.base import FetchResult, FetchStrategy
 
@@ -72,20 +73,38 @@ class CurlCffiStrategy(FetchStrategy):
 
     def fetch(self, url: str, **kwargs: Any) -> FetchResult:
         """Fetch with Chrome TLS fingerprint. Raises on HTTP >= 400 so
-        the chain advances to the next strategy."""
+        the chain advances to the next strategy.
+
+        Shared throttle layer (robots.txt + per-domain bucket + 429
+        backoff + daily quota) runs first; local `_sleep` stays as a
+        floor when throttle is bypassed.
+        """
         from curl_cffi import requests as cffi_requests
 
+        throttle.acquire(url)
         self._sleep()
-        response = cffi_requests.get(
-            url,
-            impersonate=self.impersonate,
-            timeout=20,
-            params=kwargs.get("params"),
-        )
-        response.raise_for_status()
-        return FetchResult(
-            content=response.text,
-            content_type="html",
-            status_code=response.status_code,
-            strategy_name=self.name,
-        )
+        status: int | None = None
+        retry_after: float | None = None
+        try:
+            response = cffi_requests.get(
+                url,
+                impersonate=self.impersonate,
+                timeout=20,
+                params=kwargs.get("params"),
+            )
+            status = response.status_code
+            if status == 429:
+                ra = response.headers.get("Retry-After")
+                try:
+                    retry_after = float(ra) if ra else None
+                except ValueError:
+                    retry_after = None
+            response.raise_for_status()
+            return FetchResult(
+                content=response.text,
+                content_type="html",
+                status_code=response.status_code,
+                strategy_name=self.name,
+            )
+        finally:
+            throttle.release(url, status, retry_after=retry_after)

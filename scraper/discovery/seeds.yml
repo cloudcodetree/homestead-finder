@@ -1,0 +1,107 @@
+# Source-discovery seed queries.
+#
+# Each entry is a search template rendered against every {state}
+# (and optionally {region}, {county}) we currently target. The output
+# fed through discover.py → probe.py → rank.py surfaces candidate
+# land/FSBO/gov-surplus sites for human review.
+#
+# Add a new query whenever we uncover a channel shape we haven't
+# probed before (e.g. "probate listings", "estate auctions").
+# Remove a query if it reliably returns noise (SEO farms with no
+# inventory).
+
+# Target geography — kept in sync with scraper/config.py TARGET_STATES.
+# Expand when pivoting. The expander substitutes `{state}` / `{state_name}`
+# into every template below.
+states:
+  - { code: MO, name: "Missouri" }
+  - { code: AR, name: "Arkansas" }
+
+# Ozark-specific regional terms — used for region-scoped queries.
+regions:
+  - "Ozarks"
+  - "Ozark mountains"
+  - "Mark Twain National Forest"
+  - "Boston Mountains"
+
+# Category 1: FSBO / owner-finance — classifieds + niche sites
+fsbo_queries:
+  - '"for sale by owner" land {state_name} owner financing'
+  - 'FSBO rural land {state_name}'
+  - 'owner financed land for sale {state_name}'
+  - '{state_name} land contract for deed'
+  - 'land for sale no realtor {state_name}'
+  - 'cheap land {state_name} owner'
+
+# Category 2: Hyper-local brokerages + specialists (aggregator bypass)
+local_queries:
+  - '"{region}" rural property broker'
+  - '"{region}" land specialist'
+  - '{state_name} hunting land broker'
+  - '{state_name} timberland broker'
+  - '{state_name} rural real estate company'
+  - 'homestead for sale {state_name}'
+
+# Category 3: Government / foreclosure / surplus / tax records
+government_queries:
+  - '{state_name} tax delinquent land list'
+  - '{state_name} sheriff real estate sale'
+  - '{state_name} county commissioner land sale'
+  - 'probate real estate {state_name}'
+  - 'federal forfeiture real estate {state_name}'
+  - 'estate sale farm {state_name}'
+  - 'bankruptcy real estate {state_name}'
+
+# Category 4: Auctions + specialty
+auction_queries:
+  - 'online land auction {state_name}'
+  - 'farm auction {state_name}'
+  - 'land auction website'
+  - '{state_name} absolute auction land'
+
+# Blocklist — domains we already scrape OR are known-useless
+# aggregators / walled gardens / TOS-hostile. Discover.py filters
+# these out before probing.
+blocklist:
+  # Our known sources
+  - landwatch.com
+  - landsofamerica.com
+  - land.com
+  - homesteadcrossing.com
+  - ozarkland.com
+  - unitedcountry.com
+  - mossyoakproperties.com
+  - craigslist.org
+  - landhub.com
+  - zillow.com
+  - realtor.com
+  # Big aggregators with no FSBO signal or hostile bot walls
+  - redfin.com
+  - trulia.com
+  - homes.com
+  - realtytrac.com
+  - landandfarm.com          # Land.com redirect
+  - landflip.com             # 403/Cloudflare — investigated, skipped
+  - farmandranch.com         # 403/Cloudflare — investigated, skipped
+  - landsearch.com           # 403/Cloudflare — investigated, skipped
+  - fsbo.com                 # SPA, ~6 MO+AR listings — investigated, skipped
+  # Social / login-walled
+  - facebook.com
+  - nextdoor.com
+  - linkedin.com
+  - instagram.com
+  - pinterest.com
+  # SEO / listicle noise
+  - quora.com
+  - reddit.com
+  - youtube.com
+  - wikipedia.org
+  - medium.com
+  # Federal channels we investigated and dropped
+  - usmarshals.gov           # <1 MO/AR rural/yr
+  - bid4assets.com           # cloudflare SPA, mostly vehicles
+  - cwsmarketing.com         # <1 MO/AR rural/yr
+  - fsa.usda.gov             # no centralized feed
+  # News / blog noise
+  - news.yahoo.com
+  - msn.com

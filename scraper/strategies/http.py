@@ -8,6 +8,7 @@ from typing import Any
 
 import requests
 
+import throttle
 from config import USER_AGENT, DEFAULT_RATE_LIMIT
 from strategies.base import FetchResult, FetchStrategy
 
@@ -44,14 +45,33 @@ class SimpleHTTPStrategy(FetchStrategy):
         self._last_request = time.monotonic()
 
     def fetch(self, url: str, **kwargs: Any) -> FetchResult:
-        """Fetch URL with rate limiting. Raises on HTTP errors."""
+        """Fetch URL with rate limiting. Raises on HTTP errors.
+
+        The shared throttle layer (robots.txt + per-domain bucket +
+        429 backoff + daily quota) runs before our local `_sleep`;
+        local sleep is kept as a belt-and-suspenders floor in case
+        throttle is bypassed.
+        """
+        throttle.acquire(url)
         self._sleep()
         params = kwargs.get("params")
-        response = self.session.get(url, timeout=15, params=params)
-        response.raise_for_status()
-        return FetchResult(
-            content=response.text,
-            content_type="html",
-            status_code=response.status_code,
-            strategy_name=self.name,
-        )
+        status: int | None = None
+        retry_after: float | None = None
+        try:
+            response = self.session.get(url, timeout=15, params=params)
+            status = response.status_code
+            if status == 429:
+                ra = response.headers.get("Retry-After")
+                try:
+                    retry_after = float(ra) if ra else None
+                except ValueError:
+                    retry_after = None
+            response.raise_for_status()
+            return FetchResult(
+                content=response.text,
+                content_type="html",
+                status_code=response.status_code,
+                strategy_name=self.name,
+            )
+        finally:
+            throttle.release(url, status, retry_after=retry_after)
