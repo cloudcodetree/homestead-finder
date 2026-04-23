@@ -31,6 +31,8 @@ interface SavedListingsContextValue {
   savedIds: Set<string>;
   isSaved: (listingId: string) => boolean;
   toggle: (listingId: string) => Promise<void>;
+  getNote: (listingId: string) => string;
+  updateNote: (listingId: string, note: string) => Promise<void>;
   loading: boolean;
 }
 
@@ -43,19 +45,25 @@ interface SavedListingsProviderProps {
 export const SavedListingsProvider = ({ children }: SavedListingsProviderProps) => {
   const { user, configured } = useAuth();
   const [savedIds, setSavedIds] = useState<Set<string>>(new Set());
+  // Notes are stored alongside savedIds — one loads both in a single
+  // query, avoiding a round-trip-per-detail-open.
+  const [notes, setNotes] = useState<Map<string, string>>(new Map());
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (!configured || !user) {
       setSavedIds(new Set());
+      setNotes(new Map());
       return;
     }
     let cancelled = false;
     setLoading(true);
     api.savedListings
       .list()
-      .then((ids) => {
-        if (!cancelled) setSavedIds(new Set(ids));
+      .then((rows) => {
+        if (cancelled) return;
+        setSavedIds(new Set(rows.map((r) => r.listingId)));
+        setNotes(new Map(rows.map((r) => [r.listingId, r.note])));
       })
       .finally(() => {
         if (!cancelled) setLoading(false);
@@ -103,9 +111,38 @@ export const SavedListingsProvider = ({ children }: SavedListingsProviderProps) 
     [user]
   );
 
+  const getNote = useCallback(
+    (listingId: string) => notes.get(listingId) ?? '',
+    [notes]
+  );
+
+  const updateNote = useCallback(
+    async (listingId: string, note: string) => {
+      if (!user) throw new Error('Must be signed in');
+      // Optimistic update — flip local cache, revert on error.
+      const prev = notes.get(listingId) ?? '';
+      setNotes((m) => {
+        const next = new Map(m);
+        next.set(listingId, note);
+        return next;
+      });
+      try {
+        await api.savedListings.updateNote(listingId, note);
+      } catch (err) {
+        setNotes((m) => {
+          const next = new Map(m);
+          next.set(listingId, prev);
+          return next;
+        });
+        throw err;
+      }
+    },
+    [user, notes]
+  );
+
   const value = useMemo<SavedListingsContextValue>(
-    () => ({ savedIds, isSaved, toggle, loading }),
-    [savedIds, isSaved, toggle, loading]
+    () => ({ savedIds, isSaved, toggle, getNote, updateNote, loading }),
+    [savedIds, isSaved, toggle, getNote, updateNote, loading]
   );
 
   return createElement(SavedListingsContext.Provider, { value }, children);
@@ -119,6 +156,10 @@ export const useSavedListings = (): SavedListingsContextValue => {
     savedIds: new Set(),
     isSaved: () => false,
     toggle: async () => {
+      throw new Error('SavedListingsProvider missing');
+    },
+    getNote: () => '',
+    updateNote: async () => {
       throw new Error('SavedListingsProvider missing');
     },
     loading: false,

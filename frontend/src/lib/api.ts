@@ -86,21 +86,50 @@ const onAuthChange = (cb: (user: User | null) => void): (() => void) => {
 // ── Saved listings ───────────────────────────────────────────────
 
 /**
- * Return an array of listing IDs the current user has saved. Empty
- * array if not logged in or if Supabase isn't configured — callers
- * should treat "no saved listings" and "no auth" as equivalent for
- * UI purposes.
+ * Return the saved-listings set for the current user as a map of
+ * listingId → optional note text. Empty map if not logged in or if
+ * Supabase isn't configured.
+ *
+ * Returning a record (rather than just ids) lets consumers render the
+ * note inline without a second round-trip per listing detail open.
+ * Notes are usually empty, so payload stays small.
  */
-const listSaved = async (): Promise<string[]> => {
+export interface SavedListingRow {
+  listingId: string;
+  note: string;
+}
+
+const listSaved = async (): Promise<SavedListingRow[]> => {
   if (!supabase) return [];
   const user = await getUser();
   if (!user) return [];
   const { data, error } = await supabase
     .from(SAVED_LISTINGS_TABLE)
-    .select('listing_id')
+    .select('listing_id, note')
     .eq('user_id', user.id);
   if (error || !data) return [];
-  return data.map((r) => r.listing_id as string);
+  return data.map((r) => ({
+    listingId: r.listing_id as string,
+    note: (r.note as string | null) ?? '',
+  }));
+};
+
+/**
+ * Update (or clear) the private note on a saved listing. The row must
+ * already exist — caller is responsible for toggling the save first.
+ * Passing an empty string clears the note column.
+ */
+const updateNote = async (listingId: string, note: string): Promise<void> => {
+  if (!supabase) throw new Error('Supabase not configured');
+  const user = await getUser();
+  if (!user) throw new Error('Must be signed in');
+  const trimmed = note.trim();
+  const { error } = await supabase
+    .from(SAVED_LISTINGS_TABLE)
+    .update({ note: trimmed ? trimmed : null })
+    .eq('user_id', user.id)
+    .eq('listing_id', listingId);
+  if (error) throw error;
 };
 
 /**
@@ -149,5 +178,6 @@ export const api = {
   savedListings: {
     list: listSaved,
     toggle: toggleSaved,
+    updateNote,
   },
 };

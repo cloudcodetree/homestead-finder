@@ -8,6 +8,7 @@ import {
   RED_FLAG_DESCRIPTIONS,
   RED_FLAG_SEVERITY,
 } from '../types/property';
+import { PrivateNote } from './PrivateNote';
 import { PropertyThumbnail } from './PropertyThumbnail';
 import { ResearchPanel } from './ResearchPanel';
 import {
@@ -500,6 +501,9 @@ export const PropertyDetail = ({ property, onClose }: PropertyDetailProps) => {
               </button>
             </div>
           </div>
+
+          {/* Private note (renders only when saved) */}
+          <PrivateNote listingId={property.id} />
 
           {/* CTA */}
           <div>
