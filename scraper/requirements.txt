@@ -38,3 +38,9 @@ responses==0.25.3
 python-dotenv==1.0.1
 # seeds.yml parsing for the source-discovery pipeline
 PyYAML>=6.0
+
+# Personalization — logistic regression via scipy L-BFGS-B. ~80MB
+# install but widely cached on GitHub runners. Used by rank_fit.py
+# (nightly per-user model fit).
+numpy>=1.26
+scipy>=1.11

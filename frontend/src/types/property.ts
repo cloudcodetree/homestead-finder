@@ -229,6 +229,7 @@ export interface Property {
 export type SortBy =
   | 'dealScore'
   | 'homesteadFit'
+  | 'recommended'
   | 'priceAsc'
   | 'priceDesc'
   | 'pricePerAcre'
@@ -239,6 +240,10 @@ export type SortBy =
 export const SORT_LABELS: Record<SortBy, string> = {
   dealScore: 'Best Deal',
   homesteadFit: 'Homestead Fit (AI)',
+  // Only visible when the user has enough save history for a fitted
+  // model (see useRankingWeights.hasEnoughData). The Dashboard filters
+  // this option out of the sort dropdown otherwise.
+  recommended: 'Recommended for you',
   priceAsc: 'Price: Low to High',
   priceDesc: 'Price: High to Low',
   pricePerAcre: 'Price / Acre',

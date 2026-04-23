@@ -18,8 +18,10 @@ import { useHomesteadDeals } from '../hooks/useHomesteadDeals';
 import { QueryResponse } from '../hooks/useQueryServer';
 import { useAuth } from '../hooks/useAuth';
 import { useSavedListings } from '../hooks/useSavedListings';
+import { useRankingWeights } from '../hooks/useRankingWeights';
 import { getDealScoreColor } from '../utils/scoring';
 import { getListingTypeStyle } from '../utils/listingType';
+import { scoreWithWeights } from '../utils/personalRank';
 import { formatPrice, formatAcreage } from '../utils/formatters';
 
 const MapView = lazy(() => import('./MapView').then((m) => ({ default: m.MapView })));
@@ -63,6 +65,8 @@ export const Dashboard = () => {
   const [onlySaved, setOnlySaved] = useState(false);
   const { user: currentUser } = useAuth();
   const { savedIds } = useSavedListings();
+  const { weights: rankingWeights, hasEnoughData: hasRankingData } =
+    useRankingWeights();
 
   // Deep-linkable "show only saved" flag — the account menu navigates
   // to /?saved=1 when the user clicks "My saved listings" so bookmark
@@ -145,15 +149,23 @@ export const Dashboard = () => {
     filters.sources.length,
   ].reduce((a, b) => a + b, 0);
 
-  // `properties` is already sorted by the hook using filters.sortBy.
-  // If "Only saved" is on we layer an additional filter — Dashboard-
-  // local rather than part of useFilters because saved IDs are
-  // per-user state from Supabase, orthogonal to the shareable filter
-  // URL state that lives in useFilters.
-  const sortedProperties = useMemo(
-    () => (onlySaved ? properties.filter((p) => savedIds.has(p.id)) : properties),
-    [onlySaved, properties, savedIds]
-  );
+  // `properties` is already sorted by useProperties using filters.sortBy
+  // for the server-known sort keys. We layer two local sort strategies
+  // on top:
+  //   1. `onlySaved` filter (per-user Supabase state — orthogonal to
+  //      the shareable filter URL state in useFilters).
+  //   2. `recommended` sort when the user has fitted personalization
+  //      weights. We re-sort here because it depends on a user-specific
+  //      model that the corpus-level useProperties hook doesn't see.
+  const sortedProperties = useMemo(() => {
+    let arr = onlySaved ? properties.filter((p) => savedIds.has(p.id)) : properties;
+    if (filters.sortBy === 'recommended' && hasRankingData && rankingWeights) {
+      arr = [...arr].sort(
+        (a, b) => scoreWithWeights(b, rankingWeights) - scoreWithWeights(a, rankingWeights),
+      );
+    }
+    return arr;
+  }, [onlySaved, properties, savedIds, filters.sortBy, rankingWeights, hasRankingData]);
   // Offer a "Saved" toggle whenever the user is signed in — always
   // visible but functionally off when their saved list is empty.
   const showSavedToggle = currentUser !== null;
@@ -485,11 +497,15 @@ export const Dashboard = () => {
                     onChange={(e) => updateFilter('sortBy', e.target.value as SortBy)}
                     className="border border-gray-200 rounded-lg px-3 py-1.5 text-sm bg-white focus:ring-1 focus:ring-green-500 focus:outline-none"
                   >
-                    {(Object.keys(SORT_LABELS) as SortBy[]).map((option) => (
-                      <option key={option} value={option}>
-                        {SORT_LABELS[option]}
-                      </option>
-                    ))}
+                    {(Object.keys(SORT_LABELS) as SortBy[])
+                      // Hide the "Recommended for you" option until the
+                      // user has enough save history for a fitted model.
+                      .filter((opt) => opt !== 'recommended' || hasRankingData)
+                      .map((option) => (
+                        <option key={option} value={option}>
+                          {SORT_LABELS[option]}
+                        </option>
+                      ))}
                   </select>
                 </div>
               </div>
