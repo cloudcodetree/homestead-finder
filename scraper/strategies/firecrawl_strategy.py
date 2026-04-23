@@ -5,6 +5,7 @@ from __future__ import annotations
 import os
 from typing import Any
 
+import throttle
 from strategies.base import FetchResult, FetchStrategy
 
 
@@ -36,16 +37,30 @@ class FirecrawlStrategy(FetchStrategy):
             return False
 
     def fetch(self, url: str, **kwargs: Any) -> FetchResult:
-        """Scrape URL via Firecrawl and return markdown."""
-        client = self._get_client()
-        result = client.scrape_url(url, params={"formats": ["markdown"]})
-        markdown = result.get("markdown", "")
-        if not markdown:
-            raise ValueError(f"Firecrawl returned empty markdown for {url}")
-        return FetchResult(
-            content=markdown,
-            content_type="markdown",
-            status_code=200,
-            strategy_name=self.name,
-            cost=0.001,  # rough per-page cost estimate
-        )
+        """Scrape URL via Firecrawl and return markdown.
+
+        Firecrawl fetches the target URL from its own datacenter, so
+        the throttle clock is keyed on THAT target domain (not on
+        api.firecrawl.dev). Rate-limiting and robots checks apply to
+        the end site — Firecrawl itself manages its own quota. Daily
+        per-domain quota matters here too: a runaway chain could burn
+        Firecrawl credits fast.
+        """
+        throttle.acquire(url)
+        status: int | None = None
+        try:
+            client = self._get_client()
+            result = client.scrape_url(url, params={"formats": ["markdown"]})
+            markdown = result.get("markdown", "")
+            if not markdown:
+                raise ValueError(f"Firecrawl returned empty markdown for {url}")
+            status = 200
+            return FetchResult(
+                content=markdown,
+                content_type="markdown",
+                status_code=200,
+                strategy_name=self.name,
+                cost=0.001,  # rough per-page cost estimate
+            )
+        finally:
+            throttle.release(url, status)

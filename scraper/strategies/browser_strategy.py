@@ -12,6 +12,7 @@ from __future__ import annotations
 import time
 from typing import Any
 
+import throttle
 from strategies.base import FetchResult, FetchStrategy
 
 # Reuse browser across fetches within a single run to amortize launch
@@ -92,7 +93,15 @@ class BrowserStrategy(FetchStrategy):
             return False
 
     def fetch(self, url: str, **kwargs: Any) -> FetchResult:
-        """Load page in Chromium with stealth, return rendered HTML."""
+        """Load page in Chromium with stealth, return rendered HTML.
+
+        Routes through the shared throttle layer so Playwright fetches
+        respect robots.txt + per-domain rate limiting + daily quota,
+        same as http + curl_cffi. Browser fetches are slow (~3-8s each)
+        so the rate-limit impact is minimal but the quota counter and
+        robots compliance matter for politeness.
+        """
+        throttle.acquire(url)
         browser = _get_browser(headless=self.headless)
         context = browser.new_context(
             user_agent=(
@@ -106,6 +115,7 @@ class BrowserStrategy(FetchStrategy):
         page = context.new_page()
         _apply_stealth(page)
 
+        status: int | None = None
         try:
             response = page.goto(
                 url, timeout=self.timeout, wait_until="domcontentloaded"
@@ -138,6 +148,7 @@ class BrowserStrategy(FetchStrategy):
                 strategy_name=self.name,
             )
         finally:
+            throttle.release(url, status)
             page.close()
             context.close()
 
