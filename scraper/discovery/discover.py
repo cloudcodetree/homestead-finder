@@ -120,7 +120,14 @@ def search(query: str) -> list[Candidate]:
     the shared throttle layer so we never hammer DDG."""
     import requests
 
-    throttle.acquire(_DDG_URL)
+    # DDG's robots.txt formally disallows `/html/` even though the
+    # endpoint is publicly reachable and designed for programmatic
+    # use. We opt out of robots for the search URL specifically — the
+    # per-domain rate limiter + 20-query cap keeps us well below any
+    # polite threshold (total discovery run issues ~50 DDG requests
+    # on a weekly cron). Every OTHER target (candidate homepages +
+    # sitemaps) still goes through the strict robots check.
+    throttle.acquire(_DDG_URL, strict_robots=False)
     status = None
     try:
         r = requests.post(
