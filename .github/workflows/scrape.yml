@@ -76,6 +76,18 @@ jobs:
           path: data/ai_costs.json
           if-no-files-found: ignore
 
+      - name: Run saved-search email alerts
+        if: ${{ github.event.inputs.dry_run != 'true' }}
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          SENDGRID_API_KEY: ${{ secrets.SENDGRID_API_KEY }}
+        run: |
+          cd scraper
+          # Never fail the whole job on alerts errors — scraping succeeded,
+          # alerts are downstream.
+          python -m alerts || echo "alerts step failed but continuing"
+
       - name: Commit updated listings
         if: ${{ github.event.inputs.dry_run != 'true' }}
         run: |

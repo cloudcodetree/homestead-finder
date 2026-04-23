@@ -167,6 +167,115 @@ const toggleSaved = async (listingId: string): Promise<boolean> => {
   }
 };
 
+// ── Saved searches ───────────────────────────────────────────────
+
+const SAVED_SEARCHES_TABLE = 'saved_searches';
+
+export type NotifyCadence = 'none' | 'daily' | 'weekly';
+
+export interface SavedSearch {
+  id: string;
+  name: string;
+  // Opaque filter payload — the caller (Dashboard) defines the shape.
+  // Kept as `Record<string, unknown>` here to avoid leaking the
+  // FilterState type into this abstraction layer.
+  filters: Record<string, unknown>;
+  notifyCadence: NotifyCadence;
+  lastNotifiedAt: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+interface SavedSearchRow {
+  id: string;
+  name: string;
+  filters: Record<string, unknown>;
+  notify_cadence: NotifyCadence;
+  last_notified_at: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+const rowToSavedSearch = (r: SavedSearchRow): SavedSearch => ({
+  id: r.id,
+  name: r.name,
+  filters: r.filters ?? {},
+  notifyCadence: r.notify_cadence,
+  lastNotifiedAt: r.last_notified_at,
+  createdAt: r.created_at,
+  updatedAt: r.updated_at,
+});
+
+const listSavedSearches = async (): Promise<SavedSearch[]> => {
+  if (!supabase) return [];
+  const user = await getUser();
+  if (!user) return [];
+  const { data, error } = await supabase
+    .from(SAVED_SEARCHES_TABLE)
+    .select('id, name, filters, notify_cadence, last_notified_at, created_at, updated_at')
+    .eq('user_id', user.id)
+    .order('updated_at', { ascending: false });
+  if (error || !data) return [];
+  return (data as SavedSearchRow[]).map(rowToSavedSearch);
+};
+
+const createSavedSearch = async (
+  name: string,
+  filters: Record<string, unknown>,
+  notifyCadence: NotifyCadence = 'daily',
+): Promise<SavedSearch> => {
+  if (!supabase) throw new Error('Supabase not configured');
+  const user = await getUser();
+  if (!user) throw new Error('Must be signed in');
+  const trimmed = name.trim();
+  if (!trimmed) throw new Error('Name required');
+  const { data, error } = await supabase
+    .from(SAVED_SEARCHES_TABLE)
+    .insert({
+      user_id: user.id,
+      name: trimmed.slice(0, 80),
+      filters,
+      notify_cadence: notifyCadence,
+    })
+    .select('id, name, filters, notify_cadence, last_notified_at, created_at, updated_at')
+    .single();
+  if (error || !data) throw error ?? new Error('Insert failed');
+  return rowToSavedSearch(data as SavedSearchRow);
+};
+
+const updateSavedSearch = async (
+  id: string,
+  updates: Partial<Pick<SavedSearch, 'name' | 'filters' | 'notifyCadence'>>,
+): Promise<void> => {
+  if (!supabase) throw new Error('Supabase not configured');
+  const user = await getUser();
+  if (!user) throw new Error('Must be signed in');
+  const patch: Record<string, unknown> = {};
+  if (updates.name !== undefined) patch.name = updates.name.trim().slice(0, 80);
+  if (updates.filters !== undefined) patch.filters = updates.filters;
+  if (updates.notifyCadence !== undefined)
+    patch.notify_cadence = updates.notifyCadence;
+  if (Object.keys(patch).length === 0) return;
+  const { error } = await supabase
+    .from(SAVED_SEARCHES_TABLE)
+    .update(patch)
+    .eq('id', id)
+    .eq('user_id', user.id);
+  if (error) throw error;
+};
+
+const deleteSavedSearch = async (id: string): Promise<void> => {
+  if (!supabase) throw new Error('Supabase not configured');
+  const user = await getUser();
+  if (!user) throw new Error('Must be signed in');
+  const { error } = await supabase
+    .from(SAVED_SEARCHES_TABLE)
+    .delete()
+    .eq('id', id)
+    .eq('user_id', user.id);
+  if (error) throw error;
+};
+
 export const api = {
   auth: {
     getUser,
@@ -179,5 +288,11 @@ export const api = {
     list: listSaved,
     toggle: toggleSaved,
     updateNote,
+  },
+  savedSearches: {
+    list: listSavedSearches,
+    create: createSavedSearch,
+    update: updateSavedSearch,
+    delete: deleteSavedSearch,
   },
 };

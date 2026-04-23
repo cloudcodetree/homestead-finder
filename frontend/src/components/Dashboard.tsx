@@ -10,6 +10,7 @@ import { HomesteadDeals } from './HomesteadDeals';
 import { AskClaude } from './AskClaude';
 import { AuthButton } from './AuthButton';
 import { ErrorBoundary } from './ErrorBoundary';
+import { SavedSearchesModal } from './SavedSearchesModal';
 import { useProperties } from '../hooks/useProperties';
 import { useFilters } from '../hooks/useFilters';
 import { useCurated } from '../hooks/useCurated';
@@ -35,6 +36,7 @@ export const Dashboard = () => {
     toggleListingVariant,
     toggleSource,
     resetFilters,
+    replaceFilters,
     hasActiveFilters,
   } = useFilters();
   const {
@@ -54,6 +56,7 @@ export const Dashboard = () => {
   const dealsMatchListings = deals && !(dealsIsSample && !listingsAreSample);
   const [viewMode, setViewMode] = useState<ViewMode>('list');
   const [showNotifications, setShowNotifications] = useState(false);
+  const [showSavedSearches, setShowSavedSearches] = useState(false);
   const [showFilters, setShowFilters] = useState(false); // mobile drawer
   const [sidebarOpen, setSidebarOpen] = useState(true); // desktop collapse
   const [queryResult, setQueryResult] = useState<QueryResponse | null>(null);
@@ -239,7 +242,10 @@ export const Dashboard = () => {
           >
             🔔
           </button>
-          <AuthButton onOpenNotifications={() => setShowNotifications(true)} />
+          <AuthButton
+            onOpenNotifications={() => setShowNotifications(true)}
+            onOpenSavedSearches={() => setShowSavedSearches(true)}
+          />
         </div>
       </header>
 
@@ -635,6 +641,12 @@ export const Dashboard = () => {
 
       {/* Notification settings modal */}
       {showNotifications && <NotificationSettings onClose={() => setShowNotifications(false)} />}
+      <SavedSearchesModal
+        open={showSavedSearches}
+        onClose={() => setShowSavedSearches(false)}
+        currentFilters={filters}
+        onApply={replaceFilters}
+      />
 
       {/* Quick peek bar when map is open and property selected */}
       {viewMode === 'map' && selectedProperty && (

@@ -7,6 +7,10 @@ interface AuthButtonProps {
    * owns the modal state (it's the same modal the bell icon opens)
    * so there's one notifications surface regardless of entry point. */
   onOpenNotifications?: () => void;
+  /** Called when the user clicks "Saved searches" — parent owns the
+   * modal so it can wire `currentFilters` + `onApply` to the dashboard
+   * filter state. */
+  onOpenSavedSearches?: () => void;
 }
 
 /**
@@ -20,7 +24,7 @@ interface AuthButtonProps {
  *     the settings surface the user asked for in an hamburger-style
  *     dropdown.
  */
-export const AuthButton = ({ onOpenNotifications }: AuthButtonProps) => {
+export const AuthButton = ({ onOpenNotifications, onOpenSavedSearches }: AuthButtonProps) => {
   const { user, loading, configured, loginWithGoogle, loginWithEmail, logout } = useAuth();
   const [sheetOpen, setSheetOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -125,6 +129,21 @@ export const AuthButton = ({ onOpenNotifications }: AuthButtonProps) => {
               }
               label="My saved listings"
             />
+            {onOpenSavedSearches && (
+              <MenuItem
+                onClick={() => {
+                  closeMenu();
+                  onOpenSavedSearches();
+                }}
+                icon={
+                  <svg viewBox="0 0 24 24" className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <circle cx="11" cy="11" r="8" />
+                    <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                  </svg>
+                }
+                label="Saved searches"
+              />
+            )}
             {onOpenNotifications && (
               <MenuItem
                 onClick={() => {

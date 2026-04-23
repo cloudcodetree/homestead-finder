@@ -57,6 +57,14 @@ export const useFilters = () => {
     setFilters(DEFAULT_FILTERS);
   }, []);
 
+  /** Replace the entire filter state at once — used when applying a
+   * saved search. Merges missing keys from DEFAULT_FILTERS so a
+   * saved-search payload from an older schema doesn't produce NaN
+   * range-slider positions or `undefined` array spreads. */
+  const replaceFilters = useCallback((incoming: Partial<FilterState>) => {
+    setFilters({ ...DEFAULT_FILTERS, ...incoming });
+  }, []);
+
   const hasActiveFilters =
     filters.states.length > 0 ||
     filters.features.length > 0 ||
@@ -81,6 +89,7 @@ export const useFilters = () => {
     toggleListingVariant,
     toggleSource,
     resetFilters,
+    replaceFilters,
     hasActiveFilters,
   };
 };
