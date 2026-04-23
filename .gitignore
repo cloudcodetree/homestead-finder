@@ -58,3 +58,6 @@ frontend/public/data
 
 # Local scheduler state
 .claude/scheduled_tasks.lock
+
+# Runtime throttle state — per-day per-domain request counters
+data/scrape_quota.json
