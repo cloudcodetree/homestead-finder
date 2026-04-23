@@ -167,6 +167,38 @@
 
 ---
 
+## Deferred Sources (investigated, rejected — don't re-investigate)
+
+Data collected 2026-04-22/23 during Ozark-pilot source expansion.
+Keep this list so we don't burn time re-probing channels that were
+already ruled out. Reconsider only if the underlying site structure
+or MO/AR inventory density changes materially.
+
+- **FSBO.com** — 6 MO + AR land listings across entire site (per
+  sitemap.xml); Next.js SPA, no API; Playwright required. Cost-benefit
+  is <10 relevant listings for a stateful scraper.
+- **US Marshals asset sales** — 0 MO + 1 AR (suburban house) active
+  nationwide at time of probe. Historical rate <1 MO/AR rural land
+  listing/year. Channel is usmarshals.gov + bid4assets + CWS, all
+  Cloudflare-gated SPAs. Email digest is the right integration, not
+  scraping.
+- **FSA Resales (USDA farm surplus)** — no centralized feed. Program
+  now operates via per-state-office press releases; state office
+  pages (`fsa.usda.gov/state-offices/{missouri,arkansas}`) have
+  zero inventory-property links. Scraping requires ad-hoc state-by-
+  state crawling with unpredictable schema. Defer until/unless USDA
+  restores a national inventory database.
+- **Facebook Marketplace** — login wall + aggressive anti-bot;
+  scraping violates TOS. No API for land category.
+- **PACER bankruptcy records** — paid access ($0.10/page), no
+  structured real-estate-only feed. Rural land in bankruptcy estate
+  is a single-digit fraction of filings. Not worth the dev cost.
+- **LandFlip.com / Land And Farm / Land.com / farmandranch.com / landsearch.com**
+  — all 403 on plain HTTP (Cloudflare). Inventory overlaps LandWatch
+  heavily (Land.com family). Not worth Playwright cost.
+
+---
+
 ## Tech Debt
 
 - [ ] **Tune Overpass (OpenStreetMap) rate-limit handling in proximity enrichment**

@@ -22,6 +22,7 @@ from sources.county_tax import CountyTaxScraper
 from sources.govease import GovEaseScraper
 from sources.craigslist import CraigslistScraper
 from sources.homestead_crossing import HomesteadCrossingScraper
+from sources.landhub import LandHubScraper
 from sources.lands_of_america import LandsOfAmericaScraper
 from sources.landwatch import LandWatchScraper
 from sources.mossy_oak import MossyOakScraper
@@ -41,6 +42,7 @@ ALL_SCRAPERS = {
     "united_country": UnitedCountryScraper,
     "mossy_oak": MossyOakScraper,
     "craigslist": CraigslistScraper,
+    "landhub": LandHubScraper,
     "zillow": ZillowScraper,
     "realtor": RealtorScraper,
     "county_tax": CountyTaxScraper,

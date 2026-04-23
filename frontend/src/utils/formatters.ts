@@ -44,6 +44,7 @@ export const formatSourceName = (source: string): string => {
     united_country: 'United Country',
     mossy_oak: 'Mossy Oak Properties',
     craigslist: 'Craigslist FSBO',
+    landhub: 'LandHub',
     zillow: 'Zillow',
     realtor: 'Realtor.com',
     county_tax: 'County Tax Sale',

@@ -26,7 +26,11 @@ class SimpleHTTPStrategy(FetchStrategy):
                 "User-Agent": USER_AGENT,
                 "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
                 "Accept-Language": "en-US,en;q=0.5",
-                "Accept-Encoding": "gzip, deflate, br",
+                # `br` requires the `brotli` package to decode; advertising
+                # it without the package installed means brotli-encoding
+                # servers (LandHub, Next.js) return binary garbage to us.
+                # gzip + deflate are enough and handled natively by requests.
+                "Accept-Encoding": "gzip, deflate",
                 "Connection": "keep-alive",
             }
         )

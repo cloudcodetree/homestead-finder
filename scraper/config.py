@@ -73,6 +73,10 @@ ENABLED_SOURCES: dict[str, bool] = {
     # the cheapest inventory in the corpus. Hidden gems that big
     # aggregators skip entirely.
     "craigslist": True,
+    # LandHub.com — independent aggregator outside the Land.com family.
+    # MO carries ~1,666 active rows, AR ~686. Plain HTTP works, the
+    # whole page ships as SSR Next.js JSON. Low overlap with LandWatch.
+    "landhub": True,
     "zillow": False,  # Rate limiting issues — disabled by default
     "realtor": False,  # Rate limiting issues — disabled by default
     "county_tax": True,
@@ -127,6 +131,9 @@ STRATEGY_CHAINS: dict[str, list[str]] = {
     # Craigslist hits sapi.craigslist.org directly — handled inside
     # the scraper module. Strategy chain not used.
     "craigslist": ["curl_cffi"],
+    # LandHub is plain server-rendered Next.js HTML — http works;
+    # curl_cffi as a cheap TLS fallback if they ever add Cloudflare.
+    "landhub": ["http", "curl_cffi", "selenium"],
     "county_tax": ["http", "curl_cffi", "selenium", "firecrawl"],
     "auction": ["curl_cffi", "selenium", "firecrawl+claude"],
     "blm": ["http", "curl_cffi", "selenium"],
