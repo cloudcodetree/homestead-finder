@@ -22,7 +22,15 @@ jobs:
   scrape:
     runs-on: ubuntu-latest
     permissions:
+      # `contents: write` lets this job commit+push updated listings.
+      # `actions: write` is needed for the final "Trigger Pages deploy"
+      # step — GitHub's default GITHUB_TOKEN doesn't dispatch other
+      # workflows, and pushes made with GITHUB_TOKEN don't trigger
+      # workflows listening on `push` either (a deliberate anti-loop
+      # safeguard). Without this explicit grant the step 403s with
+      # "Resource not accessible by integration".
       contents: write
+      actions: write
 
     steps:
       - name: Checkout repo
