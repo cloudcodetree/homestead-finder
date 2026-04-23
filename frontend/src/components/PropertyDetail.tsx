@@ -18,6 +18,7 @@ import {
   formatPricePerAcre,
   formatSourceName,
 } from '../utils/formatters';
+import { safeUrl } from '../utils/safeUrl';
 import { getDealScoreColor, getDealScoreLabel } from '../utils/scoring';
 
 interface PropertyDetailProps {
@@ -181,7 +182,7 @@ export const PropertyDetail = ({ property, onClose }: PropertyDetailProps) => {
                 {property.taxSale.listUrl && (
                   <div className="col-span-2">
                     <a
-                      href={property.taxSale.listUrl}
+                      href={safeUrl(property.taxSale.listUrl)}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-orange-700 hover:text-orange-900 font-medium text-xs"
@@ -464,7 +465,7 @@ export const PropertyDetail = ({ property, onClose }: PropertyDetailProps) => {
             <p className="text-gray-500 text-xs mb-1">Listing URL</p>
             <div className="flex items-center gap-2 min-w-0">
               <a
-                href={property.url}
+                href={safeUrl(property.url)}
                 target="_blank"
                 rel="noopener noreferrer"
                 title={property.url}
@@ -513,7 +514,7 @@ export const PropertyDetail = ({ property, onClose }: PropertyDetailProps) => {
               </p>
             )}
             <a
-              href={property.url}
+              href={safeUrl(property.url)}
               target="_blank"
               rel="noopener noreferrer"
               className={`block w-full text-center font-semibold py-3 rounded-lg transition-colors ${

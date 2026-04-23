@@ -47,6 +47,13 @@ _NEXT_DATA_RE = re.compile(
     re.DOTALL,
 )
 
+# Image filename allowlist — matches {digits}-{digits}.{ext} shape that
+# LandHub uses ("57600533-0.webp"), plus a generic fallback. Rejects
+# anything with a path separator, query string, or backslash. Paired
+# with an integer-only listing_id check upstream to prevent URL path
+# traversal via the CDN.
+_VALID_IMAGE_FILENAME = re.compile(r"[A-Za-z0-9_.\-]+")
+
 _STATE_SLUGS = {
     "MO": "missouri",
     "AR": "arkansas",
@@ -144,6 +151,13 @@ class LandHubScraper(BaseScraper):
             listing_id = raw.get("id")
             if listing_id is None:
                 return None
+            # Require integer-shaped id. Prevents a malicious site row
+            # from producing an attacker-controlled URL path or CDN
+            # image URL via e.g. `"id": "../admin"`.
+            if isinstance(listing_id, str) and listing_id.isdigit():
+                listing_id = int(listing_id)
+            if not isinstance(listing_id, int):
+                return None
             title = str(raw.get("title") or "").strip()
             if not title:
                 return None
@@ -184,12 +198,15 @@ class LandHubScraper(BaseScraper):
 
             county = str(raw.get("county") or "").strip()
 
-            # Image reconstruction — filename list → CDN URLs.
+            # Image reconstruction — filename list → CDN URLs. listing_id
+            # was integer-validated above, so only the filename needs an
+            # allowlist here — block path separators, query strings, and
+            # traversal sequences.
             image_files = _parse_json_list(raw.get("image"))
             images = [
                 f"https://img.landhub.com/property/{listing_id}/{fn}"
                 for fn in image_files
-                if fn and "/" not in fn
+                if fn and _VALID_IMAGE_FILENAME.fullmatch(fn)
             ][:12]
 
             # Features — LandHub's tags (e.g. "Hwy-County Rd Frontage",

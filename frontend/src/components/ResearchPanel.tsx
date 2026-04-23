@@ -1,4 +1,5 @@
 import { ExternalResearchLinks, GeoEnrichment, PropertyLocation } from '../types/property';
+import { safeUrl } from '../utils/safeUrl';
 
 interface ResearchPanelProps {
   location: PropertyLocation;
@@ -346,7 +347,7 @@ export const ResearchPanel = ({ location, geo, links }: ResearchPanelProps) => {
             {merged.map((link) => (
               <a
                 key={link.url}
-                href={link.url}
+                href={safeUrl(link.url)}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="block bg-white border border-sky-100 hover:border-sky-300 rounded px-3 py-2 transition-colors"

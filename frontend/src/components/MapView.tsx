@@ -5,6 +5,7 @@ import 'leaflet/dist/leaflet.css';
 import { Property } from '../types/property';
 import { formatPrice, formatAcreage, formatPricePerAcre } from '../utils/formatters';
 import { getListingTypeStyle } from '../utils/listingType';
+import { safeUrl } from '../utils/safeUrl';
 import { getDealScoreLabel } from '../utils/scoring';
 
 // Fix Leaflet default marker icons broken by Vite
@@ -132,7 +133,7 @@ export const MapView = ({ properties, onSelectProperty }: MapViewProps) => {
                     {getDealScoreLabel(property.dealScore)}
                   </p>
                   <a
-                    href={property.url}
+                    href={safeUrl(property.url)}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="mt-2 block text-green-600 hover:text-green-700 text-xs font-medium"
