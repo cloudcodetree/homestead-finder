@@ -161,41 +161,59 @@ user need and the thinnest shippable v1.
   within 10 mi · farmers market weekly · median age 47." Paints
   the "is there a there there" picture homesteaders ask about.
 
-- [ ] **Like / Dislike per listing — preference-tuning signal.**
+- [ ] **5-point rating per listing — preference-tuning signal.**
   Distinct from save (bookmark) and hide (banish). Save = "I want to
-  come back to this." Hide = "don't show me similar." Like/Dislike =
-  "teach the model more, but I'm not committing to action." Needed
-  because real users have preferences that don't line up cleanly with
-  those two binary decisions — you can LIKE a listing that's out of
-  budget, or DISLIKE one without wanting it banished (you'd still
-  want to see others like it for comparison).
+  come back to this." Hide = "don't show me similar." Rating = "tune
+  the model without committing to action." Needed because real
+  preferences don't line up cleanly with binary save-or-hide — a user
+  can LOVE a listing that's out of budget, or DISLIKE one without
+  wanting it banished.
+
+  **Scale: 5-point labeled (recommended v1):**
+  * 🔥 Love (+1.0 weight)
+  * 👍 Like (+0.5)
+  * 😐 Meh (0.0) — default / cleared
+  * 👎 Dislike (-0.5)
+  * 🚫 Hate (-1.0)
+  Labeled beats a slider because users struggle with false precision
+  ("is this a 7 or an 8?"). Netflix famously abandoned 5-stars after
+  finding users clustered on 3/4/5 and the bottom half went unused —
+  the labels here prevent that by making each point MEAN something
+  distinct. Alternative considered: -5..+5 slider (too much false
+  precision); 1-10 (decision fatigue); binary thumbs (less signal).
 
   **Data model — new table `listing_ratings`:**
   * (user_id, listing_id, rating smallint, created_at, updated_at)
-  * rating in {-1, 0, 1}: -1=dislike, 0=cleared, 1=like
-  * PK on (user_id, listing_id), upsert on toggle
+  * rating in {-2, -1, 0, 1, 2} mapping to Hate / Dislike / Meh /
+    Like / Love. Smallint keeps storage compact + extensible if we
+    ever add 7-point.
+  * PK on (user_id, listing_id), upsert on change
   * RLS mirror of saved_listings
 
-  **Feeds `rank_fit.py`:** new weighted training examples beyond
-  save/hide binary:
-  * save = +1.0 (strong positive)
-  * like = +0.5 (weak positive)
-  * dislike = -0.5 (weak negative)
-  * hide = -1.0 (strong negative)
-  Weighted logistic regression (sample_weight param) already supported
-  by the scipy L-BFGS-B path. Will dramatically sharpen the model
-  once users engage — two weeks of browsing with like/dislike could
-  produce 10× the signal density of saves alone.
+  **Feeds `rank_fit.py` with weighted training:**
+  * Rating weights above multiply the training-sample weight in the
+    logistic regression. scipy's sample_weight param is already in
+    the call path; just needs wiring.
+  * Sharpens the model an order of magnitude faster than binary
+    save/hide — two weeks of engaged use could produce 10× the
+    signal density.
 
-  **UI — card + detail:**
-  * Detail modal: full thumbs 👍/👎 row in the action area next to
-    Save + Not-interested (4 buttons: Save, Like, Dislike, Hide).
-  * PropertyCard: condense to save + 👍/👎 combo. Hide stays on the
-    card but maybe moves to a hover/overflow menu to avoid clutter.
-  * Tinder mode: up=like, down=dislike, right=save, left=hide. Four
-    directions, four distinct signals — fits the UX perfectly.
-  * Account menu: "My liked listings" / "My disliked listings" views
-    parallel to the existing Saved / Hidden views.
+  **UI:**
+  * Detail modal: horizontal reaction-bar row between Save and
+    Not-interested: 🚫 👎 😐 👍 🔥. Single click = set rating.
+    Clicking the current rating clears it back to Meh.
+  * PropertyCard: condensed to a single star-ish icon that opens a
+    mini reaction popover on tap. Default (Meh) hidden; any non-zero
+    rating shows a colored indicator (red for negative, green for
+    positive) with the icon.
+  * Tinder mode: velocity-based — fast up-swipe = Love, slow up-swipe
+    = Like; fast down = Hate, slow down = Dislike. Tap-hold center
+    = Meh (explicitly rate neutral). Right still = save, left still
+    = hide (action commits on top of rating). Four signals, four
+    directions, plus magnitude from swipe velocity.
+  * Account menu: "My reactions" → filtered views by rating bucket
+    (all Loves, all Likes, all Dislikes, etc.). Parallels existing
+    Saved / Hidden views.
 
 - [ ] **Tinder-mode swipe UX** — full-screen card stack with swipe
   right = save (like), swipe left = hide (not interested). Instant,
