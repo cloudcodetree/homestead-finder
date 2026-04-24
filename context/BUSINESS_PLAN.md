@@ -262,10 +262,105 @@ These are things the founder should decide before day-1 launch:
 
 ---
 
+## Competitive Findings (2026-04-24 scan)
+
+### Incumbents
+
+| Player | Buyer pricing | AI features last 12mo | Weak spot |
+|---|---|---|---|
+| LandWatch (CoStar) | Free | None | 2018-era UX, no personalization |
+| Land.com network | Free | None | 3 overlapping sites, no cross-site alerts |
+| LandHub | Free | None | Lowest traffic, broker-marketing tool |
+| LandSearch | Free | None | Has off-grid filter (5,888 listings) but utilitarian UI |
+| Whitetail Properties | Free | None | Brokerage, hunting bias, thin outside that |
+
+**All five monetize sellers/agents.** Zero buyer-side subscription
+exists. Zero have shipped buyer-facing LLM/AI features. The
+buyer-intelligence layer is entirely unclaimed.
+
+### Direct AI-clone risk — GREEN LIGHT
+
+No near-clone exists. Closest adjacents: Acres.com + Prophetic
+(enterprise developer tools for homebuilders, not consumers) and
+homesteaders.app (planning tool, not listings).
+
+YC W25 + S25 + F25 batches: ~60% AI, zero targeting homesteaders /
+rural buyers / off-grid / Ozark. Real-estate AI focus is all
+commercial/developer/transaction-automation.
+
+### Plan adjustments driven by findings
+
+**1. Sharpened positioning.** Lead pitch becomes: *"The first
+buyer-intelligence tool in rural land. Every other land site is a
+free, seller-funded listing dump. We're the research desk."*
+Tagline candidates:
+- "Research rural land the way you'd research a stock."
+- "Buyer-side intelligence for homestead land."
+- "The research tool land buyers never had."
+
+**2. Pricing risk is real — stronger free tier, annual option earlier.**
+Since buyers are trained to pay $0, free→paid conversion will be
+harder than normal SaaS (no price anchor in the category). Adjusted
+plan:
+- Free tier stays generous enough to prove value: 5 saved listings,
+  basic filters, the core deal-score view, read-only access to
+  current curated top picks.
+- Paywall gates the *differentiators*: AI enrichment, projects,
+  personalization, file upload + context, image search, unlimited
+  saves, full search history.
+- **Offer $190/yr from day 1** (not day 30 as originally scoped).
+  Higher friction annual is exactly the commitment-test we want
+  while we're educating the market that paid land research is a
+  thing.
+- 7-day full-feature trial for new signups — gives the AI-powered
+  surfaces a chance to prove their value before the paywall hits.
+
+**3. Name collision — keep the name, sharpen the tagline + domain.**
+"Homestead Finder" is close enough to `homesteaders.app` and YC's
+"Homestead" to cause SEO confusion but different enough in shape
+that a clear tagline + category keyword differentiate. Actions:
+- Lock down `homesteadfinder.com` if available; otherwise a
+  `.app` or `.land` variant. Avoid anything that subsumes
+  "homesteaders.app" in Google autocomplete.
+- Every piece of marketing copy pairs the name with "for land
+  buyers" or "for rural buyers" — explicit category signal.
+- Consider shorter brand evolution later (e.g. "Homestead"
+  standalone is taken; something like "Parcel" or "Homestead
+  Deal" as future rebrand options — not urgent).
+
+**4. New re-evaluation trigger — quarterly Acres.com check.** If
+Acres ships a consumer tier or acquires a homestead-focused
+property, we differentiate on depth (curated Ozark/rural dataset)
+rather than feature parity. This is a watch-item, not a panic
+trigger.
+
+**5. Seller-side monetization stays on the menu.** Every incumbent
+captures value on the seller side; if buyer-side SaaS plateaus,
+adding a "promoted listing" tier for realtors is a known-working
+fallback model. Not a Phase 1 concern, but comforting to know
+the capped-upside path is not actually capped.
+
+### What the findings DID NOT change
+
+- Bootstrap-to-defensibility stance — if anything, stronger. The
+  less pressure the market is under, the better bootstrap works.
+- Phase 1 MVP scope (#2 + #3 + #16 + durability + blacklist) —
+  unchanged. These are the right features for the positioning.
+- Kill list + monetization priority — unchanged.
+- Phase 4 optionality — unchanged.
+
+---
+
 ## Changelog
 
-- **2026-04-24** — initial plan drafted. Bootstrap-to-defensibility
+- **2026-04-24a** — initial plan drafted. Bootstrap-to-defensibility
   stance chosen over raise-now after weighing solo-founder/zero-user
   dynamics. Competitive scan queued (background). 16-item vision
   demoted from roadmap to menu; Phase 1 MVP scoped to #2/#3/#16
   only, plus Phase 1 durability + blacklist mitigation.
+- **2026-04-24b** — competitive scan returned (green light on AI
+  clone risk; incumbents all free-to-buyer, zero AI features).
+  Plan adjusted: sharpened buyer-intelligence positioning, stronger
+  free tier + earlier annual-pricing option to de-risk first-mover
+  pricing, kept name with clearer tagline, added quarterly
+  Acres.com watch trigger.
