@@ -21,9 +21,15 @@ import { useAuth } from '../hooks/useAuth';
 import { useHiddenListings } from '../hooks/useHiddenListings';
 import { useSavedListings } from '../hooks/useSavedListings';
 import { useRankingWeights } from '../hooks/useRankingWeights';
+import { useUserPreferences } from '../hooks/useUserPreferences';
+import {
+  isDefaultFilters,
+  preferencesToFilters,
+} from '../utils/preferencesToFilters';
 import { getDealScoreColor } from '../utils/scoring';
 import { getListingTypeStyle } from '../utils/listingType';
 import { scoreWithWeights } from '../utils/personalRank';
+import { preferenceMatchScore } from '../utils/preferenceMatch';
 import { formatPrice, formatAcreage } from '../utils/formatters';
 
 const MapView = lazy(() => import('./MapView').then((m) => ({ default: m.MapView })));
@@ -76,6 +82,40 @@ export const Dashboard = () => {
   const [onlyHidden, setOnlyHidden] = useState(false);
   const { weights: rankingWeights, hasEnoughData: hasRankingData } =
     useRankingWeights();
+  const { preferences: userPrefs, isComplete: prefsComplete } =
+    useUserPreferences();
+
+  /**
+   * One-shot application of saved preferences to filters. Runs once
+   * per session when:
+   *   - the user has completed onboarding,
+   *   - filters are still at the app defaults (i.e. user hasn't yet
+   *     tweaked anything this session).
+   * Gated by a ref so navigating around or editing filters later
+   * doesn't re-clobber. If the user hits "Clear all" to return to
+   * defaults, we deliberately don't re-seed — they asked for a clean
+   * slate. They can re-apply via Preferences → Save.
+   */
+  const prefsAppliedRef = useMemo(() => ({ done: false }), []);
+  useEffect(() => {
+    if (prefsAppliedRef.done) return;
+    if (!prefsComplete) return;
+    if (!isDefaultFilters(filters)) {
+      // User has already edited filters this session — respect that
+      // and mark as done so we don't fight them later.
+      prefsAppliedRef.done = true;
+      return;
+    }
+    const patch = preferencesToFilters(userPrefs);
+    if (Object.keys(patch).length === 0) {
+      // User completed onboarding but left everything blank — nothing
+      // to seed. Still mark done so we stop watching.
+      prefsAppliedRef.done = true;
+      return;
+    }
+    replaceFilters(patch);
+    prefsAppliedRef.done = true;
+  }, [prefsComplete, userPrefs, filters, replaceFilters, prefsAppliedRef]);
 
   // Deep-linkable "show only saved" flag — the account menu navigates
   // to /?saved=1 when the user clicks "My saved listings" so bookmark
@@ -194,6 +234,17 @@ export const Dashboard = () => {
       arr = [...arr].sort(
         (a, b) => scoreWithWeights(b, rankingWeights) - scoreWithWeights(a, rankingWeights),
       );
+    } else if (filters.sortBy === 'dealScore' && prefsComplete) {
+      // Preference-aware deal sort — listings matching the user's
+      // stated preferences get a bounded bonus (max ~20 points on
+      // 100-point scale). Nudges without hijacking. Only kicks in
+      // after onboarding is complete to avoid surprising anonymous
+      // users with a sort that doesn't match the title ("Best Deal").
+      arr = [...arr].sort((a, b) => {
+        const aScore = a.dealScore + preferenceMatchScore(a, userPrefs);
+        const bScore = b.dealScore + preferenceMatchScore(b, userPrefs);
+        return bScore - aScore;
+      });
     }
     return arr;
   }, [
@@ -206,6 +257,8 @@ export const Dashboard = () => {
     filters.sortBy,
     rankingWeights,
     hasRankingData,
+    prefsComplete,
+    userPrefs,
   ]);
   // Offer a "Saved" toggle whenever the user is signed in — always
   // visible but functionally off when their saved list is empty.
