@@ -90,7 +90,14 @@ user need and the thinnest shippable v1.
     the top nav)
   * `/projects` index page with status columns (kanban-lite)
   * `/project/{id}` page with tabs: Searches / Listings / Notes /
-    Files + a timeline of project activity
+    Files / **Vision Board** / Timeline
+  * **Vision Board tab** — Pinterest-style moodboard layout mixing
+    the project's reference-image uploads (from #14) with thumbnails
+    of pinned listings. Drag to rearrange, draw an arrow from one
+    image to another to annotate "this cabin's roof + this view."
+    Export as a PDF / share link when the project is shortlisted so
+    the user can send it to a partner / inspector. Masonry grid
+    (react-masonry-css, ~2KB) or CSS columns — no new heavy deps.
   * Drag handles on every item card; drop targets on every project
     row
   * Saved-search apply button opens the project's filtered view in
@@ -153,6 +160,40 @@ user need and the thinnest shippable v1.
   Combine into: "Nearest school: 12 min · 3 churches + library
   within 10 mi · farmers market weekly · median age 47." Paints
   the "is there a there there" picture homesteaders ask about.
+
+- [ ] **Tinder-mode swipe UX** — full-screen card stack with swipe
+  right = save (like), swipe left = hide (not interested). Instant,
+  dopamine-rewarding, thumb-friendly on mobile. Beyond being fun, it's
+  the single fastest way to generate training data for the
+  personalization model (`rank_fit.py` + `user_ranking_weights` we
+  already shipped) — each swipe is a clean +/- signal at ~10× the
+  density of browse-and-click.
+
+  **Ergonomics:**
+  * Swipe right → save (same as the ▢ button on the card)
+  * Swipe left → hide (same as the 👁 eye-off)
+  * Swipe up → open detail without leaving the stack
+  * Tap → open detail
+  * Undo button (single-step) for accidental swipes
+  * Progress indicator: "23 / 100 reviewed"
+  * Keyboard shortcuts on desktop: ← → ↑ for the three actions
+
+  **Where it lives:**
+  * View-mode tab alongside List / Map / Picks / Deals: "Swipe"
+  * Also surfaces as a "review your saves" project action — batch
+    through listings matching a saved search
+  * New-user onboarding shows a 10-card swipe to bootstrap the
+    ranking model before they hit the main feed
+
+  **Library:** framer-motion is heavy for a single feature; prefer
+  a lean card-swipe lib like `react-tinder-card` (~6KB gz) or
+  hand-rolled using CSS transforms + pointer events. No drag-to-
+  reorder dependencies — this is one-card-at-a-time.
+
+  **Data flow:** swipes batch-insert to the same `saved_listings` /
+  `hidden_listings` tables we already have, plus emit a
+  `user_events: 'swipe'` row (see behavioral-analytics item above)
+  for the training loop.
 
 - [ ] **Image-driven search** — user uploads a reference image and
   the app finds similar listings. Three example flows:
