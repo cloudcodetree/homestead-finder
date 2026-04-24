@@ -57,6 +57,38 @@ user need and the thinnest shippable v1.
   card (green/yellow/red) with a breakdown panel on the detail. Use
   existing `geoEnrichment.flood` as the template shape.
 
+- [ ] **Emergency services proximity** — drive-time to the nearest:
+  * Hospital (HHS/HRSA national hospitals geojson, free)
+  * Trauma center by level (ACS Verified Trauma Centers public CSV)
+  * Fire station (OSM Overpass `amenity=fire_station` — we already
+    hit Overpass)
+  * Sheriff / police (OSM `amenity=police`)
+  * 911 PSAP location (NENA registry — state-level free CSVs)
+  For a homestead buyer, "78 min to Level II trauma center" is
+  often a hard go/no-go line. Surface as a stoplight pill on the
+  card (green < 30 min, amber 30-60, red > 60).
+
+- [ ] **Internet / broadband availability** — FCC Broadband Map API
+  (`broadbandmap.fcc.gov/api`, free, no key) returns per-provider
+  down/up speeds + technology (fiber / cable / DSL / fixed-wireless
+  / satellite) at an exact lat/lng. Detail-page panel shows all
+  available providers; card surfaces max-wired-down-speed as a
+  "Best internet: 100Mbps fiber (Windstream)" chip. Missing provider
+  coverage is a silent deal-breaker for remote-workers.
+
+- [ ] **Community / demographic context** — blend several free
+  sources into a "community score":
+  * Census ACS 5-year block-group (age distribution, median
+    income, housing tenure) via Census API (free key)
+  * NCES school locator (public school within N miles, student-
+    teacher ratio, graduation rate) — free CSV
+  * OSM `amenity=place_of_worship`, `amenity=community_centre`,
+    `amenity=library`
+  * USDA farmers markets + CSAs directory (public API)
+  Combine into: "Nearest school: 12 min · 3 churches + library
+  within 10 mi · farmers market weekly · median age 47." Paints
+  the "is there a there there" picture homesteaders ask about.
+
 - [ ] **Property-as-stock analytics** — for each listing, compute +
   display the technical signals an investor would use:
   * Price trend over time (our daily scrape history provides this;
