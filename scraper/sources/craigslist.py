@@ -159,10 +159,13 @@ def _parse_item(it: list[Any]) -> dict[str, Any] | None:
         else f"https://craigslist.org"
     )
 
-    # Image URLs — Craigslist serves images as:
-    #   https://images.craigslist.org/{hash}_600x450.jpg
-    # The "3:XXXX_yyyy_zzzz" hashes contain size params (the trailing
-    # _XX0YY fragment); we use the base hash up to the last underscore.
+    # Image URLs — Craigslist sapi returns hashes in two shapes:
+    #   1. Multi-segment: "3:00R0R_eHOrIENayBk_zRwdSnKk"
+    #      → strip the "3:" prefix and the trailing underscore segment
+    #      → "00R0R_eHOrIENayBk" → yields a valid CDN URL
+    #   2. Single-segment opaque base58: "3:kB3qK7wzuwCsztM1mMQQW2"
+    #      → these DON'T resolve on images.craigslist.org (all 404 in
+    #      live checks). We skip them rather than ship broken URLs.
     images: list[str] = []
     all_hashes = (
         ([primary_image_hash] if primary_image_hash else [])
@@ -171,10 +174,10 @@ def _parse_item(it: list[Any]) -> dict[str, Any] | None:
     for h in all_hashes:
         if not h:
             continue
-        # Normalize: "3:00c0c_abc_def" → "00c0c_abc" (strip the "3:"
-        # prefix and the trailing size fragment).
         core = h.split(":", 1)[-1]
-        # Strip trailing underscore-suffixed size chunk
+        if "_" not in core:
+            # Single-segment hash — known-broken format; skip.
+            continue
         core = re.sub(r"_[0-9A-Za-z]+$", "", core)
         url_img = f"https://images.craigslist.org/{core}_600x450.jpg"
         if url_img not in images:
@@ -278,8 +281,19 @@ class CraigslistScraper(BaseScraper):
         if not title or price <= 0:
             return None
         images = [u for u in (raw.get("images") or []) if isinstance(u, str) and u]
+        # Scope the id by state + lat signature. Craigslist's positional
+        # decoder occasionally latches onto a non-unique field (seller
+        # account id, category code) when the schema drifts, producing
+        # the same "id" for distinct MO + AR listings. A state+lat
+        # suffix makes every row globally unique without losing the
+        # post-id-as-URL-path mapping.
+        state_str = str(raw.get("state", "")).upper()
+        lat = raw.get("lat")
+        lat_tag = (
+            f"_{state_str}_{int(round(lat * 1000))}" if lat is not None else f"_{state_str}"
+        )
         return RawListing(
-            external_id=str(raw.get("id", "")),
+            external_id=str(raw.get("id", "")) + lat_tag,
             title=title,
             price=price,
             acreage=acres,

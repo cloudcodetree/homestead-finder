@@ -328,6 +328,7 @@ export const Dashboard = () => {
                 availableStates={availableStates}
                 availableListingVariants={availableListingVariants}
                 sourceCounts={sourceCounts}
+                hasRankingData={hasRankingData}
                 hideHeader
               />
             </div>

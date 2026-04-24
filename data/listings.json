@@ -89214,7 +89214,6 @@
     "daysOnMarket": null,
     "status": "active",
     "images": [
-      "https://images.craigslist.org/kB3qK7wzuwCsztM1mMQQW2_600x450.jpg",
       "https://images.craigslist.org/00R0R_eHOrIENayBk_600x450.jpg"
     ]
   },
@@ -89241,7 +89240,6 @@
     "daysOnMarket": null,
     "status": "active",
     "images": [
-      "https://images.craigslist.org/wj1ZoNmw2mrEwppw3zjaWb_600x450.jpg",
       "https://images.craigslist.org/00v0v_ee64uGpuymt_600x450.jpg",
       "https://images.craigslist.org/00x0x_gIaFSjybIIm_600x450.jpg",
       "https://images.craigslist.org/00e0e_7AFEyrqCjzm_600x450.jpg"
@@ -89270,7 +89268,6 @@
     "daysOnMarket": null,
     "status": "active",
     "images": [
-      "https://images.craigslist.org/gNMfDf5evzpjn6owuCgAvv_600x450.jpg",
       "https://images.craigslist.org/00101_hVzuDShJIbb_600x450.jpg",
       "https://images.craigslist.org/00H0H_blU8O7p44dG_600x450.jpg"
     ]
@@ -89298,7 +89295,6 @@
     "daysOnMarket": null,
     "status": "active",
     "images": [
-      "https://images.craigslist.org/twrCMPnSSRXkrpGRR5E12d_600x450.jpg",
       "https://images.craigslist.org/01313_h7WfV1tCuZ6_600x450.jpg"
     ]
   },
@@ -89324,9 +89320,7 @@
     "description": ".85 ACRES OF LAND FOR SALE",
     "daysOnMarket": null,
     "status": "active",
-    "images": [
-      "https://images.craigslist.org/ceMpWmqjWRyz4MHkX2HNL6_600x450.jpg"
-    ]
+    "images": []
   },
   {
     "id": "craigslist_1164241",
@@ -89350,9 +89344,7 @@
     "description": "LAND FOR SALE IN MEMPHIS, TN",
     "daysOnMarket": null,
     "status": "active",
-    "images": [
-      "https://images.craigslist.org/i4jFDAB8NL1vfHh72KEXm8_600x450.jpg"
-    ]
+    "images": []
   },
   {
     "id": "craigslist_3388922",
@@ -89378,7 +89370,6 @@
     "daysOnMarket": null,
     "status": "active",
     "images": [
-      "https://images.craigslist.org/wt4c8MNJcvQdBTDkpNjuJc_600x450.jpg",
       "https://images.craigslist.org/01515_a16E37SO9qP_600x450.jpg",
       "https://images.craigslist.org/00404_hzM5gUV5ll8_600x450.jpg",
       "https://images.craigslist.org/00l0l_aQtcX1hVSZf_600x450.jpg",
@@ -89387,7 +89378,7 @@
     ]
   },
   {
-    "id": "craigslist_3621890",
+    "id": "craigslist_3621890_MO_36779",
     "title": "20 acres of unrestricted land, old house, elec, old well and septic",
     "price": 99000.0,
     "acreage": 20.0,
@@ -89412,7 +89403,6 @@
     "daysOnMarket": null,
     "status": "active",
     "images": [
-      "https://images.craigslist.org/trBktxt1Joq8naeDU3K2SL_600x450.jpg",
       "https://images.craigslist.org/00H0H_cYd3ezPUXT0_600x450.jpg",
       "https://images.craigslist.org/01616_dXTdFlOhg72_600x450.jpg",
       "https://images.craigslist.org/00X0X_bVTLdiQk4Ok_600x450.jpg",
@@ -89444,7 +89434,6 @@
     "daysOnMarket": null,
     "status": "active",
     "images": [
-      "https://images.craigslist.org/aZSbbbKTCaLxwMQ3VAx76a_600x450.jpg",
       "https://images.craigslist.org/00F0F_c7XfFDacfWy_600x450.jpg"
     ]
   },
@@ -89472,7 +89461,6 @@
     "daysOnMarket": null,
     "status": "active",
     "images": [
-      "https://images.craigslist.org/5vpDSnbprmjQcvFjFU6Jo8_600x450.jpg",
       "https://images.craigslist.org/01515_eFaBmtYW4ga_600x450.jpg",
       "https://images.craigslist.org/00I0I_9mFYz26JaTw_600x450.jpg",
       "https://images.craigslist.org/00P0P_f3215ORFMf_600x450.jpg",
@@ -89481,7 +89469,7 @@
     ]
   },
   {
-    "id": "craigslist_3621890",
+    "id": "craigslist_3621890_AR_34648",
     "title": "10 acres of land near Hot Springs Village, elec, well, septic, private",
     "price": 85000.0,
     "acreage": 10.0,
@@ -89504,7 +89492,6 @@
     "daysOnMarket": null,
     "status": "active",
     "images": [
-      "https://images.craigslist.org/eSiy3CR4KXdsm6WVyTjydb_600x450.jpg",
       "https://images.craigslist.org/00c0c_4jKfGDZEMvE_600x450.jpg",
       "https://images.craigslist.org/00u0u_7Esyn3djg9j_600x450.jpg",
       "https://images.craigslist.org/00B0B_ltEiRajVdWp_600x450.jpg",
@@ -89534,9 +89521,7 @@
     "description": "1.36 Acre land in Carroll County AR Mercury Ln, Holiday Island, AR",
     "daysOnMarket": null,
     "status": "active",
-    "images": [
-      "https://images.craigslist.org/bjhAYq64C3X2SRkMJA3re3_600x450.jpg"
-    ]
+    "images": []
   },
   {
     "id": "craigslist_2341771",
@@ -89561,7 +89546,6 @@
     "daysOnMarket": null,
     "status": "active",
     "images": [
-      "https://images.craigslist.org/jU7HLpAQtCXLwgB7VxyUEo_600x450.jpg",
       "https://images.craigslist.org/01212_j4F48TOyCFM_600x450.jpg"
     ]
   },
@@ -89588,7 +89572,6 @@
     "daysOnMarket": null,
     "status": "active",
     "images": [
-      "https://images.craigslist.org/n5V9TaMEp5z6BcrADWit6V_600x450.jpg",
       "https://images.craigslist.org/00I0I_j1lxJYbIN2z_600x450.jpg",
       "https://images.craigslist.org/00o0o_fNpacTcoCIC_600x450.jpg",
       "https://images.craigslist.org/00b0b_4eKpkqyidwG_600x450.jpg",
@@ -89619,7 +89602,6 @@
     "daysOnMarket": null,
     "status": "active",
     "images": [
-      "https://images.craigslist.org/wGDMoWYNdjiq6DB5ambfXk_600x450.jpg",
       "https://images.craigslist.org/00B0B_1SmlCIbcjSt_600x450.jpg"
     ]
   },
@@ -89646,7 +89628,6 @@
     "daysOnMarket": null,
     "status": "active",
     "images": [
-      "https://images.craigslist.org/qGZBSU1BNqWy1gKZrnC1sK_600x450.jpg",
       "https://images.craigslist.org/00B0B_1SmlCIbcjSt_600x450.jpg"
     ]
   },
@@ -89673,7 +89654,6 @@
     "daysOnMarket": null,
     "status": "active",
     "images": [
-      "https://images.craigslist.org/1K5sJkSpaEWRTd3TnSmcWY_600x450.jpg",
       "https://images.craigslist.org/00C0C_agUZuhcLobU_600x450.jpg",
       "https://images.craigslist.org/00202_kv1fLZSdktQ_600x450.jpg",
       "https://images.craigslist.org/00H0H_k5FOGgQH7cU_600x450.jpg",
@@ -89704,7 +89684,6 @@
     "daysOnMarket": null,
     "status": "active",
     "images": [
-      "https://images.craigslist.org/jNDsedArbRPtaB6kJzpFuQ_600x450.jpg",
       "https://images.craigslist.org/00b0b_d999fzlPnqA_600x450.jpg",
       "https://images.craigslist.org/00D0D_fifqgpWyq05_600x450.jpg",
       "https://images.craigslist.org/00l0l_5uMWlxUXNE1_600x450.jpg",

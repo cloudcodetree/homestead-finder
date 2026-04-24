@@ -34,6 +34,10 @@ interface FilterPanelProps {
   sourceCounts?: Record<string, number>;
   /** When true, the panel's built-in header is suppressed (parent renders its own) */
   hideHeader?: boolean;
+  /** True iff the signed-in user has a fitted personalization model.
+   * Controls whether the "Recommended for you" sort pill is shown.
+   * Mirror of the same check in Dashboard's sort-select dropdown. */
+  hasRankingData?: boolean;
 }
 
 // Fallback shown only when `availableStates` is empty (pre-load or total
@@ -56,6 +60,7 @@ export const FilterPanel = ({
   availableListingVariants,
   sourceCounts,
   hideHeader = false,
+  hasRankingData = false,
 }: FilterPanelProps) => {
   // Sorted list of sources present in the loaded data (desc by count so
   // the biggest feeds float to the top of the pill row). Skips zero-count
@@ -99,19 +104,21 @@ export const FilterPanel = ({
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">Sort By</label>
           <div className="flex flex-wrap gap-1.5">
-            {(Object.keys(SORT_LABELS) as SortBy[]).map((option) => (
-              <button
-                key={option}
-                onClick={() => onUpdateFilter('sortBy', option)}
-                className={`rounded px-2 py-0.5 text-xs font-medium transition-colors ${
-                  filters.sortBy === option
-                    ? 'bg-green-600 text-white'
-                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                }`}
-              >
-                {SORT_LABELS[option]}
-              </button>
-            ))}
+            {(Object.keys(SORT_LABELS) as SortBy[])
+              .filter((option) => option !== 'recommended' || hasRankingData)
+              .map((option) => (
+                <button
+                  key={option}
+                  onClick={() => onUpdateFilter('sortBy', option)}
+                  className={`rounded px-2 py-0.5 text-xs font-medium transition-colors ${
+                    filters.sortBy === option
+                      ? 'bg-green-600 text-white'
+                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                  }`}
+                >
+                  {SORT_LABELS[option]}
+                </button>
+              ))}
           </div>
         </div>
 
