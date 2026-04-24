@@ -89,6 +89,25 @@ user need and the thinnest shippable v1.
   within 10 mi · farmers market weekly · median age 47." Paints
   the "is there a there there" picture homesteaders ask about.
 
+- [ ] **General text search + filter combo** — dedicated search bar
+  next to the filter sidebar, substring match across title +
+  description + county + features + improvements. Currently the only
+  free-text path is AskClaude (localhost-only + requires query_server
+  running), so users searching for "cabin near Beaver Lake" have no
+  good UI. Two-phase build:
+
+  **v1 (client-side, ~2h)**: input in the header with a magnifying-
+  glass icon. Debounce 200ms. Filter the already-loaded
+  `properties` array via lowercase-substring match on the concatenated
+  fields. Case-insensitive, multi-word = AND. Instant results, zero
+  backend.
+
+  **v2 (Supabase, ~half day)**: push a subset of fields to a
+  `listings_search` Supabase table with `to_tsvector` index. Frontend
+  queries via RPC. Enables multi-word phrase search, stemming,
+  OR/NOT operators, relevance ranking. Also enables the analytics
+  layer (item above) to capture search queries server-side.
+
 - [ ] **Behavioral analytics + adaptive UI** — three stacked pieces:
 
   **a. Event capture (the foundation).** New Supabase table
