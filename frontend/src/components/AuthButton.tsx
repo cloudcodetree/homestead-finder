@@ -11,6 +11,10 @@ interface AuthButtonProps {
    * modal so it can wire `currentFilters` + `onApply` to the dashboard
    * filter state. */
   onOpenSavedSearches?: () => void;
+  /** Called when the user clicks "Preferences" — parent opens the
+   * OnboardingModal in edit mode so the user can revise what they
+   * told us during first-time setup. */
+  onOpenPreferences?: () => void;
 }
 
 /**
@@ -24,7 +28,11 @@ interface AuthButtonProps {
  *     the settings surface the user asked for in an hamburger-style
  *     dropdown.
  */
-export const AuthButton = ({ onOpenNotifications, onOpenSavedSearches }: AuthButtonProps) => {
+export const AuthButton = ({
+  onOpenNotifications,
+  onOpenSavedSearches,
+  onOpenPreferences,
+}: AuthButtonProps) => {
   const { user, loading, configured, loginWithGoogle, loginWithEmail, logout } = useAuth();
   const [sheetOpen, setSheetOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -155,6 +163,21 @@ export const AuthButton = ({ onOpenNotifications, onOpenSavedSearches }: AuthBut
                   </svg>
                 }
                 label="Saved searches"
+              />
+            )}
+            {onOpenPreferences && (
+              <MenuItem
+                onClick={() => {
+                  closeMenu();
+                  onOpenPreferences();
+                }}
+                icon={
+                  <svg viewBox="0 0 24 24" className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M12 15a3 3 0 100-6 3 3 0 000 6z" />
+                    <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 01-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.6 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z" />
+                  </svg>
+                }
+                label="Preferences"
               />
             )}
             {onOpenNotifications && (

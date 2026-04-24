@@ -5,6 +5,7 @@ import App from './App';
 import { AuthProvider } from './hooks/useAuth';
 import { HiddenListingsProvider } from './hooks/useHiddenListings';
 import { SavedListingsProvider } from './hooks/useSavedListings';
+import { UserPreferencesProvider } from './hooks/useUserPreferences';
 import './index.css';
 
 // `import.meta.env.BASE_URL` is "/homestead-finder/" under GitHub Pages
@@ -19,11 +20,13 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <BrowserRouter basename={import.meta.env.BASE_URL}>
       <AuthProvider>
-        <SavedListingsProvider>
-          <HiddenListingsProvider>
-            <App />
-          </HiddenListingsProvider>
-        </SavedListingsProvider>
+        <UserPreferencesProvider>
+          <SavedListingsProvider>
+            <HiddenListingsProvider>
+              <App />
+            </HiddenListingsProvider>
+          </SavedListingsProvider>
+        </UserPreferencesProvider>
       </AuthProvider>
     </BrowserRouter>
   </React.StrictMode>

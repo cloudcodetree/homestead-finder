@@ -10,6 +10,7 @@ import { HomesteadDeals } from './HomesteadDeals';
 import { AskClaude } from './AskClaude';
 import { AuthButton } from './AuthButton';
 import { ErrorBoundary } from './ErrorBoundary';
+import { OnboardingModal } from './OnboardingModal';
 import { SavedSearchesModal } from './SavedSearchesModal';
 import { useProperties } from '../hooks/useProperties';
 import { useFilters } from '../hooks/useFilters';
@@ -60,6 +61,7 @@ export const Dashboard = () => {
   const [viewMode, setViewMode] = useState<ViewMode>('list');
   const [showNotifications, setShowNotifications] = useState(false);
   const [showSavedSearches, setShowSavedSearches] = useState(false);
+  const [showPreferences, setShowPreferences] = useState(false);
   const [showFilters, setShowFilters] = useState(false); // mobile drawer
   const [sidebarOpen, setSidebarOpen] = useState(true); // desktop collapse
   const [queryResult, setQueryResult] = useState<QueryResponse | null>(null);
@@ -296,6 +298,7 @@ export const Dashboard = () => {
           <AuthButton
             onOpenNotifications={() => setShowNotifications(true)}
             onOpenSavedSearches={() => setShowSavedSearches(true)}
+            onOpenPreferences={() => setShowPreferences(true)}
           />
         </div>
       </header>
@@ -752,6 +755,12 @@ export const Dashboard = () => {
         currentFilters={filters}
         onApply={replaceFilters}
       />
+      {showPreferences && (
+        <OnboardingModal
+          forceOpen
+          onClose={() => setShowPreferences(false)}
+        />
+      )}
 
       {/* Quick peek bar when map is open and property selected */}
       {viewMode === 'map' && selectedProperty && (

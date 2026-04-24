@@ -347,4 +347,65 @@ export const api = {
     update: updateSavedSearch,
     delete: deleteSavedSearch,
   },
+  preferences: {
+    get: getPreferences,
+    upsert: upsertPreferences,
+  },
 };
+
+// ── User preferences ─────────────────────────────────────────────
+
+const USER_PREFERENCES_TABLE = 'user_preferences';
+
+/**
+ * Read the current user's preferences. Returns null when not
+ * logged in, no row exists, or Supabase is unconfigured — caller
+ * should treat absent as "onboarding not complete".
+ */
+async function getPreferences(): Promise<{
+  preferences: Record<string, unknown>;
+  completedAt: string | null;
+} | null> {
+  if (!supabase) return null;
+  const user = await getUser();
+  if (!user) return null;
+  const { data, error } = await supabase
+    .from(USER_PREFERENCES_TABLE)
+    .select('preferences, completed_at')
+    .eq('user_id', user.id)
+    .maybeSingle();
+  if (error || !data) return null;
+  return {
+    preferences: (data.preferences as Record<string, unknown>) ?? {},
+    completedAt: (data.completed_at as string | null) ?? null,
+  };
+}
+
+/**
+ * Upsert preferences. Shape is opaque to the API layer — caller
+ * passes the full preferences object each time (additive merges are
+ * the caller's problem; keeping the API dumb avoids stale-merge
+ * bugs when schema evolves).
+ *
+ * Pass `completed: true` when the user finishes onboarding; stamps
+ * the completed_at timestamp so we stop prompting them.
+ */
+async function upsertPreferences(
+  preferences: Record<string, unknown>,
+  { completed }: { completed?: boolean } = {},
+): Promise<void> {
+  if (!supabase) throw new Error('Supabase not configured');
+  const user = await getUser();
+  if (!user) throw new Error('Must be signed in');
+  const payload: Record<string, unknown> = {
+    user_id: user.id,
+    preferences,
+  };
+  if (completed) {
+    payload.completed_at = new Date().toISOString();
+  }
+  const { error } = await supabase
+    .from(USER_PREFERENCES_TABLE)
+    .upsert(payload, { onConflict: 'user_id' });
+  if (error) throw error;
+}

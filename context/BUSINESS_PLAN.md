@@ -243,6 +243,18 @@ Explicit list of things we've decided against pursuing now:
 
 ---
 
+## Locked Decisions (2026-04-24c)
+
+- **ICP phrasing:** "homestead buyers." Tagline: *"Research rural
+  land the way you'd research a stock — buyer-side intelligence
+  for homestead buyers."*
+- **First launch subreddit:** /r/homestead (460k, highest intent).
+- **Public identity:** full name. Reconsider only if day-job
+  conflict surfaces.
+- **Phase 1 internal order:** (1) preferences → (2) projects →
+  (3) 5-point rating → (4) durability → (5) blacklist mitigation
+  → (6) Stripe → (7) landing page.
+
 ## Open Questions (to answer before Phase 1 ship)
 
 These are things the founder should decide before day-1 launch:
