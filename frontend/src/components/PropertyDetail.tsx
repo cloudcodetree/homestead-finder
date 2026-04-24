@@ -8,6 +8,9 @@ import {
   RED_FLAG_DESCRIPTIONS,
   RED_FLAG_SEVERITY,
 } from '../types/property';
+import { useAuth } from '../hooks/useAuth';
+import { useHiddenListings } from '../hooks/useHiddenListings';
+import { useSavedListings } from '../hooks/useSavedListings';
 import { PrivateNote } from './PrivateNote';
 import { PropertyThumbnail } from './PropertyThumbnail';
 import { ResearchPanel } from './ResearchPanel';
@@ -60,6 +63,11 @@ const ValidationBadge = ({ status }: { status?: Property['status'] }) => {
 export const PropertyDetail = ({ property, onClose }: PropertyDetailProps) => {
   const scoreColor = getDealScoreColor(property.dealScore);
   const [copied, setCopied] = useState(false);
+  const { user, loginWithGoogle } = useAuth();
+  const { isSaved, toggle: toggleSaved } = useSavedListings();
+  const { isHidden, toggle: toggleHidden } = useHiddenListings();
+  const saved = isSaved(property.id);
+  const hidden = isHidden(property.id);
 
   const copyUrl = () => {
     navigator.clipboard.writeText(property.url).then(() => {
@@ -500,6 +508,68 @@ export const PropertyDetail = ({ property, onClose }: PropertyDetailProps) => {
                 )}
               </button>
             </div>
+          </div>
+
+          {/* Save / Not-interested actions — mirror the buttons on the
+              card, but labeled so users who landed here deep-link-
+              style (URL navigation) still get the affordance. Anonymous
+              click on Save falls through to Google OAuth; Hide is
+              gated to signed-in users (nowhere to persist otherwise). */}
+          <div className="border-t border-gray-100 pt-4 flex items-center gap-2">
+            <button
+              onClick={() => {
+                if (!user) {
+                  void loginWithGoogle();
+                  return;
+                }
+                void toggleSaved(property.id);
+              }}
+              className={`flex-1 inline-flex items-center justify-center gap-1.5 rounded-lg border px-3 py-2 text-sm font-medium transition-colors ${
+                saved
+                  ? 'bg-amber-400 border-amber-500 text-white hover:bg-amber-500'
+                  : 'bg-white border-gray-300 text-gray-700 hover:bg-gray-50'
+              }`}
+            >
+              <svg viewBox="0 0 24 24" className="w-4 h-4" fill={saved ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z" />
+              </svg>
+              {saved ? 'Saved' : 'Save'}
+            </button>
+            {user && (
+              <button
+                onClick={() => void toggleHidden(property.id)}
+                className={`flex-1 inline-flex items-center justify-center gap-1.5 rounded-lg border px-3 py-2 text-sm font-medium transition-colors ${
+                  hidden
+                    ? 'bg-red-500 border-red-600 text-white hover:bg-red-600'
+                    : 'bg-white border-gray-300 text-gray-700 hover:bg-gray-50'
+                }`}
+                title={hidden ? 'Hidden — click to restore' : 'Not interested'}
+              >
+                {hidden ? (
+                  <>
+                    {/* Eye (show again) — mirror of the eye-off below,
+                        restoring visibility. */}
+                    <svg viewBox="0 0 24 24" className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                      <circle cx="12" cy="12" r="3" />
+                    </svg>
+                    Hidden — show again
+                  </>
+                ) : (
+                  <>
+                    {/* Eye-off — visually distinct from the modal's Close
+                        ✕ button at top-right. Same semantic as the card's
+                        ✕ button (which is fine there because no other ✕
+                        is nearby). */}
+                    <svg viewBox="0 0 24 24" className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24" />
+                      <line x1="1" y1="1" x2="23" y2="23" />
+                    </svg>
+                    Not interested
+                  </>
+                )}
+              </button>
+            )}
           </div>
 
           {/* Private note (renders only when saved) */}
