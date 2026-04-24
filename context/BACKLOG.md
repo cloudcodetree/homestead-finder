@@ -6,6 +6,72 @@
 
 ---
 
+## Product Vision (captured 2026-04-24 — the real ROI roadmap)
+
+These are the features that transform the app from "better Zillow" into
+"buy-side homestead research desk." Each entry includes the underlying
+user need and the thinnest shippable v1.
+
+- [ ] **Personalized home page** — when the user signs in, landing on
+  the app shows 6-12 listings ranked by their personal model instead
+  of the global feed. Thinnest v1: dedicated `/home` route that reuses
+  `sortBy=recommended` + top-12 only, auto-hidden if no saves yet.
+  Eventually: AI-generated "3 listings you should see today" with a
+  one-sentence reason each.
+
+- [ ] **User preference model / persona capture** — today's
+  `user_ranking_weights` learns only from save/hide events; bootstrap
+  problem for new users. v1: an onboarding sheet asking
+  {budget, min acres, must-have features, move-in vs build, states,
+  willing-travel-radius}. Persists to a new `user_preferences` table;
+  blends into the ranking model as a prior until enough event data
+  accrues to take over. Schema should be additive — preferences are
+  durable settings, not events.
+
+- [ ] **Saved searches as projects** — current saved-searches are
+  stateless filter snapshots. Extend to "projects" with per-project:
+  name, notes, listing shortlist (explicit pins beyond saved_listings),
+  timeline of events (viewed, contacted seller, visited in person),
+  status (scouting / shortlisted / offered / closed / abandoned).
+  Turns the app into a pipeline tool, not a search tool. New
+  `projects` table + `project_listings` join table.
+
+- [ ] **User-tweakable AI prompts** — surface the enrichment + curation
+  prompts as editable text in a settings panel. User can add their own
+  criteria ("I care strongly about spring water and south-facing slope").
+  The tweak gets appended to the system prompt when the user runs
+  enrichment for themselves. Opens up power-user personalization without
+  requiring code changes. Keep base vocabulary enums locked (output
+  sanitization still clamps to them).
+
+- [ ] **Draw-boundary map search** — Leaflet + leaflet-draw. User
+  draws a polygon on the map; we filter listings whose lat/lng falls
+  inside. Deal-breaker for buyers targeting specific watersheds, school
+  districts, or commute zones. Dependency: leaflet-draw (~15KB gz).
+
+- [ ] **Climate + threat scoring** — move beyond the FirstStreet
+  external link to an integrated score. Pull from: NOAA SSP climate
+  projections (30-year temperature + precipitation shifts), FEMA flood
+  maps (already have), USDA drought outlook, wildfire WHP index, EPA
+  AirNow historical PM2.5. Compose into a "Climate Risk" pill on the
+  card (green/yellow/red) with a breakdown panel on the detail. Use
+  existing `geoEnrichment.flood` as the template shape.
+
+- [ ] **Property-as-stock analytics** — for each listing, compute +
+  display the technical signals an investor would use:
+  * Price trend over time (our daily scrape history provides this;
+    need to start storing per-ID price snapshots)
+  * Days-on-market percentile vs county
+  * $/ac relative to county 12-mo rolling median (we have medians; add
+    rolling)
+  * "Similar parcels sold for X in the last 24 months" (county
+    assessor API integration)
+  * Velocity indicator — is this market heating up or cooling?
+  New page: `/p/{id}/analytics` with charts. Uses Recharts (already
+  likely a transitive dep).
+
+---
+
 ## P0 — Immediate (Get to Working State)
 
 - [ ] **Verify frontend builds** — `cd frontend && npm install && npm run build`
