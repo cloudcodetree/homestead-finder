@@ -68,6 +68,10 @@ export const Dashboard = () => {
   const { savedIds } = useSavedListings();
   const { hiddenIds } = useHiddenListings();
   const [showHidden, setShowHidden] = useState(false);
+  /** When on, the list view shows ONLY hidden listings (user opened
+   * "My hidden listings" from the account menu). Different from
+   * `showHidden` which mixes hidden rows back into the normal sort. */
+  const [onlyHidden, setOnlyHidden] = useState(false);
   const { weights: rankingWeights, hasEnoughData: hasRankingData } =
     useRankingWeights();
 
@@ -78,12 +82,21 @@ export const Dashboard = () => {
   // user has toggled it off manually.
   const [searchParams, setSearchParams] = useSearchParams();
   useEffect(() => {
-    if (searchParams.get('saved') === '1') {
+    const params = new URLSearchParams(searchParams);
+    let changed = false;
+    if (params.get('saved') === '1') {
       setOnlySaved(true);
-      const next = new URLSearchParams(searchParams);
-      next.delete('saved');
-      setSearchParams(next, { replace: true });
+      setOnlyHidden(false);
+      params.delete('saved');
+      changed = true;
     }
+    if (params.get('hidden') === '1') {
+      setOnlyHidden(true);
+      setOnlySaved(false);
+      params.delete('hidden');
+      changed = true;
+    }
+    if (changed) setSearchParams(params, { replace: true });
   }, [searchParams, setSearchParams]);
   // States present in the loaded corpus — feeds the state filter so it
   // reflects actual inventory (not a hardcoded list). Stable reference
@@ -161,11 +174,18 @@ export const Dashboard = () => {
   //      weights. We re-sort here because it depends on a user-specific
   //      model that the corpus-level useProperties hook doesn't see.
   const sortedProperties = useMemo(() => {
-    let arr = onlySaved ? properties.filter((p) => savedIds.has(p.id)) : properties;
-    // Hide "not interested" listings by default. Saved always wins
-    // over hidden — if a user has a listing in both tables, it still
-    // shows so they don't lose track of it.
-    if (!showHidden) {
+    let arr = properties;
+    if (onlyHidden) {
+      // Dedicated "hidden view" — show every listing the user has
+      // hidden, in any sort order. No implicit un-hide; they click
+      // the eye-off on the card to restore.
+      arr = arr.filter((p) => hiddenIds.has(p.id));
+    } else if (onlySaved) {
+      arr = arr.filter((p) => savedIds.has(p.id));
+    } else if (!showHidden) {
+      // Default: hide "not interested" listings. Saved always wins
+      // over hidden — if a listing is in both tables, it still
+      // shows so the user doesn't lose track of it.
       arr = arr.filter((p) => !hiddenIds.has(p.id) || savedIds.has(p.id));
     }
     if (filters.sortBy === 'recommended' && hasRankingData && rankingWeights) {
@@ -175,6 +195,7 @@ export const Dashboard = () => {
     }
     return arr;
   }, [
+    onlyHidden,
     onlySaved,
     properties,
     savedIds,
@@ -477,6 +498,20 @@ export const Dashboard = () => {
                   <p className="text-sm text-gray-500">
                     {queryResult ? 'All listings' : `${sortedProperties.length} properties`}
                   </p>
+                  {/* Dedicated mode banner when the user navigated here
+                      via "My hidden listings" — makes the context clear
+                      and offers a one-click way out. */}
+                  {onlyHidden && (
+                    <div className="inline-flex items-center gap-2 rounded-full border border-gray-300 bg-gray-100 px-2.5 py-0.5 text-xs font-medium text-gray-700">
+                      <span>Showing hidden listings only</span>
+                      <button
+                        onClick={() => setOnlyHidden(false)}
+                        className="text-gray-500 hover:text-gray-900 underline"
+                      >
+                        Exit
+                      </button>
+                    </div>
+                  )}
                   {showSavedToggle && (
                     <button
                       onClick={() => setOnlySaved((v) => !v)}
@@ -519,17 +554,25 @@ export const Dashboard = () => {
                           : `Show ${hiddenIds.size} hidden listings`
                       }
                     >
+                      {/* Matches the card / modal convention: eye-off
+                          means "currently hidden" (even though we're
+                          toggling visibility, the chip refers to the
+                          state of the rows it's counting). */}
                       <svg
                         viewBox="0 0 24 24"
                         className="w-3 h-3"
                         fill="none"
                         stroke="currentColor"
                         strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
                       >
-                        <line x1="18" y1="6" x2="6" y2="18" />
-                        <line x1="6" y1="6" x2="18" y2="18" />
+                        <path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24" />
+                        <line x1="1" y1="1" x2="23" y2="23" />
                       </svg>
-                      <span>Hidden {hiddenIds.size}</span>
+                      <span>
+                        {showHidden ? 'Hiding' : 'Show'} hidden ({hiddenIds.size})
+                      </span>
                     </button>
                   )}
                 </div>
