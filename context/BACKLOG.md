@@ -28,13 +28,53 @@ user need and the thinnest shippable v1.
   accrues to take over. Schema should be additive — preferences are
   durable settings, not events.
 
-- [ ] **Saved searches as projects** — current saved-searches are
-  stateless filter snapshots. Extend to "projects" with per-project:
-  name, notes, listing shortlist (explicit pins beyond saved_listings),
-  timeline of events (viewed, contacted seller, visited in person),
-  status (scouting / shortlisted / offered / closed / abandoned).
-  Turns the app into a pipeline tool, not a search tool. New
-  `projects` table + `project_listings` join table.
+- [ ] **Projects — Claude-Code-style workspace organization.** Today's
+  saved_searches are orphan filter snapshots. Promote them to a full
+  "project workspace" pattern modeled on how Claude Code organizes
+  chats in projects — projects are renameable, items move between
+  projects, files sit inside projects.
+
+  **Data model:**
+  * `projects` (id, user_id, name, description, status, sort_order,
+    created_at, updated_at) — top-level container
+  * `project_items` (project_id, item_type, item_id, sort_order,
+    pinned_at, notes) — polymorphic join; `item_type` in
+    ('saved_search', 'listing', 'note', 'file'). One item → zero-or-
+    one project (moving = update parent_id). Orphan items live in an
+    implicit "Inbox" project.
+  * `project_files` (id, project_id, user_id, filename, size_bytes,
+    content_type, storage_path, created_at) — uploads via Supabase
+    Storage (free tier 1GB). For inspection reports, surveys, comps
+    printouts, offer letters.
+  * `project_notes` (id, project_id, body_md, created_at, updated_at)
+    — project-level freeform markdown. Rich-text editor optional; v1
+    is a textarea.
+
+  **Operations:**
+  * Create / rename / archive / delete project
+  * Drag-drop items between projects (or select-and-move menu)
+  * Pin a listing to a project (distinct from save — saves are "like",
+    pins are "working on")
+  * Upload a file (10MB cap / file, configurable)
+  * Project status: `scouting / shortlisted / offered / closed /
+    archived`
+  * Project-scoped "run this search" → applies filters + opens list
+
+  **UI:**
+  * Left sidebar: collapsible project tree (or a projects picker in
+    the top nav)
+  * `/projects` index page with status columns (kanban-lite)
+  * `/project/{id}` page with tabs: Searches / Listings / Notes /
+    Files + a timeline of project activity
+  * Drag handles on every item card; drop targets on every project
+    row
+  * Saved-search apply button opens the project's filtered view in
+    one click
+
+  **Why it matters:** turns the app into a pipeline tool
+  (scouting → offer → closed) rather than a search tool. Once a user
+  has even ONE active project, switching cost skyrockets — this is
+  the stickiest feature of the whole vision list.
 
 - [ ] **User-tweakable AI prompts** — surface the enrichment + curation
   prompts as editable text in a settings panel. User can add their own
