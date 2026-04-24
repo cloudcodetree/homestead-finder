@@ -17,6 +17,7 @@ import { useCurated } from '../hooks/useCurated';
 import { useHomesteadDeals } from '../hooks/useHomesteadDeals';
 import { QueryResponse } from '../hooks/useQueryServer';
 import { useAuth } from '../hooks/useAuth';
+import { useHiddenListings } from '../hooks/useHiddenListings';
 import { useSavedListings } from '../hooks/useSavedListings';
 import { useRankingWeights } from '../hooks/useRankingWeights';
 import { getDealScoreColor } from '../utils/scoring';
@@ -65,6 +66,8 @@ export const Dashboard = () => {
   const [onlySaved, setOnlySaved] = useState(false);
   const { user: currentUser } = useAuth();
   const { savedIds } = useSavedListings();
+  const { hiddenIds } = useHiddenListings();
+  const [showHidden, setShowHidden] = useState(false);
   const { weights: rankingWeights, hasEnoughData: hasRankingData } =
     useRankingWeights();
 
@@ -159,13 +162,28 @@ export const Dashboard = () => {
   //      model that the corpus-level useProperties hook doesn't see.
   const sortedProperties = useMemo(() => {
     let arr = onlySaved ? properties.filter((p) => savedIds.has(p.id)) : properties;
+    // Hide "not interested" listings by default. Saved always wins
+    // over hidden — if a user has a listing in both tables, it still
+    // shows so they don't lose track of it.
+    if (!showHidden) {
+      arr = arr.filter((p) => !hiddenIds.has(p.id) || savedIds.has(p.id));
+    }
     if (filters.sortBy === 'recommended' && hasRankingData && rankingWeights) {
       arr = [...arr].sort(
         (a, b) => scoreWithWeights(b, rankingWeights) - scoreWithWeights(a, rankingWeights),
       );
     }
     return arr;
-  }, [onlySaved, properties, savedIds, filters.sortBy, rankingWeights, hasRankingData]);
+  }, [
+    onlySaved,
+    properties,
+    savedIds,
+    hiddenIds,
+    showHidden,
+    filters.sortBy,
+    rankingWeights,
+    hasRankingData,
+  ]);
   // Offer a "Saved" toggle whenever the user is signed in — always
   // visible but functionally off when their saved list is empty.
   const showSavedToggle = currentUser !== null;
@@ -484,6 +502,33 @@ export const Dashboard = () => {
                         <path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z" />
                       </svg>
                       <span>Saved {savedIds.size > 0 ? savedIds.size : ''}</span>
+                    </button>
+                  )}
+                  {currentUser && hiddenIds.size > 0 && (
+                    <button
+                      onClick={() => setShowHidden((v) => !v)}
+                      className={`inline-flex items-center gap-1 rounded-full border px-2.5 py-0.5 text-xs font-medium transition-colors ${
+                        showHidden
+                          ? 'bg-gray-600 border-gray-700 text-white'
+                          : 'bg-white border-gray-200 text-gray-500 hover:bg-gray-50'
+                      }`}
+                      title={
+                        showHidden
+                          ? 'Showing hidden listings — click to hide them again'
+                          : `Show ${hiddenIds.size} hidden listings`
+                      }
+                    >
+                      <svg
+                        viewBox="0 0 24 24"
+                        className="w-3 h-3"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                      >
+                        <line x1="18" y1="6" x2="6" y2="18" />
+                        <line x1="6" y1="6" x2="18" y2="18" />
+                      </svg>
+                      <span>Hidden {hiddenIds.size}</span>
                     </button>
                   )}
                 </div>

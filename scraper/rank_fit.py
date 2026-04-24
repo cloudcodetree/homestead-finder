@@ -10,10 +10,13 @@ Design notes:
   * **Positive examples** = listings this user has saved (from
     saved_listings). Every saved listing contributes ONE positive
     example.
-  * **Negative examples** = random sample of unsaved listings from the
-    current corpus, 3:1 ratio to positives. Random negatives are
-    noisy (user might love them too, just hasn't seen them) but it's
-    the only signal available without explicit "not interested" UI.
+  * **Negative examples** preference order:
+      1. Explicit hides from hidden_listings (clean signal — the
+         user affirmatively said "not interested").
+      2. Random-sampled unsaved listings from the current corpus,
+         used to pad out negatives when explicit hides are scarce.
+    Target negatives:positives ratio = 3:1. When the user has fewer
+    than 3×N_saves real hides, we top up with random samples.
   * **Model**: L2-regularized logistic regression, fitted by scipy
     L-BFGS-B. No sklearn dep — one function, ~20 lines.
   * **Features** are Python-computable from the listing JSON AND
@@ -209,6 +212,22 @@ def fetch_all_saves() -> list[dict[str, Any]]:
     return r.json()
 
 
+def fetch_all_hides() -> list[dict[str, Any]]:
+    """Pull every hidden_listings row — used as explicit negative
+    examples for the ranking model."""
+    url = (
+        f"{_supabase_base()}/rest/v1/hidden_listings"
+        "?select=user_id,listing_id"
+    )
+    r = requests.get(url, headers=_supabase_headers(), timeout=30)
+    if r.status_code == 404:
+        # Migration 0004 not yet applied — treat as empty, caller
+        # falls back to random-sampled negatives.
+        return []
+    r.raise_for_status()
+    return r.json()
+
+
 def fetch_existing_weights() -> dict[str, dict[str, Any]]:
     """Return {user_id: {fitted_at, ...}} for staleness checks."""
     url = (
@@ -272,10 +291,21 @@ def process_users(
         log.info(f"[rank_fit] could not fetch saved_listings: {e}")
         return 0
 
-    # Bucket saves by user
+    # Explicit hides are optional — the model falls back to random
+    # sampling when a user has few/no hides.
+    try:
+        hides = fetch_all_hides()
+    except Exception as e:  # noqa: BLE001
+        log.info(f"[rank_fit] could not fetch hidden_listings: {e}")
+        hides = []
+
+    # Bucket saves + hides by user
     per_user: dict[str, list[str]] = {}
     for row in saves:
         per_user.setdefault(row["user_id"], []).append(row["listing_id"])
+    hides_by_user: dict[str, list[str]] = {}
+    for row in hides:
+        hides_by_user.setdefault(row["user_id"], []).append(row["listing_id"])
 
     existing = fetch_existing_weights()
     now = datetime.now(timezone.utc)
@@ -300,14 +330,33 @@ def process_users(
         if len(positives) < MIN_EXAMPLES:
             continue
 
-        # Random negatives from unsaved corpus
+        # Negatives: explicit hides first (clean signal), pad with
+        # random-sampled unsaved listings when we're short.
         saved_set = set(saved_ids)
-        candidate_negs = [i for i in all_ids if i not in saved_set]
+        target_neg_count = len(positives) * NEG_RATIO
+        hide_ids = [
+            i for i in hides_by_user.get(user_id, [])
+            if i in listings_by_id and i not in saved_set
+        ]
+        explicit_negatives = [listings_by_id[i] for i in hide_ids]
+
+        # Top up with random negatives (excluding both saves and hides)
         random.seed(hash(user_id) & 0x7fffffff)
-        negs = random.sample(
-            candidate_negs, min(len(positives) * NEG_RATIO, len(candidate_negs))
+        exclude = saved_set | set(hide_ids)
+        candidate_negs = [i for i in all_ids if i not in exclude]
+        needed = max(0, target_neg_count - len(explicit_negatives))
+        sampled_ids = random.sample(
+            candidate_negs, min(needed, len(candidate_negs))
         )
-        negatives = [listings_by_id[i] for i in negs]
+        random_negatives = [listings_by_id[i] for i in sampled_ids]
+        negatives = explicit_negatives + random_negatives
+
+        if explicit_negatives:
+            log.info(
+                f"[rank_fit] {user_id[:8]}: using "
+                f"{len(explicit_negatives)} explicit hides + "
+                f"{len(random_negatives)} random negatives"
+            )
 
         # Build feature matrix
         feature_names = sorted(_extract_features(positives[0]).keys())

@@ -167,6 +167,54 @@ const toggleSaved = async (listingId: string): Promise<boolean> => {
   }
 };
 
+// ── Hidden listings ──────────────────────────────────────────────
+
+const HIDDEN_LISTINGS_TABLE = 'hidden_listings';
+
+/** IDs the current user has marked "not interested". Empty array when
+ * not signed in or Supabase isn't configured — consumers treat it as
+ * "nothing hidden". */
+const listHidden = async (): Promise<string[]> => {
+  if (!supabase) return [];
+  const user = await getUser();
+  if (!user) return [];
+  const { data, error } = await supabase
+    .from(HIDDEN_LISTINGS_TABLE)
+    .select('listing_id')
+    .eq('user_id', user.id);
+  if (error || !data) return [];
+  return data.map((r) => r.listing_id as string);
+};
+
+/** Toggle a listing's hidden state. Returns the new state (true =
+ * hidden). Throws if not signed in. */
+const toggleHidden = async (listingId: string): Promise<boolean> => {
+  if (!supabase) throw new Error('Supabase not configured');
+  const user = await getUser();
+  if (!user) throw new Error('Must be signed in');
+  const { data: existing } = await supabase
+    .from(HIDDEN_LISTINGS_TABLE)
+    .select('listing_id')
+    .eq('user_id', user.id)
+    .eq('listing_id', listingId)
+    .maybeSingle();
+  if (existing) {
+    const { error } = await supabase
+      .from(HIDDEN_LISTINGS_TABLE)
+      .delete()
+      .eq('user_id', user.id)
+      .eq('listing_id', listingId);
+    if (error) throw error;
+    return false;
+  } else {
+    const { error } = await supabase
+      .from(HIDDEN_LISTINGS_TABLE)
+      .insert({ user_id: user.id, listing_id: listingId });
+    if (error) throw error;
+    return true;
+  }
+};
+
 // ── Saved searches ───────────────────────────────────────────────
 
 const SAVED_SEARCHES_TABLE = 'saved_searches';
@@ -288,6 +336,10 @@ export const api = {
     list: listSaved,
     toggle: toggleSaved,
     updateNote,
+  },
+  hiddenListings: {
+    list: listHidden,
+    toggle: toggleHidden,
   },
   savedSearches: {
     list: listSavedSearches,

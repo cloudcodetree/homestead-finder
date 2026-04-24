@@ -1,5 +1,6 @@
 import { Property, FEATURE_LABELS } from '../types/property';
 import { useAuth } from '../hooks/useAuth';
+import { useHiddenListings } from '../hooks/useHiddenListings';
 import { useSavedListings } from '../hooks/useSavedListings';
 import { PropertyThumbnail } from './PropertyThumbnail';
 import {
@@ -62,7 +63,9 @@ export const PropertyCard = ({ property, onClick, isSelected = false }: Property
   const typeStyle = getListingTypeStyle(property);
   const { user, loginWithGoogle } = useAuth();
   const { isSaved, toggle } = useSavedListings();
+  const { isHidden, toggle: toggleHidden } = useHiddenListings();
   const saved = isSaved(property.id);
+  const hidden = isHidden(property.id);
 
   return (
     <div
@@ -105,6 +108,38 @@ export const PropertyCard = ({ property, onClick, isSelected = false }: Property
           <path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z" />
         </svg>
       </button>
+      {/* "Not interested" button — sits just left of the bookmark.
+          Only surfaced when signed in (anonymous users would have
+          nowhere to persist the signal). Feeds the personalization
+          model in rank_fit.py as a clean negative example. */}
+      {user && (
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            void toggleHidden(property.id);
+          }}
+          aria-label={hidden ? 'Un-hide listing' : 'Not interested'}
+          title={hidden ? 'Hidden — click to restore' : 'Not interested'}
+          className={`absolute top-2 right-11 z-10 w-8 h-8 rounded-full backdrop-blur-sm flex items-center justify-center transition-colors shadow ${
+            hidden
+              ? 'bg-red-500/90 hover:bg-red-600 text-white'
+              : 'bg-black/40 hover:bg-black/60 text-white'
+          }`}
+        >
+          <svg viewBox="0 0 24 24" className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            {hidden ? (
+              // "restore" icon — circular arrow
+              <path d="M3 12a9 9 0 1 0 3-6.7M3 4v5h5" />
+            ) : (
+              // "X" — not interested
+              <>
+                <line x1="18" y1="6" x2="6" y2="18" />
+                <line x1="6" y1="6" x2="18" y2="18" />
+              </>
+            )}
+          </svg>
+        </button>
+      )}
       {/* Listing-type accent stripe — colored bar above the thumbnail
           signals tax sale vs owner-finance vs standard for-sale at a
           glance. Full-width, 4px tall. */}

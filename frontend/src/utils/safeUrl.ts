@@ -25,7 +25,6 @@ export const safeUrl = (raw: string | null | undefined): string => {
     const u = new URL(trimmed);
     if (!SAFE_SCHEMES.has(u.protocol)) {
       if (import.meta.env.DEV) {
-        // eslint-disable-next-line no-console
         console.warn(`safeUrl: rejected non-http(s) scheme "${u.protocol}" in`, raw);
       }
       return "#";

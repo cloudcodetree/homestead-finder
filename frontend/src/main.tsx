@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import App from './App';
 import { AuthProvider } from './hooks/useAuth';
+import { HiddenListingsProvider } from './hooks/useHiddenListings';
 import { SavedListingsProvider } from './hooks/useSavedListings';
 import './index.css';
 
@@ -19,7 +20,9 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
     <BrowserRouter basename={import.meta.env.BASE_URL}>
       <AuthProvider>
         <SavedListingsProvider>
-          <App />
+          <HiddenListingsProvider>
+            <App />
+          </HiddenListingsProvider>
         </SavedListingsProvider>
       </AuthProvider>
     </BrowserRouter>
