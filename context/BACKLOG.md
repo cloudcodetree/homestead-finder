@@ -43,9 +43,19 @@ user need and the thinnest shippable v1.
     one project (moving = update parent_id). Orphan items live in an
     implicit "Inbox" project.
   * `project_files` (id, project_id, user_id, filename, size_bytes,
-    content_type, storage_path, created_at) — uploads via Supabase
-    Storage (free tier 1GB). For inspection reports, surveys, comps
-    printouts, offer letters.
+    content_type, storage_path, extracted_text, text_hash,
+    created_at) — uploads via Supabase Storage (free tier 1GB).
+    Accepted types: PDF (pdfplumber → extracted_text), DOCX (python-
+    docx), spreadsheets (pandas/openpyxl → text CSV representation),
+    plain text, markdown, images (alt-text from Claude Vision stored
+    as extracted_text so images ALSO become queryable context).
+    Every upload runs a synchronous extraction pass so AI queries
+    within the project can pull file contents as context.
+  * `project_file_chunks` (file_id, chunk_text, chunk_index, embedding)
+    — v2 only. When a project's total text exceeds ~50K tokens we
+    switch from "shove everything into context" to "retrieve relevant
+    chunks via pgvector similarity." Lazy — build this only when
+    projects start hitting limits.
   * `project_notes` (id, project_id, body_md, created_at, updated_at)
     — project-level freeform markdown. Rich-text editor optional; v1
     is a textarea.
@@ -59,6 +69,21 @@ user need and the thinnest shippable v1.
   * Project status: `scouting / shortlisted / offered / closed /
     archived`
   * Project-scoped "run this search" → applies filters + opens list
+  * **Files as AI context** — any AskClaude query made INSIDE a
+    project automatically includes that project's file contents as
+    context. Examples:
+    - Upload a PDF inspection report, ask "what's the red flag here
+      and which of my saved listings avoid that issue?"
+    - Upload a spreadsheet of your own budget, ask "which listings
+      fit my annual carry limit?"
+    - Upload a seller's offer-sheet PDF, ask "compare this to the
+      typical owner-finance terms in the county."
+    - Upload a reference photo, ask "find listings with a similar
+      view" (this overlaps with vision #14 image-search but stays
+      scoped to the active project).
+    Feels like Claude Code projects: drop files in, chat answers
+    use them. Same token-budget escalation (whole-file context →
+    RAG chunks once per-project text grows large).
 
   **UI:**
   * Left sidebar: collapsible project tree (or a projects picker in
