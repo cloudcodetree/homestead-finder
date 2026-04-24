@@ -306,11 +306,111 @@ export const PropertyDetail = ({ property, onClose }: PropertyDetailProps) => {
                   <p className="text-xl font-bold text-gray-900">
                     {formatPricePerAcre(property.pricePerAcre)}
                   </p>
-                  <p className="text-xs text-gray-500 mt-0.5">Price / Acre</p>
+                  <p className="text-xs text-gray-500 mt-0.5">
+                    Price / Acre
+                    {property.residualPricePerAcre &&
+                    property.estimatedStructureValueUsd &&
+                    property.estimatedStructureValueUsd > 0 ? (
+                      <span
+                        className="ml-1 text-[10px] text-gray-400"
+                        title={`Land-only $/ac after subtracting ~${formatPrice(property.estimatedStructureValueUsd)} estimated structure value`}
+                      >
+                        &nbsp;({formatPricePerAcre(property.residualPricePerAcre)} land)
+                      </span>
+                    ) : null}
+                  </p>
                 </div>
               </>
             )}
           </div>
+
+          {/* Total-cost-to-homestead — the decision-driver view.
+              Sums the asking price + estimated build-out to reach move-
+              in-ready. For already-ready listings, buildout=0 and this
+              just echoes the asking price. Honest: we can't know a
+              buyer's finishing standards, so the number is a floor. */}
+          {property.acreage > 0 && (
+            <div className="rounded-lg border border-emerald-200 bg-emerald-50/50 p-4">
+              <div className="flex items-center gap-2 mb-2 flex-wrap">
+                <h3 className="text-sm font-semibold text-emerald-900">
+                  Total cost to live here
+                </h3>
+                {property.moveInReady && (
+                  <span className="text-xs font-bold text-emerald-700 bg-white border border-emerald-200 rounded-full px-2 py-0.5">
+                    🏠 Move-in ready
+                  </span>
+                )}
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-sm">
+                <div>
+                  <p className="text-xs text-gray-500">Asking</p>
+                  <p className="font-semibold text-gray-800">{formatPrice(property.price)}</p>
+                </div>
+                <div>
+                  <p className="text-xs text-gray-500">
+                    {property.moveInReady ? 'Build-out needed' : 'Est. build-out to ready'}
+                  </p>
+                  <p
+                    className={`font-semibold ${
+                      (property.estimatedBuildoutUsd ?? 0) === 0
+                        ? 'text-emerald-700'
+                        : 'text-gray-800'
+                    }`}
+                  >
+                    {formatPrice(property.estimatedBuildoutUsd ?? 0)}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-xs text-gray-500">Total to homestead</p>
+                  <p className="text-xl font-bold text-emerald-800">
+                    {formatPrice(property.price + (property.estimatedBuildoutUsd ?? 0))}
+                  </p>
+                </div>
+              </div>
+              <p className="text-[11px] text-gray-500 mt-3">
+                Estimate assumes a modest cabin/modular build if no dwelling,
+                basic well + septic, off-grid solar if no utility service.
+                Add your own finishes / acreage improvements on top.
+                {property.estimatedStructureValueUsd &&
+                property.estimatedStructureValueUsd > 0 ? (
+                  <>
+                    {' '}
+                    Detected structures: ~{formatPrice(property.estimatedStructureValueUsd)}{' '}
+                    already in place.
+                  </>
+                ) : null}
+              </p>
+            </div>
+          )}
+
+          {/* Nearest-town proximity — surfaces geoEnrichment.proximity
+              with context that helps a buyer underwrite access costs
+              (hospital, internet, grocery). */}
+          {property.geoEnrichment?.proximity?.nearestTownName && (
+            <div className="rounded-lg border border-sky-100 bg-sky-50/40 p-3">
+              <div className="flex items-start gap-3">
+                <span className="text-lg leading-none mt-0.5">📍</span>
+                <div className="flex-1 text-sm">
+                  <p className="font-medium text-sky-900">
+                    {property.geoEnrichment.proximity.nearestTownDistanceMiles?.toFixed(1)} mi to{' '}
+                    {property.geoEnrichment.proximity.nearestTownName}
+                    {property.geoEnrichment.proximity.nearestTownPopulation &&
+                      ` (pop ${property.geoEnrichment.proximity.nearestTownPopulation.toLocaleString()})`}
+                  </p>
+                  <p className="text-xs text-sky-700/80 mt-0.5">
+                    Nearest named town ≥5k. Drive time is roughly 1.5×
+                    linear miles on Ozark back roads.
+                    {(property.geoEnrichment.proximity.namedWaterFeatures ?? []).length > 0 && (
+                      <>
+                        {' '}
+                        Nearby water: {property.geoEnrichment.proximity.namedWaterFeatures!.slice(0, 2).join(', ')}.
+                      </>
+                    )}
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
 
           {/* AI Analysis */}
           {property.enrichedAt ? (

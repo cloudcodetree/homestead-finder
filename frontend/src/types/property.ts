@@ -224,6 +224,38 @@ export interface Property {
   // Geospatial enrichment (added by scraper/enrich_geo.py) — soil, flood,
   // elevation, watershed pulled from free US government APIs.
   geoEnrichment?: GeoEnrichment;
+
+  // ── Structures / improvements (scraper/improvements.py) ─────────
+  /**
+   * Flags keyed by improvement type when detected in the title+description.
+   * Keys: home, cabin, barn, outbuilding, well, septic, electric, water_city.
+   * Each value is always `true`; absent keys = not detected (vs. "confirmed
+   * absent"). Value-conservative: we'd rather UNDER-credit a seller than
+   * inflate a residual land price.
+   */
+  improvements?: Record<string, boolean>;
+  /** Sum of conservative per-improvement values in USD. */
+  estimatedStructureValueUsd?: number;
+  /** Asking price minus estimated structure value, floored at 10% of asking.
+   * Used to compute a fair $/acre comparison for improved vs. bare land.
+   * A cabin-on-40ac for $250k with $65k of structures has residualLandPrice
+   * $185k → $4,625/ac residual (vs. the raw $6,250/ac), which is how this
+   * listing should be deal-scored against a bare-land comp. */
+  residualLandPrice?: number;
+  residualPricePerAcre?: number;
+  /**
+   * True when the listing has a primary dwelling (home OR cabin) AND a
+   * water source (well OR city water). Septic is inferred — 99% of
+   * occupied rural homes have it even when the listing doesn't say so.
+   */
+  moveInReady?: boolean;
+  /**
+   * Rough estimate of what a buyer would need to spend to bring this
+   * parcel to move-in-ready from its current state. Zero when already
+   * move-in-ready. Feeds the Total-Cost-to-Homestead view. Assumes a
+   * modest cabin/modular build, basic well+septic, solar if off-grid.
+   */
+  estimatedBuildoutUsd?: number;
 }
 
 export type SortBy =
@@ -233,6 +265,7 @@ export type SortBy =
   | 'priceAsc'
   | 'priceDesc'
   | 'pricePerAcre'
+  | 'residualPricePerAcre'
   | 'acreage'
   | 'dateFound'
   | 'title';
@@ -247,6 +280,10 @@ export const SORT_LABELS: Record<SortBy, string> = {
   priceAsc: 'Price: Low to High',
   priceDesc: 'Price: High to Low',
   pricePerAcre: 'Price / Acre',
+  // Price-per-acre AFTER subtracting estimated structure value — fair
+  // comparison between improved and bare land. A cabin-on-40-acres
+  // listing doesn't look artificially overpriced under this sort.
+  residualPricePerAcre: 'Land $/Acre (structures-adjusted)',
   acreage: 'Acreage',
   dateFound: 'Newest',
   title: 'Name',
@@ -275,6 +312,13 @@ export interface FilterState {
    * contract. Default true so the List view stays focused on things
    * a buyer could actually pursue. */
   hideInactive: boolean;
+  /**
+   * Improvement tier filter. 'any' = no filter. 'move_in_ready' = only
+   * listings with dwelling + water. 'improved' = any detected
+   * structure or utility. 'bare_land' = nothing detected. Matches the
+   * buyer's real decision: am I buying to move in now, or to build?
+   */
+  improvementTier: 'any' | 'move_in_ready' | 'improved' | 'bare_land';
 }
 
 export const DEFAULT_FILTERS: FilterState = {
@@ -293,6 +337,7 @@ export const DEFAULT_FILTERS: FilterState = {
   minHomesteadFit: 0,
   hideWithRedFlags: false,
   hideInactive: true,
+  improvementTier: 'any',
 };
 
 export const FEATURE_LABELS: Record<PropertyFeature, string> = {

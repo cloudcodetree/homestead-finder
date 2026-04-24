@@ -1,4 +1,34 @@
 import { Property, FEATURE_LABELS } from '../types/property';
+
+/**
+ * Human labels for the improvement keys `scraper/improvements.py`
+ * emits. Keeping this here (not in types/property.ts) so the label
+ * copy can evolve per-surface without touching the data contract —
+ * the detail modal or map popups might use different wording later.
+ */
+const IMPROVEMENT_LABELS: Record<string, string> = {
+  home: 'House',
+  cabin: 'Cabin',
+  barn: 'Barn',
+  outbuilding: 'Outbuilding',
+  well: 'Well',
+  septic: 'Septic',
+  electric: 'Electric',
+  water_city: 'City water',
+};
+
+/** Rough days-on-market estimate from dateFound when the source
+ * didn't supply a firm number. Returns null for unparseable dates or
+ * future-dated rows (clock skew). Used as a negotiation signal —
+ * precision within a few days is fine. */
+const computeDaysOnMarket = (isoDate: string): number | null => {
+  if (!isoDate) return null;
+  const found = new Date(isoDate).getTime();
+  if (!Number.isFinite(found)) return null;
+  const diffDays = Math.floor((Date.now() - found) / (1000 * 60 * 60 * 24));
+  return diffDays >= 0 ? diffDays : null;
+};
+
 import { useAuth } from '../hooks/useAuth';
 import { useHiddenListings } from '../hooks/useHiddenListings';
 import { useSavedListings } from '../hooks/useSavedListings';
@@ -271,7 +301,23 @@ export const PropertyCard = ({ property, onClick, isSelected = false }: Property
             <>
               <div>
                 <p className="text-lg font-bold text-gray-900">{formatPrice(property.price)}</p>
-                <p className="text-xs text-gray-500">{formatPricePerAcre(property.pricePerAcre)}</p>
+                {/* Residual $/acre when we detected structures worth subtracting
+                    — a cabin-on-40ac listing should show the land-only $/ac
+                    alongside the raw number, otherwise buyers can't compare to
+                    bare parcels. Falls back to regular $/ac for bare land. */}
+                {property.residualPricePerAcre &&
+                property.estimatedStructureValueUsd &&
+                property.estimatedStructureValueUsd > 0 ? (
+                  <p
+                    className="text-xs text-gray-500"
+                    title={`Land-only $/ac after subtracting ~${formatPrice(property.estimatedStructureValueUsd)} estimated structure value`}
+                  >
+                    {formatPricePerAcre(property.residualPricePerAcre)}{' '}
+                    <span className="text-gray-400">(land)</span>
+                  </p>
+                ) : (
+                  <p className="text-xs text-gray-500">{formatPricePerAcre(property.pricePerAcre)}</p>
+                )}
               </div>
               <div className="text-gray-300">|</div>
               <div>
@@ -283,6 +329,28 @@ export const PropertyCard = ({ property, onClick, isSelected = false }: Property
             </>
           )}
         </div>
+
+        {/* Improvement chips — "what's already here". Surfaces detected
+            structures (home/cabin/barn) and utilities (well/septic/electric).
+            Move-in-ready trumps individual chips with a single prominent
+            badge so users can spot livable listings at a glance. */}
+        {property.moveInReady ? (
+          <div className="mt-2 inline-flex items-center gap-1 rounded-full bg-emerald-100 border border-emerald-300 px-2 py-0.5 text-xs font-semibold text-emerald-800">
+            🏠 Move-in Ready
+          </div>
+        ) : property.improvements && Object.keys(property.improvements).length > 0 ? (
+          <div className="mt-2 flex flex-wrap gap-1">
+            {Object.keys(property.improvements).slice(0, 4).map((key) => (
+              <span
+                key={key}
+                className="inline-block rounded bg-blue-50 px-1.5 py-0.5 text-xs text-blue-700 border border-blue-200 capitalize"
+                title={`Detected in listing text — ~$${(property.estimatedStructureValueUsd ?? 0).toLocaleString()} total estimated structure/utility value`}
+              >
+                {IMPROVEMENT_LABELS[key] ?? key}
+              </span>
+            ))}
+          </div>
+        ) : null}
 
         {property.features.length > 0 && (
           <div className="mt-2 flex flex-wrap gap-1">
@@ -302,7 +370,54 @@ export const PropertyCard = ({ property, onClick, isSelected = false }: Property
           </div>
         )}
 
-        <p className="mt-2 text-xs text-gray-400">{formatDaysAgo(property.dateFound)}</p>
+        {/* Bottom meta row: date + DOM badge + nearest town distance.
+            Days-on-market badge is a negotiation signal — new listings
+            (< 7d) are usually priced firm; stale listings (> 90d) often
+            open to offers. Only shown when we have provenance (either
+            an explicit daysOnMarket or a reliable dateFound difference). */}
+        <div className="mt-2 flex items-center justify-between gap-2 text-xs text-gray-400">
+          <span className="flex items-center gap-1.5">
+            <span>{formatDaysAgo(property.dateFound)}</span>
+            {(() => {
+              const dom = property.daysOnMarket ?? computeDaysOnMarket(property.dateFound);
+              if (dom === null || dom < 14) return null;
+              if (dom >= 180) {
+                return (
+                  <span
+                    className="rounded bg-orange-50 border border-orange-200 px-1 py-0 text-[10px] font-medium text-orange-700"
+                    title="Listed 180+ days ago — often negotiable, but investigate why it hasn't sold"
+                  >
+                    {dom}d on market
+                  </span>
+                );
+              }
+              if (dom >= 60) {
+                return (
+                  <span
+                    className="rounded bg-yellow-50 border border-yellow-200 px-1 py-0 text-[10px] font-medium text-yellow-700"
+                    title="60+ days on market — may be open to offers"
+                  >
+                    {dom}d on market
+                  </span>
+                );
+              }
+              return null;
+            })()}
+          </span>
+          {property.geoEnrichment?.proximity?.nearestTownName &&
+            property.geoEnrichment.proximity.nearestTownDistanceMiles !== undefined && (
+              <span
+                title={`Nearest town ≥5k: ${property.geoEnrichment.proximity.nearestTownName}${
+                  property.geoEnrichment.proximity.nearestTownPopulation
+                    ? ` (pop ${property.geoEnrichment.proximity.nearestTownPopulation.toLocaleString()})`
+                    : ''
+                }`}
+              >
+                📍 {property.geoEnrichment.proximity.nearestTownDistanceMiles.toFixed(0)} mi to{' '}
+                {property.geoEnrichment.proximity.nearestTownName}
+              </span>
+            )}
+        </div>
       </div>
     </div>
   );

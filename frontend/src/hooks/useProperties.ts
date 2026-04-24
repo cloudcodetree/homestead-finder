@@ -37,6 +37,16 @@ const applyFilters = (properties: Property[], filters: FilterState): Property[] 
     if (filters.hideInactive && (p.status === 'expired' || p.status === 'pending')) {
       return false;
     }
+    // Improvement tier — respects the user's shopping mode. Rows that
+    // haven't been through improvements.py yet (no `improvements` key)
+    // pass through on 'any' but are treated as bare_land otherwise.
+    if (filters.improvementTier !== 'any') {
+      const hasAnyImprovement =
+        !!p.improvements && Object.keys(p.improvements).length > 0;
+      if (filters.improvementTier === 'move_in_ready' && !p.moveInReady) return false;
+      if (filters.improvementTier === 'improved' && !hasAnyImprovement) return false;
+      if (filters.improvementTier === 'bare_land' && hasAnyImprovement) return false;
+    }
     return true;
   });
 };
@@ -74,6 +84,13 @@ export const useProperties = (filters: FilterState) => {
             return b.price - a.price;
           case 'pricePerAcre':
             return a.pricePerAcre - b.pricePerAcre;
+          case 'residualPricePerAcre':
+            // Fall back to pricePerAcre when residual isn't computed
+            // yet (older rows predating improvements.py).
+            return (
+              (a.residualPricePerAcre ?? a.pricePerAcre) -
+              (b.residualPricePerAcre ?? b.pricePerAcre)
+            );
           case 'acreage':
             return b.acreage - a.acreage;
           case 'dateFound':

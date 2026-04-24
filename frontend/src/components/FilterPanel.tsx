@@ -122,6 +122,36 @@ export const FilterPanel = ({
           </div>
         </div>
 
+        {/* Improvement tier — "what I'm shopping for" segmented control.
+            Move-in ready = has dwelling + water, ready to occupy.
+            Improved = any detected structure/utility, partial lift.
+            Bare land = nothing detected, full build-out ahead. */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            I&apos;m looking for…
+          </label>
+          <div className="grid grid-cols-2 gap-1.5">
+            {([
+              ['any', 'Any'],
+              ['move_in_ready', '🏠 Move-in ready'],
+              ['improved', '🔧 Improved'],
+              ['bare_land', '🌲 Bare land'],
+            ] as const).map(([val, label]) => (
+              <button
+                key={val}
+                onClick={() => onUpdateFilter('improvementTier', val)}
+                className={`rounded px-2 py-1 text-xs font-medium transition-colors border ${
+                  filters.improvementTier === val
+                    ? 'bg-green-600 border-green-700 text-white'
+                    : 'bg-white border-gray-200 text-gray-600 hover:bg-gray-50'
+                }`}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
+        </div>
+
         {/* Deal Score */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
