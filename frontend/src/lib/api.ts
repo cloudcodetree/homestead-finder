@@ -351,7 +351,217 @@ export const api = {
     get: getPreferences,
     upsert: upsertPreferences,
   },
+  projects: {
+    list: listProjects,
+    create: createProject,
+    update: updateProject,
+    delete: deleteProject,
+    addItem: addItemToProject,
+    moveItem: moveItemToProject,
+    removeItem: removeItemFromProject,
+    listItems: listProjectItems,
+  },
 };
+
+// ── Projects ─────────────────────────────────────────────────────
+
+const PROJECTS_TABLE = 'projects';
+const PROJECT_ITEMS_TABLE = 'project_items';
+
+export type ProjectStatus =
+  | 'scouting'
+  | 'shortlisted'
+  | 'offered'
+  | 'closed'
+  | 'archived';
+
+export type ProjectItemType = 'saved_search' | 'listing' | 'note' | 'file';
+
+export interface Project {
+  id: string;
+  name: string;
+  description: string | null;
+  status: ProjectStatus;
+  sortOrder: number;
+  createdAt: string;
+  updatedAt: string;
+  /** Populated when the caller asks for `list({ withCounts: true })`. */
+  itemCount?: number;
+}
+
+export interface ProjectItem {
+  id: string;
+  projectId: string;
+  itemType: ProjectItemType;
+  itemId: string;
+  sortOrder: number;
+  notes: string | null;
+  addedAt: string;
+}
+
+interface ProjectRow {
+  id: string;
+  name: string;
+  description: string | null;
+  status: ProjectStatus;
+  sort_order: number;
+  created_at: string;
+  updated_at: string;
+}
+
+const rowToProject = (r: ProjectRow): Project => ({
+  id: r.id,
+  name: r.name,
+  description: r.description,
+  status: r.status,
+  sortOrder: r.sort_order,
+  createdAt: r.created_at,
+  updatedAt: r.updated_at,
+});
+
+async function listProjects(): Promise<Project[]> {
+  if (!supabase) return [];
+  const user = await getUser();
+  if (!user) return [];
+  const { data, error } = await supabase
+    .from(PROJECTS_TABLE)
+    .select('id, name, description, status, sort_order, created_at, updated_at')
+    .eq('user_id', user.id)
+    .order('sort_order', { ascending: true })
+    .order('updated_at', { ascending: false });
+  if (error || !data) return [];
+  return (data as ProjectRow[]).map(rowToProject);
+}
+
+async function createProject(
+  name: string,
+  description: string | null = null,
+  status: ProjectStatus = 'scouting',
+): Promise<Project> {
+  if (!supabase) throw new Error('Supabase not configured');
+  const user = await getUser();
+  if (!user) throw new Error('Must be signed in');
+  const trimmed = name.trim();
+  if (!trimmed) throw new Error('Project name required');
+  const { data, error } = await supabase
+    .from(PROJECTS_TABLE)
+    .insert({
+      user_id: user.id,
+      name: trimmed.slice(0, 120),
+      description,
+      status,
+    })
+    .select('id, name, description, status, sort_order, created_at, updated_at')
+    .single();
+  if (error || !data) throw error ?? new Error('Insert failed');
+  return rowToProject(data as ProjectRow);
+}
+
+async function updateProject(
+  id: string,
+  updates: Partial<Pick<Project, 'name' | 'description' | 'status' | 'sortOrder'>>,
+): Promise<void> {
+  if (!supabase) throw new Error('Supabase not configured');
+  const user = await getUser();
+  if (!user) throw new Error('Must be signed in');
+  const patch: Record<string, unknown> = {};
+  if (updates.name !== undefined) patch.name = updates.name.trim().slice(0, 120);
+  if (updates.description !== undefined) patch.description = updates.description;
+  if (updates.status !== undefined) patch.status = updates.status;
+  if (updates.sortOrder !== undefined) patch.sort_order = updates.sortOrder;
+  if (Object.keys(patch).length === 0) return;
+  const { error } = await supabase
+    .from(PROJECTS_TABLE)
+    .update(patch)
+    .eq('id', id)
+    .eq('user_id', user.id);
+  if (error) throw error;
+}
+
+async function deleteProject(id: string): Promise<void> {
+  if (!supabase) throw new Error('Supabase not configured');
+  const user = await getUser();
+  if (!user) throw new Error('Must be signed in');
+  const { error } = await supabase
+    .from(PROJECTS_TABLE)
+    .delete()
+    .eq('id', id)
+    .eq('user_id', user.id);
+  if (error) throw error;
+}
+
+async function addItemToProject(
+  projectId: string,
+  itemType: ProjectItemType,
+  itemId: string,
+  notes: string | null = null,
+): Promise<void> {
+  if (!supabase) throw new Error('Supabase not configured');
+  const user = await getUser();
+  if (!user) throw new Error('Must be signed in');
+  // Upsert on the uniqueness tuple so re-adding the same item to the
+  // same project silently succeeds rather than erroring.
+  const { error } = await supabase.from(PROJECT_ITEMS_TABLE).upsert(
+    {
+      project_id: projectId,
+      user_id: user.id,
+      item_type: itemType,
+      item_id: itemId,
+      notes,
+    },
+    { onConflict: 'project_id,item_type,item_id' },
+  );
+  if (error) throw error;
+}
+
+async function moveItemToProject(
+  itemRowId: string,
+  newProjectId: string,
+): Promise<void> {
+  if (!supabase) throw new Error('Supabase not configured');
+  const user = await getUser();
+  if (!user) throw new Error('Must be signed in');
+  const { error } = await supabase
+    .from(PROJECT_ITEMS_TABLE)
+    .update({ project_id: newProjectId })
+    .eq('id', itemRowId)
+    .eq('user_id', user.id);
+  if (error) throw error;
+}
+
+async function removeItemFromProject(itemRowId: string): Promise<void> {
+  if (!supabase) throw new Error('Supabase not configured');
+  const user = await getUser();
+  if (!user) throw new Error('Must be signed in');
+  const { error } = await supabase
+    .from(PROJECT_ITEMS_TABLE)
+    .delete()
+    .eq('id', itemRowId)
+    .eq('user_id', user.id);
+  if (error) throw error;
+}
+
+async function listProjectItems(projectId: string): Promise<ProjectItem[]> {
+  if (!supabase) return [];
+  const user = await getUser();
+  if (!user) return [];
+  const { data, error } = await supabase
+    .from(PROJECT_ITEMS_TABLE)
+    .select('id, project_id, item_type, item_id, sort_order, notes, added_at')
+    .eq('user_id', user.id)
+    .eq('project_id', projectId)
+    .order('sort_order', { ascending: true });
+  if (error || !data) return [];
+  return data.map((r) => ({
+    id: r.id as string,
+    projectId: r.project_id as string,
+    itemType: r.item_type as ProjectItemType,
+    itemId: r.item_id as string,
+    sortOrder: (r.sort_order as number) ?? 0,
+    notes: (r.notes as string | null) ?? null,
+    addedAt: r.added_at as string,
+  }));
+}
 
 // ── User preferences ─────────────────────────────────────────────
 
