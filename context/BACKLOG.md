@@ -89,6 +89,21 @@ user need and the thinnest shippable v1.
   within 10 mi · farmers market weekly · median age 47." Paints
   the "is there a there there" picture homesteaders ask about.
 
+- [ ] **County voting patterns** — surface the political lean of the
+  county where each listing sits. Relocation is as much a cultural
+  decision as a financial one; buyers on both sides of the spectrum
+  want to underwrite this explicitly before moving. Free data sources:
+  * MIT Election Data & Science Lab — county-level presidential
+    results 2000-2024 (maintained CSV, free)
+  * Tony McGovern's `us-presidential-election-county-results` repo
+    (alternative, same shape)
+  * Harvard Dataverse mirrors for trend analysis
+  * Census FIPS county codes for the join to our existing
+    `location.county` + `location.state`
+  Surface as: "Dem/Rep lean (last election) · 5-yr trend arrow ·
+  turnout %." Detail panel can show the last 4 cycles as a mini
+  chart. Framed factually (margin + trend) not editorially.
+
 - [ ] **Property-as-stock analytics** — for each listing, compute +
   display the technical signals an investor would use:
   * Price trend over time (our daily scrape history provides this;
