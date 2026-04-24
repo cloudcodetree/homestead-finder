@@ -161,6 +161,42 @@ user need and the thinnest shippable v1.
   within 10 mi · farmers market weekly · median age 47." Paints
   the "is there a there there" picture homesteaders ask about.
 
+- [ ] **Like / Dislike per listing — preference-tuning signal.**
+  Distinct from save (bookmark) and hide (banish). Save = "I want to
+  come back to this." Hide = "don't show me similar." Like/Dislike =
+  "teach the model more, but I'm not committing to action." Needed
+  because real users have preferences that don't line up cleanly with
+  those two binary decisions — you can LIKE a listing that's out of
+  budget, or DISLIKE one without wanting it banished (you'd still
+  want to see others like it for comparison).
+
+  **Data model — new table `listing_ratings`:**
+  * (user_id, listing_id, rating smallint, created_at, updated_at)
+  * rating in {-1, 0, 1}: -1=dislike, 0=cleared, 1=like
+  * PK on (user_id, listing_id), upsert on toggle
+  * RLS mirror of saved_listings
+
+  **Feeds `rank_fit.py`:** new weighted training examples beyond
+  save/hide binary:
+  * save = +1.0 (strong positive)
+  * like = +0.5 (weak positive)
+  * dislike = -0.5 (weak negative)
+  * hide = -1.0 (strong negative)
+  Weighted logistic regression (sample_weight param) already supported
+  by the scipy L-BFGS-B path. Will dramatically sharpen the model
+  once users engage — two weeks of browsing with like/dislike could
+  produce 10× the signal density of saves alone.
+
+  **UI — card + detail:**
+  * Detail modal: full thumbs 👍/👎 row in the action area next to
+    Save + Not-interested (4 buttons: Save, Like, Dislike, Hide).
+  * PropertyCard: condense to save + 👍/👎 combo. Hide stays on the
+    card but maybe moves to a hover/overflow menu to avoid clutter.
+  * Tinder mode: up=like, down=dislike, right=save, left=hide. Four
+    directions, four distinct signals — fits the UX perfectly.
+  * Account menu: "My liked listings" / "My disliked listings" views
+    parallel to the existing Saved / Hidden views.
+
 - [ ] **Tinder-mode swipe UX** — full-screen card stack with swipe
   right = save (like), swipe left = hide (not interested). Instant,
   dopamine-rewarding, thumb-friendly on mobile. Beyond being fun, it's
