@@ -89,6 +89,58 @@ user need and the thinnest shippable v1.
   within 10 mi · farmers market weekly · median age 47." Paints
   the "is there a there there" picture homesteaders ask about.
 
+- [ ] **Behavioral analytics + adaptive UI** — three stacked pieces:
+
+  **a. Event capture (the foundation).** New Supabase table
+  `user_events (user_id, event_type text, payload jsonb, created_at)`.
+  RLS: user sees only their own rows; aggregation queries use the
+  service role. Events we care about:
+  * `search_prompt` — every AskClaude NL query + its filter context
+  * `filter_change` — which filters toggled, from what to what
+  * `sort_change` — which sort mode selected
+  * `save`, `hide`, `unhide`, `view_detail`, `external_click`
+  * `view_mode` (list / map / picks / deals)
+  * `saved_search_create` — the filter snapshot + name
+  Payload is explicitly-listed fields only — never raw listing text,
+  never user email/IP. Events expire after 365d (cron-based purge).
+
+  **b. Aggregated insights.** Materialized view or nightly rollup
+  writing to a `global_trends` table:
+  * Top 20 NL query terms (stemmed / deduped) by frequency
+  * Most-toggled filter dimensions + their typical values (e.g.
+    "maxPricePerAcre: 80% of users cap at $10k")
+  * Popular sort modes
+  * Average session → saved-listing conversion rate
+  * Per-source engagement (which sources do users actually click
+    through to)
+  * Per-county click-through density (which counties are hot)
+  Drives TWO things: (1) an "insights" dashboard for us so we know
+  what to build next; (2) inputs for adaptive UI below.
+
+  **c. Adaptive UI — both per-user and global.**
+  * Per-user: user's default sort remembers their last choice (we
+    partially do this via filter state, but it resets on navigation).
+    Default `improvementTier` biases toward their usage pattern.
+    Ask-Claude autocomplete suggests their last 5 queries.
+  * Global: when a new user lands with no personal signal, defaults
+    bias toward what the cohort uses. If 60% of users cap at
+    $10k/ac, that's the slider's default. New-user home-page surfaces
+    "Popular searches" — the top-N saved-search templates across the
+    user base.
+  * Never be aggressive — every adaptive default has an obvious "not
+    what I want" escape hatch. Adaptation must be explainable
+    ("most users in your state filter to X; we're showing that by
+    default").
+
+  **Privacy constraints (design baseline):** zero third-party
+  analytics SDKs (no GA, Mixpanel, Amplitude — they'd all share data
+  with their own business ops and expose us to ToS surprises).
+  Everything runs in Supabase, same RLS architecture as saved_listings.
+  User can request "forget me" via account menu → wipes user_events +
+  saved_* rows. Respects Do-Not-Track header by disabling aggregation
+  writes for that session (still store user-scoped events so the
+  user's own personalization works).
+
 - [ ] **County voting patterns** — surface the political lean of the
   county where each listing sits. Relocation is as much a cultural
   decision as a financial one; buyers on both sides of the spectrum
