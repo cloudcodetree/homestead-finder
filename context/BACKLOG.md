@@ -129,6 +129,39 @@ user need and the thinnest shippable v1.
   within 10 mi · farmers market weekly · median age 47." Paints
   the "is there a there there" picture homesteaders ask about.
 
+- [ ] **Image-driven search** — user uploads a reference image and
+  the app finds similar listings. Three example flows:
+  * "I saw this cabin on Instagram, find similar properties" → match
+    on architectural style + landscape + amenities visible
+  * "I love how this town looks" → match on proximity-to-towns-with-
+    similar-vibe (smaller, forested, historic, etc.)
+  * "Here's my dream view" → match on terrain + elevation + tree
+    cover implied by the photo
+
+  **Architecture (v1 — pragmatic, uses existing stack):**
+  * Frontend: attach-image button in the search bar + AskClaude bar
+  * Upload: Supabase Storage temp bucket with 24h lifecycle rule —
+    zero retention of user visual data beyond the active session
+  * Analysis: `claude -p --image` (Max subscription, already wired
+    via ADR-012) with a structured prompt asking for
+    {architectural_style, landscape_type, amenities_visible, vibe,
+    implied_aiTags from our controlled vocab, natural_language_query}
+  * Ranking: the returned aiTags + natural_language_query drive the
+    existing AskClaude re-rank path; we already do corpus-wide
+    relevance scoring there.
+
+  **v2 (scale path):** CLIP embeddings for all listing images
+  (computed once, stored in pgvector on Supabase). User upload →
+  embed → cosine similarity → ranked results. Enables "more like
+  this" browse mode without an LLM round-trip every time. ~$0.10 one-
+  time to embed the current ~2500 listing images via Replicate or
+  self-hosted CLIP. Dependency: pgvector extension (free in Supabase).
+
+  **Privacy + trust:** user-uploaded images are private (Supabase RLS
+  scoped to user_id), not indexed, auto-deleted. Explicit "don't use
+  my image to improve the model" toggle even though we're not doing
+  that currently — setting the expectation prevents future drift.
+
 - [ ] **General text search + filter combo** — dedicated search bar
   next to the filter sidebar, substring match across title +
   description + county + features + improvements. Currently the only
