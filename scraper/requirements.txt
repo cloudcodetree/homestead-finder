@@ -4,7 +4,7 @@ beautifulsoup4==4.12.3
 lxml==5.2.2
 scrapy==2.11.2
 selenium==4.21.0
-webdriver-manager==4.0.1
+webdriver-manager==4.0.2
 playwright==1.52.0
 # Stealth patches for Playwright — hides navigator.webdriver +
 # language/plugin/hairline signals that Cloudflare anti-bot uses.
