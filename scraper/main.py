@@ -14,6 +14,7 @@ from notifier import (
     send_deal_alert,
     send_homestead_gems_alert,
 )
+from schema_migrate import migrate_corpus, stamp as schema_stamp
 from scoring import ScoringEngine
 from sources.auction import AuctionScraper
 from sources.tax_sale_analytics import analyze_listings as analyze_tax_sale_listings
@@ -221,6 +222,15 @@ def run(
             print(f"  Tax-sale analytics applied to {tax_count} records")
     except Exception as e:
         print(f"  (tax-sale analytics failed: {e})")
+
+    # Schema-version pass — every row gets walked forward to
+    # CURRENT_VERSION via the migration chain (no-op today; the
+    # framework is here for the first time we need to restructure
+    # without re-scraping). Also stamps fresh rows missing the field.
+    merged = [schema_stamp(r) for r in merged]
+    merged, migrated_count = migrate_corpus(merged)
+    if migrated_count:
+        print(f"  Schema migrations applied to {migrated_count} rows")
 
     output_path.write_text(json.dumps(merged, indent=2))
     print(f"\n  Written: {output_path} ({len(merged)} listings)")
