@@ -85,6 +85,29 @@ ENABLED_SOURCES: dict[str, bool] = {
     "govease": True,
 }
 
+# ── Local-only sources (CI safety) ────────────────────────────────────────────
+# These sources have one or more of: (a) Cloudflare bot wall that we
+# bypass via curl_cffi TLS impersonation, (b) a ToS that explicitly
+# forbids automated scraping, or (c) a track record of blocking
+# datacenter IP ranges. GitHub Actions runner IPs are well-known to
+# anti-scraping services and likelier to land in a permanent block.
+# Running these from a residential IP (the developer's machine) keeps
+# the blacklist risk to the laptop's IP, where rotation is cheap.
+#
+# When `os.environ['CI']` is truthy, main.py SKIPS these sources.
+# They run only when the operator invokes `python main.py` locally.
+# The CI workflow handles the merge: local-scraped JSON is committed
+# by the developer; CI's daily run handles low-risk sources only.
+LOCAL_ONLY_SOURCES: set[str] = {
+    # Active anti-bot wall (Cloudflare TLS fingerprint check). Highest risk.
+    "landwatch",
+    # ToS forbids automated scraping; sapi works but a single-IP block
+    # is plausible. Volume is low so daily local runs are easy.
+    "craigslist",
+    # Same family as LandWatch (CoStar) when re-enabled.
+    "lands_of_america",
+}
+
 # ── Adaptive fetch strategies ────────────────────────────────────────────────
 # API keys for fallback strategies (set via env vars or config_local.py)
 FIRECRAWL_API_KEY: str = os.getenv("FIRECRAWL_API_KEY", "")

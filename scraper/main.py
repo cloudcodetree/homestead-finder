@@ -5,6 +5,7 @@ from __future__ import annotations
 import argparse
 import json
 from datetime import date
+from typing import Any
 
 import config
 from logger import get_logger
@@ -81,13 +82,32 @@ def run(
     max_pages_val = max_pages or config.MAX_PAGES_PER_SOURCE
     engine = ScoringEngine()
 
+    # In CI, drop local-only sources (Cloudflare-walled or ToS-restricted —
+    # see LOCAL_ONLY_SOURCES doc in config.py). The developer runs these
+    # from a residential IP and commits the resulting listings.json
+    # fragment alongside CI's runs. Override with `CI=false` env var
+    # for local CI-simulation runs.
+    import os as _os
+
+    in_ci = _os.environ.get("CI", "").lower() in ("1", "true", "yes")
+    skipped_local_only: list[str] = []
+
     # Determine which scrapers to run
-    active_scrapers = {
-        name: cls
-        for name, cls in ALL_SCRAPERS.items()
-        if config.ENABLED_SOURCES.get(name, False)
-        and (source_filter is None or name == source_filter)
-    }
+    active_scrapers: dict[str, Any] = {}
+    for name, cls in ALL_SCRAPERS.items():
+        if not config.ENABLED_SOURCES.get(name, False):
+            continue
+        if source_filter is not None and name != source_filter:
+            continue
+        if in_ci and name in config.LOCAL_ONLY_SOURCES:
+            skipped_local_only.append(name)
+            continue
+        active_scrapers[name] = cls
+
+    if skipped_local_only:
+        print(
+            f"  [CI] Skipping local-only sources: {', '.join(skipped_local_only)}"
+        )
 
     if not active_scrapers:
         print("No scrapers enabled. Check config.ENABLED_SOURCES.")
