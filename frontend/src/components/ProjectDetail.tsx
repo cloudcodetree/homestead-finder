@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import { useProjects, useProjectItems } from '../hooks/useProjects';
 import { useProperties } from '../hooks/useProperties';
+import { useQueryServer } from '../hooks/useQueryServer';
 import { DEFAULT_FILTERS } from '../types/property';
 import { api, type Project, type ProjectStatus } from '../lib/api';
 import { formatPrice, formatAcreage, formatCountyState } from '../utils/formatters';
@@ -26,7 +27,7 @@ const STATUS_OPTIONS: Array<{ value: ProjectStatus; label: string }> = [
   { value: 'archived', label: 'Archived' },
 ];
 
-type TabKey = 'listings' | 'searches' | 'notes' | 'files';
+type TabKey = 'listings' | 'searches' | 'notes' | 'files' | 'chat';
 
 export const ProjectDetail = () => {
   const { id } = useParams<{ id: string }>();
@@ -178,6 +179,7 @@ export const ProjectDetail = () => {
             ['searches', `Saved searches (${searches.length})`],
             ['notes', 'Notes'],
             ['files', 'Files'],
+            ['chat', 'Chat'],
           ] as const
         ).map(([key, label]) => (
           <button
@@ -219,10 +221,200 @@ export const ProjectDetail = () => {
           />
         ) : tab === 'notes' ? (
           <NotesTab projectId={project.id} />
-        ) : (
+        ) : tab === 'files' ? (
           <FilesTab projectId={project.id} />
+        ) : (
+          <ChatTab projectId={project.id} />
         )}
       </div>
+    </div>
+  );
+};
+
+// ── Chat tab ──────────────────────────────────────────────────────
+
+interface ChatTabProps {
+  projectId: string;
+}
+
+interface ChatTurn {
+  question: string;
+  matches: Array<{ id: string; reason: string; title?: string }>;
+  error?: string;
+}
+
+const ChatTab = ({ projectId }: ChatTabProps) => {
+  const navigate = useNavigate();
+  const { status, ask } = useQueryServer();
+  const { allProperties } = useProperties(DEFAULT_FILTERS);
+  const [question, setQuestion] = useState('');
+  const [history, setHistory] = useState<ChatTurn[]>([]);
+  const [busy, setBusy] = useState(false);
+  const [contextChars, setContextChars] = useState<number | null>(null);
+
+  // Build the project context: project_files extracted_text concatenated
+  // with a header per file so the AI can tell them apart. Recomputed
+  // before each ask so newly-extracted files flow in without a reload.
+  const buildProjectContext = useCallback(async (): Promise<string> => {
+    const files = await api.projects.listFiles(projectId);
+    const note = await api.projects.getNote(projectId);
+    const parts: string[] = [];
+    if (note.trim()) {
+      parts.push(`## Project notes\n${note}`);
+    }
+    for (const f of files) {
+      if (!f.extractedText) {
+        parts.push(`## ${f.filename} (still processing)`);
+        continue;
+      }
+      // Cap each file at ~50K chars so one outsize PDF doesn't drown
+      // out the others. Server caps the whole payload at 1MB anyway.
+      const trimmed = f.extractedText.slice(0, 50_000);
+      parts.push(`## ${f.filename}\n${trimmed}`);
+    }
+    return parts.join('\n\n---\n\n');
+  }, [projectId]);
+
+  // Resolve listing titles from the global corpus so chat results
+  // show useful headers, not just opaque IDs.
+  const titleById = useMemo(() => {
+    const m = new Map<string, string>();
+    for (const p of allProperties) m.set(p.id, p.title);
+    return m;
+  }, [allProperties]);
+
+  const onAsk = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const q = question.trim();
+    if (!q || busy) return;
+    setBusy(true);
+    try {
+      const ctx = await buildProjectContext();
+      setContextChars(ctx.length);
+      const resp = await ask(q, 10, ctx);
+      const turn: ChatTurn = {
+        question: q,
+        matches: resp.matches.map((m) => ({
+          id: m.id,
+          reason: m.reason,
+          title: titleById.get(m.id),
+        })),
+      };
+      setHistory((h) => [turn, ...h]);
+      setQuestion('');
+    } catch (err) {
+      setHistory((h) => [
+        {
+          question: q,
+          matches: [],
+          error: err instanceof Error ? err.message : 'Request failed',
+        },
+        ...h,
+      ]);
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  if (status === 'checking') {
+    return <p className="text-sm text-gray-500">Checking AI server…</p>;
+  }
+  if (status === 'unavailable') {
+    return (
+      <div className="text-sm text-gray-700 space-y-2">
+        <p>
+          AI chat needs the local query server running. Per ADR-012, AI
+          inference runs on your machine via{' '}
+          <code className="text-xs bg-gray-100 px-1 py-0.5 rounded">claude -p</code>
+          {' '}so we don&apos;t pay API credits on top of the Max subscription.
+        </p>
+        <p className="text-xs text-gray-500">
+          Start it with{' '}
+          <code className="text-xs bg-gray-100 px-1 py-0.5 rounded">
+            cd scraper &amp;&amp; python -m query_server
+          </code>
+          {' '}then reload this tab.
+        </p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-4">
+      <div>
+        <p className="text-sm text-gray-700 mb-1">
+          Ask anything that uses your project&apos;s context. Files (extracted
+          text) and notes are sent along with each question. Results are listings
+          ranked by relevance to your question + context.
+        </p>
+        <p className="text-[11px] text-gray-400">
+          Examples: <em>&ldquo;Which of my pinned listings actually match
+          the budget in my offer letter PDF?&rdquo;</em> · <em>&ldquo;Find listings
+          like the cabin I rated 😄 but under $80k.&rdquo;</em>
+        </p>
+      </div>
+
+      <form onSubmit={onAsk} className="flex gap-2">
+        <input
+          type="text"
+          value={question}
+          onChange={(e) => setQuestion(e.target.value)}
+          maxLength={500}
+          placeholder="Ask about this project…"
+          disabled={busy}
+          className="flex-1 border border-gray-200 rounded px-3 py-2 text-sm focus:ring-1 focus:ring-green-500 focus:outline-none disabled:bg-gray-50"
+        />
+        <button
+          type="submit"
+          disabled={busy || !question.trim()}
+          className="bg-green-600 hover:bg-green-700 disabled:bg-gray-300 text-white text-sm font-medium px-4 py-2 rounded"
+        >
+          {busy ? 'Thinking…' : 'Ask'}
+        </button>
+      </form>
+      {contextChars !== null && (
+        <p className="text-[11px] text-gray-400">
+          Last query used {contextChars.toLocaleString()} chars of project
+          context (notes + extracted file text).
+        </p>
+      )}
+
+      {history.length === 0 ? (
+        <p className="text-sm text-gray-500 italic">
+          No questions yet. Your project chat history lives here for the
+          session — it&apos;s not persisted across reloads (yet).
+        </p>
+      ) : (
+        <ul className="space-y-3">
+          {history.map((t, i) => (
+            <li key={i} className="border border-gray-100 rounded p-3">
+              <p className="text-sm font-medium text-gray-900 mb-2">
+                <span className="text-gray-400">Q:</span> {t.question}
+              </p>
+              {t.error ? (
+                <p className="text-sm text-red-600">Error: {t.error}</p>
+              ) : t.matches.length === 0 ? (
+                <p className="text-sm text-gray-500 italic">No matches.</p>
+              ) : (
+                <ul className="space-y-1.5">
+                  {t.matches.map((m) => (
+                    <li
+                      key={m.id}
+                      className="border-l-2 border-green-300 pl-2 cursor-pointer hover:bg-green-50/40"
+                      onClick={() => navigate(`/p/${m.id}`)}
+                    >
+                      <p className="text-sm font-medium text-gray-900">
+                        {m.title ?? m.id}
+                      </p>
+                      <p className="text-xs text-gray-600">{m.reason}</p>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 };

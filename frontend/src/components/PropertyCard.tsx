@@ -198,16 +198,16 @@ export const PropertyCard = ({ property, onClick, isSelected = false }: Property
           className="absolute top-2 left-2 z-10 w-7 h-7 rounded-full bg-white/95 border border-gray-200 backdrop-blur-sm flex items-center justify-center text-sm shadow"
           title={
             rating === 2
-              ? '🔥 Loved'
+              ? '😄 Loved'
               : rating === 1
-                ? '👍 Liked'
+                ? '🙂 Liked'
                 : rating === -1
-                  ? '👎 Disliked'
-                  : '🚫 Hated'
+                  ? '🙁 Disliked'
+                  : '😡 Hated'
           }
           aria-label="Your rating"
         >
-          {rating === 2 ? '🔥' : rating === 1 ? '👍' : rating === -1 ? '👎' : '🚫'}
+          {rating === 2 ? '😄' : rating === 1 ? '🙂' : rating === -1 ? '🙁' : '😡'}
         </div>
       )}
       {/* Listing-type accent stripe — colored bar above the thumbnail

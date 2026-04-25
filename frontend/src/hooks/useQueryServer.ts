@@ -77,18 +77,29 @@ export const useQueryServer = () => {
     };
   }, [check]);
 
-  const ask = useCallback(async (question: string, limit = 15): Promise<QueryResponse> => {
-    const res = await fetch(`${QUERY_SERVER_URL}/query`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ question, limit }),
-    });
-    if (!res.ok) {
-      const body = await res.json().catch(() => ({ error: res.statusText }));
-      throw new Error(body.error || `HTTP ${res.status}`);
-    }
-    return (await res.json()) as QueryResponse;
-  }, []);
+  const ask = useCallback(
+    async (
+      question: string,
+      limit = 15,
+      projectContext?: string,
+    ): Promise<QueryResponse> => {
+      const body: Record<string, unknown> = { question, limit };
+      if (projectContext && projectContext.trim()) {
+        body.projectContext = projectContext;
+      }
+      const res = await fetch(`${QUERY_SERVER_URL}/query`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+      });
+      if (!res.ok) {
+        const errBody = await res.json().catch(() => ({ error: res.statusText }));
+        throw new Error(errBody.error || `HTTP ${res.status}`);
+      }
+      return (await res.json()) as QueryResponse;
+    },
+    [],
+  );
 
   return { status, model, ask };
 };

@@ -24,12 +24,16 @@ interface RatingOption {
   bg: string;
 }
 
+// Smiley scale from very upset → very happy. The middle Meh emoji
+// is kept from the prior thumbs/fire scale to preserve continuity
+// for users who already learned it. Each step crosses one full
+// affect band (sad / mildly sad / neutral / mildly happy / happy).
 const OPTIONS: RatingOption[] = [
-  { value: -2, emoji: '🚫', label: 'Hate', active: 'border-red-500', bg: 'bg-red-50' },
-  { value: -1, emoji: '👎', label: 'Dislike', active: 'border-orange-400', bg: 'bg-orange-50' },
+  { value: -2, emoji: '😡', label: 'Hate', active: 'border-red-500', bg: 'bg-red-50' },
+  { value: -1, emoji: '🙁', label: 'Dislike', active: 'border-orange-400', bg: 'bg-orange-50' },
   { value: 0, emoji: '😐', label: 'Meh', active: 'border-gray-400', bg: 'bg-gray-100' },
-  { value: 1, emoji: '👍', label: 'Like', active: 'border-blue-400', bg: 'bg-blue-50' },
-  { value: 2, emoji: '🔥', label: 'Love', active: 'border-amber-500', bg: 'bg-amber-50' },
+  { value: 1, emoji: '🙂', label: 'Like', active: 'border-blue-400', bg: 'bg-blue-50' },
+  { value: 2, emoji: '😄', label: 'Love', active: 'border-amber-500', bg: 'bg-amber-50' },
 ];
 
 interface RatingBarProps {

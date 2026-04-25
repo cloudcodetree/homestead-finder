@@ -44,3 +44,9 @@ PyYAML>=6.0
 # (nightly per-user model fit).
 numpy>=1.26
 scipy>=1.11
+
+# Project-files text extraction (project_files_extract.py).
+# python-docx for .docx, openpyxl for .xlsx — pdfplumber + pandas
+# are already pulled in for tax-sale parsing. Each ~1MB.
+python-docx>=1.1
+openpyxl>=3.1
