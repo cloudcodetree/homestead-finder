@@ -167,6 +167,57 @@ const toggleSaved = async (listingId: string): Promise<boolean> => {
   }
 };
 
+// ── Listing ratings ──────────────────────────────────────────────
+
+const LISTING_RATINGS_TABLE = 'listing_ratings';
+
+/** Domain of stored ratings. We never persist 0 — clearing to Meh
+ * deletes the row instead, keeping the table compact. */
+export type ListingRating = -2 | -1 | 1 | 2;
+
+/** Returns map of {listingId → rating} for the signed-in user. */
+async function listRatings(): Promise<Map<string, ListingRating>> {
+  if (!supabase) return new Map();
+  const user = await getUser();
+  if (!user) return new Map();
+  const { data, error } = await supabase
+    .from(LISTING_RATINGS_TABLE)
+    .select('listing_id, rating')
+    .eq('user_id', user.id);
+  if (error || !data) return new Map();
+  const map = new Map<string, ListingRating>();
+  for (const r of data) {
+    map.set(r.listing_id as string, r.rating as ListingRating);
+  }
+  return map;
+}
+
+/** Set or clear a rating. Pass `null` (or 0) to clear → row deleted. */
+async function setRating(
+  listingId: string,
+  rating: ListingRating | null,
+): Promise<void> {
+  if (!supabase) throw new Error('Supabase not configured');
+  const user = await getUser();
+  if (!user) throw new Error('Must be signed in');
+  if (rating === null) {
+    const { error } = await supabase
+      .from(LISTING_RATINGS_TABLE)
+      .delete()
+      .eq('user_id', user.id)
+      .eq('listing_id', listingId);
+    if (error) throw error;
+    return;
+  }
+  const { error } = await supabase
+    .from(LISTING_RATINGS_TABLE)
+    .upsert(
+      { user_id: user.id, listing_id: listingId, rating },
+      { onConflict: 'user_id,listing_id' },
+    );
+  if (error) throw error;
+}
+
 // ── Hidden listings ──────────────────────────────────────────────
 
 const HIDDEN_LISTINGS_TABLE = 'hidden_listings';
@@ -340,6 +391,10 @@ export const api = {
   hiddenListings: {
     list: listHidden,
     toggle: toggleHidden,
+  },
+  ratings: {
+    list: listRatings,
+    set: setRating,
   },
   savedSearches: {
     list: listSavedSearches,

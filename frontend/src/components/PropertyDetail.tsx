@@ -14,6 +14,7 @@ import { useSavedListings } from '../hooks/useSavedListings';
 import { AddToProjectButton } from './AddToProjectButton';
 import { PrivateNote } from './PrivateNote';
 import { PropertyThumbnail } from './PropertyThumbnail';
+import { RatingBar } from './RatingBar';
 import { ResearchPanel } from './ResearchPanel';
 import {
   formatAcreage,
@@ -611,13 +612,16 @@ export const PropertyDetail = ({ property, onClose }: PropertyDetailProps) => {
             </div>
           </div>
 
-          {/* Save / Not-interested / Add-to-project actions row.
-              Mirrors the buttons on the card but labeled. Add-to-project
-              shows only for signed-in users (anonymous have nowhere to
-              persist a project). */}
+          {/* Reaction row + Add-to-project sit above the Save/Hide bar.
+              Three preference axes from light to heavy commitment:
+              rating (lightest, just preference signal), bookmark+hide
+              (action), project (work-tracking). */}
           {user && (
-            <div className="flex items-center justify-end pt-4">
-              <AddToProjectButton itemType="listing" itemId={property.id} />
+            <div className="border-t border-gray-100 pt-4 space-y-2">
+              <RatingBar listingId={property.id} />
+              <div className="flex items-center justify-end">
+                <AddToProjectButton itemType="listing" itemId={property.id} />
+              </div>
             </div>
           )}
           <div className="border-t border-gray-100 pt-4 flex items-center gap-2">

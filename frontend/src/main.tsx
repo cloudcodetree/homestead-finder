@@ -4,6 +4,7 @@ import { BrowserRouter } from 'react-router-dom';
 import App from './App';
 import { AuthProvider } from './hooks/useAuth';
 import { HiddenListingsProvider } from './hooks/useHiddenListings';
+import { ListingRatingsProvider } from './hooks/useListingRatings';
 import { SavedListingsProvider } from './hooks/useSavedListings';
 import { UserPreferencesProvider } from './hooks/useUserPreferences';
 import './index.css';
@@ -23,7 +24,9 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
         <UserPreferencesProvider>
           <SavedListingsProvider>
             <HiddenListingsProvider>
-              <App />
+              <ListingRatingsProvider>
+                <App />
+              </ListingRatingsProvider>
             </HiddenListingsProvider>
           </SavedListingsProvider>
         </UserPreferencesProvider>

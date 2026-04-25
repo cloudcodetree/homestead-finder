@@ -31,6 +31,7 @@ const computeDaysOnMarket = (isoDate: string): number | null => {
 
 import { useAuth } from '../hooks/useAuth';
 import { useHiddenListings } from '../hooks/useHiddenListings';
+import { useListingRatings } from '../hooks/useListingRatings';
 import { useSavedListings } from '../hooks/useSavedListings';
 import { PropertyThumbnail } from './PropertyThumbnail';
 import {
@@ -94,8 +95,10 @@ export const PropertyCard = ({ property, onClick, isSelected = false }: Property
   const { user, loginWithGoogle } = useAuth();
   const { isSaved, toggle } = useSavedListings();
   const { isHidden, toggle: toggleHidden } = useHiddenListings();
+  const { getRating } = useListingRatings();
   const saved = isSaved(property.id);
   const hidden = isHidden(property.id);
+  const rating = getRating(property.id);
 
   return (
     <div
@@ -174,6 +177,28 @@ export const PropertyCard = ({ property, onClick, isSelected = false }: Property
             )}
           </svg>
         </button>
+      )}
+      {/* Rating indicator — small emoji badge in the top-LEFT, away
+          from the save/hide buttons in the top-right. Only renders
+          when the user has actually rated this listing. Click opens
+          the detail modal where the full RatingBar lives; we don't
+          surface the 5-button picker on the card to avoid clutter. */}
+      {rating !== 0 && (
+        <div
+          className="absolute top-2 left-2 z-10 w-7 h-7 rounded-full bg-white/95 border border-gray-200 backdrop-blur-sm flex items-center justify-center text-sm shadow"
+          title={
+            rating === 2
+              ? '🔥 Loved'
+              : rating === 1
+                ? '👍 Liked'
+                : rating === -1
+                  ? '👎 Disliked'
+                  : '🚫 Hated'
+          }
+          aria-label="Your rating"
+        >
+          {rating === 2 ? '🔥' : rating === 1 ? '👍' : rating === -1 ? '👎' : '🚫'}
+        </div>
       )}
       {/* Listing-type accent stripe — colored bar above the thumbnail
           signals tax sale vs owner-finance vs standard for-sale at a
