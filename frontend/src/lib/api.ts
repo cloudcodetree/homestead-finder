@@ -417,6 +417,10 @@ export const api = {
     listItems: listProjectItems,
     getNote: getProjectNote,
     upsertNote: upsertProjectNote,
+    listFiles: listProjectFiles,
+    uploadFile: uploadProjectFile,
+    deleteFile: deleteProjectFile,
+    getFileSignedUrl: getProjectFileSignedUrl,
   },
 };
 
@@ -640,6 +644,142 @@ async function upsertProjectNote(projectId: string, bodyMd: string): Promise<voi
     .from('project_notes')
     .insert({ user_id: user.id, project_id: projectId, body_md: bodyMd });
   if (error) throw error;
+}
+
+// ── Project files ────────────────────────────────────────────────
+
+export interface ProjectFile {
+  id: string;
+  projectId: string;
+  filename: string;
+  sizeBytes: number;
+  contentType: string | null;
+  storagePath: string;
+  extractedText: string | null;
+  createdAt: string;
+}
+
+const PROJECT_FILES_BUCKET = 'project-files';
+const MAX_FILE_BYTES = 10 * 1024 * 1024; // 10 MB
+
+async function listProjectFiles(projectId: string): Promise<ProjectFile[]> {
+  if (!supabase) return [];
+  const user = await getUser();
+  if (!user) return [];
+  const { data, error } = await supabase
+    .from('project_files')
+    .select('id, project_id, filename, size_bytes, content_type, storage_path, extracted_text, created_at')
+    .eq('user_id', user.id)
+    .eq('project_id', projectId)
+    .order('created_at', { ascending: false });
+  if (error || !data) return [];
+  return data.map((r) => ({
+    id: r.id as string,
+    projectId: r.project_id as string,
+    filename: r.filename as string,
+    sizeBytes: (r.size_bytes as number) ?? 0,
+    contentType: (r.content_type as string | null) ?? null,
+    storagePath: r.storage_path as string,
+    extractedText: (r.extracted_text as string | null) ?? null,
+    createdAt: r.created_at as string,
+  }));
+}
+
+async function uploadProjectFile(
+  projectId: string,
+  file: File,
+): Promise<ProjectFile> {
+  if (!supabase) throw new Error('Supabase not configured');
+  const user = await getUser();
+  if (!user) throw new Error('Must be signed in');
+  if (file.size > MAX_FILE_BYTES) {
+    throw new Error(
+      `File too large: ${(file.size / 1024 / 1024).toFixed(1)}MB. Max ${MAX_FILE_BYTES / 1024 / 1024}MB.`,
+    );
+  }
+
+  // Storage path: {user_id}/{project_id}/{timestamp}-{sanitized_filename}
+  // The user-id prefix lets storage RLS scope by ownership at the
+  // path level (operator configures the matching policy in Supabase
+  // dashboard — see context/PROJECT_FILES_SETUP.md).
+  const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_').slice(-100);
+  const storagePath = `${user.id}/${projectId}/${Date.now()}-${safeName}`;
+
+  const { error: uploadErr } = await supabase.storage
+    .from(PROJECT_FILES_BUCKET)
+    .upload(storagePath, file, {
+      contentType: file.type || undefined,
+      upsert: false,
+    });
+  if (uploadErr) throw uploadErr;
+
+  // Insert metadata row. If this fails after the upload succeeded,
+  // we have an orphan blob — operator can periodically reconcile via
+  // a cleanup script. Acceptable for MVP.
+  const { data, error } = await supabase
+    .from('project_files')
+    .insert({
+      project_id: projectId,
+      user_id: user.id,
+      filename: file.name,
+      size_bytes: file.size,
+      content_type: file.type || null,
+      storage_path: storagePath,
+    })
+    .select('id, project_id, filename, size_bytes, content_type, storage_path, extracted_text, created_at')
+    .single();
+  if (error || !data) {
+    // Best-effort cleanup of the blob we just uploaded.
+    await supabase.storage.from(PROJECT_FILES_BUCKET).remove([storagePath]);
+    throw error ?? new Error('File metadata insert failed');
+  }
+  return {
+    id: data.id as string,
+    projectId: data.project_id as string,
+    filename: data.filename as string,
+    sizeBytes: (data.size_bytes as number) ?? 0,
+    contentType: (data.content_type as string | null) ?? null,
+    storagePath: data.storage_path as string,
+    extractedText: (data.extracted_text as string | null) ?? null,
+    createdAt: data.created_at as string,
+  };
+}
+
+async function deleteProjectFile(fileId: string): Promise<void> {
+  if (!supabase) throw new Error('Supabase not configured');
+  const user = await getUser();
+  if (!user) throw new Error('Must be signed in');
+  // Find the storage path before deleting the metadata row.
+  const { data: row } = await supabase
+    .from('project_files')
+    .select('storage_path')
+    .eq('id', fileId)
+    .eq('user_id', user.id)
+    .maybeSingle();
+  const { error } = await supabase
+    .from('project_files')
+    .delete()
+    .eq('id', fileId)
+    .eq('user_id', user.id);
+  if (error) throw error;
+  if (row?.storage_path) {
+    // Best-effort blob cleanup.
+    await supabase.storage
+      .from(PROJECT_FILES_BUCKET)
+      .remove([row.storage_path as string]);
+  }
+}
+
+async function getProjectFileSignedUrl(
+  storagePath: string,
+  expiresIn = 60,
+): Promise<string | null> {
+  if (!supabase) return null;
+  const { data, error } = await supabase.storage
+    .from(PROJECT_FILES_BUCKET)
+    .createSignedUrl(storagePath, expiresIn);
+  if (error || !data) return null;
+  return data.signedUrl;
 }
 
 async function listProjectItems(projectId: string): Promise<ProjectItem[]> {

@@ -26,7 +26,7 @@ const STATUS_OPTIONS: Array<{ value: ProjectStatus; label: string }> = [
   { value: 'archived', label: 'Archived' },
 ];
 
-type TabKey = 'listings' | 'searches' | 'notes';
+type TabKey = 'listings' | 'searches' | 'notes' | 'files';
 
 export const ProjectDetail = () => {
   const { id } = useParams<{ id: string }>();
@@ -177,6 +177,7 @@ export const ProjectDetail = () => {
             ['listings', `Pinned listings (${listings.length})`],
             ['searches', `Saved searches (${searches.length})`],
             ['notes', 'Notes'],
+            ['files', 'Files'],
           ] as const
         ).map(([key, label]) => (
           <button
@@ -216,8 +217,10 @@ export const ProjectDetail = () => {
               await refresh();
             }}
           />
-        ) : (
+        ) : tab === 'notes' ? (
           <NotesTab projectId={project.id} />
+        ) : (
+          <FilesTab projectId={project.id} />
         )}
       </div>
     </div>
@@ -329,6 +332,145 @@ const SearchesTab = ({ items, onRemove }: SearchesTabProps) => {
 };
 
 // ── Notes tab ─────────────────────────────────────────────────────────
+
+// ── Files tab ─────────────────────────────────────────────────────
+
+interface FilesTabProps {
+  projectId: string;
+}
+
+const FilesTab = ({ projectId }: FilesTabProps) => {
+  const [files, setFiles] = useState<
+    Awaited<ReturnType<typeof api.projects.listFiles>>
+  >([]);
+  const [loading, setLoading] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const refresh = useCallback(async () => {
+    setLoading(true);
+    try {
+      setFiles(await api.projects.listFiles(projectId));
+    } finally {
+      setLoading(false);
+    }
+  }, [projectId]);
+
+  useEffect(() => {
+    void refresh();
+  }, [refresh]);
+
+  const onPick = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const f = e.target.files?.[0];
+    if (!f) return;
+    setError(null);
+    setUploading(true);
+    try {
+      await api.projects.uploadFile(projectId, f);
+      await refresh();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Upload failed');
+    } finally {
+      setUploading(false);
+      // Reset the input so picking the same file twice still fires onChange
+      e.target.value = '';
+    }
+  };
+
+  const onDownload = async (storagePath: string, filename: string) => {
+    const url = await api.projects.getFileSignedUrl(storagePath, 60);
+    if (!url) {
+      setError('Could not generate download link');
+      return;
+    }
+    // Open in a new tab; browsers auto-download types they can't render
+    const a = document.createElement('a');
+    a.href = url;
+    a.target = '_blank';
+    a.rel = 'noopener noreferrer';
+    a.download = filename;
+    a.click();
+  };
+
+  const onDelete = async (id: string, filename: string) => {
+    if (!confirm(`Delete "${filename}"?`)) return;
+    try {
+      await api.projects.deleteFile(id);
+      await refresh();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Delete failed');
+    }
+  };
+
+  return (
+    <div>
+      <div className="flex items-center justify-between mb-3">
+        <p className="text-xs text-gray-500">
+          Inspection PDFs, surveys, comparable-sales printouts, owner-finance term sheets.
+          Up to 10MB per file.
+        </p>
+        <label
+          className={`inline-flex items-center gap-1.5 text-sm font-medium rounded-lg px-3 py-1.5 cursor-pointer ${
+            uploading
+              ? 'bg-gray-300 text-gray-500'
+              : 'bg-green-600 hover:bg-green-700 text-white'
+          }`}
+        >
+          {uploading ? 'Uploading…' : '+ Upload file'}
+          <input
+            type="file"
+            className="hidden"
+            disabled={uploading}
+            onChange={(e) => void onPick(e)}
+          />
+        </label>
+      </div>
+      {error && <p className="text-xs text-red-600 mb-2">{error}</p>}
+      {loading && files.length === 0 ? (
+        <p className="text-sm text-gray-500">Loading…</p>
+      ) : files.length === 0 ? (
+        <p className="text-sm text-gray-500">
+          No files yet. Drop a PDF, image, or spreadsheet to attach it to this
+          project.
+        </p>
+      ) : (
+        <ul className="space-y-2">
+          {files.map((f) => (
+            <li
+              key={f.id}
+              className="flex items-center gap-3 border border-gray-100 rounded p-2 hover:border-green-400 transition-colors"
+            >
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-medium text-gray-900 truncate">{f.filename}</p>
+                <p className="text-xs text-gray-500">
+                  {(f.sizeBytes / 1024).toFixed(0)} KB · {f.contentType || 'unknown'} ·{' '}
+                  {new Date(f.createdAt).toLocaleDateString()}
+                </p>
+              </div>
+              <button
+                onClick={() => void onDownload(f.storagePath, f.filename)}
+                className="text-xs text-gray-600 hover:text-green-700 font-medium"
+              >
+                Download
+              </button>
+              <button
+                onClick={() => void onDelete(f.id, f.filename)}
+                className="text-xs text-gray-400 hover:text-red-600"
+              >
+                Delete
+              </button>
+            </li>
+          ))}
+        </ul>
+      )}
+      <p className="text-[11px] text-gray-400 mt-3 italic">
+        Storage layer ready. AI-context wiring (in-project AskClaude pulls
+        file contents) ships in a follow-up increment with the text-extraction
+        worker.
+      </p>
+    </div>
+  );
+};
 
 interface NotesTabProps {
   projectId: string;
