@@ -1,10 +1,10 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import { useProjects, useProjectItems } from '../hooks/useProjects';
 import { useProperties } from '../hooks/useProperties';
 import { DEFAULT_FILTERS } from '../types/property';
-import type { Project, ProjectStatus } from '../lib/api';
+import { api, type Project, type ProjectStatus } from '../lib/api';
 import { formatPrice, formatAcreage, formatCountyState } from '../utils/formatters';
 
 /**
@@ -335,30 +335,103 @@ interface NotesTabProps {
 }
 
 const NotesTab = ({ projectId }: NotesTabProps) => {
-  // v1: stub — single placeholder textarea backed by localStorage so
-  // the tab isn't empty during testing. Real persistence to
-  // project_notes table comes in the next increment along with the
-  // file/chat tabs.
-  const [text, setText] = useState(() => {
-    return localStorage.getItem(`project_note_${projectId}`) ?? '';
-  });
+  const [text, setText] = useState('');
+  const [persistedText, setPersistedText] = useState('');
+  const [status, setStatus] = useState<'idle' | 'loading' | 'saving' | 'saved' | 'error'>('loading');
+  const debounceTimer = useRef<number | null>(null);
+
+  // Load existing note from Supabase (preferring cloud) on mount;
+  // fall back to a localStorage cache for offline first-paint.
+  useEffect(() => {
+    let cancelled = false;
+    const cacheKey = `project_note_${projectId}`;
+    const cached = localStorage.getItem(cacheKey);
+    if (cached !== null) {
+      setText(cached);
+      setPersistedText(cached);
+    }
+    setStatus('loading');
+    void api.projects.getNote(projectId).then((cloud) => {
+      if (cancelled) return;
+      setText(cloud);
+      setPersistedText(cloud);
+      localStorage.setItem(cacheKey, cloud);
+      setStatus('idle');
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [projectId]);
+
+  // Debounced save: every keystroke updates local state instantly +
+  // localStorage cache; cloud upsert fires 1s after last keystroke.
+  // On blur we flush immediately.
+  const commit = useCallback(
+    async (next: string) => {
+      if (next === persistedText) return;
+      setStatus('saving');
+      try {
+        await api.projects.upsertNote(projectId, next);
+        setPersistedText(next);
+        setStatus('saved');
+        window.setTimeout(() => setStatus('idle'), 1500);
+      } catch {
+        setStatus('error');
+      }
+    },
+    [projectId, persistedText],
+  );
+
+  const onChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const next = e.target.value;
+    setText(next);
+    localStorage.setItem(`project_note_${projectId}`, next);
+    if (debounceTimer.current) window.clearTimeout(debounceTimer.current);
+    debounceTimer.current = window.setTimeout(() => void commit(next), 1000);
+  };
+
+  const onBlur = () => {
+    if (debounceTimer.current) {
+      window.clearTimeout(debounceTimer.current);
+      debounceTimer.current = null;
+    }
+    void commit(text);
+  };
+
+  // Flush on unmount.
+  useEffect(() => {
+    return () => {
+      if (debounceTimer.current) {
+        window.clearTimeout(debounceTimer.current);
+        void commit(text);
+      }
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <div>
+      <div className="flex items-center justify-between mb-2">
+        <p className="text-xs text-gray-500">
+          Markdown supported when we wire the renderer; for now plain text.
+        </p>
+        <span className="text-[11px] text-gray-400">
+          {status === 'loading' && 'Loading…'}
+          {status === 'saving' && 'Saving…'}
+          {status === 'saved' && '✓ Saved'}
+          {status === 'error' && (
+            <span className="text-red-500">Couldn&apos;t save (cached locally)</span>
+          )}
+        </span>
+      </div>
       <textarea
         value={text}
-        onChange={(e) => {
-          const next = e.target.value;
-          setText(next);
-          localStorage.setItem(`project_note_${projectId}`, next);
-        }}
-        rows={10}
-        placeholder="Notes for this project — markdown supported when we wire the renderer in the next increment. Persisted locally for now; cloud sync to project_notes table coming soon."
+        onChange={onChange}
+        onBlur={onBlur}
+        rows={12}
+        placeholder="Notes for this project — research findings, contacts, contingencies, comps you want to remember. Cloud-synced across devices."
         className="w-full border border-gray-200 rounded p-3 text-sm focus:ring-1 focus:ring-green-500 focus:outline-none resize-y"
       />
-      <p className="text-[11px] text-gray-400 mt-2 italic">
-        Local-only persistence in this increment. Cloud sync + markdown render
-        ship with the file/chat tabs.
-      </p>
     </div>
   );
 };

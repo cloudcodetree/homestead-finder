@@ -205,6 +205,10 @@ class UnitedCountryScraper(BaseScraper):
         except Exception as e:
             log.info(f"[united_country] fetch failed for {url}: {e}")
             return []
+        # Archive raw HTML before parsing (durability layer).
+        from raw_archive import archive as _archive
+
+        _archive("united_country", f"state-{state.lower()}", result.content, ext="html")
         items = parse_ucre_html(result.content, state)
         log.info(
             f"[united_country] {state}: {len(items)} listings parsed "

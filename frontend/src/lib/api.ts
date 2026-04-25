@@ -415,6 +415,8 @@ export const api = {
     moveItem: moveItemToProject,
     removeItem: removeItemFromProject,
     listItems: listProjectItems,
+    getNote: getProjectNote,
+    upsertNote: upsertProjectNote,
   },
 };
 
@@ -593,6 +595,50 @@ async function removeItemFromProject(itemRowId: string): Promise<void> {
     .delete()
     .eq('id', itemRowId)
     .eq('user_id', user.id);
+  if (error) throw error;
+}
+
+async function getProjectNote(projectId: string): Promise<string> {
+  if (!supabase) return '';
+  const user = await getUser();
+  if (!user) return '';
+  const { data, error } = await supabase
+    .from('project_notes')
+    .select('body_md')
+    .eq('user_id', user.id)
+    .eq('project_id', projectId)
+    .order('updated_at', { ascending: false })
+    .limit(1)
+    .maybeSingle();
+  if (error || !data) return '';
+  return (data.body_md as string) ?? '';
+}
+
+async function upsertProjectNote(projectId: string, bodyMd: string): Promise<void> {
+  if (!supabase) throw new Error('Supabase not configured');
+  const user = await getUser();
+  if (!user) throw new Error('Must be signed in');
+  // Find existing note (one per project for v1).
+  const { data: existing } = await supabase
+    .from('project_notes')
+    .select('id')
+    .eq('user_id', user.id)
+    .eq('project_id', projectId)
+    .order('updated_at', { ascending: false })
+    .limit(1)
+    .maybeSingle();
+  if (existing) {
+    const { error } = await supabase
+      .from('project_notes')
+      .update({ body_md: bodyMd })
+      .eq('id', existing.id)
+      .eq('user_id', user.id);
+    if (error) throw error;
+    return;
+  }
+  const { error } = await supabase
+    .from('project_notes')
+    .insert({ user_id: user.id, project_id: projectId, body_md: bodyMd });
   if (error) throw error;
 }
 

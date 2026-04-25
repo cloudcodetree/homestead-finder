@@ -10,12 +10,13 @@ import {
 } from '../types/property';
 import { useAuth } from '../hooks/useAuth';
 import { useHiddenListings } from '../hooks/useHiddenListings';
-import { useSavedListings } from '../hooks/useSavedListings';
+import { FreeTierLimitError, useSavedListings } from '../hooks/useSavedListings';
 import { AddToProjectButton } from './AddToProjectButton';
 import { PrivateNote } from './PrivateNote';
 import { PropertyThumbnail } from './PropertyThumbnail';
 import { RatingBar } from './RatingBar';
 import { ResearchPanel } from './ResearchPanel';
+import { UpgradeModal } from './UpgradeModal';
 import {
   formatAcreage,
   formatCountyState,
@@ -70,6 +71,26 @@ export const PropertyDetail = ({ property, onClose }: PropertyDetailProps) => {
   const { isHidden, toggle: toggleHidden } = useHiddenListings();
   const saved = isSaved(property.id);
   const hidden = isHidden(property.id);
+  const [showUpgrade, setShowUpgrade] = useState(false);
+
+  /** Save click handler — same pattern as PropertyCard. Anonymous
+   * users get Google OAuth; free-tier users at the 5-save limit
+   * see the upgrade modal instead of a silent failure. */
+  const onSaveClick = async () => {
+    if (!user) {
+      void loginWithGoogle();
+      return;
+    }
+    try {
+      await toggleSaved(property.id);
+    } catch (err) {
+      if (err instanceof FreeTierLimitError) {
+        setShowUpgrade(true);
+        return;
+      }
+      throw err;
+    }
+  };
 
   const copyUrl = () => {
     navigator.clipboard.writeText(property.url).then(() => {
@@ -626,13 +647,7 @@ export const PropertyDetail = ({ property, onClose }: PropertyDetailProps) => {
           )}
           <div className="border-t border-gray-100 pt-4 flex items-center gap-2">
             <button
-              onClick={() => {
-                if (!user) {
-                  void loginWithGoogle();
-                  return;
-                }
-                void toggleSaved(property.id);
-              }}
+              onClick={() => void onSaveClick()}
               className={`flex-1 inline-flex items-center justify-center gap-1.5 rounded-lg border px-3 py-2 text-sm font-medium transition-colors ${
                 saved
                   ? 'bg-amber-400 border-amber-500 text-white hover:bg-amber-500'
@@ -708,6 +723,11 @@ export const PropertyDetail = ({ property, onClose }: PropertyDetailProps) => {
           </div>
         </div>
       </div>
+      <UpgradeModal
+        open={showUpgrade}
+        onClose={() => setShowUpgrade(false)}
+        reason="saved_listings_limit"
+      />
     </div>
   );
 };

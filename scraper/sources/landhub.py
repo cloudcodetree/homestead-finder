@@ -35,6 +35,7 @@ import json
 import re
 from typing import Any
 
+import raw_archive
 from logger import get_logger
 
 from .base import BaseScraper, RawListing
@@ -124,6 +125,15 @@ class LandHubScraper(BaseScraper):
             except Exception as e:
                 log.info(f"[landhub] {state} page {page} fetch failed: {e}")
                 break
+            # Archive raw page response BEFORE parsing — durability layer.
+            # Replay-friendly: a future parser change can re-extract from
+            # this gzipped HTML without a live re-scrape.
+            raw_archive.archive(
+                "landhub",
+                f"page-{state.lower()}-{page}",
+                result.content,
+                ext="html",
+            )
             page_rows = _extract_listings(result.content)
             if not page_rows:
                 log.info(

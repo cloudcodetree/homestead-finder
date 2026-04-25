@@ -34,6 +34,7 @@ from typing import Any
 
 from bs4 import BeautifulSoup
 
+import raw_archive
 from logger import get_logger
 
 from .base import BaseScraper, RawListing
@@ -217,6 +218,13 @@ class MossyOakScraper(BaseScraper):
         except Exception as e:
             log.info(f"[mossy_oak] fetch failed for {url}: {e}")
             return []
+        # Archive raw HTML before parsing (durability layer).
+        raw_archive.archive(
+            "mossy_oak",
+            f"state-{state.lower()}",
+            result.content,
+            ext="html",
+        )
         items = parse_mossy_oak_html(result.content, state)
         log.info(
             f"[mossy_oak] {state}: {len(items)} listings "

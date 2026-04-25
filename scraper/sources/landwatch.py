@@ -334,6 +334,16 @@ class LandWatchScraper(BaseScraper):
         except Exception as e:  # pragma: no cover — defensive
             log.info(f"[landwatch] fetch error for {url}: {e}")
             return []
+        # Archive raw response BEFORE parsing — Cloudflare wall is the
+        # highest-risk source for re-fetch. Replay path is critical here.
+        from raw_archive import archive as _archive
+
+        archive_key = (
+            f"{context}".replace(" ", "-").replace("/", "-")[:80] or "page"
+        )
+        archive_ext = "md" if fetch_result.content_type == "markdown" else "html"
+        _archive("landwatch", archive_key, fetch_result.content, ext=archive_ext)
+
         if fetch_result.content_type == "markdown":
             page_results = parse_markdown_listings(fetch_result.content, state)
         else:

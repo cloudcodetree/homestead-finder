@@ -33,6 +33,7 @@ from __future__ import annotations
 import re
 from typing import Any
 
+import raw_archive
 from logger import get_logger
 
 from .base import BaseScraper, RawListing
@@ -236,6 +237,16 @@ class CraigslistScraper(BaseScraper):
             r = cffi_requests.get(_SAPI_URL, impersonate="chrome131", timeout=20)
             r.raise_for_status()
             data = r.json()
+            # Archive the raw sapi JSON response — Craigslist's positional
+            # schema drifts. Future parser fixes can replay against this
+            # snapshot rather than waking up the rate-limit-aware
+            # Chrome-impersonation path.
+            raw_archive.archive(
+                "craigslist",
+                f"sapi-national-{state.lower()}",
+                r.text,
+                ext="json",
+            )
         except Exception as e:
             log.info(f"[craigslist] sapi fetch failed: {type(e).__name__}: {e}")
             return []

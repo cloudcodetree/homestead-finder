@@ -325,6 +325,16 @@ class HomesteadCrossingScraper(BaseScraper):
             log.info(f"[homestead_crossing] fetch failed for {state_url}: {e}")
             return []
 
+        # Archive raw response (durability layer).
+        from raw_archive import archive as _archive
+
+        _archive(
+            "homestead_crossing",
+            f"state-{state.lower()}",
+            fetch_result.content,
+            ext="md" if fetch_result.content_type == "markdown" else "html",
+        )
+
         # HTML path is preferred (Playwright renders Rent Manager's
         # `.rmwb_listing-wrapper` cards directly). Firecrawl-returned
         # markdown flows through the legacy markdown parser.

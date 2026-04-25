@@ -304,6 +304,10 @@ class OzarkLandScraper(BaseScraper):
         except Exception as e:
             log.info(f"[ozarkland] fetch failed for {self._LIST_URL}: {e}")
             return []
+        # Archive raw HTML (durability layer).
+        from raw_archive import archive as _archive
+
+        _archive("ozarkland", f"list-{state.lower()}", html, ext="html")
         items = parse_ozarkland_html(html)
         filtered = [item for item in items if item.get("state") == state.upper()]
         log.info(
