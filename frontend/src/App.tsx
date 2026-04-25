@@ -1,10 +1,12 @@
 import { Route, Routes } from 'react-router-dom';
 import { BuildFooter } from './components/BuildFooter';
 import { Dashboard } from './components/Dashboard';
+import { HomeFeed } from './components/HomeFeed';
 import { Landing } from './components/Landing';
 import { OnboardingModal } from './components/OnboardingModal';
 import { ProjectDetail } from './components/ProjectDetail';
 import { ProjectsIndex } from './components/ProjectsIndex';
+import { SwipeView } from './components/SwipeView';
 
 /**
  * Both routes render the Dashboard; the `:id?` on the property route
@@ -18,6 +20,8 @@ const App = () => {
     <>
       <Routes>
         <Route path="/" element={<Dashboard />} />
+        <Route path="/home" element={<HomeFeed />} />
+        <Route path="/swipe" element={<SwipeView />} />
         <Route path="/p/:id" element={<Dashboard />} />
         <Route path="/projects" element={<ProjectsIndex />} />
         <Route path="/project/:id" element={<ProjectDetail />} />

@@ -60,6 +60,7 @@ export const isDefaultFilters = (filters: FilterState): boolean => {
     filters.minDealScore === 0 &&
     filters.minHomesteadFit === 0 &&
     filters.improvementTier === 'any' &&
-    filters.hideWithRedFlags === DEFAULT_FILTERS.hideWithRedFlags
+    filters.hideWithRedFlags === DEFAULT_FILTERS.hideWithRedFlags &&
+    filters.searchText === ''
   );
 };

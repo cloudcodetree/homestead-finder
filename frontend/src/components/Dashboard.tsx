@@ -285,6 +285,43 @@ export const Dashboard = () => {
           </div>
         </div>
 
+        {/* Free-text search — substring across title, description,
+            county, features, improvements, AI tags. Multi-word AND.
+            Hidden on small screens (mobile users get the filter
+            drawer); keeps the header from overflowing. */}
+        <div className="hidden md:flex items-center ml-4 flex-1 max-w-md relative">
+          <svg
+            viewBox="0 0 24 24"
+            className="absolute left-2.5 w-4 h-4 text-gray-400 pointer-events-none"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <circle cx="11" cy="11" r="8" />
+            <line x1="21" y1="21" x2="16.65" y2="16.65" />
+          </svg>
+          <input
+            type="search"
+            value={filters.searchText}
+            onChange={(e) => updateFilter('searchText', e.target.value)}
+            placeholder="Search title, county, features…"
+            className="w-full border border-gray-200 rounded-lg pl-8 pr-3 py-1.5 text-sm focus:ring-1 focus:ring-green-500 focus:border-green-500 focus:outline-none"
+            aria-label="Search listings"
+          />
+          {filters.searchText && (
+            <button
+              onClick={() => updateFilter('searchText', '')}
+              className="absolute right-2 text-gray-400 hover:text-gray-600 text-sm"
+              aria-label="Clear search"
+              type="button"
+            >
+              ✕
+            </button>
+          )}
+        </div>
+
         <div className="ml-auto flex items-center gap-2">
           <div className="flex bg-gray-100 rounded-lg p-0.5">
             <button

@@ -47,6 +47,26 @@ const applyFilters = (properties: Property[], filters: FilterState): Property[] 
       if (filters.improvementTier === 'improved' && !hasAnyImprovement) return false;
       if (filters.improvementTier === 'bare_land' && hasAnyImprovement) return false;
     }
+    // Free-text search — multi-word AND match across the listing's
+    // searchable fields. Each whitespace-split term must appear
+    // somewhere; case-insensitive. Cheap because it's a JS substring
+    // check on already-loaded data.
+    if (filters.searchText && filters.searchText.trim()) {
+      const haystack = [
+        p.title,
+        p.description ?? '',
+        p.location.county,
+        p.location.state,
+        ...(p.features ?? []),
+        ...Object.keys(p.improvements ?? {}),
+        ...(p.aiTags ?? []),
+        p.aiSummary ?? '',
+      ]
+        .join(' ')
+        .toLowerCase();
+      const terms = filters.searchText.toLowerCase().trim().split(/\s+/);
+      if (!terms.every((t) => haystack.includes(t))) return false;
+    }
     return true;
   });
 };

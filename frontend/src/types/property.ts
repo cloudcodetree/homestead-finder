@@ -312,6 +312,12 @@ export interface FilterState {
    * contract. Default true so the List view stays focused on things
    * a buyer could actually pursue. */
   hideInactive: boolean;
+  /** Free-text query, case-insensitive substring match across title,
+   * description, county, features, improvements. Empty string = no
+   * filter. Saved as part of a saved search so a user can pin
+   * "anything mentioning 'spring' in Howell County" as a project
+   * watchlist. */
+  searchText: string;
   /**
    * Improvement tier filter. 'any' = no filter. 'move_in_ready' = only
    * listings with dwelling + water. 'improved' = any detected
@@ -338,6 +344,7 @@ export const DEFAULT_FILTERS: FilterState = {
   hideWithRedFlags: false,
   hideInactive: true,
   improvementTier: 'any',
+  searchText: '',
 };
 
 export const FEATURE_LABELS: Record<PropertyFeature, string> = {
