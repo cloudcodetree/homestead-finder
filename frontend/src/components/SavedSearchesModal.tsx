@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { FilterState } from '../types/property';
 import { useSavedSearches } from '../hooks/useSavedSearches';
 import type { NotifyCadence, SavedSearch } from '../lib/api';
+import { AddToProjectButton } from './AddToProjectButton';
 
 interface SavedSearchesModalProps {
   open: boolean;
@@ -175,6 +176,11 @@ const SavedSearchRow = ({
             <option key={val} value={val}>{label}</option>
           ))}
         </select>
+        <AddToProjectButton
+          itemType="saved_search"
+          itemId={search.id}
+          label="Add to project"
+        />
         {confirming ? (
           <div className="ml-auto flex items-center gap-1 text-xs">
             <button

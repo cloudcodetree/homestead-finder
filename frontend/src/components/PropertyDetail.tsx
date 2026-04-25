@@ -11,6 +11,7 @@ import {
 import { useAuth } from '../hooks/useAuth';
 import { useHiddenListings } from '../hooks/useHiddenListings';
 import { useSavedListings } from '../hooks/useSavedListings';
+import { AddToProjectButton } from './AddToProjectButton';
 import { PrivateNote } from './PrivateNote';
 import { PropertyThumbnail } from './PropertyThumbnail';
 import { ResearchPanel } from './ResearchPanel';
@@ -610,11 +611,15 @@ export const PropertyDetail = ({ property, onClose }: PropertyDetailProps) => {
             </div>
           </div>
 
-          {/* Save / Not-interested actions — mirror the buttons on the
-              card, but labeled so users who landed here deep-link-
-              style (URL navigation) still get the affordance. Anonymous
-              click on Save falls through to Google OAuth; Hide is
-              gated to signed-in users (nowhere to persist otherwise). */}
+          {/* Save / Not-interested / Add-to-project actions row.
+              Mirrors the buttons on the card but labeled. Add-to-project
+              shows only for signed-in users (anonymous have nowhere to
+              persist a project). */}
+          {user && (
+            <div className="flex items-center justify-end pt-4">
+              <AddToProjectButton itemType="listing" itemId={property.id} />
+            </div>
+          )}
           <div className="border-t border-gray-100 pt-4 flex items-center gap-2">
             <button
               onClick={() => {

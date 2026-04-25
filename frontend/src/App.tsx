@@ -2,6 +2,8 @@ import { Route, Routes } from 'react-router-dom';
 import { BuildFooter } from './components/BuildFooter';
 import { Dashboard } from './components/Dashboard';
 import { OnboardingModal } from './components/OnboardingModal';
+import { ProjectDetail } from './components/ProjectDetail';
+import { ProjectsIndex } from './components/ProjectsIndex';
 
 /**
  * Both routes render the Dashboard; the `:id?` on the property route
@@ -16,6 +18,8 @@ const App = () => {
       <Routes>
         <Route path="/" element={<Dashboard />} />
         <Route path="/p/:id" element={<Dashboard />} />
+        <Route path="/projects" element={<ProjectsIndex />} />
+        <Route path="/project/:id" element={<ProjectDetail />} />
         <Route path="*" element={<Dashboard />} />
       </Routes>
       {/* First-time user onboarding. Self-gating — no-ops when user is
