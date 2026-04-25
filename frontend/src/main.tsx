@@ -6,6 +6,7 @@ import { AuthProvider } from './hooks/useAuth';
 import { HiddenListingsProvider } from './hooks/useHiddenListings';
 import { ListingRatingsProvider } from './hooks/useListingRatings';
 import { SavedListingsProvider } from './hooks/useSavedListings';
+import { SubscriptionProvider } from './hooks/useSubscription';
 import { UserPreferencesProvider } from './hooks/useUserPreferences';
 import './index.css';
 
@@ -21,15 +22,17 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <BrowserRouter basename={import.meta.env.BASE_URL}>
       <AuthProvider>
-        <UserPreferencesProvider>
-          <SavedListingsProvider>
-            <HiddenListingsProvider>
-              <ListingRatingsProvider>
-                <App />
-              </ListingRatingsProvider>
-            </HiddenListingsProvider>
-          </SavedListingsProvider>
-        </UserPreferencesProvider>
+        <SubscriptionProvider>
+          <UserPreferencesProvider>
+            <SavedListingsProvider>
+              <HiddenListingsProvider>
+                <ListingRatingsProvider>
+                  <App />
+                </ListingRatingsProvider>
+              </HiddenListingsProvider>
+            </SavedListingsProvider>
+          </UserPreferencesProvider>
+        </SubscriptionProvider>
       </AuthProvider>
     </BrowserRouter>
   </React.StrictMode>

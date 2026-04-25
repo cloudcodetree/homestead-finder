@@ -30,9 +30,11 @@ const computeDaysOnMarket = (isoDate: string): number | null => {
 };
 
 import { useAuth } from '../hooks/useAuth';
+import { useState } from 'react';
 import { useHiddenListings } from '../hooks/useHiddenListings';
 import { useListingRatings } from '../hooks/useListingRatings';
-import { useSavedListings } from '../hooks/useSavedListings';
+import { useSavedListings, FreeTierLimitError } from '../hooks/useSavedListings';
+import { UpgradeModal } from './UpgradeModal';
 import { PropertyThumbnail } from './PropertyThumbnail';
 import {
   formatAcreage,
@@ -99,6 +101,24 @@ export const PropertyCard = ({ property, onClick, isSelected = false }: Property
   const saved = isSaved(property.id);
   const hidden = isHidden(property.id);
   const rating = getRating(property.id);
+  const [showUpgrade, setShowUpgrade] = useState(false);
+
+  const onSaveClick = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (!user) {
+      void loginWithGoogle();
+      return;
+    }
+    try {
+      await toggle(property.id);
+    } catch (err) {
+      if (err instanceof FreeTierLimitError) {
+        setShowUpgrade(true);
+        return;
+      }
+      throw err;
+    }
+  };
 
   return (
     <div
@@ -112,17 +132,7 @@ export const PropertyCard = ({ property, onClick, isSelected = false }: Property
           OAuth round-trip via useAuth). Optimistic-update semantics
           inherited from useSavedListings. */}
       <button
-        onClick={(e) => {
-          e.stopPropagation();
-          if (!user) {
-            // Anonymous click on the bookmark → quickest path to login
-            // is Google (one tap). If that user would rather use email
-            // they can hit Sign-in in the header and see the full sheet.
-            void loginWithGoogle();
-            return;
-          }
-          void toggle(property.id);
-        }}
+        onClick={onSaveClick}
         aria-label={saved ? 'Remove from saved' : 'Save listing'}
         title={
           user
@@ -444,6 +454,11 @@ export const PropertyCard = ({ property, onClick, isSelected = false }: Property
             )}
         </div>
       </div>
+      <UpgradeModal
+        open={showUpgrade}
+        onClose={() => setShowUpgrade(false)}
+        reason="saved_listings_limit"
+      />
     </div>
   );
 };

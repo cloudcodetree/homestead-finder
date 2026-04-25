@@ -9,7 +9,9 @@ import {
   ReactNode,
 } from 'react';
 import { api } from '../lib/api';
+import { FREE_TIER_LIMITS } from '../lib/billing';
 import { useAuth } from './useAuth';
+import { useSubscription } from './useSubscription';
 
 /**
  * Saved-listings context — ONE shared source of truth for the whole
@@ -34,6 +36,19 @@ interface SavedListingsContextValue {
   getNote: (listingId: string) => string;
   updateNote: (listingId: string, note: string) => Promise<void>;
   loading: boolean;
+  /** True iff the current user has hit the free-tier saved-listing
+   * limit and trying to save another would prompt an upgrade. */
+  atFreeLimit: boolean;
+}
+
+/** Thrown when a free-tier user tries to exceed their saved-listing
+ * limit. UI catches this to surface the UpgradeModal. */
+export class FreeTierLimitError extends Error {
+  reason: 'saved_listings_limit';
+  constructor() {
+    super('Free tier saved-listings limit reached');
+    this.reason = 'saved_listings_limit';
+  }
 }
 
 const SavedListingsContext = createContext<SavedListingsContextValue | null>(null);
@@ -44,6 +59,7 @@ interface SavedListingsProviderProps {
 
 export const SavedListingsProvider = ({ children }: SavedListingsProviderProps) => {
   const { user, configured } = useAuth();
+  const { paid } = useSubscription();
   const [savedIds, setSavedIds] = useState<Set<string>>(new Set());
   // Notes are stored alongside savedIds — one loads both in a single
   // query, avoiding a round-trip-per-detail-open.
@@ -81,6 +97,12 @@ export const SavedListingsProvider = ({ children }: SavedListingsProviderProps) 
   const toggle = useCallback(
     async (listingId: string) => {
       if (!user) throw new Error('Must be signed in to save listings');
+      // Free-tier limit gate: only blocks ADDS, not removes. Saving
+      // your 6th listing as a free user throws FreeTierLimitError;
+      // unsaving anything always works.
+      if (!paid && !savedIds.has(listingId) && savedIds.size >= FREE_TIER_LIMITS.savedListings) {
+        throw new FreeTierLimitError();
+      }
       // Optimistic update: flip locally, then sync to backend; revert
       // on error so the UI stays honest.
       setSavedIds((prev) => {
@@ -108,7 +130,7 @@ export const SavedListingsProvider = ({ children }: SavedListingsProviderProps) 
         throw err;
       }
     },
-    [user]
+    [user, paid, savedIds]
   );
 
   const getNote = useCallback(
@@ -140,9 +162,12 @@ export const SavedListingsProvider = ({ children }: SavedListingsProviderProps) 
     [user, notes]
   );
 
+  const atFreeLimit =
+    !paid && savedIds.size >= FREE_TIER_LIMITS.savedListings;
+
   const value = useMemo<SavedListingsContextValue>(
-    () => ({ savedIds, isSaved, toggle, getNote, updateNote, loading }),
-    [savedIds, isSaved, toggle, getNote, updateNote, loading]
+    () => ({ savedIds, isSaved, toggle, getNote, updateNote, loading, atFreeLimit }),
+    [savedIds, isSaved, toggle, getNote, updateNote, loading, atFreeLimit]
   );
 
   return createElement(SavedListingsContext.Provider, { value }, children);
@@ -163,5 +188,6 @@ export const useSavedListings = (): SavedListingsContextValue => {
       throw new Error('SavedListingsProvider missing');
     },
     loading: false,
+    atFreeLimit: false,
   };
 };
