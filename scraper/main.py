@@ -22,7 +22,9 @@ from sources.tax_sale_analytics import analyze_listings as analyze_tax_sale_list
 from sources.blm import BLMScraper
 from sources.county_tax import CountyTaxScraper
 from sources.govease import GovEaseScraper
-from sources.craigslist import CraigslistScraper
+# Craigslist disabled — see ALL_SCRAPERS for the full reason. Import
+# left out so unused-import lint stays clean; restoring requires this
+# line and the dict entry below.
 from sources.homestead_crossing import HomesteadCrossingScraper
 from sources.landhub import LandHubScraper
 from sources.lands_of_america import LandsOfAmericaScraper
@@ -43,7 +45,18 @@ ALL_SCRAPERS = {
     "ozarkland": OzarkLandScraper,
     "united_country": UnitedCountryScraper,
     "mossy_oak": MossyOakScraper,
-    "craigslist": CraigslistScraper,
+    # craigslist disabled 2026-04-28: URL builder is broken on two
+    # axes — points at the apex craigslist.org instead of a regional
+    # subdomain (apex 404s every listing) and captures the wrong
+    # integer as the post ID (a sequence offset, not the post ID).
+    # Real post ID = decode.minPostingId + item[0]. Fix is to build a
+    # lat/lng→subdomain resolver since decode.locations is unreliable
+    # (Cherokee Village geo-prefix points at fayar but the actual
+    # listing lives under jonesboro). Until the URL builder is fixed
+    # every craigslist row ships a 404 outbound link, so we don't run
+    # the scraper. Restore: re-add `from sources.craigslist import
+    # CraigslistScraper` to the imports above and uncomment the line:
+    #     "craigslist": CraigslistScraper,
     "landhub": LandHubScraper,
     "zillow": ZillowScraper,
     "realtor": RealtorScraper,
@@ -255,6 +268,56 @@ def run(
     output_path.write_text(json.dumps(merged, indent=2))
     print(f"\n  Written: {output_path} ({len(merged)} listings)")
 
+    # Shadow-write to the SQLite store. JSON remains canonical for the
+    # static frontend; this gives subsequent passes (image_refresh,
+    # enrich, deals, …) a SQL surface to work against instead of
+    # re-reading + re-writing the JSON each time. Idempotent — failures
+    # here never break the JSON write that already succeeded.
+    import os as _os
+
+    if not _os.environ.get("SKIP_DB_SYNC"):
+        try:
+            from db_io import import_from_json
+
+            n = import_from_json(output_path)
+            if n:
+                print(f"  DB synced: {n} listings → corpus.sqlite")
+        except Exception as e:
+            print(f"  (db sync failed; JSON is still authoritative: {e})")
+
+    # Generic image refresh — works for every source. Detects rows
+    # with synthesized/placeholder image URLs (heuristic: every URL
+    # ends with the listing's own PID) and re-extracts real CDN URLs
+    # from each listing's detail page. Per-source regex extractors
+    # registered in image_refresh.EXTRACTORS run first; sources
+    # without one fall through to the AI fallback (Claude reads the
+    # HTML and pulls photo URLs). Idempotent + throttled at
+    # ~0.7 req/sec serialized. Skip with SKIP_IMAGE_REFRESH=1
+    # (legacy SKIP_LW_IMAGES still honored for back-compat).
+    import os as _os
+
+    if not _os.environ.get("SKIP_IMAGE_REFRESH") and not _os.environ.get("SKIP_LW_IMAGES"):
+        try:
+            from image_refresh import run as refresh_images
+
+            print("  Refreshing image URLs from detail pages…")
+            refresh_images(output_path)
+        except Exception as e:
+            print(f"  (image refresh failed: {e})")
+
+    # Daily health check — week-over-week diff per source. Surfaces
+    # silent regressions (a source returning 0 listings, image
+    # coverage cratering, geo coverage dropping). Non-fatal: a breach
+    # is logged + emailed but doesn't abort the rest of the pipeline.
+    # Skip with HEALTH_CHECK_SKIP=1 during fast iterations.
+    if not _os.environ.get("HEALTH_CHECK_SKIP"):
+        try:
+            from health_check import run as health_run
+
+            health_run(output_path, alert=True)
+        except Exception as e:
+            print(f"  (health check failed: {e})")
+
     if config.SAVE_DATED_SNAPSHOT:
         snapshot_path = config.DATA_DIR / f"listings_{date.today().isoformat()}.json"
         snapshot_path.write_text(json.dumps(scored, indent=2))
@@ -358,11 +421,31 @@ def main() -> None:
         action="store_true",
         help="Validate learned selectors and exit",
     )
+    parser.add_argument(
+        "--skip-image-refresh",
+        action="store_true",
+        help="Skip the generic detail-page photo refresh pass (faster iteration; "
+        "broken `{N}-{PID}` URLs will remain on listings that haven't been refreshed)",
+    )
+    # Back-compat alias — older invocations / docs still reference the
+    # LandWatch-specific flag. Both map to SKIP_IMAGE_REFRESH now.
+    parser.add_argument(
+        "--skip-landwatch-images",
+        action="store_true",
+        help=argparse.SUPPRESS,
+    )
     args = parser.parse_args()
 
     if args.validate_selectors:
         validate_selectors()
         return
+
+    # Map the CLI flag(s) to the env vars the run() routine inspects
+    # so flag + env paths honor the same gate.
+    if args.skip_image_refresh or args.skip_landwatch_images:
+        import os as _os
+
+        _os.environ["SKIP_IMAGE_REFRESH"] = "1"
 
     # Override AI settings if flags provided
     if args.no_ai:

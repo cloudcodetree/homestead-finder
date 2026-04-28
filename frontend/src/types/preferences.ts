@@ -41,6 +41,18 @@ export interface UserPreferences {
    * ~400 chars at the UI level. */
   vision?: string;
 
+  /**
+   * Free-form ranking hints — explicit instructions to the AI ranker
+   * such as "deduct points if there's no creek access" or "boost
+   * listings with owner financing". Distinct from `vision` (a
+   * descriptive paragraph) — these are imperative rules. Joined into
+   * the system prompt as a numbered list. Capped at ~600 chars.
+   *
+   * Surfaced via the dedicated /settings/ai-prompts page; not part
+   * of the onboarding flow because it's a power-user feature.
+   */
+  rankingHints?: string;
+
   /** Timestamp the user completed onboarding, null if skipped. */
   completedAt?: string;
 }
@@ -54,4 +66,5 @@ export const DEFAULT_PREFERENCES: UserPreferences = {
   targetStates: [],
   drivingToleranceMin: null,
   vision: '',
+  rankingHints: '',
 };

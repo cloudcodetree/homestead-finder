@@ -6,8 +6,13 @@
 //   supabase functions deploy stripe-webhook --no-verify-jwt
 //   supabase secrets set STRIPE_SECRET_KEY=sk_live_xxx
 //   supabase secrets set STRIPE_WEBHOOK_SECRET=whsec_xxx
-//   supabase secrets set SUPABASE_URL=https://...
-//   supabase secrets set SUPABASE_SERVICE_ROLE_KEY=sb_secret_...
+//
+// Supabase auto-injects the project's URL and the API-Keys-2.0
+// secret key into every Edge Function — no manual `secrets set`
+// for those (the CLI rejects names starting with SUPABASE_ anyway).
+// This function reads `SUPABASE_SECRET_KEY` first (new format,
+// `sb_secret_…`) and falls back to `SUPABASE_SERVICE_ROLE_KEY` for
+// projects still on the legacy JWT key.
 //
 // Then in Stripe Dashboard → Developers → Webhooks, add an endpoint
 // pointing to https://<project-ref>.supabase.co/functions/v1/stripe-webhook
@@ -39,10 +44,18 @@ const stripe = new Stripe(Deno_.env.get('STRIPE_SECRET_KEY')!, {
   apiVersion: '2024-09-30.acacia',
 });
 
-const supabase = createClient(
-  Deno_.env.get('SUPABASE_URL')!,
-  Deno_.env.get('SUPABASE_SERVICE_ROLE_KEY')!,
-);
+// Prefer the new API-Keys-2.0 secret key (sb_secret_…). Fall back
+// to the legacy service_role JWT only for projects that haven't yet
+// disabled JWT-based keys. Supabase auto-injects whichever exists.
+const supabaseKey =
+  Deno_.env.get('SUPABASE_SECRET_KEY') ?? Deno_.env.get('SUPABASE_SERVICE_ROLE_KEY');
+if (!supabaseKey) {
+  throw new Error(
+    'Neither SUPABASE_SECRET_KEY nor SUPABASE_SERVICE_ROLE_KEY is set ' +
+      'in the function environment',
+  );
+}
+const supabase = createClient(Deno_.env.get('SUPABASE_URL')!, supabaseKey);
 
 const WEBHOOK_SECRET = Deno_.env.get('STRIPE_WEBHOOK_SECRET')!;
 

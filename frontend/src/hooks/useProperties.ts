@@ -1,5 +1,6 @@
 import { useCallback, useMemo } from 'react';
 import { Property, FilterState } from '../types/property';
+import { pointInPolygon } from '../utils/geometry';
 import { getListingTypeStyle } from '../utils/listingType';
 import { useJsonAsset } from './useJsonAsset';
 
@@ -31,6 +32,23 @@ const applyFilters = (properties: Property[], filters: FilterState): Property[] 
       if (!hasAll) return false;
     }
     if (filters.hideWithRedFlags && (p.redFlags?.length ?? 0) > 0) return false;
+    // Drawn-boundary filter — listing must fall inside the user's
+    // map polygon. Listings without coords are excluded (they can't
+    // be in any drawn area). The polygon is closed implicitly by
+    // pointInPolygon.
+    if (filters.drawnArea && filters.drawnArea.length >= 3) {
+      const lat = p.location?.lat;
+      const lng = p.location?.lng;
+      if (
+        typeof lat !== 'number' ||
+        typeof lng !== 'number' ||
+        lat === 0 ||
+        lng === 0
+      ) {
+        return false;
+      }
+      if (!pointInPolygon([lat, lng], filters.drawnArea)) return false;
+    }
     // Hide listings marked expired/pending/under-contract by the
     // source. Tax-sale rows keep their own `status="tax_sale"` which
     // is never treated as inactive.
@@ -81,16 +99,55 @@ const loadSample = async () => {
 
 const isEmptyArray = (d: Property[]) => d.length === 0;
 
+/**
+ * Cross-row deduplication for the loaded corpus.
+ *
+ * The scraper sometimes emits two rows for the same listing when a
+ * re-discovery pass uses a different ID suffix (e.g.
+ * `craigslist_3221688` and `craigslist_3221688_MO_38084` both
+ * pointing at the same source URL). Until that's fixed in the
+ * scraper, dedupe in the loader: prefer the row with more data
+ * (longer description, more images, has coords, has AI summary).
+ *
+ * Exposed as a pure function so it can be tested in isolation;
+ * `useProperties` calls it inside a useMemo over the raw fetch.
+ */
+const dedupeKey = (p: Property): string => {
+  const u = (p.url ?? '').trim().toLowerCase();
+  return u || p.id;
+};
+
+const richness = (p: Property): number => {
+  let s = 0;
+  if (p.images && p.images.length > 0) s += 10 + p.images.length;
+  if (p.imageUrl) s += 5;
+  if ((p.description ?? '').length > 0) {
+    s += Math.min(5, Math.floor(p.description!.length / 100));
+  }
+  if (p.location?.lat && p.location?.lng && p.location.lat !== 0) s += 3;
+  if (p.aiSummary) s += 5;
+  return s;
+};
+
+export const dedupeListings = (rows: Property[]): Property[] => {
+  if (rows.length === 0) return rows;
+  const best = new Map<string, Property>();
+  for (const p of rows) {
+    if (!p.id) continue;
+    const k = dedupeKey(p);
+    const existing = best.get(k);
+    if (!existing || richness(p) > richness(existing)) best.set(k, p);
+  }
+  return Array.from(best.values());
+};
+
 export const useProperties = (filters: FilterState) => {
   const { data, loading, error, isSample } = useJsonAsset<Property[]>({
     assetPath: 'data/listings.json',
     loadFallback: useCallback(loadSample, []),
     isEmpty: isEmptyArray,
   });
-  // Memoize the fallback so `allProperties` has a stable reference when
-  // data hasn't loaded yet — otherwise the useMemo dependencies below
-  // change every render.
-  const allProperties = useMemo(() => data ?? [], [data]);
+  const allProperties = useMemo(() => dedupeListings(data ?? []), [data]);
 
   const filtered = useMemo(() => applyFilters(allProperties, filters), [allProperties, filters]);
 

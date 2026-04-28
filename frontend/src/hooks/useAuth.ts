@@ -45,14 +45,27 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       return;
     }
     let cancelled = false;
+    // Track whether the auth listener has already produced an
+    // authoritative user. Without this guard the post-OAuth sequence
+    // can race: the listener fires SIGNED_IN with the new user before
+    // getUser()'s network round-trip resolves, and getUser() can then
+    // return null (the session hasn't synced to the server side yet),
+    // clobbering the freshly-set user back to anonymous. The
+    // symptom is the AuthButton showing "Sign in" right after a
+    // successful sign-in.
+    let listenerSetUser = false;
     api.auth.getUser().then((u) => {
-      if (!cancelled) {
-        setUser(u);
-        setLoading(false);
-      }
+      if (cancelled) return;
+      // Only set from getUser if the listener hasn't already given us
+      // a user — otherwise we'd risk overwriting a real session.
+      if (u || !listenerSetUser) setUser(u);
+      setLoading(false);
     });
     const unsubscribe = api.auth.onAuthChange((u) => {
-      if (!cancelled) setUser(u);
+      if (cancelled) return;
+      if (u) listenerSetUser = true;
+      setUser(u);
+      setLoading(false);
     });
     return () => {
       cancelled = true;

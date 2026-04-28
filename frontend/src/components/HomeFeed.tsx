@@ -33,7 +33,7 @@ import { PropertyCard } from './PropertyCard';
 const HOME_LIMIT = 12;
 
 export const HomeFeed = () => {
-  const { user, loginWithGoogle } = useAuth();
+  const { user } = useAuth();
   const { allProperties, loading } = useProperties(DEFAULT_FILTERS);
   const { savedIds } = useSavedListings();
   const { hiddenIds } = useHiddenListings();
@@ -94,32 +94,7 @@ export const HomeFeed = () => {
   ]);
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <header className="bg-white border-b border-gray-200 px-4 py-3">
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <span className="text-xl">🌿</span>
-            <h1 className="font-bold text-gray-900 text-lg">Homestead Finder</h1>
-          </div>
-          <div className="flex items-center gap-3">
-            <Link
-              to="/"
-              className="text-sm text-gray-600 hover:text-gray-900"
-            >
-              Browse all listings →
-            </Link>
-            {!user && (
-              <button
-                onClick={() => void loginWithGoogle()}
-                className="bg-green-600 hover:bg-green-700 text-white text-sm font-medium px-3 py-1.5 rounded-lg"
-              >
-                Sign in
-              </button>
-            )}
-          </div>
-        </div>
-      </header>
-
+    <div className="h-full overflow-y-auto">
       <main className="max-w-7xl mx-auto px-4 py-6">
         <div className="mb-5">
           <h2 className="text-2xl font-bold text-gray-900">

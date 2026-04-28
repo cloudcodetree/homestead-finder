@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import { UpgradeModal } from './UpgradeModal';
 
@@ -22,6 +22,16 @@ import { UpgradeModal } from './UpgradeModal';
 export const Landing = () => {
   const { user, loginWithGoogle } = useAuth();
   const [showPricing, setShowPricing] = useState(false);
+  const navigate = useNavigate();
+
+  // Auto-bounce signed-in visitors into the shell. Without this, a
+  // user who hits /landing while already authenticated (or completes
+  // OAuth and lands back here) sees Landing's own "Sign in" header
+  // instead of the AppShell — the chevron/avatar lives in AppShell,
+  // so they perceive the sign-in as not having taken effect.
+  useEffect(() => {
+    if (user) navigate('/home', { replace: true });
+  }, [user, navigate]);
 
   return (
     <div className="min-h-screen bg-white">
@@ -47,12 +57,20 @@ export const Landing = () => {
                 Open dashboard →
               </Link>
             ) : (
-              <button
-                onClick={() => void loginWithGoogle()}
-                className="text-sm font-medium text-green-700 hover:text-green-900"
-              >
-                Sign in
-              </button>
+              <>
+                <button
+                  onClick={() => void loginWithGoogle()}
+                  className="text-sm text-gray-600 hover:text-gray-900"
+                >
+                  Sign in
+                </button>
+                <button
+                  onClick={() => void loginWithGoogle()}
+                  className="bg-green-600 hover:bg-green-700 text-white text-sm font-semibold px-3.5 py-1.5 rounded-lg shadow-sm"
+                >
+                  Try it out →
+                </button>
+              </>
             )}
           </div>
         </div>

@@ -3,17 +3,75 @@ import { Property } from '../types/property';
 import { PropertyCarousel } from './PropertyCarousel';
 
 /**
+ * Hosts whose images can't be reliably hotlinked from a third-party
+ * origin. Craigslist's image CDN serves placeholder/blocked content
+ * for off-site referers without surfacing a 4xx — onError never fires
+ * and we end up rendering broken alt text. Skipping them at the source
+ * lets the thumbnail fall straight through to the satellite tile.
+ */
+const HOTLINK_BLOCKED_HOSTS = ['images.craigslist.org', 'craigslist.org'];
+
+/**
+ * Detect a SYNTHESIZED LandWatch placeholder URL.
+ *
+ * Old scraper output used the form
+ *   assets.landwatch.com/resizedimages/360/990/l/80/<N>-<listingPID>
+ * — i.e. it stamped the listing's own PID as the photo ID. The CDN
+ * serves a "Photo not provided" image for those URLs at HTTP 200,
+ * which is impossible to distinguish in the browser (CORS blocks
+ * pixel inspection). The image_refresh pass writes URLs at the
+ * SAME path but with INDEPENDENT real photo IDs (9-10 digit IDs
+ * issued by LandWatch's CDN, NOT the listing's PID).
+ *
+ * The discriminator is the trailing photo ID: equals the listing's
+ * PID → synthesized → reject. Different ID → refreshed real photo →
+ * keep. We had to thread the listing's PID through to make this call
+ * because path-only filtering rejected good refreshed URLs too.
+ */
+const _SYNTHESIZED_LW_PATH = /assets\.landwatch\.com\/resizedimages\/360\/990\/l\/80\/\d+-(\d+)/;
+
+const isHotlinkable = (url: string, listingPid: string): boolean => {
+  try {
+    const u = new URL(url);
+    if (HOTLINK_BLOCKED_HOSTS.some((h) => u.host.endsWith(h))) return false;
+    const m = url.match(_SYNTHESIZED_LW_PATH);
+    if (m && m[1] === listingPid) return false;
+    return true;
+  } catch {
+    return true; // relative or malformed — let the <img> try anyway
+  }
+};
+
+/**
  * All valid image URLs for a property, in card-display order. Prefers
  * the `images[]` array (current scraper output — may contain 1-8
  * entries); falls back to the legacy `imageUrl` field; returns empty
  * for image-less rows (tax-sale parcels, scrape failures).
+ *
+ * Filters out URLs from hosts known to block off-origin hotlinks, so
+ * the satellite fallback can take over instead of rendering as broken
+ * alt text.
  */
 const allImages = (property: Property): string[] => {
+  // Strip the source prefix to recover the source-issued listing PID
+  // (e.g. `landwatch_424803462` → `424803462`). The trailing portion
+  // is what gets compared against image-URL trailing IDs in
+  // `isHotlinkable` to detect synthesized LandWatch placeholders.
+  const pid = (property.id || '').includes('_')
+    ? (property.id || '').split('_').slice(1).join('_')
+    : property.id || '';
   const fromArray = (property.images ?? []).filter(
-    (u) => typeof u === 'string' && u.length > 0
+    (u): u is string =>
+      typeof u === 'string' && u.length > 0 && isHotlinkable(u, pid),
   );
   if (fromArray.length > 0) return fromArray;
-  if (property.imageUrl && property.imageUrl.length > 0) return [property.imageUrl];
+  if (
+    property.imageUrl &&
+    property.imageUrl.length > 0 &&
+    isHotlinkable(property.imageUrl, pid)
+  ) {
+    return [property.imageUrl];
+  }
   return [];
 };
 

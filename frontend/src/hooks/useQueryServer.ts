@@ -82,10 +82,21 @@ export const useQueryServer = () => {
       question: string,
       limit = 15,
       projectContext?: string,
+      userPromptOverrides?: { vision?: string; rankingHints?: string },
     ): Promise<QueryResponse> => {
       const body: Record<string, unknown> = { question, limit };
       if (projectContext && projectContext.trim()) {
         body.projectContext = projectContext;
+      }
+      // Vision #4 — pass user-authored prompt fragments through to the
+      // server so they get appended to Claude's system prompt. Server
+      // is responsible for sanitizing + length-capping; we just forward
+      // what the user typed.
+      if (userPromptOverrides?.vision?.trim()) {
+        body.userVision = userPromptOverrides.vision.trim();
+      }
+      if (userPromptOverrides?.rankingHints?.trim()) {
+        body.userRankingHints = userPromptOverrides.rankingHints.trim();
       }
       const res = await fetch(`${QUERY_SERVER_URL}/query`, {
         method: 'POST',

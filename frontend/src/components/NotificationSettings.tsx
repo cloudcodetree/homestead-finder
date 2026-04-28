@@ -20,6 +20,7 @@ const loadPrefs = (): NotificationPrefs => {
 };
 
 interface NotificationSettingsProps {
+  /** Called when the user clicks Cancel — page wrapper navigates back. */
   onClose: () => void;
 }
 
@@ -34,13 +35,10 @@ export const NotificationSettings = ({ onClose }: NotificationSettingsProps) => 
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50">
-      <div className="bg-white rounded-xl shadow-2xl w-full max-w-md">
-        <div className="p-5 border-b border-gray-100 flex items-center justify-between">
+    <div className="p-6">
+      <div className="bg-white rounded-xl shadow-2xl w-full max-w-md mx-auto">
+        <div className="p-5 border-b border-gray-100">
           <h2 className="font-bold text-gray-900">Deal Notifications</h2>
-          <button onClick={onClose} className="text-gray-400 hover:text-gray-600 text-xl">
-            ✕
-          </button>
         </div>
 
         <div className="p-5 space-y-4">

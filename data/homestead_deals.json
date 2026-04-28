@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-04-22T20:03:06.068054+00:00",
+  "generatedAt": "2026-04-28T04:54:15.760557+00:00",
   "model": "sonnet",
-  "totalListings": 514,
-  "passedFiltersCount": 120,
+  "totalListings": 2463,
+  "passedFiltersCount": 506,
   "candidateCount": 40,
   "pickCount": 12,
   "filterSummary": {
@@ -27,75 +27,75 @@
   },
   "picks": [
     {
-      "id": "landwatch_426302076",
-      "headline": "67-acre Ozark spring and creek homestead",
-      "reason": "67.5 acres at $4,133/acre with an existing well, septic, spring, and creek eliminates the two most expensive infrastructure hurdles. Mixed timber and open ground in the Tomahawk Creek watershed support both resource harvesting and cultivation. The truncated listing leaves road access and electricity unconfirmed \u2014 those must be verified before closing, as they are the only material unknowns on an otherwise strong buy.",
+      "id": "united_country_1146739",
+      "headline": "80 acres AR Ozarks with working well and pond",
+      "reason": "At $2,499/acre for 80 acres, this is the strongest value-to-scale ratio in the candidate set. A working well and on-site pond provide dual-source water independence without relying on surface rights. Electricity is already run, and proximity to Norfork Lake adds hunting and recreation. Main risks are unverified soil class and unknown zoning; buyer should confirm buildability and any timber restrictions before closing.",
       "rank": 1
     },
     {
-      "id": "landwatch_422366319",
-      "headline": "53 acres with creek, pond, and springs",
-      "reason": "53 acres at $4,000/acre in Madison County, AR delivers creek frontage, a pond, and springs \u2014 three independent water sources that underpin genuine off-grid self-sufficiency. Paved access and a build-ready classification reduce startup friction. Soil quality and whether a residential permit is straightforward in this county are the critical unknowns requiring due diligence before purchase.",
+      "id": "landwatch_426170882",
+      "headline": "40-acre Ozark retreat with Class 3 soil and creeks",
+      "reason": "The only candidate with confirmed Class 3 soil (Linker Mountainburg complex, 5% slope), year-round surface water from multiple creeks and a waterfall, and utilities already on site. Existing cabins eliminate construction urgency. At $9,912/acre ($396,500 total) this is the priciest per acre among strong contenders, and the grid-dependent infrastructure reduces true off-grid viability \u2014 but for a comfort homestead with solid ag soil, it is the most complete package in the list.",
       "rank": 2
     },
     {
-      "id": "landwatch_426170882",
-      "headline": "40-acre Ozark waterfall retreat with cabins",
-      "reason": "Year-round creeks and a waterfall in the Tomahawk Creek\u2013Little Red River watershed provide reliable water on Class 3 (well-drained, 5% slope) Linker-Mountainburg soil suitable for small-scale agriculture. Existing cabins and on-site utilities enable immediate occupancy without a development phase. At $9,913/acre the price is the main trade-off \u2014 this is comfort homesteading, not a pioneer land play, and grid infrastructure means true off-grid operation would require retrofit.",
+      "id": "landwatch_426302076",
+      "headline": "67.5 acres MO with spring, creek, well, and septic",
+      "reason": "At $4,133/acre for 67.5 acres in Texas County, this property has the rarest combination in the dataset: a natural spring plus a creek plus an existing well and septic system, removing the two costliest infrastructure items. Mixed timber and open ground at 1,190 ft elevation support both food production and resource harvesting. Critical unknowns are road access quality and electricity \u2014 the truncated listing does not confirm power.",
       "rank": 3
     },
     {
-      "id": "landwatch_419681713",
-      "headline": "172 acres Class 2 soil, pioneer infrastructure build",
-      "reason": "172 acres at $1,512/acre with Ruston fine sandy loam (USDA Class 2, 2% slope, excellent drainage) is the best soil-per-dollar combination in this set. No flood risk and solid agricultural ground give this genuine long-term homesteading upside. The catch is real: no well, no septic, no utilities, and the listing emphasizes hunting use \u2014 zoning for residential homestead must be confirmed before treating this as a buildable property, and infrastructure costs could run $50\u2013100k.",
+      "id": "united_country_1123343",
+      "headline": "30 acres near Jasper AR at lowest price per acre",
+      "reason": "At $2,300/acre ($69,000 total), this is the cheapest per-acre listing in the candidate set that still has on-site utilities, creek water, and paved access. Proximity to Jasper keeps services within reach while maintaining rural character. The timberland designation means clearing is required before cultivation, and soil class is unknown \u2014 buyers must budget for clearing and confirm zoning allows residential use.",
       "rank": 4
     },
     {
-      "id": "landwatch_425424825",
-      "headline": "61 acres with four ponds near Highway 21",
-      "reason": "61 acres at $6,250/acre in Madison County, AR comes with four ponds providing redundant water storage and livestock infrastructure without needing a drilled well. Less than 1 mile from Highway 21 and utilities available at the county road reduce both isolation and development cost. Soil quality is undisclosed and must be verified; at this price per acre the budget for soil amendment or raised-bed systems is limited.",
+      "id": "landwatch_422743078",
+      "headline": "30 acres MO with farmhouse, barns, and spring pond",
+      "reason": "The only fully developed turnkey agricultural property in the set: existing farmhouse, barns, and outbuildings eliminate years of construction cost and effort. A spring-fed pond provides reliable year-round water for livestock and irrigation. At $13,967/acre ($419,000 total) the price reflects the improvements; 10-minute proximity to town reduces true remoteness. Spring reliability and formal water rights documentation should be verified before purchase.",
       "rank": 5
     },
     {
-      "id": "landwatch_425688197",
-      "headline": "40-acre farm with house, workshop, and pond",
-      "reason": "40.8 acres at $7,353/acre in Howell County, MO includes a farmhouse, workshop, fenced pasture, and pond \u2014 a functional livestock operation on day one. The 2-mile proximity to Willow Springs provides healthcare, feed, and hardware access without compromising rural character. Soil data is absent and the farmhouse age and condition are unverified; a structural inspection and soil sample should be conditions of any offer.",
+      "id": "landwatch_425429652",
+      "headline": "50 acres AR Searcy County with creek and pasture",
+      "reason": "50 acres with a documented year-round creek, rolling pasture, timber resources, and established food-plot areas at $4,250/acre ($212,500 total) offers significant scale for self-sufficient living. Steep terrain in sections will constrain buildable footprint, and utility infrastructure details are absent \u2014 electric and well status must be confirmed. The combination of water, acreage, and demonstrated agricultural use makes this one of the stronger rural land plays despite the information gaps.",
       "rank": 6
     },
     {
-      "id": "landwatch_422743078",
-      "headline": "30-acre farmstead with barns and spring pond",
-      "reason": "Existing farmhouse, barns, and agricultural infrastructure with a spring-fed pond 10 minutes from town make this the most immediately livable option in the set. At $13,967/acre for 30 developed acres in Texas County, MO it is priced for the improvements, not raw land. The main risk is that spring reliability and soil suitability are unverified \u2014 a dry year or soil test revealing poor ground could undermine the agricultural case at this price.",
+      "id": "landwatch_421279189",
+      "headline": "27 acres MO Wayne County, all infrastructure installed",
+      "reason": "Electric, water, septic, and a concrete slab are already in place on 27 acres at $6,852/acre ($185,000 total) \u2014 the full cost of installing these from scratch typically exceeds $50,000. County road access provides reliable ingress and proximity to services. Soil class and water source reliability are not documented in the listing, which is the main due-diligence gap; the existing slab indicates a structure was or will be placed, so zoning is presumably confirmed.",
       "rank": 7
     },
     {
-      "id": "ozarkland_jacks-fork-farmsteads-parcel-l",
-      "headline": "8.78-acre spring parcel with Class 3 soil",
-      "reason": "A natural spring combined with Weller silt loam (Class 3, farmland of statewide importance, 6.2% slope, flood zone X) is an unusually strong combination at this price point in Missouri. Off-grid viability is tagged and the terrain is buildable with minimal earthwork. The acreage is tight at 8.78 acres \u2014 barely enough for a full homestead without intensive management \u2014 and road access and utility hookup must be confirmed with the seller before closing.",
+      "id": "landwatch_426246605",
+      "headline": "37 acres MO Carter County with off-grid cabin",
+      "reason": "An existing off-grid cabin on 37 acres at $5,132/acre ($189,900 total) near the year-round Current River provides immediate shelter and a proven water source within reach. The isolated, no-HOA setting in Carter County suits remote living. Off-grid system condition (solar, water catchment) needs inspection, and the listing does not confirm grid electric or soil class \u2014 primarily suited for someone comfortable with off-grid systems from day one.",
       "rank": 8
     },
     {
-      "id": "landwatch_425832953",
-      "headline": "21-acre build-ready parcel with fiber and water",
-      "reason": "21.8 acres at $11,927/acre in Newton County (Ozarks, AR) with water, electric, and fiber internet already on site eliminates the three most common rural development delays. Highway access on both sides simplifies easement and logistics. Soil data and water rights detail are absent, which matters at this price \u2014 agricultural potential cannot be confirmed without a site visit and soil test, so this suits a homesteader who prioritizes connectivity and infrastructure over farming.",
+      "id": "ozarkland_jacks-fork-farmsteads-parcel-l",
+      "headline": "8.78 acres MO Class 3 farmland with natural spring",
+      "reason": "This is the only small parcel in the list with both confirmed Class 3 soil (Weller silt loam, statewide importance, 6.2% slope) and a natural spring providing year-round water \u2014 a combination that is genuinely rare at this price point ($8,986/acre, $78,900 total). Flood zone X and good drainage support building. At under 9 acres the footprint is tight for a full homestead, and road access plus utility details must be verified with the seller before purchase.",
       "rank": 9
     },
     {
-      "id": "ozarkland_jacks-fork-farmsteads-parcel-w",
-      "headline": "6-acre stream parcel with agricultural soil",
-      "reason": "6.09 acres with a year-round stream and Class 3 Weller silt loam (6.2% slope, flood zone X) at $7,537/acre provides quality agricultural ground and reliable water in a buildable configuration. Infrastructure needs (septic, utilities) add startup cost but the land fundamentals are sound. At just over 6 acres there is minimal buffer for mistakes or expansion \u2014 this works best as a compact, intensive kitchen-garden homestead rather than a livestock or grain operation.",
+      "id": "united_country_1129751",
+      "headline": "23 acres AR near Buffalo River, three utilities pre-installed",
+      "reason": "Well, septic, and electricity are already in place on 23 acres at $5,652/acre ($130,000 total), removing the three most expensive development items for a homestead build. Proximity to Buffalo National River provides reliable year-round water access and recreation. The listing is sparse on terrain and soil details, and the 'camper-ready' language suggests modest existing improvements rather than a full residence \u2014 zoning confirmation and a site visit are necessary.",
       "rank": 10
     },
     {
-      "id": "homestead_crossing_1157",
-      "headline": "18 acres with utilities and year-round water",
-      "reason": "18 acres at $3,494/acre in Oregon County, MO is the lowest price per acre in this set that still includes confirmed utilities and year-round water \u2014 making it the clearest budget entry point for a functional homestead. Class 4 Alred-Gatewood soil at 12% slopes significantly limits row-crop agriculture and complicates construction planning, restricting this to pasture, hay, and livestock-based production. Remote Oregon County location means a long drive for medical care or major supply runs.",
+      "id": "landhub_4920977",
+      "headline": "16 acres AR Montgomery County creek, pond, and electric",
+      "reason": "Dual water sources (creek and pond) plus existing electricity and direct highway access at $10,000/acre ($160,600 total) provide solid homesteading infrastructure for a 16-acre parcel. Adjacent national forest supports privacy and hunting. The listing omits zoning and building requirements, and potential land-use restrictions from the forest adjacency should be investigated; soil class and flood zone are also unverified.",
       "rank": 11
     },
     {
-      "id": "homestead_crossing_1552",
-      "headline": "21-acre parcel with utilities in Burton Branch watershed",
-      "reason": "Sand Hollow #18 offers the most acreage among the Bendavis-Poynor Class 4 cluster \u2014 21.34 acres at $5,056/acre with electric and water available in the Burton Branch\u2013Big Piney River watershed. Class 4 soil with severe agricultural limitations is the persistent weakness across this parcel group, making serious food production impractical and constraining the homestead to livestock, raised beds, and residential self-sufficiency. It is included as the strongest representative of a large group of similar parcels, but food-focused buyers should prioritize the higher-ranked options.",
+      "id": "landwatch_425954944",
+      "headline": "28 acres AR near Buffalo River, needs well drilled",
+      "reason": "At $3,750/acre ($105,000 total) near the Buffalo River with available electric and county road access, this is reasonable value for 28 acres in Searcy County. The requires_well_drilling red flag is a known and addressable cost ($8,000\u2013$20,000 typical in the Ozarks) rather than a structural disqualifier. Soil class, terrain difficulty, and building restrictions are all unverified from the truncated listing \u2014 this is a speculative buy requiring on-site inspection before commitment.",
       "rank": 12
     }
   ]

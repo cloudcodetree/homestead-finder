@@ -23,6 +23,7 @@ env/
 .env
 .env.local
 .env.*.local
+.env.deploy
 scraper/config_local.py
 
 # Claude Code local settings (user-specific overrides)
@@ -61,3 +62,18 @@ frontend/public/data
 
 # Runtime throttle state — per-day per-domain request counters
 data/scrape_quota.json
+
+# SQLite scraper store — derived from listings.json on every run.
+# Not checked in: it's a working store, not the shipped artifact.
+data/corpus.sqlite
+data/corpus.sqlite-shm
+data/corpus.sqlite-wal
+
+# Image-placeholder fingerprint registry — populated by
+# `python -m scraper.image_validation --learn`. Could be checked in
+# once stable but for now treat it as local-only state.
+data/_image_placeholders.json
+
+# Supabase CLI working directory — per-machine state (linked project,
+# pooler URL, version pins). Standard Supabase template ignores this.
+supabase/.temp/

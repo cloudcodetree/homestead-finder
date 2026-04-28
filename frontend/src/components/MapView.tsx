@@ -1,7 +1,17 @@
-import { useEffect } from 'react';
-import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
+import { useEffect, useState } from 'react';
+import {
+  MapContainer,
+  Marker,
+  Polygon,
+  Polyline,
+  Popup,
+  TileLayer,
+  useMap,
+  useMapEvents,
+} from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
+import { Pencil, X } from 'lucide-react';
 import { Property } from '../types/property';
 import { formatPrice, formatAcreage, formatPricePerAcre } from '../utils/formatters';
 import { getListingTypeStyle } from '../utils/listingType';
@@ -64,7 +74,48 @@ interface MapViewProps {
   properties: Property[];
   selectedId: string | null;
   onSelectProperty: (id: string) => void;
+  /** When set, the saved polygon is rendered as a translucent overlay
+   * and listings outside it are filtered upstream. */
+  drawnArea?: Array<[number, number]> | null;
+  /** Called when the user finishes drawing a new polygon. Empty array
+   * = clear. */
+  onAreaChange?: (polygon: Array<[number, number]> | null) => void;
 }
+
+interface DrawingLayerProps {
+  active: boolean;
+  vertices: Array<[number, number]>;
+  onAddVertex: (v: [number, number]) => void;
+  onFinish: () => void;
+}
+
+/**
+ * Captures the next click on the map as a polygon vertex when
+ * drawing mode is active. Double-click closes the polygon. The
+ * map's own scroll-zoom and pan handlers stay enabled — only
+ * single clicks are consumed for vertex placement.
+ */
+const DrawingLayer = ({ active, vertices, onAddVertex, onFinish }: DrawingLayerProps) => {
+  useMapEvents({
+    click(e) {
+      if (!active) return;
+      onAddVertex([e.latlng.lat, e.latlng.lng]);
+    },
+    dblclick() {
+      if (!active) return;
+      onFinish();
+    },
+  });
+  if (!active || vertices.length === 0) return null;
+  // Render an in-progress polyline so the user sees their vertices
+  // accumulating; closes into a polygon visually only on finish.
+  return (
+    <Polyline
+      positions={vertices}
+      pathOptions={{ color: '#16a34a', weight: 2, dashArray: '4 4' }}
+    />
+  );
+};
 
 // A listing is mappable only when it has non-zero coords — scraper
 // output seeds `lat/lng = 0` until the geo-enrichment pass runs, and
@@ -75,9 +126,35 @@ const hasValidCoords = (p: Property): boolean =>
   p.location?.lat !== undefined &&
   p.location?.lng !== undefined;
 
-export const MapView = ({ properties, onSelectProperty }: MapViewProps) => {
+export const MapView = ({
+  properties,
+  onSelectProperty,
+  drawnArea = null,
+  onAreaChange,
+}: MapViewProps) => {
   const mappable = properties.filter(hasValidCoords);
   const missingCoords = properties.length - mappable.length;
+  const [drawing, setDrawing] = useState(false);
+  const [pending, setPending] = useState<Array<[number, number]>>([]);
+
+  const startDrawing = () => {
+    setPending([]);
+    setDrawing(true);
+  };
+  const finishDrawing = () => {
+    setDrawing(false);
+    if (pending.length >= 3 && onAreaChange) {
+      onAreaChange(pending);
+    }
+    setPending([]);
+  };
+  const cancelDrawing = () => {
+    setDrawing(false);
+    setPending([]);
+  };
+  const clearArea = () => {
+    onAreaChange?.(null);
+  };
 
   return (
     <div className="relative h-full w-full">
@@ -87,6 +164,59 @@ export const MapView = ({ properties, onSelectProperty }: MapViewProps) => {
           coordinates yet. Run{' '}
           <code className="bg-amber-100 px-1 rounded">python -m scraper.enrich_geo</code> to geocode
           them.
+        </div>
+      )}
+
+      {/* Drawing toolbar — pinned top-right of the map. Above marker
+          z-index (Leaflet markers render around 600). */}
+      {onAreaChange && (
+        <div className="absolute top-3 right-3 z-[600] flex flex-col gap-1.5 items-end">
+          {!drawing && !drawnArea && (
+            <button
+              type="button"
+              onClick={startDrawing}
+              className="bg-white border border-gray-300 hover:border-green-500 hover:text-green-700 text-gray-700 text-xs font-medium px-3 py-1.5 rounded-md shadow flex items-center gap-1.5"
+              title="Click vertices on the map; double-click to finish"
+            >
+              <Pencil className="w-3.5 h-3.5" />
+              Draw area
+            </button>
+          )}
+          {drawing && (
+            <div className="bg-white border border-green-300 rounded-md shadow p-2 flex items-center gap-2">
+              <span className="text-xs text-gray-600">
+                {pending.length === 0
+                  ? 'Click first vertex…'
+                  : `${pending.length} vertex${pending.length === 1 ? '' : 'es'} — double-click to finish`}
+              </span>
+              <button
+                type="button"
+                onClick={finishDrawing}
+                disabled={pending.length < 3}
+                className="text-xs font-medium text-green-700 hover:text-green-800 disabled:text-gray-300"
+              >
+                Finish
+              </button>
+              <button
+                type="button"
+                onClick={cancelDrawing}
+                className="text-xs text-gray-500 hover:text-gray-900"
+              >
+                Cancel
+              </button>
+            </div>
+          )}
+          {!drawing && drawnArea && drawnArea.length >= 3 && (
+            <button
+              type="button"
+              onClick={clearArea}
+              className="bg-white border border-gray-300 hover:border-red-400 hover:text-red-700 text-gray-700 text-xs font-medium px-3 py-1.5 rounded-md shadow flex items-center gap-1.5"
+              title="Remove the drawn search area"
+            >
+              <X className="w-3.5 h-3.5" />
+              Clear area
+            </button>
+          )}
         </div>
       )}
       {mappable.length === 0 ? (
@@ -106,12 +236,33 @@ export const MapView = ({ properties, onSelectProperty }: MapViewProps) => {
           zoom={4}
           className="h-full w-full"
           scrollWheelZoom={true}
+          // Disable map's default double-click-zoom while drawing —
+          // double-click is the "finish polygon" gesture, and the
+          // zoom would fight it.
+          doubleClickZoom={!drawing}
         >
           <TileLayer
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
           <FitBounds properties={mappable} />
+          {drawnArea && drawnArea.length >= 3 && (
+            <Polygon
+              positions={drawnArea}
+              pathOptions={{
+                color: '#16a34a',
+                weight: 2,
+                fillColor: '#16a34a',
+                fillOpacity: 0.08,
+              }}
+            />
+          )}
+          <DrawingLayer
+            active={drawing}
+            vertices={pending}
+            onAddVertex={(v) => setPending((p) => [...p, v])}
+            onFinish={finishDrawing}
+          />
           {mappable.map((property) => (
             <Marker
               key={property.id}

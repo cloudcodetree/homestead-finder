@@ -78,7 +78,8 @@ export const useFilters = () => {
     filters.maxPrice < DEFAULT_FILTERS.maxPrice ||
     filters.minAcreage > DEFAULT_FILTERS.minAcreage ||
     filters.maxAcreage < DEFAULT_FILTERS.maxAcreage ||
-    filters.maxPricePerAcre < DEFAULT_FILTERS.maxPricePerAcre;
+    filters.maxPricePerAcre < DEFAULT_FILTERS.maxPricePerAcre ||
+    (filters.drawnArea !== null && filters.drawnArea.length >= 3);
 
   return {
     filters,

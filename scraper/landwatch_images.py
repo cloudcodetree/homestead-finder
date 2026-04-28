@@ -27,8 +27,10 @@ from __future__ import annotations
 
 import argparse
 import json
+import random
 import re
 import sys
+import time
 from pathlib import Path
 from typing import Any
 
@@ -36,6 +38,13 @@ import config
 from logger import get_logger
 
 log = get_logger("landwatch_images")
+
+# Polite throttle between detail-page fetches. Per the project's
+# never-get-blacklisted rule we keep this conservative even when
+# curl_cffi mimics Chrome — 1.0–1.6s ≈ 0.7 req/sec serialized, well
+# under what a human browsing landwatch.com would generate.
+_THROTTLE_MIN_S = 1.0
+_THROTTLE_MAX_S = 1.6
 
 # resizedimages/{w}/{h}/{orientation}/{quality}/[{crop}/]?{index}-{id}
 # We only care about the trailing `{index}-{id}` pair.
@@ -47,6 +56,44 @@ _OG_IMAGE_RE = re.compile(r'property="og:image"\s+content="([^"]+)"')
 # thumbnail aspect ratio (h-32 at w=400 = roughly 2.75:1, which is
 # what LandWatch's "990/360/l" variant gives).
 _PREFERRED_PATH = "/resizedimages/360/990/l/80/"
+
+
+def _ai_fallback_image_urls(html: str, url: str) -> list[str]:
+    """When the regex extractors return nothing, fall back to a Claude
+    pass that reads the (truncated) HTML and tries to find image URLs.
+
+    Idempotent + cached via `llm.call_json`'s on-disk cache, so the
+    same listing's HTML hashes to the same response — re-runs cost
+    nothing. Bounded to 25KB of HTML to keep prompt tokens cheap.
+
+    Returns an empty list if Claude isn't installed (CI), if the AI
+    can't find anything, or if the response is malformed. The caller
+    should already have logged the regex miss.
+    """
+    try:
+        import llm
+    except Exception:
+        return []
+    if not llm.is_available():
+        return []
+    snippet = html[:25000]
+    prompt = (
+        "Extract every image URL from the HTML below that points to an "
+        "actual property photo (not a placeholder, logo, icon, or "
+        "stock image). Return JSON: {\"images\": [\"https://…\", …]} "
+        "with at most 12 entries, ordered as they appear in the page. "
+        "If no real property photos exist, return {\"images\": []}.\n\n"
+        f"PAGE URL: {url}\n\nHTML:\n{snippet}"
+    )
+    try:
+        result = llm.call_json(prompt, tag="landwatch_images_ai")
+    except Exception as e:
+        log.info(f"[landwatch_images] AI fallback failed: {type(e).__name__}: {e}")
+        return []
+    if not isinstance(result, dict):
+        return []
+    images = result.get("images") or []
+    return [u for u in images if isinstance(u, str) and u.startswith("http")][:12]
 
 
 def _extract_image_urls(html: str) -> list[str]:
@@ -153,14 +200,29 @@ def run(
     for idx, listing in enumerate(candidates, 1):
         url = listing["url"]
         html = _fetch_detail_html(url)
+        # Polite jitter between requests regardless of success — failed
+        # fetches usually mean we hit a transient block, and pounding
+        # back-to-back makes that worse.
+        if idx < len(candidates):
+            time.sleep(random.uniform(_THROTTLE_MIN_S, _THROTTLE_MAX_S))
         if not html:
             failed += 1
             continue
         images = _extract_image_urls(html)
         if not images:
-            # No og:image, no resizedimages on the page — rare but
-            # possible when LandWatch serves a "listing not available"
-            # stub. Keep whatever was there.
+            # Regexes missed — fall through to Claude (cached, free
+            # against the Max subscription per ADR-012). Useful when
+            # LandWatch ships a fresh detail-page layout that moves
+            # photos out of `<meta property="og:image">` and the
+            # `/resizedimages/...` path. No-op if `claude` isn't on
+            # PATH (i.e. CI).
+            images = _ai_fallback_image_urls(html, url)
+        if not images:
+            # No og:image, no resizedimages on the page, AI fallback
+            # also returned nothing. Drop the (broken) synthesized
+            # URLs we previously wrote so the frontend falls through
+            # to the satellite tile instead of "Photo not provided".
+            listing["images"] = []
             skipped += 1
             continue
         # Cap to 12 — gallery pages rarely show more than 8-10 photos

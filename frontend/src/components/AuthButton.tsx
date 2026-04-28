@@ -2,21 +2,6 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 
-interface AuthButtonProps {
-  /** Called when the user clicks "Notification settings" — parent
-   * owns the modal state (it's the same modal the bell icon opens)
-   * so there's one notifications surface regardless of entry point. */
-  onOpenNotifications?: () => void;
-  /** Called when the user clicks "Saved searches" — parent owns the
-   * modal so it can wire `currentFilters` + `onApply` to the dashboard
-   * filter state. */
-  onOpenSavedSearches?: () => void;
-  /** Called when the user clicks "Preferences" — parent opens the
-   * OnboardingModal in edit mode so the user can revise what they
-   * told us during first-time setup. */
-  onOpenPreferences?: () => void;
-}
-
 /**
  * Auth entry point for the top-right header. Three visual states:
  *
@@ -24,15 +9,10 @@ interface AuthButtonProps {
  *   - Not signed in → "Sign in" pill that opens a modal sheet with
  *     email magic-link (primary) and Google OAuth.
  *   - Signed in → avatar + account menu (name/email, quick links,
- *     notification settings, sign out). Menu items here consolidate
- *     the settings surface the user asked for in an hamburger-style
- *     dropdown.
+ *     notification settings, sign out). Menu items navigate to
+ *     real routes — no modal wiring required from the parent.
  */
-export const AuthButton = ({
-  onOpenNotifications,
-  onOpenSavedSearches,
-  onOpenPreferences,
-}: AuthButtonProps) => {
+export const AuthButton = () => {
   const { user, loading, configured, loginWithGoogle, loginWithEmail, logout } = useAuth();
   const [sheetOpen, setSheetOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -166,7 +146,7 @@ export const AuthButton = ({
             <MenuItem
               onClick={() => {
                 closeMenu();
-                navigate('/?saved=1');
+                navigate('/browse?saved=1');
               }}
               icon={
                 <svg viewBox="0 0 24 24" className="w-4 h-4" fill="currentColor">
@@ -178,7 +158,7 @@ export const AuthButton = ({
             <MenuItem
               onClick={() => {
                 closeMenu();
-                navigate('/?hidden=1');
+                navigate('/browse?hidden=1');
               }}
               icon={
                 <svg viewBox="0 0 24 24" className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -188,46 +168,54 @@ export const AuthButton = ({
               }
               label="My hidden listings"
             />
-            {onOpenSavedSearches && (
-              <MenuItem
-                onClick={() => {
-                  closeMenu();
-                  onOpenSavedSearches();
-                }}
-                icon={
-                  <svg viewBox="0 0 24 24" className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <circle cx="11" cy="11" r="8" />
-                    <line x1="21" y1="21" x2="16.65" y2="16.65" />
-                  </svg>
-                }
-                label="Saved searches"
-              />
-            )}
-            {onOpenPreferences && (
-              <MenuItem
-                onClick={() => {
-                  closeMenu();
-                  onOpenPreferences();
-                }}
-                icon={
-                  <svg viewBox="0 0 24 24" className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M12 15a3 3 0 100-6 3 3 0 000 6z" />
-                    <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 01-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.6 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z" />
-                  </svg>
-                }
-                label="Preferences"
-              />
-            )}
-            {onOpenNotifications && (
-              <MenuItem
-                onClick={() => {
-                  closeMenu();
-                  onOpenNotifications();
-                }}
-                icon={<span>🔔</span>}
-                label="Notification settings"
-              />
-            )}
+            <MenuItem
+              onClick={() => {
+                closeMenu();
+                navigate('/saved-searches');
+              }}
+              icon={
+                <svg viewBox="0 0 24 24" className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="11" cy="11" r="8" />
+                  <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                </svg>
+              }
+              label="Saved searches"
+            />
+            <MenuItem
+              onClick={() => {
+                closeMenu();
+                navigate('/onboarding');
+              }}
+              icon={
+                <svg viewBox="0 0 24 24" className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M12 15a3 3 0 100-6 3 3 0 000 6z" />
+                  <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 01-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.6 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z" />
+                </svg>
+              }
+              label="Preferences"
+            />
+            <MenuItem
+              onClick={() => {
+                closeMenu();
+                navigate('/settings/notifications');
+              }}
+              icon={<span>🔔</span>}
+              label="Notification settings"
+            />
+            <MenuItem
+              onClick={() => {
+                closeMenu();
+                navigate('/upgrade');
+              }}
+              icon={
+                <svg viewBox="0 0 24 24" className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                </svg>
+              }
+              label="Upgrade"
+            />
+            {/* Render-once anchors satisfy older referencing routes;
+                deep-links to /upgrade?reason=… still drive copy. */}
             <div className="border-t border-gray-100" />
             <MenuItem
               onClick={() => {

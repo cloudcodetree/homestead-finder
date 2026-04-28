@@ -42,13 +42,27 @@ _ID_HISTORY_CAP = 1000  # most recent notified ids we keep per search
 
 
 def _supabase_headers() -> dict[str, str]:
-    """Headers for authenticated REST calls against Supabase."""
-    key = os.environ.get("SUPABASE_SERVICE_ROLE_KEY") or os.environ.get(
-        "SUPABASE_ANON_KEY", ""
+    """Headers for authenticated REST calls against Supabase.
+
+    Prefers the new `sb_secret_…` API-keys-2.0 secret key (env:
+    `SUPABASE_SECRET_KEY`) and falls back to the legacy `service_role`
+    JWT (`SUPABASE_SERVICE_ROLE_KEY`) for projects that haven't yet
+    migrated. The two key types are functionally interchangeable at
+    REST-call sites — both bypass RLS — but the new secret-key format
+    has per-key scoping + revocation, which we want.
+
+    Final fallback is the public anon key so local-dev tests can run
+    without a high-privilege key in the environment.
+    """
+    key = (
+        os.environ.get("SUPABASE_SECRET_KEY")
+        or os.environ.get("SUPABASE_SERVICE_ROLE_KEY")
+        or os.environ.get("SUPABASE_ANON_KEY", "")
     )
     if not key:
         raise RuntimeError(
-            "SUPABASE_SERVICE_ROLE_KEY (or SUPABASE_ANON_KEY for local testing) required"
+            "SUPABASE_SECRET_KEY (preferred) or SUPABASE_SERVICE_ROLE_KEY (legacy) "
+            "or SUPABASE_ANON_KEY (local-only) required"
         )
     return {
         "apikey": key,

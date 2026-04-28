@@ -64,9 +64,12 @@ interface OnboardingModalProps {
    * mode). Undefined in first-time-use mode — that one only closes
    * via save/skip. */
   onClose?: () => void;
+  /** Render inline in-page (no overlay) instead of a centered modal.
+   * Used by the /onboarding route. */
+  asPage?: boolean;
 }
 
-export const OnboardingModal = ({ forceOpen = false, onClose }: OnboardingModalProps = {}) => {
+export const OnboardingModal = ({ forceOpen = false, onClose, asPage = false }: OnboardingModalProps = {}) => {
   const { user } = useAuth();
   const { preferences, isComplete, loading, save } = useUserPreferences();
   const [draft, setDraft] = useState<UserPreferences>({
@@ -83,9 +86,9 @@ export const OnboardingModal = ({ forceOpen = false, onClose }: OnboardingModalP
   //     parent says so; close via onClose.
   const shouldShow = useMemo(() => {
     if (!user || loading) return false;
-    if (forceOpen) return true;
+    if (asPage || forceOpen) return true;
     return !isComplete;
-  }, [user, loading, isComplete, forceOpen]);
+  }, [user, loading, isComplete, forceOpen, asPage]);
 
   // When force-opened, re-seed the draft from the persisted row so the
   // user sees their existing answers instead of blank defaults.
@@ -116,7 +119,7 @@ export const OnboardingModal = ({ forceOpen = false, onClose }: OnboardingModalP
     setSaving(true);
     try {
       await save(draft, { complete });
-      if (forceOpen && onClose) onClose();
+      if ((forceOpen || asPage) && onClose) onClose();
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Could not save');
     } finally {
@@ -124,9 +127,13 @@ export const OnboardingModal = ({ forceOpen = false, onClose }: OnboardingModalP
     }
   };
 
+  const wrapper = asPage
+    ? 'p-6'
+    : 'fixed inset-0 z-[9999] flex items-center justify-center bg-black/60 p-4';
+
   return (
-    <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/60 p-4">
-      <div className="bg-white rounded-xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+    <div className={wrapper}>
+      <div className="bg-white rounded-xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto mx-auto">
         <div className="px-6 py-4 border-b border-gray-100">
           <h2 className="text-lg font-bold text-gray-900">
             Tell us what you&apos;re looking for
@@ -293,13 +300,13 @@ export const OnboardingModal = ({ forceOpen = false, onClose }: OnboardingModalP
           <button
             type="button"
             onClick={() => {
-              if (forceOpen && onClose) onClose();
+              if ((forceOpen || asPage) && onClose) onClose();
               else void submit(true);
             }}
             disabled={saving}
             className="text-sm text-gray-500 hover:text-gray-900 underline disabled:opacity-50"
           >
-            {forceOpen ? 'Cancel' : 'Skip for now'}
+            {forceOpen ? 'Cancel' : asPage ? 'Skip' : 'Skip for now'}
           </button>
           <button
             type="button"

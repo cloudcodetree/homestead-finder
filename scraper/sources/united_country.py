@@ -37,7 +37,17 @@ from .landwatch import extract_features
 log = get_logger("scraper.united_country")
 
 
-_COUNTY_RE = re.compile(r"([A-Z][A-Za-z\s\-]+?)\s+[Cc]ounty", re.MULTILINE)
+# Capture the WORD(s) immediately before " County", not the whole title
+# leading up to it. Each captured word must be at least 3 letters
+# (rejects abbreviations like "Ac", "Ar" that the old non-greedy
+# pattern accepted, e.g. "…40 Ac Madison County" → captured
+# "Ac Madison" instead of "Madison"). Word boundaries on both ends
+# prevent matching mid-word. Up to 3 capitalized words allowed
+# (e.g. "Saint Louis", "East Baton Rouge").
+_COUNTY_RE = re.compile(
+    r"\b([A-Z][a-z]{2,}(?:\s+[A-Z][a-z]+){0,2})\s+[Cc]ounty\b",
+    re.MULTILINE,
+)
 _PRICE_RE = re.compile(r"\$([\d,]+)(?:\.\d+)?")
 _ACRES_RE = re.compile(r"([\d.]+)\s*(?:\+/-\s*)?[Aa]cres?", re.IGNORECASE)
 # Listing URL shape: /properties/{state}/{slug}/{numeric-id}/

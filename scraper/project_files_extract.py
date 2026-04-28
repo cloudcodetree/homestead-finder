@@ -51,12 +51,19 @@ BUCKET = "project-files"
 
 
 def _supabase_headers(*, json_body: bool = True) -> dict[str, str]:
-    key = os.environ.get("SUPABASE_SERVICE_ROLE_KEY") or os.environ.get(
-        "SUPABASE_ANON_KEY", ""
+    """We read project_files across users (the worker is server-side,
+    not user-scoped) — requires an RLS-bypassing key. Prefers the new
+    `SUPABASE_SECRET_KEY` (API Keys 2.0); falls back to legacy
+    `SUPABASE_SERVICE_ROLE_KEY` for projects still on JWT keys."""
+    key = (
+        os.environ.get("SUPABASE_SECRET_KEY")
+        or os.environ.get("SUPABASE_SERVICE_ROLE_KEY")
+        or os.environ.get("SUPABASE_ANON_KEY", "")
     )
     if not key:
         raise RuntimeError(
-            "SUPABASE_SERVICE_ROLE_KEY required (we read across users)"
+            "SUPABASE_SECRET_KEY (preferred) or SUPABASE_SERVICE_ROLE_KEY "
+            "(legacy) required (we read across users)"
         )
     h = {"apikey": key, "Authorization": f"Bearer {key}"}
     if json_body:

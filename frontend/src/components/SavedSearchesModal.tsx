@@ -5,8 +5,6 @@ import type { NotifyCadence, SavedSearch } from '../lib/api';
 import { AddToProjectButton } from './AddToProjectButton';
 
 interface SavedSearchesModalProps {
-  open: boolean;
-  onClose: () => void;
   /** Current filter state from the Dashboard. Lets the user save
    * exactly what they're looking at. */
   currentFilters: FilterState;
@@ -29,8 +27,6 @@ const CADENCE_LABELS: Record<NotifyCadence, string> = {
  * Rendered from the account menu's "Saved searches" item.
  */
 export const SavedSearchesModal = ({
-  open,
-  onClose,
   currentFilters,
   onApply,
 }: SavedSearchesModalProps) => {
@@ -39,8 +35,6 @@ export const SavedSearchesModal = ({
   const [cadence, setCadence] = useState<NotifyCadence>('daily');
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
-
-  if (!open) return null;
 
   const onSave = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -58,17 +52,10 @@ export const SavedSearchesModal = ({
   };
 
   return (
-    <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/50 p-4">
-      <div className="bg-white rounded-lg shadow-xl max-w-md w-full max-h-[85vh] overflow-y-auto">
-        <div className="px-4 py-3 border-b border-gray-100 flex items-center justify-between">
+    <div className="p-6">
+      <div className="bg-white rounded-lg shadow-xl max-w-md w-full max-h-[85vh] overflow-y-auto mx-auto">
+        <div className="px-4 py-3 border-b border-gray-100">
           <h2 className="font-semibold text-gray-900">Saved searches</h2>
-          <button
-            onClick={onClose}
-            className="text-gray-400 hover:text-gray-600"
-            aria-label="Close"
-          >
-            ✕
-          </button>
         </div>
 
         <form onSubmit={onSave} className="px-4 py-3 border-b border-gray-100 space-y-2">
@@ -117,10 +104,7 @@ export const SavedSearchesModal = ({
               <SavedSearchRow
                 key={s.id}
                 search={s}
-                onApply={() => {
-                  onApply(s.filters as unknown as FilterState);
-                  onClose();
-                }}
+                onApply={() => onApply(s.filters as unknown as FilterState)}
                 onUpdate={(patch) => update(s.id, patch)}
                 onRemove={() => remove(s.id)}
               />

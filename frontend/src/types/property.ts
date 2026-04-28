@@ -113,6 +113,40 @@ export interface GeoEnrichment {
 }
 
 /**
+ * County-level political-lean signal. Sourced from publicly-available
+ * presidential election returns (MIT Election Lab is the typical
+ * canonical source). Stamped onto each listing by
+ * `scraper/enrichment/voting.py` based on the listing's
+ * (state, county) pair.
+ *
+ * The signal is County-level, not parcel-level — it reflects the
+ * surrounding electorate, not the listing itself. UI surfaces it
+ * as a "what are the neighbors like" indicator inside the Lifestyle
+ * Fit family of signals.
+ */
+export interface VotingPattern {
+  /** Election year the signal is from (e.g. 2024). */
+  year: number;
+  /** Democratic vote share, 0–100. */
+  dPct: number;
+  /** Republican vote share, 0–100. */
+  rPct: number;
+  /** Margin in percentage points; positive = R-leaning, negative = D-leaning. */
+  marginPp: number;
+  /**
+   * Coarse bucket consumers can filter on:
+   *   strongly_d: D won by ≥20pp
+   *   lean_d:    D won by 5–20pp
+   *   balanced:  margin within ±5pp
+   *   lean_r:    R won by 5–20pp
+   *   strongly_r: R won by ≥20pp
+   * Computed once at enrichment time so the frontend doesn't have
+   * to re-derive from rPct/dPct on every render.
+   */
+  bucket: 'strongly_d' | 'lean_d' | 'balanced' | 'lean_r' | 'strongly_r';
+}
+
+/**
  * URLs to third-party parcel research tools that LandWatch links out to.
  * We don't scrape these (ToS prohibits), but we surface the deep links
  * so users can click through for richer research.
@@ -225,6 +259,14 @@ export interface Property {
   // elevation, watershed pulled from free US government APIs.
   geoEnrichment?: GeoEnrichment;
 
+  /**
+   * County-level political lean. Stamped by scraper/enrichment/voting.py
+   * from a vendored election-results JSON. Optional because older rows
+   * predate the enrichment + counties without a match (rural Alaska,
+   * unincorporated territories) won't have one.
+   */
+  votingPattern?: VotingPattern;
+
   // ── Structures / improvements (scraper/improvements.py) ─────────
   /**
    * Flags keyed by improvement type when detected in the title+description.
@@ -325,6 +367,15 @@ export interface FilterState {
    * buyer's real decision: am I buying to move in now, or to build?
    */
   improvementTier: 'any' | 'move_in_ready' | 'improved' | 'bare_land';
+  /**
+   * Optional drawn search polygon. When set, listings are filtered to
+   * those whose lat/lng falls inside this polygon. Each entry is a
+   * `[lat, lng]` pair; the polygon is implicitly closed (first vertex
+   * connects to last). Drawn from MapView via "Draw area"; persisted
+   * here so the polygon survives view-mode switches and is part of a
+   * saveable search.
+   */
+  drawnArea: Array<[number, number]> | null;
 }
 
 export const DEFAULT_FILTERS: FilterState = {
@@ -345,6 +396,7 @@ export const DEFAULT_FILTERS: FilterState = {
   hideInactive: true,
   improvementTier: 'any',
   searchText: '',
+  drawnArea: null,
 };
 
 export const FEATURE_LABELS: Record<PropertyFeature, string> = {

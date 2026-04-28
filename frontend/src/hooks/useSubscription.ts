@@ -1,6 +1,7 @@
 import {
   createContext,
   createElement,
+  useCallback,
   useContext,
   useEffect,
   useMemo,
@@ -37,7 +38,7 @@ export const SubscriptionProvider = ({ children }: { children: ReactNode }) => {
   const [subscription, setSubscription] = useState<Subscription>(FREE_SUBSCRIPTION);
   const [loading, setLoading] = useState(false);
 
-  const refresh = async () => {
+  const refresh = useCallback(async () => {
     if (!configured || !user) {
       setSubscription(FREE_SUBSCRIPTION);
       return;
@@ -48,7 +49,7 @@ export const SubscriptionProvider = ({ children }: { children: ReactNode }) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [configured, user]);
 
   useEffect(() => {
     void refresh();
@@ -80,7 +81,7 @@ export const SubscriptionProvider = ({ children }: { children: ReactNode }) => {
       loading,
       refresh,
     }),
-    [subscription, loading],
+    [subscription, loading, refresh],
   );
 
   return createElement(SubscriptionContext.Provider, { value }, children);

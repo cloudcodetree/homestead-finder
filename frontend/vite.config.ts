@@ -1,3 +1,4 @@
+/// <reference types="vitest" />
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
@@ -14,5 +15,12 @@ export default defineConfig({
     // Frozen at build time; exposed as a global constant the footer can
     // render. ISO format — the footer formats it for display.
     __BUILD_TIME__: JSON.stringify(new Date().toISOString()),
+  },
+  test: {
+    environment: 'jsdom',
+    globals: true,
+    setupFiles: ['./src/test/setup.ts'],
+    // Default `node` env was fine for the pure-utility tests; component
+    // tests need DOM globals (document, window, getComputedStyle).
   },
 })

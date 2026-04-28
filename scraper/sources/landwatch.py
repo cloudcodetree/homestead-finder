@@ -510,17 +510,20 @@ class LandWatchScraper(BaseScraper):
             if explicit:
                 listing["images"] = explicit
             else:
-                # Synthesized gallery. LandWatch's CDN serves
-                # `{N}-{PID}` for the Nth photo (1-indexed). Real
-                # listings usually have 5-10 photos; rows with fewer
-                # return a "Photo not provided" jpeg at the same size,
-                # which renders harmlessly in the carousel — the user
-                # sees what's actually in the listing. Capped at 8 to
-                # balance coverage vs payload.
-                listing["images"] = [
-                    f"https://assets.landwatch.com/resizedimages/360/990/l/80/{n}-{pid}"
-                    for n in range(1, 9)
-                ]
+                # No real photo URLs found in the page markup.
+                # We previously synthesized `{1..8}-{PID}` URLs at
+                # `/resizedimages/360/990/l/80/`, but that path
+                # treats the listing PID as the photo ID. LandWatch
+                # photos have INDEPENDENT IDs (e.g. 5513520089) and
+                # live at `/resizedimages/600/0/h/80/w/{1}-{photoID}`.
+                # The synthesized URLs returned a "Photo not provided"
+                # placeholder for every slot, which the carousel can't
+                # distinguish from real photos (same dims, same 200,
+                # CORS blocks pixel inspection). Better to emit no
+                # images and let the frontend fall back to a satellite
+                # tile. Real photos are picked up when the search-
+                # results page exposes <img> tags (handled above).
+                listing["images"] = []
         return listings
 
     def parse(self, raw: dict[str, Any]) -> RawListing | None:

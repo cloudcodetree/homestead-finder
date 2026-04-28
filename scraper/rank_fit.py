@@ -194,12 +194,19 @@ def _fit_logreg(
 
 
 def _supabase_headers() -> dict[str, str]:
-    key = os.environ.get("SUPABASE_SERVICE_ROLE_KEY") or os.environ.get(
-        "SUPABASE_ANON_KEY", ""
+    """Cross-user reads require an RLS-bypassing key. Prefers the
+    new `SUPABASE_SECRET_KEY` (API Keys 2.0 secret key) and falls
+    back to legacy `SUPABASE_SERVICE_ROLE_KEY` for projects still on
+    JWT-based keys."""
+    key = (
+        os.environ.get("SUPABASE_SECRET_KEY")
+        or os.environ.get("SUPABASE_SERVICE_ROLE_KEY")
+        or os.environ.get("SUPABASE_ANON_KEY", "")
     )
     if not key:
         raise RuntimeError(
-            "SUPABASE_SERVICE_ROLE_KEY required for cross-user reads"
+            "SUPABASE_SECRET_KEY (preferred) or SUPABASE_SERVICE_ROLE_KEY "
+            "(legacy) required for cross-user reads"
         )
     return {
         "apikey": key,

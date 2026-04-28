@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import { useHiddenListings } from '../hooks/useHiddenListings';
@@ -68,6 +68,11 @@ export const SwipeView = () => {
   const [index, setIndex] = useState(0);
   const [drag, setDrag] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
   const [exit, setExit] = useState<Direction>(null);
+  // Two-phase entry: 'mount' parks a fresh card off-screen below;
+  // an rAF flips to 'rest', triggering the slide-up transition.
+  // useLayoutEffect ensures the off-screen position is in place
+  // before the browser paints, so we don't see a flash at rest.
+  const [enterPhase, setEnterPhase] = useState<'mount' | 'rest'>('mount');
   const [lastAction, setLastAction] = useState<{
     listingId: string;
     action: 'save' | 'hide' | 'like' | 'dislike';
@@ -77,6 +82,20 @@ export const SwipeView = () => {
   const startRef = useRef<{ x: number; y: number } | null>(null);
 
   const current = queue[index];
+
+  useLayoutEffect(() => {
+    if (!current) return;
+    setEnterPhase('mount');
+    let rafId = requestAnimationFrame(() => {
+      rafId = requestAnimationFrame(() => setEnterPhase('rest'));
+    });
+    return () => cancelAnimationFrame(rafId);
+    // We deliberately key on the listing id only — re-running this
+    // on every Property reference change (which can happen when the
+    // queue memo recomputes) would re-park the card off-screen and
+    // cancel an animation already in flight.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [current?.id]);
 
   const commit = async (dir: Direction, p: Property) => {
     if (!user) {
@@ -199,19 +218,24 @@ export const SwipeView = () => {
         transition: 'transform 250ms ease-out, opacity 250ms ease-out',
         opacity: 0,
       }
-    : {
-        transform: `translate(${drag.x}px, ${drag.y}px) rotate(${rotation}deg)`,
-        transition: drag.x === 0 && drag.y === 0 ? 'transform 200ms ease-out' : 'none',
-      };
+    : enterPhase === 'mount'
+      ? {
+          transform: 'translate(0, 100%)',
+          transition: 'none',
+        }
+      : {
+          transform: `translate(${drag.x}px, ${drag.y}px) rotate(${rotation}deg)`,
+          transition:
+            drag.x === 0 && drag.y === 0
+              ? 'transform 300ms cubic-bezier(0.2, 0.8, 0.2, 1)'
+              : 'none',
+        };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col">
-      <header className="bg-white border-b border-gray-200 px-4 py-3 flex items-center justify-between">
-        <Link to="/" className="text-sm text-gray-600 hover:text-gray-900">
-          ← Back to listings
-        </Link>
+    <div className="h-full bg-gray-100 flex flex-col">
+      <div className="bg-white border-b border-gray-200 px-4 py-2 flex items-center justify-between flex-shrink-0">
         <div className="flex items-center gap-2">
-          <h1 className="font-semibold text-gray-900">Swipe mode</h1>
+          <h1 className="font-semibold text-gray-900 text-sm">Swipe mode</h1>
           {queue.length > 0 && (
             <span className="text-xs text-gray-500">
               {Math.min(index + 1, queue.length)} / {queue.length}
@@ -226,7 +250,7 @@ export const SwipeView = () => {
         >
           ↶ Undo
         </button>
-      </header>
+      </div>
 
       <div className="flex-1 flex items-center justify-center p-4 select-none">
         {!current ? (

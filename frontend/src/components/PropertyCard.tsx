@@ -31,9 +31,11 @@ const computeDaysOnMarket = (isoDate: string): number | null => {
 
 import { useAuth } from '../hooks/useAuth';
 import { useState } from 'react';
+import { getCountyStat, useCountyMedians } from '../hooks/useCountyMedians';
 import { useHiddenListings } from '../hooks/useHiddenListings';
 import { useListingRatings } from '../hooks/useListingRatings';
 import { useSavedListings, FreeTierLimitError } from '../hooks/useSavedListings';
+import { formatVsMedian } from '../utils/marketStats';
 import { UpgradeModal } from './UpgradeModal';
 import { PropertyThumbnail } from './PropertyThumbnail';
 import {
@@ -102,6 +104,25 @@ export const PropertyCard = ({ property, onClick, isSelected = false }: Property
   const hidden = isHidden(property.id);
   const rating = getRating(property.id);
   const [showUpgrade, setShowUpgrade] = useState(false);
+
+  // County-level "vs median $/acre" cue — small chip near the price.
+  // Self-gates on comp depth: hides for counties with < 5 listings so
+  // we don't quote a median computed off two rows.
+  const countyMedians = useCountyMedians();
+  const countyStat = getCountyStat(
+    countyMedians,
+    property.location?.state,
+    property.location?.county,
+  );
+  const vsMedian = countyStat
+    ? formatVsMedian(
+        property.pricePerAcre,
+        countyStat.median,
+        property.location?.county ?? 'county',
+        5,
+        countyStat.count,
+      )
+    : null;
 
   const onSaveClick = async (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -352,6 +373,20 @@ export const PropertyCard = ({ property, onClick, isSelected = false }: Property
                   </p>
                 ) : (
                   <p className="text-xs text-gray-500">{formatPricePerAcre(property.pricePerAcre)}</p>
+                )}
+                {vsMedian && (
+                  <p
+                    className={`text-[11px] mt-0.5 font-medium ${
+                      vsMedian.startsWith('at')
+                        ? 'text-gray-500'
+                        : vsMedian.includes('below')
+                          ? 'text-emerald-700'
+                          : 'text-orange-700'
+                    }`}
+                    title={`County median $/acre: ${formatPricePerAcre(countyStat?.median ?? 0)} (${countyStat?.count ?? 0} comps)`}
+                  >
+                    {vsMedian}
+                  </p>
                 )}
               </div>
               <div className="text-gray-300">|</div>

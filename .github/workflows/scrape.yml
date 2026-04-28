@@ -88,6 +88,10 @@ jobs:
         if: ${{ github.event.inputs.dry_run != 'true' }}
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          # API Keys 2.0: prefer the `sb_secret_…` secret key. Legacy
+          # `SUPABASE_SERVICE_ROLE_KEY` falls through if SUPABASE_SECRET_KEY
+          # isn't set, so this works during the transition.
+          SUPABASE_SECRET_KEY: ${{ secrets.SUPABASE_SECRET_KEY }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
           SENDGRID_API_KEY: ${{ secrets.SENDGRID_API_KEY }}
         run: |
@@ -100,12 +104,56 @@ jobs:
         if: ${{ github.event.inputs.dry_run != 'true' }}
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          # API Keys 2.0: prefer the `sb_secret_…` secret key. Legacy
+          # `SUPABASE_SERVICE_ROLE_KEY` falls through if SUPABASE_SECRET_KEY
+          # isn't set, so this works during the transition.
+          SUPABASE_SECRET_KEY: ${{ secrets.SUPABASE_SECRET_KEY }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
         run: |
           cd scraper
           # Personalization is also downstream of scraping — failures here
           # don't block the commit step.
           python -m rank_fit || echo "rank_fit step failed but continuing"
+
+      - name: Health check + GitHub Actions summary
+        if: always()
+        run: |
+          cd scraper
+          # `health_check.py` already runs inside main.py for the alert
+          # path; this re-runs it with --json so we can render a
+          # markdown summary on the workflow run page. `--json` exits 0
+          # even when there are breaches; we still want the summary
+          # rendered. Breaches show up as a section in the summary.
+          REPORT_JSON=$(python -m health_check --json 2>/dev/null || echo '{}')
+          echo "## Scrape health" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          if [ "$REPORT_JSON" = "{}" ] || [ -z "$REPORT_JSON" ]; then
+            echo "_No health report produced (no listings file or first-run baseline)._" >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+          # Per-source table.
+          echo "| Source | Listings | Geo % | Images % | Hot % |" >> "$GITHUB_STEP_SUMMARY"
+          echo "|---|---:|---:|---:|---:|" >> "$GITHUB_STEP_SUMMARY"
+          echo "$REPORT_JSON" | python3 -c '
+          import json, sys
+          r = json.load(sys.stdin)
+          today = r.get("today") or {}
+          for src in sorted(today):
+              m = today[src]
+              print(f"| {src} | {int(m[\"count\"])} | {m[\"geo_pct\"]:.1f}% | {m[\"images_pct\"]:.1f}% | {m[\"hot_pct\"]:.1f}% |")
+          ' >> "$GITHUB_STEP_SUMMARY"
+          # Breaches block (only if any).
+          BREACHES=$(echo "$REPORT_JSON" | python3 -c 'import json,sys; print(len(json.load(sys.stdin).get("breaches") or []))')
+          if [ "$BREACHES" != "0" ]; then
+            echo "" >> "$GITHUB_STEP_SUMMARY"
+            echo "### ⚠ ${BREACHES} regression(s)" >> "$GITHUB_STEP_SUMMARY"
+            echo "$REPORT_JSON" | python3 -c '
+          import json, sys
+          r = json.load(sys.stdin)
+          for b in r.get("breaches") or []:
+              print(f"- **{b[\"source\"]}** — {b[\"metric\"]}: {b[\"before\"]:.1f} → {b[\"after\"]:.1f} ({b[\"delta_pct\"]:+.1f}%)")
+          ' >> "$GITHUB_STEP_SUMMARY"
+          fi
 
       - name: Commit updated listings
         if: ${{ github.event.inputs.dry_run != 'true' }}

@@ -1,4 +1,27 @@
 import { STRIPE_PAYMENT_LINKS } from '../lib/billing';
+import { useAuth } from '../hooks/useAuth';
+
+/**
+ * Append the signed-in user's Supabase UUID to a Stripe Payment
+ * Link as `client_reference_id` so the webhook can map back from
+ * Stripe customer → app user when the subscription event arrives.
+ *
+ * The Edge Function reads this off the Checkout Session and stamps
+ * it onto the Stripe Customer's metadata; subsequent renewal /
+ * cancel events look the user up via that metadata.
+ *
+ * No-ops when the user isn't signed in (the `<a>` shouldn't be
+ * clickable in that state anyway — the upgrade flow is auth-gated
+ * upstream).
+ */
+const withClientReferenceId = (href: string, userId: string | null): string => {
+  if (!href || !userId) return href || '#';
+  // Payment Links accept `client_reference_id` as a URL query param.
+  // We can't be sure the operator's URL doesn't already have a `?`
+  // (some links carry `prefilled_promo_code` etc.) so detect.
+  const sep = href.includes('?') ? '&' : '?';
+  return `${href}${sep}client_reference_id=${encodeURIComponent(userId)}`;
+};
 
 interface UpgradeModalProps {
   /** What feature triggered the upgrade prompt — affects copy. */
@@ -10,6 +33,9 @@ interface UpgradeModalProps {
     | 'generic';
   open: boolean;
   onClose: () => void;
+  /** Render inline in-page (no overlay) instead of a centered modal.
+   * Used by the /upgrade route so upgrade flow lives at a real URL. */
+  asPage?: boolean;
 }
 
 const REASON_COPY: Record<
@@ -51,16 +77,25 @@ export const UpgradeModal = ({
   reason = 'generic',
   open,
   onClose,
+  asPage = false,
 }: UpgradeModalProps) => {
+  // Hooks must run before any early-return so React's hook-order
+  // invariant holds across renders where `open` flips.
+  const { user } = useAuth();
   if (!open) return null;
   const copy = REASON_COPY[reason];
-  const monthlyHref = STRIPE_PAYMENT_LINKS.monthly;
-  const annualHref = STRIPE_PAYMENT_LINKS.annual;
-  const linksConfigured = Boolean(monthlyHref && annualHref);
+  const userId = user?.id ?? null;
+  const monthlyHref = withClientReferenceId(STRIPE_PAYMENT_LINKS.monthly, userId);
+  const annualHref = withClientReferenceId(STRIPE_PAYMENT_LINKS.annual, userId);
+  const linksConfigured = Boolean(STRIPE_PAYMENT_LINKS.monthly && STRIPE_PAYMENT_LINKS.annual);
+
+  const wrapper = asPage
+    ? 'p-6'
+    : 'fixed inset-0 z-[9999] bg-black/60 flex items-center justify-center p-4';
 
   return (
-    <div className="fixed inset-0 z-[9999] bg-black/60 flex items-center justify-center p-4">
-      <div className="bg-white rounded-xl shadow-2xl max-w-lg w-full">
+    <div className={wrapper}>
+      <div className="bg-white rounded-xl shadow-2xl max-w-lg w-full mx-auto">
         <div className="p-6">
           <h2 className="text-lg font-bold text-gray-900">{copy.headline}</h2>
           <p className="text-sm text-gray-600 mt-1.5">{copy.body}</p>

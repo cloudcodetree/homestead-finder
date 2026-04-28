@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useQueryServer, QueryResponse } from '../hooks/useQueryServer';
+import { useUserPreferences } from '../hooks/useUserPreferences';
 
 interface AskClaudeProps {
   onResult: (result: QueryResponse | null) => void;
@@ -14,6 +15,7 @@ interface AskClaudeProps {
  */
 export const AskClaude = ({ onResult, activeQuestion }: AskClaudeProps) => {
   const { status, model, ask } = useQueryServer();
+  const { preferences } = useUserPreferences();
   const [question, setQuestion] = useState(activeQuestion ?? '');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -27,7 +29,10 @@ export const AskClaude = ({ onResult, activeQuestion }: AskClaudeProps) => {
     setLoading(true);
     setError(null);
     try {
-      const result = await ask(trimmed);
+      const result = await ask(trimmed, undefined, undefined, {
+        vision: preferences.vision,
+        rankingHints: preferences.rankingHints,
+      });
       onResult(result);
     } catch (err) {
       const msg = err instanceof Error ? err.message : 'Query failed';

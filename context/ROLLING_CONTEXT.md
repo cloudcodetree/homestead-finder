@@ -10,8 +10,8 @@
 
 | Item | Status |
 |------|--------|
-| Last Updated | 2026-04-20 |
-| Current Phase | AI-enrichment pipeline shipped (local Max via `claude -p`) + real data flowing for LandWatch. Visual architecture docs added at `docs/diagrams.html`. |
+| Last Updated | 2026-04-25 |
+| Current Phase | Phase 1 MVP shipped (preferences, projects, ratings, paywall, swipe, /home, search). 2026-04-25: full app-shell redesign — modals replaced by routes, persistent collapsible left rail, top bar with logo routing per auth state. |
 | Dashboard | AI filters, Top Picks view, Ask-Claude bar (dev-only), all CI-verified green |
 | Scraper | LandWatch markdown parser working via Firecrawl; 125 real MT listings pulled in dry-run |
 | GitHub Pages | Still not enabled in repo settings |
@@ -109,6 +109,27 @@
 ---
 
 ## Recent Sessions
+
+### Session 8 — 2026-04-25
+**What was done:** Full frontend shell redesign + modal-to-route migration.
+
+- **AppShell** (`frontend/src/components/AppShell.tsx`) — persistent top bar (logo, global search, account menu) + collapsible left rail (icon-only mini ↔ full label, 56px ↔ 224px) with `localStorage`-backed collapsed state and a mobile off-canvas drawer behind a hamburger. Logo routes to `/home` when signed in, `/landing` when anonymous.
+- **Root routing** (`RootRedirect.tsx`) — `/` redirects per auth status. `/landing` and `/onboarding` render outside the shell; everything else is wrapped.
+- **Modal-to-route conversion** — `OnboardingModal`, `UpgradeModal`, `SavedSearchesModal`, `NotificationSettings`, and `PropertyDetail` each gained an `asPage` prop that suppresses the overlay/close-button. Thin page wrappers under `frontend/src/components/pages/` mount each at a real URL: `/onboarding`, `/upgrade?reason=…`, `/saved-searches`, `/settings/notifications`, `/p/:id`.
+- **Dashboard**: stripped its own top bar (AppShell now owns chrome); replaced with a sub-header that hosts stats + view-mode tabs. Added URL-driven view-mode (`?view=picks|deals|map|list`) and search (`?q=…`) deep-links so the rail's "Top picks" / "Homestead deals" / global search wire through. Removed in-place `PropertyDetail` stacking — `/p/:id` is now its own route via `PropertyDetailPage` which looks up the listing in the full corpus and renders `PropertyDetail asPage`.
+- **HomeFeed / SwipeView**: stripped duplicate headers, switched root from `min-h-screen` to `h-full` so they sit inside the shell's flex column. Browse path moved from `/` to `/browse` (the rail's first nav item).
+- **AuthButton**: removed callback-prop API (`onOpenNotifications`, `onOpenSavedSearches`, `onOpenPreferences`). Account menu items now navigate to real routes; added an "Upgrade" link.
+- **Deps**: added `@headlessui/react`, `lucide-react`, `clsx`. Lucide is the icon set on the rail; Headless UI not yet used (reserved for future menu/disclosure work).
+- **Lint cleanup**: fixed the pre-existing `useSubscription` `refresh` non-stable dep by wrapping in `useCallback`.
+
+**Decisions made:**
+- **App is route-driven, not modal-driven.** Every meaningful surface lives at a URL — shareable, back-button-friendly, consistent chrome. Inline confirms (e.g. delete) stay inline; full surfaces become routes.
+- **Browse moved to `/browse`** (was `/`). `/` is now a redirect. Existing bookmarks to `/` survive via the redirect; nav rail surfaces `/browse` directly.
+- **`asPage` mode prop** on modal components is the migration shim. Modals can be deleted in a future cleanup once nothing renders them outside the page wrappers.
+
+**Commits:** none yet (all changes uncommitted on `main`).
+
+---
 
 ### Session 7 — 2026-04-20
 **What was done:** Built a single-page visual reference at `docs/diagrams.html` covering four views: (1) system architecture + daily data flow, (2) adaptive fetch strategy chain (HTTP → Playwright → Firecrawl → Claude + learning pipeline), (3) local AI pipeline for enrich/curate/query (ADR-012), (4) deal-scoring formula breakdown with a pie chart of factor weights. Uses Mermaid.js from CDN with sticky nav, per-section context notes pulled from the ADRs, and color-coded node classes. All 5 Mermaid blocks validated via kroki.io (HTTP 200).

@@ -12,6 +12,7 @@ import { useAuth } from '../hooks/useAuth';
 import { useHiddenListings } from '../hooks/useHiddenListings';
 import { FreeTierLimitError, useSavedListings } from '../hooks/useSavedListings';
 import { AddToProjectButton } from './AddToProjectButton';
+import { MarketContext } from './MarketContext';
 import { PrivateNote } from './PrivateNote';
 import { PropertyThumbnail } from './PropertyThumbnail';
 import { RatingBar } from './RatingBar';
@@ -30,6 +31,8 @@ import { getDealScoreColor, getDealScoreLabel } from '../utils/scoring';
 
 interface PropertyDetailProps {
   property: Property;
+  /** Called when the user clicks the back arrow. Always navigates
+   * one step back in history at the route level. */
   onClose: () => void;
 }
 
@@ -100,27 +103,21 @@ export const PropertyDetail = ({ property, onClose }: PropertyDetailProps) => {
   };
 
   return (
-    // `z-[9999]` beats Leaflet's internal pane z-indexes (up to 700)
-    // so the detail modal always stacks above an active Map view.
-    // Tailwind's `z-50` (= 50) wasn't enough — markers were painting
-    // through the overlay when a listing was opened from the map.
-    <div className="fixed inset-0 z-[9999] flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black/50">
-      <div className="relative bg-white w-full sm:max-w-2xl sm:rounded-xl shadow-2xl max-h-[90vh] overflow-y-auto">
-        {/* Sticky close-button anchor — a zero-height sticky container
-            keeps the absolutely-positioned button pinned to the top of
-            the modal's viewport as the user scrolls. Previously the
-            button was absolute-positioned over the hero image and
-            scrolled away with content; users had to scroll back up to
-            dismiss the modal. Now it floats at top-right regardless of
-            scroll position. Dark-glass backdrop keeps it legible over
-            the hero image at the top AND the white content below. */}
+    // Renders inline within the AppShell main column at /p/:id.
+    <div className="p-0 sm:p-4">
+      <div className="relative bg-white w-full sm:max-w-3xl sm:rounded-xl shadow-sm sm:shadow border border-gray-200 mx-auto">
+        {/* Sticky back-button anchor — zero-height sticky container
+            keeps the absolutely-positioned button pinned to the top
+            of the viewport as the user scrolls. Dark-glass backdrop
+            so it stays legible over both the hero image and the
+            white content below. */}
         <div className="sticky top-0 z-20 h-0">
           <button
             onClick={onClose}
-            aria-label="Close"
-            className="absolute top-3 right-3 w-9 h-9 rounded-full bg-black/50 hover:bg-black/70 backdrop-blur-sm text-white text-lg leading-none flex items-center justify-center transition-colors shadow-lg"
+            aria-label="Back"
+            className="absolute top-3 left-3 w-9 h-9 rounded-full bg-black/50 hover:bg-black/70 backdrop-blur-sm text-white text-lg leading-none flex items-center justify-center transition-colors shadow-lg"
           >
-            ✕
+            ‹
           </button>
         </div>
         {/* Hero image — full-bleed banner above the sticky header.
@@ -565,6 +562,10 @@ export const PropertyDetail = ({ property, onClose }: PropertyDetailProps) => {
             geo={property.geoEnrichment}
             links={property.externalLinks}
           />
+
+          {/* Property-as-a-stock — market context (county / state median
+              percentile, similar listings). Self-gates on comp depth. */}
+          <MarketContext property={property} />
 
           {/* Metadata */}
           <div className="border-t border-gray-100 pt-4 grid grid-cols-2 gap-3 text-sm">
