@@ -1,0 +1,22 @@
+{
+  "items": [
+    {
+      "id": "investment-score",
+      "title": "New: Investment Score with visual breakdown",
+      "body": "Every listing now carries a 0\u2013100 Investment Score composing Value, Land, Risk, Liquidity, and Macro signals. Open a listing detail to see the per-axis bars and what fed each one.",
+      "publishedAt": "2026-04-29"
+    },
+    {
+      "id": "national-voting",
+      "title": "County voting expanded to all 3,160 US counties",
+      "body": "Voting tags now cover the full national table (was 22 seed counties). Most rural Ozark counties pick up coverage; the chip on each listing detail shows R/D share + bucket.",
+      "publishedAt": "2026-04-28"
+    },
+    {
+      "id": "polygon-search",
+      "title": "Draw-an-area filter on the map",
+      "body": "Map view now supports drawing a polygon to filter listings to that exact area \u2014 useful for narrowing to a specific watershed or county subset without dragging the bounding box.",
+      "publishedAt": "2026-04-25"
+    }
+  ]
+}
