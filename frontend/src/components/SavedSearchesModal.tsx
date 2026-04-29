@@ -66,7 +66,7 @@ export const SavedSearchesModal = ({
             type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            placeholder="e.g. Ozark homestead < $100k"
+            placeholder="e.g. Hays County homestead < $300k"
             maxLength={80}
             className="w-full border border-gray-200 rounded px-2 py-1.5 text-sm focus:outline-none focus:ring-1 focus:ring-green-500 focus:border-green-500"
           />

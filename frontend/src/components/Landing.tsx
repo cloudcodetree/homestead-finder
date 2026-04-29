@@ -259,9 +259,10 @@ export const Landing = () => {
           Stop scrolling LandWatch.
         </h2>
         <p className="text-gray-600 mb-6">
-          The 2,500+ MO &amp; AR listings already in the corpus today are waiting
-          for you to react to. The model gets sharper every save, every rating,
-          every hide.
+          Every active rural-land listing in the greater Austin area
+          (Travis, Williamson, Hays, Bastrop, Caldwell) is already in
+          the corpus, scored, and waiting for you to react to. The
+          model gets sharper every save, every rating, every hide.
         </p>
         {user ? (
           <Link
@@ -282,8 +283,8 @@ export const Landing = () => {
 
       <footer className="border-t border-gray-100 py-6">
         <div className="max-w-4xl mx-auto px-6 text-center text-xs text-gray-400">
-          Homestead Finder · Built for the next homesteading wave · MO + AR
-          first, expanding
+          Homestead Finder · Built for the next homesteading wave ·
+          Greater Austin first, expanding
         </div>
       </footer>
 

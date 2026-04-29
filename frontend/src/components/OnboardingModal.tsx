@@ -7,18 +7,27 @@ import { useAuth } from '../hooks/useAuth';
 import { useUserPreferences } from '../hooks/useUserPreferences';
 
 /**
- * States we currently scrape. Onboarding requires the user to pick at
+ * Areas we currently cover. Onboarding requires the user to pick at
  * least one before they can save — without a target area we have
  * nothing meaningful to filter the corpus by, and the default
  * Project we auto-create needs an area to bind to.
  *
+ * Pivot 2026-04-29: greater Austin TX (Austin–Round Rock MSA, 5
+ * counties). The `code` is the value persisted to
+ * UserPreferences.targetStates — we keep the field name historical
+ * for schema continuity even though the values are now county-level
+ * keys (`TX|travis` etc) rather than 2-letter state codes.
+ *
  * TODO(ai-enrich): replace with a dynamic list keyed off the actual
- * states present in `data/listings.json` so this stays in sync as
+ * counties present in `data/listings.json` so this stays in sync as
  * the scraper expands.
  */
 const SUPPORTED_STATES: Array<{ code: string; label: string }> = [
-  { code: 'AR', label: 'Arkansas' },
-  { code: 'MO', label: 'Missouri' },
+  { code: 'TX|travis', label: 'Travis County (Austin)' },
+  { code: 'TX|williamson', label: 'Williamson County (Round Rock)' },
+  { code: 'TX|hays', label: 'Hays County (San Marcos)' },
+  { code: 'TX|bastrop', label: 'Bastrop County' },
+  { code: 'TX|caldwell', label: 'Caldwell County' },
 ];
 
 /**
@@ -155,8 +164,16 @@ export const OnboardingModal = ({ forceOpen = false, onClose, asPage = false }: 
     try {
       const existing = await api.projects.list();
       if (existing.length > 0) return;
-      const states = (draft.targetStates ?? []).join(' / ');
-      const name = states ? `My ${states} search` : 'My homestead search';
+      // Resolve picked codes back to their human labels so the
+      // project name reads naturally (e.g. "My Travis County search"
+      // instead of "My TX|travis search").
+      const labels = (draft.targetStates ?? [])
+        .map((c) => SUPPORTED_STATES.find((s) => s.code === c)?.label ?? c)
+        // Trim the descriptor parens — "Travis County (Austin)" → "Travis County"
+        .map((l) => l.replace(/\s*\([^)]*\)\s*$/, ''));
+      const name = labels.length
+        ? `My ${labels.length === 1 ? labels[0] : 'Austin metro'} search`
+        : 'My homestead search';
       await api.projects.create(name, null);
     } catch {
       // Non-fatal — onboarding can finish without a project; the

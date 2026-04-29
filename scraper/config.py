@@ -13,15 +13,33 @@ DATA_DIR.mkdir(exist_ok=True)
 # ── Target geography ─────────────────────────────────────────────────────────
 # States to scrape. Expand as budget/rate-limit allows.
 TARGET_STATES: list[str] = os.getenv(
-    # Pivot 2026-04-21: Ozark pilot. MO is the hybrid-state flagship
-    # (lien-style 1st/2nd offerings + deed 3rd offerings in the same
-    # county). AR adds a redeemable-deed variant via the statewide
-    # Commissioner of State Lands + Carroll County (Eureka Springs) for
-    # the homestead-adjacent inventory. All prior-state listings are
-    # archived under data/archive/2026-04-21_pre_mo_ar_pivot/.
+    # Pivot 2026-04-29: greater Austin TX. The MO/AR pilot corpus
+    # (2,426 listings) is archived at `data/archive/2026-04-29-mo-ar/`
+    # and can be restored by copying those files back into `data/`
+    # and flipping this default back to "MO,AR".
+    #
+    # We scrape the whole state at the source level (LandWatch et al.
+    # only filter by state, not county) and trim post-scrape via
+    # TARGET_COUNTIES below — without that filter we'd ingest all 254
+    # TX counties and drown the corpus in non-Austin inventory.
     "TARGET_STATES",
-    "MO,AR",
+    "TX",
 ).split(",")
+
+# Sub-state filter applied after the source scrape returns. Empty
+# list = no filter (use the full TARGET_STATES result). Keys are
+# `<STATE>|<county-lower-no-suffix>` matching the voting/macro
+# table key shape so the same normalization helper works on both.
+#
+# Pivot 2026-04-29: Austin–Round Rock MSA (5 counties). Hill Country
+# (Burnet, Blanco, Llano) deferred until inventory needs it.
+TARGET_COUNTIES: list[str] = [
+    "TX|travis",
+    "TX|williamson",
+    "TX|hays",
+    "TX|bastrop",
+    "TX|caldwell",
+]
 
 # ── Deal criteria ────────────────────────────────────────────────────────────
 MIN_ACREAGE: float = float(os.getenv("MIN_ACREAGE", "5"))
@@ -56,10 +74,11 @@ ENABLED_SOURCES: dict[str, bool] = {
     # duplicates LandWatch inventory — disabled until we verify unique
     # inventory justifies the Playwright cost.
     "lands_of_america": False,
-    # Ozark owner-finance specialists (MO/AR only) — tiny inventory
-    # but ICP-perfect.
-    "homestead_crossing": True,
-    "ozarkland": True,
+    # Ozark owner-finance specialists (MO/AR only). Disabled
+    # 2026-04-29 with the Austin TX pivot — neither vendor lists
+    # Texas inventory. Re-enable on revert.
+    "homestead_crossing": False,
+    "ozarkland": False,
     # United Country Real Estate — rural-specialist franchise with
     # Ozark offices (Willow Springs MO, Mountain Home AR, etc).
     # Inventory largely absent from LandWatch / Land.com aggregators,
@@ -69,17 +88,22 @@ ENABLED_SOURCES: dict[str, bool] = {
     # Server-rendered, lat/lng baked into card data attributes, heavy
     # Ozark coverage. Hidden-gem yield similar to United Country.
     "mossy_oak": True,
-    # Craigslist FSBO land — small volume (~5-15 hits/state/day) but
-    # the cheapest inventory in the corpus. Hidden gems that big
-    # aggregators skip entirely.
-    "craigslist": True,
+    # Craigslist FSBO land — disabled at the registry level
+    # (`scraper/main.py:ALL_SCRAPERS`) on 2026-04-28 because of a
+    # broken URL builder. Listed here as False for consistency.
+    "craigslist": False,
     # LandHub.com — independent aggregator outside the Land.com family.
     # MO carries ~1,666 active rows, AR ~686. Plain HTTP works, the
     # whole page ships as SSR Next.js JSON. Low overlap with LandWatch.
     "landhub": True,
     "zillow": False,  # Rate limiting issues — disabled by default
     "realtor": False,  # Rate limiting issues — disabled by default
-    "county_tax": True,
+    # county_tax: disabled 2026-04-29 with the Austin TX pivot —
+    # the existing tax-sale parsers are MO/AR-county-specific.
+    # TX equivalents (Travis/Williamson/Hays/Bastrop/Caldwell)
+    # publish delinquent-tax sales differently per county and need
+    # new parsers; deferred until the rest of the pivot is stable.
+    "county_tax": False,
     "auction": True,
     "blm": True,
     "govease": True,

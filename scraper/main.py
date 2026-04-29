@@ -74,6 +74,39 @@ _LEASE_KEYWORDS = re.compile(
 )
 
 
+def _normalize_county_key(state: str, county: str) -> str:
+    """`<STATE>|<county-lower-no-suffix>` — matches the keying used by
+    voting_county.json + macro_county.json so the same helper line
+    works against both. Mirrors the normalize logic in
+    `enrichment/voting.py` (which is the canonical owner)."""
+    s = (state or "").upper()
+    c = (county or "").strip().lower()
+    c = re.sub(r"\s+(county|parish|borough|city and borough|census area|municipality)\s*$", "", c)
+    c = c.replace(".", "")
+    c = re.sub(r"\s+", " ", c).strip()
+    return f"{s}|{c}" if s and c else ""
+
+
+def _county_filter(listing: dict[str, Any], allowed: set[str]) -> bool:
+    """Return True if the listing's (state, county) pair is in the
+    allow-list. Listings without a parsed county fail-open: we keep
+    them rather than drop, since geo enrichment can backfill the
+    county later. Trade-off accepted: we may briefly carry a few
+    out-of-region rows until enrichment fills them; the alternative
+    (drop-no-county) loses listings whose source HTML didn't surface
+    a county string in the search-result row."""
+    if not allowed:
+        return True
+    loc = listing.get("location") or {}
+    key = _normalize_county_key(
+        loc.get("state", ""),
+        loc.get("county", ""),
+    )
+    if not key:
+        return True  # fail-open; geo enrichment will reclassify later
+    return key in allowed
+
+
 def _is_likely_lease_or_share(listing: dict[str, Any]) -> bool:
     """Return True for listings that look like annual leases, hunt-club
     shares, or other not-a-sale rows that LandWatch et al. mix into
@@ -184,6 +217,21 @@ def run(
             seen_urls.add(url)
             unique.append(p)
     print(f"\n  Deduplicated: {len(all_results)} → {len(unique)} unique listings")
+
+    # Sub-state county filter (e.g. greater Austin TX = 5 counties
+    # of the 254 in the state). Sources only filter by state, so
+    # without this we'd carry the full state's inventory.
+    target_counties = {
+        c.strip() for c in (config.TARGET_COUNTIES or []) if c.strip()
+    }
+    if target_counties:
+        pre_county = len(unique)
+        unique = [p for p in unique if _county_filter(p, target_counties)]
+        if pre_county != len(unique):
+            print(
+                f"  Filtered to {len(target_counties)} target counties: "
+                f"{pre_county} → {len(unique)}"
+            )
 
     # Reject lease / equity-share / hunt-club listings. LandWatch and
     # Land.com lump these into the same /...for-sale/ URL pattern as

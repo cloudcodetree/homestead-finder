@@ -10,8 +10,8 @@
 
 | Item | Status |
 |------|--------|
-| Last Updated | 2026-04-25 |
-| Current Phase | Phase 1 MVP shipped (preferences, projects, ratings, paywall, swipe, /home, search). 2026-04-25: full app-shell redesign — modals replaced by routes, persistent collapsible left rail, top bar with logo routing per auth state. |
+| Last Updated | 2026-04-29 |
+| Current Phase | **Region pivot in progress: MO + AR → greater Austin TX (Travis, Williamson, Hays, Bastrop, Caldwell)**. Pre-pivot snapshot of the full 2,426-listing MO/AR corpus archived at `data/archive/2026-04-29-mo-ar/` (`listings.json` + `curated.json` + `homestead_deals.json`). To revert: copy those files back into `data/`, flip TARGET_STATES back to `["MO", "AR"]` in `scraper/config.py`. |
 | Dashboard | AI filters, Top Picks view, Ask-Claude bar (dev-only), all CI-verified green |
 | Scraper | LandWatch markdown parser working via Firecrawl; 125 real MT listings pulled in dry-run |
 | GitHub Pages | Still not enabled in repo settings |

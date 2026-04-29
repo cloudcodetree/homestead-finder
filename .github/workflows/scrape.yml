@@ -71,7 +71,9 @@ jobs:
           # Must match scraper/config.py TARGET_STATES — if the two
           # disagree, the workflow env wins and we scrape the wrong
           # states. Kept explicit here so reviewers see it in PR diffs.
-          TARGET_STATES: ${{ github.event.inputs.states || 'MO,AR' }}
+          # Pivot 2026-04-29: TX (greater Austin via TARGET_COUNTIES
+          # post-filter in scraper/main.py).
+          TARGET_STATES: ${{ github.event.inputs.states || 'TX' }}
         run: |
           cd scraper
           ARGS=""

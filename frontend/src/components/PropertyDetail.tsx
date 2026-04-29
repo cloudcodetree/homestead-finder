@@ -423,7 +423,7 @@ export const PropertyDetail = ({ property, onClose }: PropertyDetailProps) => {
                   </p>
                   <p className="text-xs text-sky-700/80 mt-0.5">
                     Nearest named town ≥5k. Drive time is roughly 1.5×
-                    linear miles on Ozark back roads.
+                    linear miles on rural back roads.
                     {(property.geoEnrichment.proximity.namedWaterFeatures ?? []).length > 0 && (
                       <>
                         {' '}

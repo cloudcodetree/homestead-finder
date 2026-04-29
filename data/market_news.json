@@ -1,38 +1,38 @@
 {
   "items": [
     {
-      "id": "2026-04-corpus-update",
+      "id": "2026-04-pivot-austin",
       "category": "market",
-      "title": "2,426 Ozark listings now scored for investment",
-      "body": "Every active LandWatch / United Country / LandHub / Mossy Oak listing in MO + AR now carries an InvestmentScore composing value-vs-comps, soil class, flood risk, and county macro signals. Sort by 'Investment Score (AI)' on Browse to surface the strongest fundamentals first.",
+      "title": "We're now covering greater Austin",
+      "body": "As of April 29 the corpus has pivoted from MO + AR to the Austin\u2013Round Rock MSA: Travis, Williamson, Hays, Bastrop, and Caldwell counties. The MO/AR snapshot is preserved at `data/archive/2026-04-29-mo-ar/` and can be restored if we expand back. Hill Country (Burnet, Blanco, Llano) is on deck if Austin-5 inventory thins out.",
       "publishedAt": "2026-04-29",
-      "tone": "info",
+      "tone": "highlight",
       "imageKeyword": "ozarks"
     },
     {
-      "id": "2026-04-rural-shift",
+      "id": "2026-04-tx-corridor",
       "category": "market",
-      "title": "Ozark rural counties shifted ~10pp further R in 2024",
-      "body": "We re-stamped county voting from a 2024 source. Reynolds, Carter, Wayne, and Howell counties (MO) all moved 9-12pp toward R from 2020 \u2014 useful context for buyers thinking about local culture and zoning trajectory.",
-      "publishedAt": "2026-04-28",
+      "title": "Hill Country drift: where Austin homesteaders are looking",
+      "body": "The under-$500k acreage band in Austin proper has all but vanished, but Hays + Bastrop carry a healthy supply of 5\u201320 acre tracts under that price. Caldwell trends cheaper still on per-acre but tilts pasture rather than woodland \u2014 know what you're optimizing for.",
+      "publishedAt": "2026-04-29",
       "tone": "info",
       "imageKeyword": "pasture"
     },
     {
-      "id": "2026-04-buffalo-river-cluster",
+      "id": "2026-04-buildable-water",
       "category": "market",
-      "title": "Buffalo River corridor: 5 new homestead-grade listings under $150k",
-      "body": "Searcy, Newton, and Marion counties saw a small wave of <50-acre tracts with at least one creek or well in the past two weeks. Most carry 'utilities on-site' and stay below the $5k/acre line.",
-      "publishedAt": "2026-04-26",
-      "tone": "highlight",
+      "title": "Buildable acreage with on-site water remains the rarest sub-corpus",
+      "body": "Across Austin-5, listings that pair > 5 acres with an existing well, established road access, and no flood-zone overlap are roughly 7\u20139% of inventory. Saved-search candidates: \"Austin metro, well + road, 5+ ac, < $400k\".",
+      "publishedAt": "2026-04-29",
+      "tone": "info",
       "imageKeyword": "creek"
     },
     {
       "id": "2026-04-cabin-watch",
       "category": "market",
-      "title": "Off-grid cabins on 30+ acres are the rarest sub-corpus",
-      "body": "Of the 2,426 listings we track, only 47 pair an existing cabin with 30+ acres AND on-site water. They average $4,800/acre and rarely stay listed >60 days. Worth a saved search if 'turnkey homestead' is the goal.",
-      "publishedAt": "2026-04-25",
+      "title": "Off-grid cabins on land are scarce in Texas",
+      "body": "Texas listings rarely advertise 'off-grid cabin on N acres' the way Ozark inventory does \u2014 the closest equivalent is 'barndominium' or a hunting cabin tagged on raw land. Filter by Structures + No HOA + 10+ acres to find them.",
+      "publishedAt": "2026-04-28",
       "tone": "info",
       "imageKeyword": "cabin"
     }

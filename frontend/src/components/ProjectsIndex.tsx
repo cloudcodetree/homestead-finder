@@ -160,7 +160,7 @@ export const ProjectsIndex = () => {
               autoFocus
               value={newName}
               onChange={(e) => setNewName(e.target.value)}
-              placeholder="e.g. 2026 Ozark scouting"
+              placeholder="e.g. 2026 Austin metro scouting"
               maxLength={120}
               className="w-full border border-gray-200 rounded px-2 py-1.5 text-sm focus:ring-1 focus:ring-green-500 focus:outline-none"
             />

@@ -85,8 +85,9 @@ export const WelcomeStrip = () => {
       <>
         <p className="text-sm text-gray-700">
           Welcome to Homestead Finder. We aggregate every active
-          rural-land listing in MO + AR and score each one on value,
-          land quality, and risk so you can shop the way you'd
+          rural-land listing in the greater Austin area (Travis,
+          Williamson, Hays, Bastrop, Caldwell) and score each one on
+          value, land quality, and risk so you can shop the way you'd
           research a stock.
         </p>
         <Link
