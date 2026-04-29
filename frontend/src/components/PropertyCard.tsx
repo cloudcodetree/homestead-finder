@@ -35,9 +35,9 @@ import { getCountyStat, useCountyMedians } from '../hooks/useCountyMedians';
 import { useHiddenListings } from '../hooks/useHiddenListings';
 import { useListingRatings } from '../hooks/useListingRatings';
 import { useSavedListings, FreeTierLimitError } from '../hooks/useSavedListings';
-import { Home, Search } from 'lucide-react';
+import { Home, Star } from 'lucide-react';
 import { formatVsMedian } from '../utils/marketStats';
-import { InvestmentScoreBadge } from './InvestmentScore';
+import { InvestmentScoreBadge, ScoreRingChip } from './InvestmentScore';
 import { UpgradeModal } from './UpgradeModal';
 import { PropertyThumbnail } from './PropertyThumbnail';
 import {
@@ -49,7 +49,7 @@ import {
   formatSourceName,
 } from '../utils/formatters';
 import { getListingTypeStyle } from '../utils/listingType';
-import { getDealScoreColor, getDealScoreLabel, getDealScoreBorderColor } from '../utils/scoring';
+import { getDealScoreLabel, getDealScoreBorderColor } from '../utils/scoring';
 
 interface PropertyCardProps {
   property: Property;
@@ -95,7 +95,6 @@ const ValidationBadge = ({ status }: { status?: Property['status'] }) => {
 };
 
 export const PropertyCard = ({ property, onClick, isSelected = false }: PropertyCardProps) => {
-  const scoreColor = getDealScoreColor(property.dealScore);
   const scoreBorder = getDealScoreBorderColor(property.dealScore);
   const typeStyle = getListingTypeStyle(property);
   const { user, loginWithGoogle } = useAuth();
@@ -259,38 +258,39 @@ export const PropertyCard = ({ property, onClick, isSelected = false }: Property
           </div>
           <div className="flex flex-col items-end gap-1 flex-shrink-0">
             <div className="flex items-center gap-1">
-              {/* Three score pills, each with its own icon so the
-                  meaning is obvious at a glance. Sized w-3.5 h-3.5
-                  (14 px) — at w-3 (12 px) the silhouettes blur.
-                    🟢 ring gauge      → InvestmentScore (ring IS the icon)
-                    🏠 Home (house)    → Homestead Fit
-                    🔍 Search (magnifier) → Deal Score (looking for value) */}
+              {/* Three score pills, all using the same ring-gauge-with-
+                  icon shape (`ScoreRingChip`). Identity comes from the
+                  inner glyph; magnitude from the ring's fill + tier
+                  color (red < 50, amber 50-69, green ≥ 70):
+                    💲 DollarSign → Investment
+                    🏠 Home       → Homestead Fit
+                    ⭐ Star       → Deal Score */}
               {property.investmentScore !== undefined && (
                 <InvestmentScoreBadge score={property.investmentScore} />
               )}
               {property.homesteadFitScore !== undefined ? (
-                <div
-                  className="inline-flex items-center gap-1 rounded-full px-2 py-1 text-xs font-bold bg-purple-100 text-purple-700 border border-purple-200"
-                  title={`Homestead Fit: ${property.homesteadFitScore}/100${property.aiSummary ? ` — ${property.aiSummary}` : ''}`}
-                >
-                  <Home className="w-3.5 h-3.5" aria-hidden="true" />
-                  <span className="tabular-nums">{property.homesteadFitScore}</span>
-                </div>
+                <ScoreRingChip
+                  score={property.homesteadFitScore}
+                  icon={Home}
+                  label={
+                    property.aiSummary
+                      ? `Homestead Fit — ${property.aiSummary}`
+                      : 'Homestead Fit'
+                  }
+                />
               ) : (
-                <div
+                <span
                   className="inline-flex items-center gap-1 rounded-full px-1.5 py-1 text-[10px] font-medium bg-gray-100 text-gray-500 border border-gray-200"
                   title="Homestead Fit not yet AI-analyzed"
                 >
                   <Home className="w-3.5 h-3.5 opacity-60" aria-hidden="true" />
-                </div>
+                </span>
               )}
-              <div
-                className={`inline-flex items-center gap-1 rounded-full px-2 py-1 text-xs font-bold ${scoreColor}`}
-                title={`Deal Score: ${property.dealScore}/100`}
-              >
-                <Search className="w-3.5 h-3.5" aria-hidden="true" />
-                <span className="tabular-nums">{property.dealScore}</span>
-              </div>
+              <ScoreRingChip
+                score={property.dealScore}
+                icon={Star}
+                label="Deal Score"
+              />
             </div>
             <ValidationBadge status={property.status} />
           </div>

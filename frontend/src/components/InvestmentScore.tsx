@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { Info } from 'lucide-react';
+import { useState, type ReactNode } from 'react';
+import { DollarSign, Info } from 'lucide-react';
 import type {
   InvestmentAxis,
   InvestmentBreakdown,
@@ -50,17 +50,35 @@ interface RingProps {
   size?: number;
   strokeWidth?: number;
   /** When true, the score number sits inside the ring; when false the
-   * ring is a pure indicator and the consumer puts the number elsewhere. */
+   * ring is a pure indicator and the consumer puts the number elsewhere
+   * (or supplies a child icon via `children`). */
   showNumber?: boolean;
+  /** Optional ARIA label override — useful when this ring is used as
+   * a generic score indicator (e.g. Homestead Fit, Deal Score) rather
+   * than the InvestmentScore composite. */
+  ariaLabel?: string;
+  /** Custom inner content — typically a small lucide icon at the size
+   * the chip wants. Renders centered. Overrides `showNumber`. */
+  children?: ReactNode;
 }
 
 /**
  * Circular gauge — animated stroke-dasharray. SVG-only, no chart lib.
- * Used by the badge on cards (size=44) and the panel header on detail
- * pages (size=80). Color follows the same band rules as the per-axis
- * bars so the eye groups them.
+ * Used by:
+ *   - the panel header on detail pages (size=80, showNumber)
+ *   - the per-pill badge on cards (size≈22, child glyph instead of
+ *     number, see `ScoreRingChip` below)
+ * Color follows the same band rules as the per-axis bars so the eye
+ * groups them.
  */
-const Ring = ({ score, size = 80, strokeWidth = 8, showNumber = true }: RingProps) => {
+const Ring = ({
+  score,
+  size = 80,
+  strokeWidth = 8,
+  showNumber = true,
+  ariaLabel,
+  children,
+}: RingProps) => {
   const r = (size - strokeWidth) / 2;
   const c = 2 * Math.PI * r;
   const pct = Math.max(0, Math.min(100, score)) / 100;
@@ -70,7 +88,7 @@ const Ring = ({ score, size = 80, strokeWidth = 8, showNumber = true }: RingProp
     <div
       className="relative flex-shrink-0"
       style={{ width: size, height: size }}
-      aria-label={`Investment score ${Math.round(score)} of 100`}
+      aria-label={ariaLabel ?? `Score ${Math.round(score)} of 100`}
     >
       <svg width={size} height={size} className="-rotate-90 transform">
         <circle
@@ -90,15 +108,68 @@ const Ring = ({ score, size = 80, strokeWidth = 8, showNumber = true }: RingProp
           strokeDasharray={`${dash} ${c}`}
         />
       </svg>
-      {showNumber && (
+      {children ? (
         <div
-          className={`absolute inset-0 flex items-center justify-center font-semibold ${klass.text}`}
-          style={{ fontSize: size * 0.32 }}
+          className={`absolute inset-0 flex items-center justify-center ${klass.text}`}
         >
-          {Math.round(score)}
+          {children}
         </div>
+      ) : (
+        showNumber && (
+          <div
+            className={`absolute inset-0 flex items-center justify-center font-semibold ${klass.text}`}
+            style={{ fontSize: size * 0.32 }}
+          >
+            {Math.round(score)}
+          </div>
+        )
       )}
     </div>
+  );
+};
+
+interface ScoreRingChipProps {
+  score: number;
+  /** Lucide icon component; rendered centered inside the ring. */
+  icon: React.ComponentType<{ className?: string }>;
+  /** Tooltip / aria — what this score actually measures. */
+  label: string;
+  /** Override the chip's accent (used by InvestmentScore so the chip
+   * matches the panel's tier colors; Fit / Deal use their own palette). */
+  toneOverride?: { bg: string; text: string };
+}
+
+/**
+ * Pill that combines a percentage ring (color-banded by score) with
+ * an inner glyph and the score number to its right. Lets the user
+ * read identity (icon) AND magnitude (ring fill + color) in one
+ * compact chip — the original "icon next to number" version made the
+ * three score chips on each card hard to tell apart at small sizes,
+ * and the ring-only Investment badge had no identity glyph at all.
+ */
+export const ScoreRingChip = ({
+  score,
+  icon: Icon,
+  label,
+  toneOverride,
+}: ScoreRingChipProps) => {
+  const klass = tierClasses[tier(score)];
+  const tone = toneOverride ?? { bg: klass.bg, text: klass.text };
+  return (
+    <span
+      className={`inline-flex items-center gap-1 rounded-full border px-1 py-0.5 text-xs font-bold ${tone.bg} ${tone.text} border-current/30`}
+      title={`${label}: ${Math.round(score)}/100`}
+    >
+      <Ring
+        score={score}
+        size={22}
+        strokeWidth={2.5}
+        ariaLabel={`${label} ${Math.round(score)} of 100`}
+      >
+        <Icon className="w-3 h-3" />
+      </Ring>
+      <span className="tabular-nums px-1">{Math.round(score)}</span>
+    </span>
   );
 };
 
@@ -244,22 +315,11 @@ export const InvestmentScorePanel = ({ property }: PanelProps) => {
 };
 
 /**
- * Compact badge for cards — just the ring gauge + score number.
- * The ring IS the icon: it's the only chip on the card with a
- * filled circular gauge, so it's immediately distinguishable from
- * the homestead-fit (sprout) and deal-score (sparkles) chips that
- * sit next to it. The "Inv" text label was redundant — the tooltip
- * carries the full meaning.
+ * Compact card badge for InvestmentScore — a thin wrapper over the
+ * generic `ScoreRingChip` so all three score pills (Investment, Fit,
+ * Deal) share the same ring-gauge-with-icon shape. Identity from the
+ * DollarSign glyph; magnitude from the ring's stroke fill + tier color.
  */
-export const InvestmentScoreBadge = ({ score }: { score: number }) => {
-  const klass = tierClasses[tier(score)];
-  return (
-    <span
-      className={`inline-flex items-center gap-1 rounded-full border px-1.5 py-0.5 text-xs font-bold ${klass.bg} ${klass.text} border-current/30`}
-      title={`Investment Score: ${Math.round(score)} / 100`}
-    >
-      <Ring score={score} size={18} strokeWidth={3} showNumber={false} />
-      <span className="tabular-nums">{Math.round(score)}</span>
-    </span>
-  );
-};
+export const InvestmentScoreBadge = ({ score }: { score: number }) => (
+  <ScoreRingChip score={score} icon={DollarSign} label="Investment Score" />
+);
