@@ -118,6 +118,7 @@ const AxisRow = ({ axis }: { axis: InvestmentAxis }) => {
   const disabled = axis.weight === 0;
   const klass = tierClasses[tier(axis.score)];
   const widthPct = Math.max(0, Math.min(100, axis.score));
+  const hasSignals = (axis.signals?.length ?? 0) > 0;
   return (
     <div
       className={`rounded-lg border p-2.5 ${
@@ -150,18 +151,20 @@ const AxisRow = ({ axis }: { axis: InvestmentAxis }) => {
         <span className="text-[10px] text-gray-400 tabular-nums w-10 text-right">
           {disabled ? '—' : `×${axis.weight.toFixed(2)}`}
         </span>
-        <button
-          type="button"
-          aria-label={`Show ${axis.label} details`}
-          onClick={() => setOpen((v) => !v)}
-          className="text-gray-400 hover:text-gray-700"
-        >
-          <Info className="w-3.5 h-3.5" />
-        </button>
+        {hasSignals && (
+          <button
+            type="button"
+            aria-label={`Show ${axis.label} details`}
+            onClick={() => setOpen((v) => !v)}
+            className="text-gray-400 hover:text-gray-700"
+          >
+            <Info className="w-3.5 h-3.5" />
+          </button>
+        )}
       </div>
-      {open && axis.signals.length > 0 && (
+      {open && hasSignals && (
         <ul className="mt-2 ml-22 space-y-0.5 text-xs text-gray-600">
-          {axis.signals.map((sig, i) => (
+          {axis.signals!.map((sig, i) => (
             <li key={i} className="flex items-baseline justify-between gap-2">
               <span className="truncate">{sig.label}</span>
               <span className="tabular-nums text-gray-500 flex-shrink-0">

@@ -179,14 +179,21 @@ export interface InvestmentAxis {
   /** Composite weight applied to this axis (0-1). 0 = axis disabled
    * for this listing because the underlying data isn't ingested yet. */
   weight: number;
-  signals: InvestmentSignal[];
+  /** Optional contributing signals — present only when the score was
+   * computed live in the browser. The persisted form on disk drops
+   * `signals` to keep listings.json small (each one was ~600 bytes).
+   * The detail panel still renders bars + scores fine without them;
+   * the per-axis ⓘ expander just hides until signals are available. */
+  signals?: InvestmentSignal[];
 }
 
 export interface InvestmentBreakdown {
   /** 0-100 composite — same value as Property.investmentScore. */
   score: number;
   axes: InvestmentAxis[];
-  computedAt: string;
+  /** Optional — only present on live-computed breakdowns. The
+   * persisted form skips this to save bytes. */
+  computedAt?: string;
 }
 
 /**

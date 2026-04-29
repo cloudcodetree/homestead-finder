@@ -492,6 +492,28 @@ def load_macro_table(path: Path) -> dict[str, Any] | None:
         return None
 
 
+def _compact_breakdown(result: dict[str, Any]) -> dict[str, Any]:
+    """Slim form of `compute_investment_score` output for persistence
+    on the listing record. Drops `signals` (recomputable from the
+    listing's own fields), `label` (re-derivable from `key`), and the
+    `computedAt` timestamp (we don't display it). Roughly halves the
+    per-listing JSON footprint, which matters once data/listings.json
+    crosses 10 MB and the frontend starts choking on concurrent
+    fetches by every PropertyCard."""
+    return {
+        "score": result["score"],
+        "axes": [
+            {
+                "key": ax["key"],
+                "label": ax["label"],
+                "score": ax["score"],
+                "weight": ax["weight"],
+            }
+            for ax in result["axes"]
+        ],
+    }
+
+
 def run(input_path: Path, output_path: Path) -> dict[str, int]:
     listings = json.loads(input_path.read_text())
     if not isinstance(listings, list):
@@ -521,7 +543,7 @@ def run(input_path: Path, output_path: Path) -> dict[str, int]:
             macro=macro,
         )
         it["investmentScore"] = result["score"]
-        it["investmentBreakdown"] = result
+        it["investmentBreakdown"] = _compact_breakdown(result)
         counters["scored"] += 1
 
     output_path.write_text(json.dumps(listings, indent=2))
