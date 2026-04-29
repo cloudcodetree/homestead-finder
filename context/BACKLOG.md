@@ -713,8 +713,8 @@ or MO/AR inventory density changes materially.
       address parser) to look up city-centroid coords offline. Coarse
       but free, no runtime dep. ~2 hrs.
   - Files: [scraper/enrichment/](scraper/enrichment/),
-    [/tmp/forward_geo.py](/tmp/forward_geo.py) one-shot script kept
-    locally; promote to `scraper/forward_geo.py` if we resume this work.
+    [scraper/forward_geo.py](scraper/forward_geo.py) (promoted from
+    /tmp on 2026-04-29 with the Austin pivot).
   - Non-urgent — current 41% coords / 37% fully-enriched coverage is
     enough to power the AI Analysis + Market Context panels for the
     listings users are most likely to engage with (the ones with real
