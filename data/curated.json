@@ -1,79 +1,79 @@
 {
-  "curatedAt": "2026-04-28T04:52:51.917217+00:00",
+  "curatedAt": "2026-04-29T04:22:39.423618+00:00",
   "model": "sonnet",
   "candidateCount": 50,
   "pickCount": 12,
   "picks": [
     {
-      "id": "landwatch_423050733",
-      "headline": "Big Barren Creek: water, soil, timber all present",
-      "reason": "385 acres with Big Barren Creek providing year-round water plus multiple ponds, agricultural-suitable soil, timber for harvest, and grazing land. At $2,273/acre this is genuinely good value for the resource density. No restrictions noted; proximity to Van Buren provides services without sacrificing rural character.",
+      "id": "landhub_3663183",
+      "headline": "283 acres with cabin at $1,497 per acre",
+      "reason": "The lowest price per acre of any candidate with meaningful scale\u2014283.8 acres includes a cabin and Macks Creek water frontage in a remote Camden County setting. Off-grid and grazing viable with agricultural and timber potential. Critical unknowns (road quality, utility details) are worth investigating, but no other listing combines this acreage, price, and existing shelter.",
       "rank": 1
     },
     {
-      "id": "landhub_3663183",
-      "headline": "283 acres, cabin included, lowest price per acre",
-      "reason": "At $1,498/acre with an existing cabin and Macks Creek water access, this is the best price-per-acre on the list for a property with shelter and water. Off-grid viable and large enough for serious food production. Caveat: road access quality and utility infrastructure are unconfirmed and must be verified.",
+      "id": "landwatch_425489963",
+      "headline": "520 remote Missouri acres at two grand",
+      "reason": "At $2,000/acre for 520 acres with paved road access, no HOA, and proximity to both the Black River and Clearwater Lake, this is exceptional scale for the price. Water access is reliable via nearby surface water rather than on-site wells, which needs verification. The absence of any red flags and direct buildable access make it a strong foundation despite unspecified utility infrastructure.",
       "rank": 2
     },
     {
-      "id": "landwatch_425489963",
-      "headline": "520 acres near Black River, no restrictions",
-      "reason": "520 acres at $2,000/acre is exceptional scale for the price in southeast Missouri. Direct road access, proximity to Black River and Clearwater Lake for water, and no HOA or noted restrictions. Utilities and soil specifics are unconfirmed, but the acreage and water access make this a strong raw-land homestead candidate.",
+      "id": "landwatch_423050733",
+      "headline": "Big Barren Creek ranch with multiple ponds",
+      "reason": "385 acres at $2,272/acre with Big Barren Creek running through plus multiple ponds\u2014the most robust on-site water story among large affordable candidates. Soil suitable for agriculture, timber harvestable, and grazing viable. Off-grid development is needed, but natural resources cover the hardest part of water independence.",
       "rank": 3
     },
     {
       "id": "landwatch_423655527",
-      "headline": "358 Ozark acres, springs, well, and highway access",
-      "reason": "Multiple natural springs plus an existing well solve the water problem across 358 acres at $2,360/acre. Direct highway access and strong timber and hunting potential with no HOA. Key unknowns are utility availability and zoning, but the water infrastructure and scale at this price are hard to match.",
+      "headline": "358 Ozark acres with springs, well, and highway",
+      "reason": "Multiple natural springs plus an existing well provide layered water independence on 358 acres at $2,360/acre with paved Highway 9 access and no HOA. Timber and hunting potential are strong. Utilities and zoning need clarification from the truncated listing, but water redundancy at this price and scale is hard to beat.",
       "rank": 4
     },
     {
-      "id": "landwatch_422200956",
-      "headline": "180 acres, electric service and live water in place",
-      "reason": "180 acres with on-site 20A\u201350A electric, live water, and a well already installed removes the two biggest off-grid startup barriers at $2,749/acre. Off-grid viable with hunting and agricultural potential. Road access and residential zoning need verification, but the infrastructure head start is significant.",
+      "id": "united_country_1146739",
+      "headline": "80 Ozark acres fully wired with well and pond",
+      "reason": "On-site electric, a working well, and a pond on 80 acres at $2,498/acre with no HOA makes this the most build-ready smaller property in the list. Norfork Lake proximity adds hunting and timber value. It punches above its price class by having three independent water sources and power already installed.",
       "rank": 5
     },
     {
-      "id": "united_country_1146739",
-      "headline": "80 Ozark acres with electric, well, and pond",
-      "reason": "Electric on-site, a working well, and a pond provide water independence on a buildable 80-acre Ozarks parcel at $2,499/acre. No HOA, near Norfork Lake, and timber potential round out the fundamentals. Main unknowns are soil quality and zoning detail, but the utilities package is already solved.",
+      "id": "landwatch_422200956",
+      "headline": "180 Missouri acres wired for off-grid living",
+      "reason": "Live water on site, an existing well, and 20A\u201350A electric service already run makes this 180 acres at $2,749/acre genuinely off-grid-ready rather than aspirationally so. Seclusion and hunting support self-sufficient living. Road access and residential zoning should be confirmed, but the infrastructure combination at this price per acre is uncommon.",
       "rank": 6
     },
     {
-      "id": "landwatch_424737662",
-      "headline": "250 acres, creek plus spring, home and shop ready",
-      "reason": "Year-round creek and spring water on 250 acres with an existing home and shop significantly reduces startup effort. Agricultural soil suitable for Ozark conditions supports grazing and diversified production at $3,498/acre. Terrain is rolling rather than row-crop flat, but that is typical and manageable for homesteading.",
+      "id": "landwatch_425792009",
+      "headline": "227 Wayne County acres with spring-fed house",
+      "reason": "Year-round spring-fed water, an existing house, pasture for grazing, harvestable timber, and no HOA on 227 acres at $2,973/acre with paved access. Proximity to Mark Twain National Forest extends the effective range. Utilities and zoning need verification, but the combination of shelter, water, and scale at under $3k/acre is compelling.",
       "rank": 7
     },
     {
-      "id": "landwatch_425792009",
-      "headline": "227 acres, spring-fed water, house and paved access",
-      "reason": "Spring-fed year-round water, 227 acres of pasture and timber adjacent to Mark Twain National Forest, an existing house, and paved access via Wayne 421 at $2,973/acre. No HOA. Utility and zoning confirmation is still needed, but the natural water and existing structure make this a strong turnkey candidate.",
+      "id": "landwatch_424737662",
+      "headline": "250 Arkansas acres with creek, spring, and shop",
+      "reason": "Creek and spring together provide dual year-round water sources on 250 acres at $3,498/acre with an existing home and shop reducing startup costs. Rolling Ozark terrain is better suited to pasture than row crops, but diversified homesteading is well-supported. The existing structures mean you can operate from day one.",
       "rank": 8
     },
     {
-      "id": "landwatch_424865268",
-      "headline": "750-acre turnkey ranch, homes and water secured",
-      "reason": "Modern homes, utilities, and Strawberry River access already in place across 750 acres at $3,313/acre with no HOA. Agnos silt loam soil (class 6) rules out row crops but supports grazing and forestry well\u2014this is a livestock-focused homestead, not a market garden. High total price ($2.48M) is the principal barrier.",
+      "id": "landwatch_424747417",
+      "headline": "260 isolated Ozark acres with existing cabin",
+      "reason": "260 acres at $3,651/acre with an existing cabin, off-grid designation, creek-adjacent location, no HOA, and strong isolation in Madison County. The hilly terrain complicates expansion but provides natural privacy. At this price with existing shelter and water proximity, it's a practical starting point for low-overhead self-sufficient living.",
       "rank": 9
     },
     {
       "id": "landwatch_426302076",
-      "headline": "67 acres with spring, creek, well, and septic installed",
-      "reason": "Spring and creek provide dual water sources, and both well and septic are already in place on 67.5 acres at $4,133/acre\u2014removing the two most expensive infrastructure items. Mixed timber and open ground support harvesting and cultivation. Road access and electricity availability are not confirmed and should be checked.",
+      "headline": "Rebel Hollow: spring, creek, well, and septic installed",
+      "reason": "67.5 acres at $4,133/acre with an existing well and septic system already in place\u2014two infrastructure items that typically cost $20\u201340k and require permitting. A spring and creek add water redundancy. Road access quality and electric availability are the remaining unknowns, but the sanitation and water infrastructure already installed make this far cheaper to develop than vacant comparables.",
       "rank": 10
     },
     {
-      "id": "landwatch_425429650",
-      "headline": "60 Ozark acres, pond, pasture, and hardwood timber",
-      "reason": "Established pond, pasture, and hardwood timber on 60 acres with agricultural-suitable soil at $3,750/acre. Year-round water noted, no major restrictions identified. A smaller but genuinely productive parcel; well and septic status should be verified before closing.",
+      "id": "landwatch_423570178",
+      "headline": "140 Arkansas acres with house, barns, and fiber",
+      "reason": "A 3BR/2BA home, barns, fenced pastures, ponds, and fiber internet on 140 acres at $4,642/acre with no HOA in Independence County. Fiber access is rare at this price point and enables remote work income alongside homesteading. Immediate occupancy with functioning agricultural infrastructure removes the most expensive phase of development.",
       "rank": 11
     },
     {
-      "id": "landwatch_422366319",
-      "headline": "53 Arkansas acres with creek, pond, and springs",
-      "reason": "Three distinct water sources\u2014creek, pond, and springs\u2014on 53 acres at $4,000/acre with paved access and off-grid viable designation. Agricultural potential and good Ozarks location. Soil quality, zoning, and on-site utility availability are not confirmed, keeping this ranked lower despite the impressive water profile.",
+      "id": "landwatch_425429652",
+      "headline": "50 Searcy County acres with year-round creek",
+      "reason": "50 acres at $4,250/acre with year-round creek access, rolling pasture, established food plots, harvestable timber, and no HOA in rural Arkansas. Steep terrain will require careful building site selection, and utilities need confirmation, but the water security and mix of open and wooded land support genuine self-sufficiency at a fair entry price.",
       "rank": 12
     }
   ]

@@ -578,6 +578,87 @@ or MO/AR inventory density changes materially.
 
 ## Tech Debt
 
+- [ ] **Tier listings before enrichment — skip duds, lazy-enrich on demand**
+  - Captured 2026-04-28. Today every listing gets the full pass: AI
+    enrichment, geo lookup (5 gov calls), voting tag, image refresh,
+    InvestmentScore. We pay the cost — wall clock + Claude tokens —
+    on listings that may never be viewed (price too high, acreage too
+    small, broken county text, no features).
+  - Triage idea: a fast pre-pass marks each listing with
+    `enrichmentTier: full | basic | skip` based on cheap signals
+    (price band, acres, $/ac vs corpus median, source, has-images,
+    has-county). Only `full` listings run the expensive passes. `basic`
+    gets voting + score only. `skip` gets a thumbnail-only row.
+  - Lazy backfill: pairs naturally with the **Click-to-enrich** entry
+    above — when a user opens a `basic`/`skip` listing's detail page,
+    we run the missing passes on demand. Zero ongoing cost for
+    listings nobody looks at.
+  - Tier definitions (initial guess; tune from save/hide signal):
+    - `full`: ≥1 acre AND price < $1M AND has structured location
+      AND has at least one image OR a strong feature flag
+    - `basic`: has structured location AND price > 0
+    - `skip`: missing both
+  - Files touched: new `scraper/enrichment_tier.py`,
+    `scraper/enrich.py` + `scraper/enrich_geo.py` honor the tier flag.
+  - Don't start until InvestmentScore Phase 2 + visual breakdown UI
+    are landed (this entry's purpose is to capture the inspiration).
+
+- [ ] **Click-to-enrich — user-triggered enrichment as monetization surface**
+  - Captured 2026-04-28 ("i don't want to loose the inspiration"). Idea:
+    let users click a button on any listing (or paste a URL of a new
+    listing they found) to run enrichment on-demand instead of having
+    every listing pre-enriched on our dime.
+  - Cost breakdown (per listing):
+    - Forward-geocode (Census): $0, <1s
+    - Geo enrichment (soil/flood/elev/watershed/proximity): $0, 3-8s
+    - Voting + InvestmentScore + image refresh: $0, <1s each
+    - AI enrichment (Haiku tags/fit/red flags): ~$0.0015 via Anthropic
+      API, $0 via local Claude Max (CLI). 5-10s.
+  - Total: a tenth of a cent in API mode, ~10-15s wall-clock.
+  - Two-tier UX:
+    - **Free / on-demand**: "Enrich" button → geo + voting + score
+      only (no AI). Free to operate; we absorb.
+    - **Premium / "Deep enrichment"**: extends with AI enrichment.
+      $0.0015 we eat from the subscription, or pass through at
+      $0.05/listing if we want a margin.
+  - Architecture: a Supabase Edge Function (`enrich-listing`) holds
+    the Anthropic API key server-side; free tier doesn't need a key.
+    Synchronous response (10-15s) is fine for the UX — show a spinner.
+  - Why this is interesting beyond cost reduction: it turns the
+    listing detail page into a self-service surface. Power users
+    paste URLs from sources we don't scrape, get full enrichment
+    instantly. Acts like an acquisition funnel.
+  - Don't start until InvestmentScore Phase 2 + the visual breakdown
+    UI are landed.
+
+- [ ] **Replace hand-curated tables marked `TODO(ai-enrich)` with live / learned data**
+  - Scoring + macro modules ship with several hand-curated constants
+    that will go stale or are coarser than they should be. Each is
+    flagged with a `TODO(ai-enrich):` comment for grep discoverability:
+    `grep -rn "TODO(ai-enrich)" scraper/`
+  - Current entries (2026-04-28):
+    - `STATE_PROPERTY_TAX_RATE` in `scraper/macro_data.py` — Tax
+      Foundation 2024 estimates, state-level. County variance is
+      large (TX counties 1.4–2.6%); county-level pull would be a real
+      improvement.
+    - `STATE_UNEMPLOYMENT_RATE` in `scraper/macro_data.py` — fallback
+      when BLS LAUS county flat-file 403s. **Unemployment moves
+      fast** — recessions shift state rates 5pp+ in months. Refresh
+      annually at minimum or solve the BLS WAF block to get live
+      county-level data (the helper code is intact and ready).
+    - `_PHASE1_WEIGHTS` / `_PHASE2_WEIGHTS` in
+      `scraper/investment_score.py` — gut-feel composite weights.
+      Two upgrade paths: per-user reorderable weights (see the
+      `feedback_visualize_data` memory rule), or learned weights via
+      `rank_fit`-style training against save/hide/rating signal.
+    - `_RED_FLAG_PENALTIES` in `scraper/investment_score.py` — ad-hoc
+      severity points per flag. Better calibration: Claude pass over
+      a sample of saved-vs-hidden listings paired with their flags
+      would infer which flags actually predict user rejection.
+  - Convention: any future hand-curated table that can be displaced
+    by a live source or a learned fit should carry the same
+    `TODO(ai-enrich):` marker so this list stays grep-able.
+
 - [ ] **Recover the 1,424 listings still without coords (placeholder addresses)**
   - As of 2026-04-28 the corpus has 2,426 listings; only 1,002 have
     lat/lng. The remaining 1,424 (mostly LandWatch + United Country)

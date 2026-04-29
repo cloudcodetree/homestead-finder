@@ -36,6 +36,7 @@ import { useHiddenListings } from '../hooks/useHiddenListings';
 import { useListingRatings } from '../hooks/useListingRatings';
 import { useSavedListings, FreeTierLimitError } from '../hooks/useSavedListings';
 import { formatVsMedian } from '../utils/marketStats';
+import { InvestmentScoreBadge } from './InvestmentScore';
 import { UpgradeModal } from './UpgradeModal';
 import { PropertyThumbnail } from './PropertyThumbnail';
 import {
@@ -257,6 +258,9 @@ export const PropertyCard = ({ property, onClick, isSelected = false }: Property
           </div>
           <div className="flex flex-col items-end gap-1 flex-shrink-0">
             <div className="flex items-center gap-1">
+              {property.investmentScore !== undefined && (
+                <InvestmentScoreBadge score={property.investmentScore} />
+              )}
               {property.homesteadFitScore !== undefined ? (
                 <div
                   className="rounded-full px-2 py-1 text-xs font-bold bg-purple-100 text-purple-700 border border-purple-200"

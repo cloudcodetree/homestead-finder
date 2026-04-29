@@ -12,6 +12,7 @@ import { useAuth } from '../hooks/useAuth';
 import { useHiddenListings } from '../hooks/useHiddenListings';
 import { FreeTierLimitError, useSavedListings } from '../hooks/useSavedListings';
 import { AddToProjectButton } from './AddToProjectButton';
+import { InvestmentScorePanel } from './InvestmentScore';
 import { MarketContext } from './MarketContext';
 import { PrivateNote } from './PrivateNote';
 import { PropertyThumbnail } from './PropertyThumbnail';
@@ -562,6 +563,10 @@ export const PropertyDetail = ({ property, onClose }: PropertyDetailProps) => {
             geo={property.geoEnrichment}
             links={property.externalLinks}
           />
+
+          {/* Investment-grade composite (Value / Land / Risk / Liquidity /
+              Macro). Self-gates on `investmentBreakdown` presence. */}
+          <InvestmentScorePanel property={property} />
 
           {/* Property-as-a-stock — market context (county / state median
               percentile, similar listings). Self-gates on comp depth. */}

@@ -147,6 +147,49 @@ export interface VotingPattern {
 }
 
 /**
+ * One contributing signal feeding an InvestmentScore axis. The frontend
+ * renders the axis bar; signals are surfaced in a tooltip / expander
+ * so the user can see what the model actually looked at.
+ */
+export interface InvestmentSignal {
+  label: string;
+  /** Relative weight inside its axis (0-1). 0 = informational only. */
+  weight: number;
+  /** Signal value as the user should see it — string or number. */
+  value: string | number | null;
+}
+
+/**
+ * One axis of the InvestmentScore composite. Returned as an ordered
+ * LIST (not a dict) by `compute_investment_score` so axis reordering /
+ * reweighting is a one-line state change in the future.
+ */
+export type InvestmentAxisKey =
+  | 'value'
+  | 'land'
+  | 'risk'
+  | 'liquidity'
+  | 'macro';
+
+export interface InvestmentAxis {
+  key: InvestmentAxisKey;
+  label: string;
+  /** 0-100 score for this axis. */
+  score: number;
+  /** Composite weight applied to this axis (0-1). 0 = axis disabled
+   * for this listing because the underlying data isn't ingested yet. */
+  weight: number;
+  signals: InvestmentSignal[];
+}
+
+export interface InvestmentBreakdown {
+  /** 0-100 composite — same value as Property.investmentScore. */
+  score: number;
+  axes: InvestmentAxis[];
+  computedAt: string;
+}
+
+/**
  * URLs to third-party parcel research tools that LandWatch links out to.
  * We don't scrape these (ToS prohibits), but we surface the deep links
  * so users can click through for richer research.
@@ -267,6 +310,19 @@ export interface Property {
    */
   votingPattern?: VotingPattern;
 
+  /**
+   * Composite 0-100 InvestmentScore. Stamped by scraper/investment_score.py.
+   * Sortable + headline number for the property-as-stock view.
+   */
+  investmentScore?: number;
+  /**
+   * Per-axis breakdown of `investmentScore` so the frontend can render
+   * a transparent visualization (horizontal bars / radar) instead of
+   * a black-box number. Axes are returned as an ordered LIST so user
+   * reordering / reweighting is a one-line state change later.
+   */
+  investmentBreakdown?: InvestmentBreakdown;
+
   // ── Structures / improvements (scraper/improvements.py) ─────────
   /**
    * Flags keyed by improvement type when detected in the title+description.
@@ -302,6 +358,7 @@ export interface Property {
 
 export type SortBy =
   | 'dealScore'
+  | 'investmentScore'
   | 'homesteadFit'
   | 'recommended'
   | 'priceAsc'
@@ -314,6 +371,7 @@ export type SortBy =
 
 export const SORT_LABELS: Record<SortBy, string> = {
   dealScore: 'Best Deal',
+  investmentScore: 'Investment Score (AI)',
   homesteadFit: 'Homestead Fit (AI)',
   // Only visible when the user has enough save history for a fitted
   // model (see useRankingWeights.hasEnoughData). The Dashboard filters

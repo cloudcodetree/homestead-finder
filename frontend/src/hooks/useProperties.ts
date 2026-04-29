@@ -176,6 +176,14 @@ export const useProperties = (filters: FilterState) => {
             return a.title.localeCompare(b.title);
           case 'homesteadFit':
             return (b.homesteadFitScore ?? -1) - (a.homesteadFitScore ?? -1);
+          case 'investmentScore':
+            // Tie-break by price asc so two equally-strong fundamentals
+            // surface the cheaper option first — matches the "best
+            // value" instinct most users have when sorting by score.
+            return (
+              (b.investmentScore ?? -1) - (a.investmentScore ?? -1) ||
+              a.price - b.price
+            );
           case 'dealScore':
           default:
             return b.dealScore - a.dealScore;
