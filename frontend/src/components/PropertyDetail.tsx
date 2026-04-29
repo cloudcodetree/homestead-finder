@@ -1,4 +1,4 @@
-import { Brain, Sprout } from 'lucide-react';
+import { Brain, Home } from 'lucide-react';
 import { useState } from 'react';
 import {
   Property,
@@ -448,7 +448,7 @@ export const PropertyDetail = ({ property, onClose }: PropertyDetailProps) => {
                     className="inline-flex items-center gap-1 text-xs font-bold text-purple-700 bg-white border border-purple-200 rounded-full px-2 py-0.5"
                     title={`Homestead Fit: ${property.homesteadFitScore}/100`}
                   >
-                    <Sprout className="w-3 h-3" aria-hidden="true" />
+                    <Home className="w-3.5 h-3.5" aria-hidden="true" />
                     <span className="tabular-nums">
                       {property.homesteadFitScore}
                     </span>
