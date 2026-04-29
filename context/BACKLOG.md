@@ -578,6 +578,42 @@ or MO/AR inventory density changes materially.
 
 ## Tech Debt
 
+- [ ] **Source coverage gaps after the Austin TX pivot**
+  - Captured 2026-04-29 from the first TX scrape run. Of 7 enabled
+    sources, only `united_country` returned non-zero (498 raw → 372
+    after the Austin-5 county filter). The others need investigation
+    before we can call source coverage healthy:
+    - **landwatch**: robots.txt disallows `/texas-land-for-sale/page-N`
+      across every fetch strategy. Confirm vs MO/AR (`/missouri-…`,
+      `/arkansas-…`) which scraped fine — is the disallow state-
+      specific in their robots, or have they added a global rule?
+      Also check whether landwatch.com exposes an alternate URL form
+      (e.g. county-level pages `/travis-county-texas-land-for-sale/`)
+      that ISN'T disallowed.
+    - **mossy_oak / landhub / auction**: silent 0 results. Either the
+      parser regex doesn't match the TX page layout, the search URL
+      doesn't surface inventory for TX, or the page returned but
+      rendered nothing useful. Add a few `log.info` breadcrumbs at
+      "page fetched" / "parser found N rows" / "yielded 0 after
+      filters" so we can isolate which step zeroed.
+    - **blm**: 404 on `https://www.blm.gov/programs/lands-and-realty/
+      land-disposal/land-sales`. Their site reorganized; find the
+      current listing index URL.
+    - **govease**: hit Denton/Grayson/McLennan/Wichita TX counties —
+      none of those are in Austin-5. The county list inside
+      `sources/govease.py` is hardcoded; rewire to honor
+      `config.TARGET_COUNTIES` so the active set follows the pivot.
+    - **lands_of_america** (currently disabled): same CoStar parent
+      as landwatch, likely shares the robots issue but worth a quick
+      check while we're in this area.
+    - **zillow / realtor** (currently disabled, "rate limit issues"):
+      try with the Austin-only county filter — much smaller request
+      volume than statewide MO/AR was, may stay under whatever cap
+      they tripped on.
+  - File this whole thing as one bounded ticket (not 7 separate ones)
+    so we can spike on each source and decide land/skip in one pass.
+  - Quick win: govease county list is a one-line config touch.
+
 - [ ] **Click-through cap for free signups (paid = unlimited)**
   - Captured 2026-04-29 alongside the three-tier access model
     (anonymous / free signup / paid). The current stopgap treats
