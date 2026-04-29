@@ -129,18 +129,16 @@ export const TopPicksCarousel = () => {
 
       {/* Carousel: chevrons live OUTSIDE the scroller (flex siblings,
           not absolute overlays) so they never cover the card photos.
-          They keep a fixed slot whether enabled or not — `invisible`
-          when at the end so the scroller's width doesn't reflow when
-          you reach a boundary. */}
+          Both chevrons are always visible — at a boundary they fade
+          to a dim disabled state instead of hiding entirely, so the
+          control affordance is obvious before the user interacts. */}
       <div className="flex items-center gap-2">
         <button
           type="button"
           onClick={() => scrollByCard(-1)}
           disabled={!canScrollLeft}
           aria-label="Scroll left"
-          className={`flex-shrink-0 rounded-full p-2 border border-gray-200 bg-white shadow-sm text-gray-700 hover:text-gray-900 hover:border-gray-300 transition-opacity ${
-            canScrollLeft ? '' : 'invisible'
-          }`}
+          className="flex-shrink-0 rounded-full p-2 border border-gray-200 bg-white shadow-sm text-gray-700 hover:text-gray-900 hover:border-gray-300 disabled:opacity-30 disabled:cursor-not-allowed transition-opacity"
         >
           <ChevronLeft className="w-5 h-5" />
         </button>
@@ -158,9 +156,7 @@ export const TopPicksCarousel = () => {
           onClick={() => scrollByCard(1)}
           disabled={!canScrollRight}
           aria-label="Scroll right"
-          className={`flex-shrink-0 rounded-full p-2 border border-gray-200 bg-white shadow-sm text-gray-700 hover:text-gray-900 hover:border-gray-300 transition-opacity ${
-            canScrollRight ? '' : 'invisible'
-          }`}
+          className="flex-shrink-0 rounded-full p-2 border border-gray-200 bg-white shadow-sm text-gray-700 hover:text-gray-900 hover:border-gray-300 disabled:opacity-30 disabled:cursor-not-allowed transition-opacity"
         >
           <ChevronRight className="w-5 h-5" />
         </button>
