@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 from datetime import date
 from typing import Any
 
@@ -65,6 +66,37 @@ ALL_SCRAPERS = {
     "blm": BLMScraper,
     "govease": GovEaseScraper,
 }
+
+
+_LEASE_KEYWORDS = re.compile(
+    r"(?i)\b(equity share|hunt club share|annual lease|lease term|/yr\b|per year|"
+    r"per acre per year|/acre/year)\b"
+)
+
+
+def _is_likely_lease_or_share(listing: dict[str, Any]) -> bool:
+    """Return True for listings that look like annual leases, hunt-club
+    shares, or other not-a-sale rows that LandWatch et al. mix into
+    /...for-sale/ URL patterns.
+
+    Two signals — either is sufficient:
+      1. price/acre < $50 on a tract over 1 acre (annual lease rates
+         are typically $5-$50/acre/year; legit rural sales floor is
+         ~$100-500/acre even for unimproved land).
+      2. Lease/share keyword in title or description.
+    """
+    try:
+        price = float(listing.get("price", 0) or 0)
+        acres = float(listing.get("acreage", 0) or 0)
+    except (TypeError, ValueError):
+        price = acres = 0.0
+    if price > 0 and acres > 1 and (price / acres) < 50:
+        return True
+    title = str(listing.get("title", ""))
+    desc = str(listing.get("description", ""))
+    if _LEASE_KEYWORDS.search(title) or _LEASE_KEYWORDS.search(desc):
+        return True
+    return False
 
 
 def load_previously_seen() -> set[str]:
@@ -152,6 +184,22 @@ def run(
             seen_urls.add(url)
             unique.append(p)
     print(f"\n  Deduplicated: {len(all_results)} → {len(unique)} unique listings")
+
+    # Reject lease / equity-share / hunt-club listings. LandWatch and
+    # Land.com lump these into the same /...for-sale/ URL pattern as
+    # real sales, so a price-based heuristic is the cleanest filter:
+    #   - $/acre below $50 with > 1 acre is almost always an annual
+    #     lease rate (genuine rural land has a ~$500/acre floor; even
+    #     remote unimproved tracts rarely go under $100/acre).
+    #   - Title or description containing "equity share", "hunt club
+    #     share", "annual lease", "/yr", "per year" is a fractional
+    #     ownership or rental, not a sale.
+    # Both checks are conservative — false positives would only kill
+    # listings that already look indistinguishable from leases.
+    pre_filter = len(unique)
+    unique = [p for p in unique if not _is_likely_lease_or_share(p)]
+    if pre_filter != len(unique):
+        print(f"  Filtered lease / equity-share rows: {pre_filter} → {len(unique)}")
 
     # Score all listings
     scored = engine.score_all(unique)

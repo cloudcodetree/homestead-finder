@@ -578,6 +578,39 @@ or MO/AR inventory density changes materially.
 
 ## Tech Debt
 
+- [ ] **Recover the 1,424 listings still without coords (placeholder addresses)**
+  - As of 2026-04-28 the corpus has 2,426 listings; only 1,002 have
+    lat/lng. The remaining 1,424 (mostly LandWatch + United Country)
+    have addresses with placeholder street numbers like `000 Old Dolph
+    Road`, `TBD Big Barren Creek RD`, or just a road name — Census's
+    TIGER street-range geocoder (free, what `forward_geo.py` uses) can't
+    match those. The ZIP-only fallback also failed because Census's
+    batch endpoint requires a non-empty street.
+  - Without coords these listings are locked out of the geo-enrichment
+    cascade (soil / flood / elevation / watershed / proximity) — that's
+    why "fully enriched" is 894/2,426 (37%) instead of ~95%.
+  - Options to evaluate (rough cost / payoff):
+    - **City-centroid fallback via a third-party** (Nominatim
+      self-hosted, Pelias, or a paid tier of Mapbox/Google) — would
+      lift coverage to ~95% but introduces a paid dep or a self-hosted
+      service. ~half-day to wire up.
+    - **Parcel-detail page scraping** — LandWatch's detail page renders
+      a map widget with the actual coords in JSON state. We already do
+      `landwatch_images.py`-style page fetches; adding a coord-extract
+      pass is the same shape. Lifts coverage for the LandWatch ~946
+      rows specifically. ~half-day.
+    - **City-name geocoding via a small bundled GeoNames JSON** — use
+      the `<city>, <state>` pair (which we already have from the
+      address parser) to look up city-centroid coords offline. Coarse
+      but free, no runtime dep. ~2 hrs.
+  - Files: [scraper/enrichment/](scraper/enrichment/),
+    [/tmp/forward_geo.py](/tmp/forward_geo.py) one-shot script kept
+    locally; promote to `scraper/forward_geo.py` if we resume this work.
+  - Non-urgent — current 41% coords / 37% fully-enriched coverage is
+    enough to power the AI Analysis + Market Context panels for the
+    listings users are most likely to engage with (the ones with real
+    addresses tend to be richer listings overall).
+
 - [ ] **Tune Overpass (OpenStreetMap) rate-limit handling in proximity enrichment**
   - Current behavior: 176-listing backfill at `concurrency=2` still 429s on
     a meaningful fraction of `lookup_proximity` calls. The code handles
