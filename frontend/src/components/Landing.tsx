@@ -64,12 +64,12 @@ export const Landing = () => {
                 >
                   Sign in
                 </button>
-                <button
-                  onClick={() => void loginWithGoogle()}
+                <Link
+                  to="/home"
                   className="bg-green-600 hover:bg-green-700 text-white text-sm font-semibold px-3.5 py-1.5 rounded-lg shadow-sm"
                 >
                   Try it out →
-                </button>
+                </Link>
               </>
             )}
           </div>
