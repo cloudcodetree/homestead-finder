@@ -127,38 +127,43 @@ export const TopPicksCarousel = () => {
         </p>
       </div>
 
-      {/* Carousel: scroller in the middle, chevrons absolutely-
-          positioned to the left + right edges and vertically
-          centered. Chevrons disable / fade out when there's nothing
-          to scroll in that direction. */}
-      <div className="relative">
+      {/* Carousel: chevrons live OUTSIDE the scroller (flex siblings,
+          not absolute overlays) so they never cover the card photos.
+          They keep a fixed slot whether enabled or not — `invisible`
+          when at the end so the scroller's width doesn't reflow when
+          you reach a boundary. */}
+      <div className="flex items-center gap-2">
         <button
           type="button"
           onClick={() => scrollByCard(-1)}
           disabled={!canScrollLeft}
           aria-label="Scroll left"
-          className="absolute left-0 top-1/2 -translate-y-1/2 z-10 rounded-full p-2 border border-gray-200 bg-white shadow-md text-gray-700 hover:text-gray-900 hover:border-gray-300 disabled:opacity-0 disabled:cursor-default transition-opacity"
+          className={`flex-shrink-0 rounded-full p-2 border border-gray-200 bg-white shadow-sm text-gray-700 hover:text-gray-900 hover:border-gray-300 transition-opacity ${
+            canScrollLeft ? '' : 'invisible'
+          }`}
         >
           <ChevronLeft className="w-5 h-5" />
-        </button>
-        <button
-          type="button"
-          onClick={() => scrollByCard(1)}
-          disabled={!canScrollRight}
-          aria-label="Scroll right"
-          className="absolute right-0 top-1/2 -translate-y-1/2 z-10 rounded-full p-2 border border-gray-200 bg-white shadow-md text-gray-700 hover:text-gray-900 hover:border-gray-300 disabled:opacity-0 disabled:cursor-default transition-opacity"
-        >
-          <ChevronRight className="w-5 h-5" />
         </button>
         <div
           ref={scrollerRef}
           onScroll={updateScrollState}
-          className="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-2 px-10 scrollbar-thin scrollbar-thumb-gray-300"
+          className="flex-1 min-w-0 flex gap-4 overflow-x-auto snap-x snap-mandatory pb-2 scrollbar-thin scrollbar-thumb-gray-300"
         >
           {cards.map((c) => (
             <PickCard key={c.pick.id} pick={c.pick} property={c.property} />
           ))}
         </div>
+        <button
+          type="button"
+          onClick={() => scrollByCard(1)}
+          disabled={!canScrollRight}
+          aria-label="Scroll right"
+          className={`flex-shrink-0 rounded-full p-2 border border-gray-200 bg-white shadow-sm text-gray-700 hover:text-gray-900 hover:border-gray-300 transition-opacity ${
+            canScrollRight ? '' : 'invisible'
+          }`}
+        >
+          <ChevronRight className="w-5 h-5" />
+        </button>
       </div>
     </section>
   );
