@@ -35,7 +35,7 @@ import { getCountyStat, useCountyMedians } from '../hooks/useCountyMedians';
 import { useHiddenListings } from '../hooks/useHiddenListings';
 import { useListingRatings } from '../hooks/useListingRatings';
 import { useSavedListings, FreeTierLimitError } from '../hooks/useSavedListings';
-import { Flame, Home } from 'lucide-react';
+import { Home, Search } from 'lucide-react';
 import { formatVsMedian } from '../utils/marketStats';
 import { InvestmentScoreBadge } from './InvestmentScore';
 import { UpgradeModal } from './UpgradeModal';
@@ -261,12 +261,10 @@ export const PropertyCard = ({ property, onClick, isSelected = false }: Property
             <div className="flex items-center gap-1">
               {/* Three score pills, each with its own icon so the
                   meaning is obvious at a glance. Sized w-3.5 h-3.5
-                  (14 px) — at the previous w-3 (12 px) the Sprout
-                  read as a checkmark and Sparkles as a leaf. House +
-                  Flame have stronger silhouettes that hold up small.
-                    🟢 ring gauge → InvestmentScore (ring IS the icon)
-                    🏠 Home       → Homestead Fit
-                    🔥 Flame      → Deal Score */}
+                  (14 px) — at w-3 (12 px) the silhouettes blur.
+                    🟢 ring gauge      → InvestmentScore (ring IS the icon)
+                    🏠 Home (house)    → Homestead Fit
+                    🔍 Search (magnifier) → Deal Score (looking for value) */}
               {property.investmentScore !== undefined && (
                 <InvestmentScoreBadge score={property.investmentScore} />
               )}
@@ -290,7 +288,7 @@ export const PropertyCard = ({ property, onClick, isSelected = false }: Property
                 className={`inline-flex items-center gap-1 rounded-full px-2 py-1 text-xs font-bold ${scoreColor}`}
                 title={`Deal Score: ${property.dealScore}/100`}
               >
-                <Flame className="w-3.5 h-3.5" aria-hidden="true" />
+                <Search className="w-3.5 h-3.5" aria-hidden="true" />
                 <span className="tabular-nums">{property.dealScore}</span>
               </div>
             </div>
