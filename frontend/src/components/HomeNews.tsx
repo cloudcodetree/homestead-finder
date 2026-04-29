@@ -121,14 +121,14 @@ export const AlertsStrip = () => {
   const { searches, loading } = useSavedSearches();
   if (loading || searches.length === 0) return null;
   return (
-    <section>
+    <section className="rounded-xl border border-gray-200 bg-white p-4">
       <SectionHeader icon={Bell} title="Your saved searches" />
       <ul className="space-y-1.5">
         {searches.slice(0, 3).map((s) => (
           <li key={s.id}>
             <Link
               to={`/saved-searches`}
-              className="flex items-center gap-2 rounded-lg border border-gray-200 bg-white px-3 py-2 hover:border-emerald-300 hover:bg-emerald-50/40 transition-colors"
+              className="flex items-center gap-2 rounded-lg border border-gray-200 bg-gray-50 px-3 py-2 hover:border-emerald-300 hover:bg-emerald-50/40 transition-colors"
             >
               <Bookmark className="w-3.5 h-3.5 text-gray-400" aria-hidden="true" />
               <span className="text-sm font-medium text-gray-900 truncate">
@@ -204,10 +204,10 @@ export const MarketNewsStrip = () => {
   const items = useMarketNews();
   if (items.length === 0) return null;
   return (
-    <section>
+    <section className="rounded-xl border border-gray-200 bg-amber-50/30 p-4">
       <SectionHeader icon={Newspaper} title="Market news" />
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {items.slice(0, 6).map((item) => (
+      <div className="grid gap-4 sm:grid-cols-2">
+        {items.slice(0, 4).map((item) => (
           <NewspaperCard key={item.id} item={item} />
         ))}
       </div>
@@ -233,7 +233,7 @@ export const SiteUpdatesStrip = () => {
   const items = useSiteUpdates();
   if (items.length === 0) return null;
   return (
-    <section>
+    <section className="rounded-xl border border-gray-200 bg-sky-50/40 p-4">
       <SectionHeader icon={Megaphone} title="What's new in Homestead Finder" />
       <div className="grid gap-2 sm:grid-cols-2">
         {items.slice(0, 4).map((item) => (

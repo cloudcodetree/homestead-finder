@@ -105,58 +105,60 @@ export const TopPicksCarousel = () => {
 
   return (
     <section
-      className="relative"
+      className="rounded-xl border border-gray-200 bg-emerald-50/30 p-4"
       aria-labelledby="top-picks-heading"
     >
-      <div className="flex items-end justify-between gap-2 mb-3">
-        <div>
-          <h3
-            id="top-picks-heading"
-            className="text-base font-semibold text-gray-900"
+      <div className="mb-3">
+        <h3
+          id="top-picks-heading"
+          className="text-base font-semibold text-gray-900"
+        >
+          Top Picks
+        </h3>
+        <p className="text-xs text-gray-500 mt-0.5">
+          {curation?.pickCount ?? cards.length} listings hand-picked by{' '}
+          Claude {curation?.model ?? 'sonnet'} from the full corpus.{' '}
+          <Link
+            to="/browse?view=picks"
+            className="text-emerald-700 hover:text-emerald-900 font-medium"
           >
-            Top Picks
-          </h3>
-          <p className="text-xs text-gray-500 mt-0.5">
-            {curation?.pickCount ?? cards.length} listings hand-picked by{' '}
-            Claude {curation?.model ?? 'sonnet'} from the full corpus.{' '}
-            <Link
-              to="/browse?view=picks"
-              className="text-emerald-700 hover:text-emerald-900 font-medium"
-            >
-              See all →
-            </Link>
-          </p>
-        </div>
-        <div className="flex gap-1.5">
-          <button
-            type="button"
-            onClick={() => scrollByCard(-1)}
-            disabled={!canScrollLeft}
-            aria-label="Scroll left"
-            className="rounded-full p-1.5 border border-gray-200 bg-white text-gray-600 hover:text-gray-900 hover:border-gray-300 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
-          >
-            <ChevronLeft className="w-4 h-4" />
-          </button>
-          <button
-            type="button"
-            onClick={() => scrollByCard(1)}
-            disabled={!canScrollRight}
-            aria-label="Scroll right"
-            className="rounded-full p-1.5 border border-gray-200 bg-white text-gray-600 hover:text-gray-900 hover:border-gray-300 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
-          >
-            <ChevronRight className="w-4 h-4" />
-          </button>
-        </div>
+            See all →
+          </Link>
+        </p>
       </div>
 
-      <div
-        ref={scrollerRef}
-        onScroll={updateScrollState}
-        className="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-2 -mx-1 px-1 scrollbar-thin scrollbar-thumb-gray-300"
-      >
-        {cards.map((c) => (
-          <PickCard key={c.pick.id} pick={c.pick} property={c.property} />
-        ))}
+      {/* Carousel: scroller in the middle, chevrons absolutely-
+          positioned to the left + right edges and vertically
+          centered. Chevrons disable / fade out when there's nothing
+          to scroll in that direction. */}
+      <div className="relative">
+        <button
+          type="button"
+          onClick={() => scrollByCard(-1)}
+          disabled={!canScrollLeft}
+          aria-label="Scroll left"
+          className="absolute left-0 top-1/2 -translate-y-1/2 z-10 rounded-full p-2 border border-gray-200 bg-white shadow-md text-gray-700 hover:text-gray-900 hover:border-gray-300 disabled:opacity-0 disabled:cursor-default transition-opacity"
+        >
+          <ChevronLeft className="w-5 h-5" />
+        </button>
+        <button
+          type="button"
+          onClick={() => scrollByCard(1)}
+          disabled={!canScrollRight}
+          aria-label="Scroll right"
+          className="absolute right-0 top-1/2 -translate-y-1/2 z-10 rounded-full p-2 border border-gray-200 bg-white shadow-md text-gray-700 hover:text-gray-900 hover:border-gray-300 disabled:opacity-0 disabled:cursor-default transition-opacity"
+        >
+          <ChevronRight className="w-5 h-5" />
+        </button>
+        <div
+          ref={scrollerRef}
+          onScroll={updateScrollState}
+          className="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-2 px-10 scrollbar-thin scrollbar-thumb-gray-300"
+        >
+          {cards.map((c) => (
+            <PickCard key={c.pick.id} pick={c.pick} property={c.property} />
+          ))}
+        </div>
       </div>
     </section>
   );
