@@ -10,6 +10,12 @@ export interface NewsItem {
   /** Visual treatment hint — `highlight` gets a green accent strip;
    * `info` is the default neutral card. */
   tone?: 'info' | 'highlight';
+  /** Optional hero image URL for newspaper-style market-news cards.
+   * Lookup keyword for our generic-photo bank. The card resolves
+   * `keyword` against `lib/genericPhotos.ts` so the JSON stays
+   * self-describing and we can swap photo sources later without
+   * editing every news entry. */
+  imageKeyword?: 'farm' | 'forest' | 'creek' | 'cabin' | 'pasture' | 'ozarks';
 }
 
 interface NewsBundle {

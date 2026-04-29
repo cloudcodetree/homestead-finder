@@ -1,4 +1,7 @@
 import { ExternalResearchLinks, GeoEnrichment, PropertyLocation } from '../types/property';
+import { Lock } from 'lucide-react';
+import { useAccessTier } from '../hooks/useAccessTier';
+import { useAuth } from '../hooks/useAuth';
 import { safeUrl } from '../utils/safeUrl';
 
 interface ResearchPanelProps {
@@ -266,6 +269,8 @@ export const ResearchPanel = ({ location, geo, links }: ResearchPanelProps) => {
   const lat = location.lat || geo?.lat;
   const lng = location.lng || geo?.lng;
   const hasCoord = lat != null && lng != null && lat !== 0 && lng !== 0;
+  const { canSeeSourceLinks } = useAccessTier();
+  const { loginWithGoogle } = useAuth();
 
   if (!hasCoord && !geo && !links) {
     return (
@@ -337,26 +342,48 @@ export const ResearchPanel = ({ location, geo, links }: ResearchPanelProps) => {
       )}
       {geo?.proximity && <ProximityBlock proximity={geo.proximity} />}
 
-      {/* External research links */}
+      {/* External research links — gated for anonymous viewers.
+          The deep-link URLs include the listing's lat/lng, which by
+          itself isn't reverse-searchable on the source site, but
+          combined with the title visible above could narrow the
+          listing down on AcreValue / FEMA / etc. Locking these
+          behind signup keeps the IP-leak surface tight and gives
+          users a clear reason to create an account. */}
       {merged.length > 0 && (
         <div>
           <h4 className="text-xs font-semibold text-sky-800 mb-2 uppercase tracking-wide">
             Explore this parcel
           </h4>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-            {merged.map((link) => (
-              <a
-                key={link.url}
-                href={safeUrl(link.url)}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="block bg-white border border-sky-100 hover:border-sky-300 rounded px-3 py-2 transition-colors"
-              >
-                <div className="text-sm font-medium text-sky-800">{link.label} →</div>
-                <div className="text-[11px] text-gray-500">{link.description}</div>
-              </a>
-            ))}
-          </div>
+          {canSeeSourceLinks ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+              {merged.map((link) => (
+                <a
+                  key={link.url}
+                  href={safeUrl(link.url)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block bg-white border border-sky-100 hover:border-sky-300 rounded px-3 py-2 transition-colors"
+                >
+                  <div className="text-sm font-medium text-sky-800">
+                    {link.label} →
+                  </div>
+                  <div className="text-[11px] text-gray-500">
+                    {link.description}
+                  </div>
+                </a>
+              ))}
+            </div>
+          ) : (
+            <button
+              type="button"
+              onClick={() => void loginWithGoogle()}
+              className="flex items-center gap-2 w-full rounded border border-emerald-200 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 text-sm font-medium px-3 py-2 transition-colors"
+            >
+              <Lock className="w-3.5 h-3.5" aria-hidden="true" />
+              Sign up free to unlock {merged.length} external research
+              {merged.length === 1 ? ' tool' : ' tools'}
+            </button>
+          )}
         </div>
       )}
 

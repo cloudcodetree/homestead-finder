@@ -1,56 +1,41 @@
 import { Bell, Bookmark, Megaphone, Newspaper, Sparkles } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
-import { useMarketNews, useSiteUpdates, type NewsItem } from '../hooks/useMarketNews';
+import {
+  useMarketNews,
+  useSiteUpdates,
+  type NewsItem,
+} from '../hooks/useMarketNews';
 import { useSavedListings } from '../hooks/useSavedListings';
 import { useSavedSearches } from '../hooks/useSavedSearches';
+import { photoUrl } from '../lib/genericPhotos';
 
 /**
- * "News" section above the Top Picks carousel on /home. Composed of
- * four optional strips so each one can self-gate on whether it has
- * anything to say:
+ * "News" surface above and below the Top Picks carousel on /home.
+ * Composed of independent strips so each one can self-gate on
+ * whether it has anything to say. Layout (top → bottom):
  *
- *   1. WelcomeStrip     — generic greeting for cold-start users;
- *                         evolves into a personalized "you've saved
- *                         X / rated Y" line once there's signal.
- *   2. AlertsStrip      — saved-search summaries (only renders when
- *                         the user has at least one saved search).
- *   3. MarketNewsStrip  — operator-curated `data/market_news.json`,
- *                         editorial content covering corpus changes
- *                         and county trends.
- *   4. SiteUpdatesStrip — operator-curated `data/site_updates.json`,
- *                         changelog-style entries for new features.
+ *   1. WelcomeStrip    — generic greeting → personalized after the
+ *                        user has saved at least one listing.
+ *   2. AlertsStrip     — saved-search summaries (renders only when
+ *                        the user has at least one saved search).
+ *   3. (Top Picks carousel slots in here, rendered by HomeFeed.)
+ *   4. MarketNewsStrip — operator-curated `data/market_news.json`,
+ *                        rendered as a 2-3 col newspaper grid with
+ *                        generic hero photos so it reads like a feed
+ *                        rather than a status page.
+ *   5. SiteUpdatesStrip — operator-curated `data/site_updates.json`,
+ *                        changelog-style entries.
  *
- * Each strip ships its own header + icon so the user can scan
- * vertically without reading.
+ * Strips render in their own slots so HomeFeed can interleave the
+ * picks carousel between AlertsStrip and MarketNewsStrip without
+ * this component knowing about it.
  */
 
 const formatDate = (iso: string): string => {
   const d = new Date(iso);
   if (Number.isNaN(d.getTime())) return iso;
   return d.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
-};
-
-const NewsCard = ({ item }: { item: NewsItem }) => {
-  const accent =
-    item.tone === 'highlight'
-      ? 'border-l-emerald-500'
-      : 'border-l-gray-200';
-  return (
-    <article
-      className={`rounded-lg border border-gray-200 bg-white p-3 border-l-4 ${accent}`}
-    >
-      <header className="flex items-baseline justify-between gap-2 mb-1">
-        <h4 className="text-sm font-semibold text-gray-900 truncate">
-          {item.title}
-        </h4>
-        <span className="text-[10px] text-gray-400 tabular-nums flex-shrink-0">
-          {formatDate(item.publishedAt)}
-        </span>
-      </header>
-      <p className="text-xs text-gray-600 leading-relaxed">{item.body}</p>
-    </article>
-  );
 };
 
 const SectionHeader = ({
@@ -68,7 +53,7 @@ const SectionHeader = ({
   </div>
 );
 
-const WelcomeStrip = () => {
+export const WelcomeStrip = () => {
   const { user } = useAuth();
   const { savedIds } = useSavedListings();
   const savedCount = savedIds.size;
@@ -132,7 +117,7 @@ const WelcomeStrip = () => {
   );
 };
 
-const AlertsStrip = () => {
+export const AlertsStrip = () => {
   const { searches, loading } = useSavedSearches();
   if (loading || searches.length === 0) return null;
   return (
@@ -168,41 +153,93 @@ const AlertsStrip = () => {
   );
 };
 
-const MarketNewsStrip = () => {
+/**
+ * Newspaper-style market-news card. Hero photo on top (generic stock
+ * keyed by `imageKeyword`), date pill, title, lede paragraph. Sized
+ * to fit a 2-col grid on tablet, 3-col on desktop.
+ */
+const NewspaperCard = ({ item }: { item: NewsItem }) => {
+  const photo = photoUrl(item.imageKeyword);
+  const accent =
+    item.tone === 'highlight'
+      ? 'border-emerald-300 ring-1 ring-emerald-100'
+      : 'border-gray-200';
+  return (
+    <article
+      className={`rounded-xl border ${accent} bg-white overflow-hidden flex flex-col`}
+    >
+      {photo ? (
+        <div className="relative aspect-[16/9] bg-gray-100 overflow-hidden">
+          <img
+            src={photo}
+            alt=""
+            loading="lazy"
+            decoding="async"
+            className="w-full h-full object-cover"
+          />
+          <span className="absolute top-2 left-2 inline-flex items-center text-[10px] font-bold uppercase tracking-wide text-white bg-black/55 backdrop-blur-sm rounded px-1.5 py-0.5">
+            {formatDate(item.publishedAt)}
+          </span>
+        </div>
+      ) : (
+        <div className="flex items-center justify-between px-3 pt-3">
+          <span className="text-[10px] font-bold uppercase tracking-wide text-gray-400">
+            {formatDate(item.publishedAt)}
+          </span>
+        </div>
+      )}
+      <div className="p-3 flex flex-col flex-1">
+        <h4 className="text-sm font-semibold text-gray-900 leading-snug mb-1.5">
+          {item.title}
+        </h4>
+        <p className="text-xs text-gray-600 leading-relaxed line-clamp-5">
+          {item.body}
+        </p>
+      </div>
+    </article>
+  );
+};
+
+export const MarketNewsStrip = () => {
   const items = useMarketNews();
   if (items.length === 0) return null;
   return (
     <section>
       <SectionHeader icon={Newspaper} title="Market news" />
-      <div className="grid gap-2">
-        {items.slice(0, 3).map((item) => (
-          <NewsCard key={item.id} item={item} />
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {items.slice(0, 6).map((item) => (
+          <NewspaperCard key={item.id} item={item} />
         ))}
       </div>
     </section>
   );
 };
 
-const SiteUpdatesStrip = () => {
+/** Compact card for the changelog-style site-updates strip — no hero
+ * photo (these are app updates, not editorial content). */
+const UpdateCard = ({ item }: { item: NewsItem }) => (
+  <article className="rounded-lg border border-gray-200 bg-white p-3 border-l-4 border-l-gray-200">
+    <header className="flex items-baseline justify-between gap-2 mb-1">
+      <h4 className="text-sm font-semibold text-gray-900">{item.title}</h4>
+      <span className="text-[10px] text-gray-400 tabular-nums flex-shrink-0">
+        {formatDate(item.publishedAt)}
+      </span>
+    </header>
+    <p className="text-xs text-gray-600 leading-relaxed">{item.body}</p>
+  </article>
+);
+
+export const SiteUpdatesStrip = () => {
   const items = useSiteUpdates();
   if (items.length === 0) return null;
   return (
     <section>
       <SectionHeader icon={Megaphone} title="What's new in Homestead Finder" />
-      <div className="grid gap-2">
-        {items.slice(0, 2).map((item) => (
-          <NewsCard key={item.id} item={item} />
+      <div className="grid gap-2 sm:grid-cols-2">
+        {items.slice(0, 4).map((item) => (
+          <UpdateCard key={item.id} item={item} />
         ))}
       </div>
     </section>
   );
 };
-
-export const HomeNews = () => (
-  <div className="space-y-4">
-    <WelcomeStrip />
-    <AlertsStrip />
-    <MarketNewsStrip />
-    <SiteUpdatesStrip />
-  </div>
-);

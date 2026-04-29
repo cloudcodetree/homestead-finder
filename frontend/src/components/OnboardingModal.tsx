@@ -1,9 +1,25 @@
 import { useMemo, useState } from 'react';
+import { api } from '../lib/api';
 import { FEATURE_LABELS } from '../types/property';
 import type { PropertyFeature } from '../types/property';
 import { DEFAULT_PREFERENCES, UserPreferences } from '../types/preferences';
 import { useAuth } from '../hooks/useAuth';
 import { useUserPreferences } from '../hooks/useUserPreferences';
+
+/**
+ * States we currently scrape. Onboarding requires the user to pick at
+ * least one before they can save — without a target area we have
+ * nothing meaningful to filter the corpus by, and the default
+ * Project we auto-create needs an area to bind to.
+ *
+ * TODO(ai-enrich): replace with a dynamic list keyed off the actual
+ * states present in `data/listings.json` so this stays in sync as
+ * the scraper expands.
+ */
+const SUPPORTED_STATES: Array<{ code: string; label: string }> = [
+  { code: 'AR', label: 'Arkansas' },
+  { code: 'MO', label: 'Missouri' },
+];
 
 /**
  * First-time-user preference capture. Triggered once per user when
@@ -114,11 +130,50 @@ export const OnboardingModal = ({ forceOpen = false, onClose, asPage = false }: 
       return { ...d, mustHaveFeatures: Array.from(cur) };
     });
 
+  const toggleState = (code: string) =>
+    setDraft((d) => {
+      const cur = new Set(d.targetStates ?? []);
+      if (cur.has(code)) cur.delete(code);
+      else cur.add(code);
+      return { ...d, targetStates: Array.from(cur) };
+    });
+
+  /** First-time onboarding requires at least one target state. We
+   * don't gate the settings-mode flow (forceOpen) on it because the
+   * user may have already completed onboarding and is just editing
+   * other fields. */
+  const targetStates = draft.targetStates ?? [];
+  const requireState = !forceOpen;
+  const stateGateOk = !requireState || targetStates.length >= 1;
+
+  /** Spin up a default Project on first onboarding completion so the
+   * user has a workspace ready. Idempotent — no-op when the user
+   * already has at least one project (e.g. they re-completed the
+   * onboarding flow from the settings menu). Quietly tolerates
+   * failures so a transient network issue can't block save. */
+  const ensureDefaultProject = async () => {
+    try {
+      const existing = await api.projects.list();
+      if (existing.length > 0) return;
+      const states = (draft.targetStates ?? []).join(' / ');
+      const name = states ? `My ${states} search` : 'My homestead search';
+      await api.projects.create(name, null);
+    } catch {
+      // Non-fatal — onboarding can finish without a project; the
+      // user can create one manually from /projects.
+    }
+  };
+
   const submit = async (complete: boolean) => {
+    if (complete && requireState && !stateGateOk) {
+      setError('Pick at least one state to continue.');
+      return;
+    }
     setError(null);
     setSaving(true);
     try {
       await save(draft, { complete });
+      if (complete) await ensureDefaultProject();
       if ((forceOpen || asPage) && onClose) onClose();
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Could not save');
@@ -146,6 +201,39 @@ export const OnboardingModal = ({ forceOpen = false, onClose, asPage = false }: 
         </div>
 
         <div className="p-6 space-y-6">
+          {/* Target states — REQUIRED. Every other section in this
+              flow is optional, but we need at least one state pinned
+              before the corpus filter has anything meaningful to do
+              and before we can name the auto-created default Project. */}
+          <section>
+            <h3 className="text-sm font-semibold text-gray-800 mb-2">
+              Where are you looking? <span className="text-red-600">*</span>
+            </h3>
+            <p className="text-xs text-gray-500 mb-2">
+              Pick at least one. We currently scrape these states and
+              add more as we expand.
+            </p>
+            <div className="flex flex-wrap gap-2">
+              {SUPPORTED_STATES.map((s) => {
+                const on = targetStates.includes(s.code);
+                return (
+                  <button
+                    key={s.code}
+                    type="button"
+                    onClick={() => toggleState(s.code)}
+                    className={`text-sm rounded-lg border px-3 py-1.5 font-medium transition-colors ${
+                      on
+                        ? 'bg-green-600 border-green-700 text-white'
+                        : 'bg-white border-gray-200 text-gray-700 hover:bg-gray-50'
+                    }`}
+                  >
+                    {s.label}
+                  </button>
+                );
+              })}
+            </div>
+          </section>
+
           {/* Budget */}
           <section>
             <h3 className="text-sm font-semibold text-gray-800 mb-2">
@@ -297,22 +385,34 @@ export const OnboardingModal = ({ forceOpen = false, onClose, asPage = false }: 
         </div>
 
         <div className="px-6 py-4 border-t border-gray-100 flex items-center justify-between gap-3 bg-gray-50 rounded-b-xl">
-          <button
-            type="button"
-            onClick={() => {
-              if ((forceOpen || asPage) && onClose) onClose();
-              else void submit(true);
-            }}
-            disabled={saving}
-            className="text-sm text-gray-500 hover:text-gray-900 underline disabled:opacity-50"
-          >
-            {forceOpen ? 'Cancel' : asPage ? 'Skip' : 'Skip for now'}
-          </button>
+          {/* Cancel exists in settings/page mode (user already
+              completed onboarding once), but first-time-use no
+              longer offers a Skip — onboarding is now required so
+              we have a target state pinned and a default Project
+              created. The Save button enables as soon as one state
+              is picked, so it's still a 5-second flow. */}
+          {(forceOpen || asPage) ? (
+            <button
+              type="button"
+              onClick={() => {
+                if (onClose) onClose();
+              }}
+              disabled={saving}
+              className="text-sm text-gray-500 hover:text-gray-900 underline disabled:opacity-50"
+            >
+              Cancel
+            </button>
+          ) : (
+            <span />
+          )}
           <button
             type="button"
             onClick={() => void submit(true)}
-            disabled={saving}
-            className="bg-green-600 hover:bg-green-700 disabled:bg-gray-300 text-white font-medium px-4 py-2 rounded-lg text-sm"
+            disabled={saving || !stateGateOk}
+            title={
+              !stateGateOk ? 'Pick at least one state to continue' : undefined
+            }
+            className="bg-green-600 hover:bg-green-700 disabled:bg-gray-300 disabled:cursor-not-allowed text-white font-medium px-4 py-2 rounded-lg text-sm"
           >
             {saving ? 'Saving…' : forceOpen ? 'Save changes' : 'Save & continue'}
           </button>

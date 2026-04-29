@@ -115,16 +115,18 @@ export const AppShell = () => {
     setMobileOpen(false);
   }, [location.pathname]);
 
-  // Auth gate — anonymous users get bounced to the marketing page
-  // for in-shell routes that require an account. A small allow-list
-  // exempts publicly-shareable surfaces so links to e.g. `/home` or a
-  // specific `/p/<id>` work for non-logged-in recipients without
-  // forcing them through the landing funnel.
+  // Three-tier access model (2026-04-29):
+  //   anonymous  → can browse /home, /browse, /p/:id, /upgrade with
+  //                IP-revealing fields hidden (source URL, external
+  //                research links, "View Full Listing"). Bounced to
+  //                /landing for any account-only route below.
+  //   signed-in  → unrestricted today (paid is unmodeled until
+  //                billing ships — see useSubscription).
   //
-  // /home: shareable preview of the personalized feed; renders the
-  //        cold-start "top deals" path for anonymous viewers.
-  // /p/:id: shareable listing deep-links — must resolve for anyone.
-  // /upgrade: pricing CTA reachable without an account.
+  // The allow-list keeps shareable preview links working without
+  // leaking enough metadata to reverse-search the source listing
+  // from us. The actual link gating lives in PropertyDetail and the
+  // useAccessTier hook, not here.
   //
   // While auth is loading we render nothing rather than briefly
   // flashing the shell's chrome.
@@ -132,6 +134,7 @@ export const AppShell = () => {
   const path = location.pathname;
   const isPublicInShell =
     path === '/home' ||
+    path === '/browse' ||
     path.startsWith('/p/') ||
     path === '/upgrade';
   if (configured && !user && !isPublicInShell) {

@@ -1,7 +1,12 @@
 import { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import { UpgradeModal } from './UpgradeModal';
+
+/** Stash key for the post-OAuth redirect target. The Supabase redirect
+ * URL is configured globally, so we can't tunnel `next` through the
+ * OAuth roundtrip — we save it here and pop it on signed-in landing. */
+const NEXT_AFTER_AUTH_KEY = 'hf:auth-next';
 
 /**
  * Public landing page at `/landing`. Doubles as the marketing front
@@ -23,14 +28,40 @@ export const Landing = () => {
   const { user, loginWithGoogle } = useAuth();
   const [showPricing, setShowPricing] = useState(false);
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  // `?next=` is set by AppShell's auth gate when an anonymous user
+  // tries to deep-link into a protected route. Show a "sign up to
+  // access" banner and stash the path so OAuth redirects them back.
+  const nextPath = searchParams.get('next');
 
-  // Auto-bounce signed-in visitors into the shell. Without this, a
-  // user who hits /landing while already authenticated (or completes
-  // OAuth and lands back here) sees Landing's own "Sign in" header
-  // instead of the AppShell — the chevron/avatar lives in AppShell,
-  // so they perceive the sign-in as not having taken effect.
+  const startSignup = () => {
+    if (nextPath) {
+      try {
+        sessionStorage.setItem(NEXT_AFTER_AUTH_KEY, nextPath);
+      } catch {
+        // ignore — non-critical, we'll just send them to /home
+      }
+    }
+    void loginWithGoogle();
+  };
+
+  // Auto-bounce signed-in visitors into the shell. Honors a
+  // previously-stashed `next` so a deep-link click that triggered
+  // the auth flow lands the user where they were aiming. Falls back
+  // to /home for the cold-start case.
   useEffect(() => {
-    if (user) navigate('/home', { replace: true });
+    if (!user) return;
+    let target = '/home';
+    try {
+      const stashed = sessionStorage.getItem(NEXT_AFTER_AUTH_KEY);
+      if (stashed && stashed.startsWith('/') && !stashed.startsWith('//')) {
+        target = stashed;
+      }
+      sessionStorage.removeItem(NEXT_AFTER_AUTH_KEY);
+    } catch {
+      // ignore — fall through to /home
+    }
+    navigate(target, { replace: true });
   }, [user, navigate]);
 
   return (
@@ -59,7 +90,7 @@ export const Landing = () => {
             ) : (
               <>
                 <button
-                  onClick={() => void loginWithGoogle()}
+                  onClick={startSignup}
                   className="text-sm text-gray-600 hover:text-gray-900"
                 >
                   Sign in

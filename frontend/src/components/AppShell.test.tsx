@@ -61,10 +61,13 @@ describe('AppShell auth guard', () => {
     expect(screen.getByTestId('upgrade')).toBeInTheDocument();
   });
 
-  it('redirects anonymous users from /browse to /landing', () => {
+  it('lets anonymous users see /browse (public-in-shell)', () => {
+    // /browse is public-in-shell as of 2026-04-29 — anonymous users
+    // can see the listing grid; outbound source URLs and external
+    // research links are separately gated by useAccessTier inside
+    // PropertyDetail / ResearchPanel.
     renderAt('/browse', <div data-testid="browse">BROWSE</div>);
-    expect(screen.getByTestId('landing')).toBeInTheDocument();
-    expect(screen.queryByTestId('browse')).not.toBeInTheDocument();
+    expect(screen.getByTestId('browse')).toBeInTheDocument();
   });
 
   it('redirects anonymous users from /projects to /landing', () => {

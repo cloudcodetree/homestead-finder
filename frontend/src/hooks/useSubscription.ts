@@ -77,11 +77,15 @@ export const SubscriptionProvider = ({ children }: { children: ReactNode }) => {
   const value = useMemo<SubscriptionContextValue>(
     () => ({
       subscription,
-      paid: isPaid(subscription),
+      // Free-for-now (2026-04-29): every signed-in user is treated as
+      // paid until billing is wired up. Anonymous visitors stay on
+      // the free tier (paid=false) — the gating they hit is in
+      // useAccessTier (source-link visibility), not paywall modals.
+      paid: user ? true : isPaid(subscription),
       loading,
       refresh,
     }),
-    [subscription, loading, refresh],
+    [subscription, loading, refresh, user],
   );
 
   return createElement(SubscriptionContext.Provider, { value }, children);

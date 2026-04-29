@@ -578,6 +578,34 @@ or MO/AR inventory density changes materially.
 
 ## Tech Debt
 
+- [ ] **Click-through cap for free signups (paid = unlimited)**
+  - Captured 2026-04-29 alongside the three-tier access model
+    (anonymous / free signup / paid). The current stopgap treats
+    every signed-in user as effectively paid (`useSubscription`
+    returns `paid: true` for any logged-in user) and only gates
+    anonymous access via `useAccessTier` — outbound source URLs +
+    external research links hide behind a "Sign up free" CTA.
+  - Once billing ships, the free tier should cap click-throughs at
+    e.g. 5/day. Each click on an outbound source URL or external
+    research link logs a row to a `click_log` table; a counter is
+    queried per detail-page load so the UI can show "3 of 5 left
+    today" and gate further clicks at the cap.
+  - Implementation sketch:
+    - Supabase: `click_log(user_id, listing_id, kind, clicked_at)`
+      with RLS limiting to own rows + an index on
+      `(user_id, clicked_at)` for the daily-window query.
+    - `frontend/src/hooks/useClickCredits.ts` — exposes
+      `{ remaining, capUsed, hardCap, registerClick(kind, listingId) }`.
+    - `useAccessTier` returns a third tier: `signed_in_capped` once
+      `paid !== true && capUsed >= hardCap`. PropertyDetail and
+      ResearchPanel switch to "Upgrade for unlimited" CTAs in that
+      state instead of the "Sign up free" CTA shown to anonymous.
+  - Files: `frontend/src/hooks/useAccessTier.ts`,
+    `frontend/src/hooks/useSubscription.ts`,
+    `supabase/migrations/00XX_click_log.sql` (new),
+    `frontend/src/components/PropertyDetail.tsx`,
+    `frontend/src/components/ResearchPanel.tsx`.
+
 - [ ] **Tier listings before enrichment — skip duds, lazy-enrich on demand**
   - Captured 2026-04-28. Today every listing gets the full pass: AI
     enrichment, geo lookup (5 gov calls), voting tag, image refresh,

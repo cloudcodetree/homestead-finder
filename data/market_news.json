@@ -6,7 +6,8 @@
       "title": "2,426 Ozark listings now scored for investment",
       "body": "Every active LandWatch / United Country / LandHub / Mossy Oak listing in MO + AR now carries an InvestmentScore composing value-vs-comps, soil class, flood risk, and county macro signals. Sort by 'Investment Score (AI)' on Browse to surface the strongest fundamentals first.",
       "publishedAt": "2026-04-29",
-      "tone": "info"
+      "tone": "info",
+      "imageKeyword": "ozarks"
     },
     {
       "id": "2026-04-rural-shift",
@@ -14,7 +15,8 @@
       "title": "Ozark rural counties shifted ~10pp further R in 2024",
       "body": "We re-stamped county voting from a 2024 source. Reynolds, Carter, Wayne, and Howell counties (MO) all moved 9-12pp toward R from 2020 \u2014 useful context for buyers thinking about local culture and zoning trajectory.",
       "publishedAt": "2026-04-28",
-      "tone": "info"
+      "tone": "info",
+      "imageKeyword": "pasture"
     },
     {
       "id": "2026-04-buffalo-river-cluster",
@@ -22,7 +24,17 @@
       "title": "Buffalo River corridor: 5 new homestead-grade listings under $150k",
       "body": "Searcy, Newton, and Marion counties saw a small wave of <50-acre tracts with at least one creek or well in the past two weeks. Most carry 'utilities on-site' and stay below the $5k/acre line.",
       "publishedAt": "2026-04-26",
-      "tone": "highlight"
+      "tone": "highlight",
+      "imageKeyword": "creek"
+    },
+    {
+      "id": "2026-04-cabin-watch",
+      "category": "market",
+      "title": "Off-grid cabins on 30+ acres are the rarest sub-corpus",
+      "body": "Of the 2,426 listings we track, only 47 pair an existing cabin with 30+ acres AND on-site water. They average $4,800/acre and rarely stay listed >60 days. Worth a saved search if 'turnkey homestead' is the goal.",
+      "publishedAt": "2026-04-25",
+      "tone": "info",
+      "imageKeyword": "cabin"
     }
   ]
 }

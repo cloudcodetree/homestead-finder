@@ -1,4 +1,4 @@
-import { Brain, Home } from 'lucide-react';
+import { Brain, Home, Lock } from 'lucide-react';
 import { useState } from 'react';
 import {
   Property,
@@ -9,6 +9,7 @@ import {
   RED_FLAG_DESCRIPTIONS,
   RED_FLAG_SEVERITY,
 } from '../types/property';
+import { useAccessTier } from '../hooks/useAccessTier';
 import { useAuth } from '../hooks/useAuth';
 import { useHiddenListings } from '../hooks/useHiddenListings';
 import { FreeTierLimitError, useSavedListings } from '../hooks/useSavedListings';
@@ -72,6 +73,7 @@ export const PropertyDetail = ({ property, onClose }: PropertyDetailProps) => {
   const scoreColor = getDealScoreColor(property.dealScore);
   const [copied, setCopied] = useState(false);
   const { user, loginWithGoogle } = useAuth();
+  const { canSeeSourceLinks } = useAccessTier();
   const { isSaved, toggle: toggleSaved } = useSavedListings();
   const { isHidden, toggle: toggleHidden } = useHiddenListings();
   const saved = isSaved(property.id);
@@ -609,45 +611,61 @@ export const PropertyDetail = ({ property, onClose }: PropertyDetailProps) => {
             )}
           </div>
 
-          {/* Listing URL */}
+          {/* Listing URL — gated for anonymous viewers. We deliberately
+              do NOT expose the source URL or its host name when the
+              user isn't signed in: combined with title + county +
+              acreage already on the page, it would be enough to
+              re-find the listing on the source site and bypass the
+              signup funnel entirely. */}
           <div className="border-t border-gray-100 pt-4">
             <p className="text-gray-500 text-xs mb-1">Listing URL</p>
-            <div className="flex items-center gap-2 min-w-0">
-              <a
-                href={safeUrl(property.url)}
-                target="_blank"
-                rel="noopener noreferrer"
-                title={property.url}
-                className="text-blue-600 hover:underline text-sm truncate min-w-0 flex-1"
-              >
-                {property.url}
-              </a>
+            {canSeeSourceLinks ? (
+              <div className="flex items-center gap-2 min-w-0">
+                <a
+                  href={safeUrl(property.url)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  title={property.url}
+                  className="text-blue-600 hover:underline text-sm truncate min-w-0 flex-1"
+                >
+                  {property.url}
+                </a>
+                <button
+                  onClick={copyUrl}
+                  title="Copy URL"
+                  className="flex-shrink-0 text-gray-400 hover:text-gray-600 transition-colors"
+                >
+                  {copied ? (
+                    <span className="text-xs text-green-600 font-medium whitespace-nowrap">
+                      Copied!
+                    </span>
+                  ) : (
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-4 w-4"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                    </svg>
+                  )}
+                </button>
+              </div>
+            ) : (
               <button
-                onClick={copyUrl}
-                title="Copy URL"
-                className="flex-shrink-0 text-gray-400 hover:text-gray-600 transition-colors"
+                type="button"
+                onClick={() => void loginWithGoogle()}
+                className="inline-flex items-center gap-2 rounded-lg border border-emerald-200 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 text-sm font-medium px-3 py-2 w-full"
               >
-                {copied ? (
-                  <span className="text-xs text-green-600 font-medium whitespace-nowrap">
-                    Copied!
-                  </span>
-                ) : (
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-4 w-4"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
-                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
-                  </svg>
-                )}
+                <Lock className="w-3.5 h-3.5" aria-hidden="true" />
+                Sign up free to view the source listing
               </button>
-            </div>
+            )}
           </div>
 
           {/* Reaction row + Add-to-project sit above the Save/Hide bar.
@@ -725,18 +743,29 @@ export const PropertyDetail = ({ property, onClose }: PropertyDetailProps) => {
                 ✗ This listing has expired or is no longer available
               </p>
             )}
-            <a
-              href={safeUrl(property.url)}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={`block w-full text-center font-semibold py-3 rounded-lg transition-colors ${
-                property.status === 'expired'
-                  ? 'bg-gray-200 text-gray-500'
-                  : 'bg-green-600 hover:bg-green-700 text-white'
-              }`}
-            >
-              View Full Listing →
-            </a>
+            {canSeeSourceLinks ? (
+              <a
+                href={safeUrl(property.url)}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`block w-full text-center font-semibold py-3 rounded-lg transition-colors ${
+                  property.status === 'expired'
+                    ? 'bg-gray-200 text-gray-500'
+                    : 'bg-green-600 hover:bg-green-700 text-white'
+                }`}
+              >
+                View Full Listing →
+              </a>
+            ) : (
+              <button
+                type="button"
+                onClick={() => void loginWithGoogle()}
+                className="flex w-full items-center justify-center gap-2 rounded-lg bg-green-600 hover:bg-green-700 text-white font-semibold py-3"
+              >
+                <Lock className="w-4 h-4" aria-hidden="true" />
+                Sign up free to view this listing
+              </button>
+            )}
           </div>
         </div>
       </div>
