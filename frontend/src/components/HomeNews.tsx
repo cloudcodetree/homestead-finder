@@ -38,18 +38,30 @@ const formatDate = (iso: string): string => {
   return d.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
 };
 
+/**
+ * Heading shared across the home-page strips (and matched by
+ * TopPicksCarousel) so all four sections read at the same visual
+ * level — section icon, bold title, optional tagline. Without this
+ * the news sections were a quieter "uppercase tracking-wide" caption
+ * style and felt secondary to Top Picks.
+ */
 const SectionHeader = ({
   icon: Icon,
   title,
+  tagline,
 }: {
   icon: typeof Newspaper;
   title: string;
+  tagline?: React.ReactNode;
 }) => (
-  <div className="flex items-center gap-2 mb-2">
-    <Icon className="w-4 h-4 text-gray-500" aria-hidden="true" />
-    <h3 className="text-xs font-semibold uppercase tracking-wide text-gray-500">
-      {title}
-    </h3>
+  <div className="mb-3">
+    <div className="flex items-center gap-2">
+      <Icon className="w-4 h-4 text-gray-700" aria-hidden="true" />
+      <h3 className="text-base font-semibold text-gray-900">{title}</h3>
+    </div>
+    {tagline && (
+      <p className="text-xs text-gray-500 mt-0.5 ml-6">{tagline}</p>
+    )}
   </div>
 );
 
@@ -122,7 +134,11 @@ export const AlertsStrip = () => {
   if (loading || searches.length === 0) return null;
   return (
     <section className="rounded-xl border border-gray-200 bg-white p-4">
-      <SectionHeader icon={Bell} title="Your saved searches" />
+      <SectionHeader
+        icon={Bell}
+        title="Your saved searches"
+        tagline={`${searches.length} saved ${searches.length === 1 ? 'search' : 'searches'} watching the corpus on your behalf.`}
+      />
       <ul className="space-y-1.5">
         {searches.slice(0, 3).map((s) => (
           <li key={s.id}>
@@ -205,7 +221,11 @@ export const MarketNewsStrip = () => {
   if (items.length === 0) return null;
   return (
     <section className="rounded-xl border border-gray-200 bg-amber-50/30 p-4">
-      <SectionHeader icon={Newspaper} title="Market news" />
+      <SectionHeader
+        icon={Newspaper}
+        title="Market news"
+        tagline="Editorial notes on the corpus and what's moving in the regions we cover."
+      />
       <div className="grid gap-4 sm:grid-cols-2">
         {items.slice(0, 4).map((item) => (
           <NewspaperCard key={item.id} item={item} />
@@ -234,7 +254,11 @@ export const SiteUpdatesStrip = () => {
   if (items.length === 0) return null;
   return (
     <section className="rounded-xl border border-gray-200 bg-sky-50/40 p-4">
-      <SectionHeader icon={Megaphone} title="What's new in Homestead Finder" />
+      <SectionHeader
+        icon={Megaphone}
+        title="What's new in Homestead Finder"
+        tagline="Recent app updates and shipped features."
+      />
       <div className="grid gap-2 sm:grid-cols-2">
         {items.slice(0, 4).map((item) => (
           <UpdateCard key={item.id} item={item} />

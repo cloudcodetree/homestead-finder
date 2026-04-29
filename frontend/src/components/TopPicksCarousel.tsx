@@ -109,13 +109,16 @@ export const TopPicksCarousel = () => {
       aria-labelledby="top-picks-heading"
     >
       <div className="mb-3">
-        <h3
-          id="top-picks-heading"
-          className="text-base font-semibold text-gray-900"
-        >
-          Top Picks
-        </h3>
-        <p className="text-xs text-gray-500 mt-0.5">
+        <div className="flex items-center gap-2">
+          <Star className="w-4 h-4 text-gray-700" aria-hidden="true" />
+          <h3
+            id="top-picks-heading"
+            className="text-base font-semibold text-gray-900"
+          >
+            Top Picks
+          </h3>
+        </div>
+        <p className="text-xs text-gray-500 mt-0.5 ml-6">
           {curation?.pickCount ?? cards.length} listings hand-picked by{' '}
           Claude {curation?.model ?? 'sonnet'} from the full corpus.{' '}
           <Link
