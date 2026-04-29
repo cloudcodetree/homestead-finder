@@ -244,18 +244,22 @@ export const InvestmentScorePanel = ({ property }: PanelProps) => {
 };
 
 /**
- * Compact badge for cards — just the ring + score, no breakdown.
- * Sized to slot next to existing card chips (Fit / red flags / etc.).
+ * Compact badge for cards — just the ring gauge + score number.
+ * The ring IS the icon: it's the only chip on the card with a
+ * filled circular gauge, so it's immediately distinguishable from
+ * the homestead-fit (sprout) and deal-score (sparkles) chips that
+ * sit next to it. The "Inv" text label was redundant — the tooltip
+ * carries the full meaning.
  */
 export const InvestmentScoreBadge = ({ score }: { score: number }) => {
   const klass = tierClasses[tier(score)];
   return (
     <span
-      className={`inline-flex items-center gap-1.5 rounded-full border px-1.5 py-0.5 text-[11px] font-medium ${klass.bg} ${klass.text} border-current/30`}
-      title={`Investment score ${Math.round(score)} / 100`}
+      className={`inline-flex items-center gap-1 rounded-full border px-1.5 py-0.5 text-xs font-bold ${klass.bg} ${klass.text} border-current/30`}
+      title={`Investment Score: ${Math.round(score)} / 100`}
     >
-      <Ring score={score} size={20} strokeWidth={3} showNumber={false} />
-      <span className="tabular-nums">Inv {Math.round(score)}</span>
+      <Ring score={score} size={18} strokeWidth={3} showNumber={false} />
+      <span className="tabular-nums">{Math.round(score)}</span>
     </span>
   );
 };

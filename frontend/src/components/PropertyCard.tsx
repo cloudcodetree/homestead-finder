@@ -35,6 +35,7 @@ import { getCountyStat, useCountyMedians } from '../hooks/useCountyMedians';
 import { useHiddenListings } from '../hooks/useHiddenListings';
 import { useListingRatings } from '../hooks/useListingRatings';
 import { useSavedListings, FreeTierLimitError } from '../hooks/useSavedListings';
+import { Sparkles, Sprout } from 'lucide-react';
 import { formatVsMedian } from '../utils/marketStats';
 import { InvestmentScoreBadge } from './InvestmentScore';
 import { UpgradeModal } from './UpgradeModal';
@@ -258,29 +259,38 @@ export const PropertyCard = ({ property, onClick, isSelected = false }: Property
           </div>
           <div className="flex flex-col items-end gap-1 flex-shrink-0">
             <div className="flex items-center gap-1">
+              {/* Three score pills, each with its own icon so the
+                  meaning is obvious at a glance — without the icons,
+                  three differently-colored 0-100 numbers crammed
+                  next to each other are easy to mix up.
+                    📈 InvestmentScore (ring gauge IS the icon)
+                    🌱 Homestead Fit (homesteading focus)
+                    ✨ Deal Score (hot deal / value) */}
               {property.investmentScore !== undefined && (
                 <InvestmentScoreBadge score={property.investmentScore} />
               )}
               {property.homesteadFitScore !== undefined ? (
                 <div
-                  className="rounded-full px-2 py-1 text-xs font-bold bg-purple-100 text-purple-700 border border-purple-200"
-                  title={`AI Homestead Fit: ${property.homesteadFitScore}/100${property.aiSummary ? ` — ${property.aiSummary}` : ''}`}
+                  className="inline-flex items-center gap-1 rounded-full px-2 py-1 text-xs font-bold bg-purple-100 text-purple-700 border border-purple-200"
+                  title={`Homestead Fit: ${property.homesteadFitScore}/100${property.aiSummary ? ` — ${property.aiSummary}` : ''}`}
                 >
-                  ◆ {property.homesteadFitScore}
+                  <Sprout className="w-3 h-3" aria-hidden="true" />
+                  <span className="tabular-nums">{property.homesteadFitScore}</span>
                 </div>
               ) : (
                 <div
-                  className="rounded-full px-1.5 py-1 text-[10px] font-medium bg-gray-100 text-gray-500 border border-gray-200"
-                  title="Not yet AI-analyzed — run ./scripts/refresh_ai.sh locally to enrich"
+                  className="inline-flex items-center gap-1 rounded-full px-1.5 py-1 text-[10px] font-medium bg-gray-100 text-gray-500 border border-gray-200"
+                  title="Homestead Fit not yet AI-analyzed"
                 >
-                  ◇
+                  <Sprout className="w-3 h-3 opacity-60" aria-hidden="true" />
                 </div>
               )}
               <div
-                className={`rounded-full px-2 py-1 text-xs font-bold ${scoreColor}`}
-                title={`Deal Score: ${property.dealScore}`}
+                className={`inline-flex items-center gap-1 rounded-full px-2 py-1 text-xs font-bold ${scoreColor}`}
+                title={`Deal Score: ${property.dealScore}/100`}
               >
-                {property.dealScore}
+                <Sparkles className="w-3 h-3" aria-hidden="true" />
+                <span className="tabular-nums">{property.dealScore}</span>
               </div>
             </div>
             <ValidationBadge status={property.status} />

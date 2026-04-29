@@ -1,3 +1,4 @@
+import { Brain, Sprout } from 'lucide-react';
 import { useState } from 'react';
 import {
   Property,
@@ -437,10 +438,20 @@ export const PropertyDetail = ({ property, onClose }: PropertyDetailProps) => {
           {property.enrichedAt ? (
             <div className="rounded-lg border border-purple-100 bg-purple-50/40 p-4">
               <div className="flex items-center gap-2 mb-3 flex-wrap">
+                <Brain
+                  className="w-4 h-4 text-purple-700"
+                  aria-hidden="true"
+                />
                 <h3 className="text-sm font-semibold text-purple-900">AI Analysis</h3>
                 {property.homesteadFitScore !== undefined && (
-                  <span className="text-xs font-bold text-purple-700 bg-white border border-purple-200 rounded-full px-2 py-0.5">
-                    Fit {property.homesteadFitScore}/100
+                  <span
+                    className="inline-flex items-center gap-1 text-xs font-bold text-purple-700 bg-white border border-purple-200 rounded-full px-2 py-0.5"
+                    title={`Homestead Fit: ${property.homesteadFitScore}/100`}
+                  >
+                    <Sprout className="w-3 h-3" aria-hidden="true" />
+                    <span className="tabular-nums">
+                      {property.homesteadFitScore}
+                    </span>
                   </span>
                 )}
                 <span
