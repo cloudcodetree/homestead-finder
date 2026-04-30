@@ -97,7 +97,31 @@ export const Dashboard = () => {
       prefsAppliedRef.done = true;
       return;
     }
+    // Wait for the corpus to load — we use it below to drop stale
+    // preferences that would zero the result set (e.g. a user with
+    // `targetStates: ['MO','AR']` from before the 2026-04-29 Austin
+    // pivot, against a TX-only corpus).
+    if (allProperties.length === 0) return;
     const patch = preferencesToFilters(userPrefs);
+    // Validate the seeded `states` filter against the loaded corpus.
+    // If none of the user's preferred states are present, drop the
+    // filter rather than show an empty page that requires "Clear
+    // filters" to recover. Same for `sources`. Other filters
+    // (price, acreage, features) silently keep their values — those
+    // can legitimately produce zero hits and that's the user's call.
+    if (patch.states && patch.states.length > 0) {
+      const corpusStates = new Set(
+        allProperties
+          .map((p) => p.location?.state)
+          .filter((s): s is string => Boolean(s)),
+      );
+      const valid = patch.states.filter((s) => corpusStates.has(s));
+      if (valid.length === 0) {
+        delete patch.states;
+      } else if (valid.length !== patch.states.length) {
+        patch.states = valid;
+      }
+    }
     if (Object.keys(patch).length === 0) {
       // User completed onboarding but left everything blank — nothing
       // to seed. Still mark done so we stop watching.
@@ -106,7 +130,14 @@ export const Dashboard = () => {
     }
     replaceFilters(patch);
     prefsAppliedRef.done = true;
-  }, [prefsComplete, userPrefs, filters, replaceFilters, prefsAppliedRef]);
+  }, [
+    prefsComplete,
+    userPrefs,
+    filters,
+    replaceFilters,
+    prefsAppliedRef,
+    allProperties,
+  ]);
 
   // URL ↔ state sync.
   //   `?view=…` and `?saved=1` live IN the URL as the source of truth
