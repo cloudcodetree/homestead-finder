@@ -200,10 +200,12 @@ class MossyOakScraper(BaseScraper):
     RATE_LIMIT_SECONDS = 2.5
 
     def _state_url(self, state: str) -> str:
-        state_slug = {
-            "AR": "arkansas",
-            "MO": "missouri",
-        }.get(state.upper())
+        # Pulled from the shared STATE_SLUGS map — previously only
+        # AR/MO were inlined here, which silently zeroed every other
+        # state (TX caught it during the 2026-04-29 Austin pivot).
+        from states import STATE_SLUGS
+
+        state_slug = STATE_SLUGS.get(state.upper())
         if not state_slug:
             return ""
         return f"{self.BASE_URL}/land-for-sale/{state_slug}/"

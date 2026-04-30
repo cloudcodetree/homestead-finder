@@ -55,10 +55,10 @@ _NEXT_DATA_RE = re.compile(
 # traversal via the CDN.
 _VALID_IMAGE_FILENAME = re.compile(r"[A-Za-z0-9_.\-]+")
 
-_STATE_SLUGS = {
-    "MO": "missouri",
-    "AR": "arkansas",
-}
+# Pulled from the shared STATE_SLUGS map — previously only AR/MO
+# were inlined here, which silently zeroed every other state (TX
+# caught it during the 2026-04-29 Austin pivot).
+from states import STATE_SLUGS as _STATE_SLUGS
 
 
 def _parse_json_list(val: Any) -> list[str]:
@@ -109,9 +109,13 @@ class LandHubScraper(BaseScraper):
         slug = _STATE_SLUGS.get(state.upper())
         if not slug:
             return ""
-        # The /land-for-sale/{slug}/ form works for page 1; explicit
-        # ?page= works for all pages including page 1.
-        return f"{self.BASE_URL}/land-for-sale/{slug}/?page={page}"
+        # LandHub renamed the path slug from /land-for-sale/ to
+        # /property-for-sale/ sometime before 2026-04-29. The old
+        # path now 308-redirects through `/land-for-sale/{slug}` →
+        # `/property-for-sale/{slug}` and our curl_cffi strategy
+        # doesn't follow redirects, so requests against the old form
+        # silently land on a redirect response and return zero rows.
+        return f"{self.BASE_URL}/property-for-sale/{slug}?page={page}"
 
     def fetch(self, state: str, max_pages: int = 5) -> list[dict[str, Any]]:
         rows: list[dict[str, Any]] = []

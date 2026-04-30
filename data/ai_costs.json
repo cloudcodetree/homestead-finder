@@ -23366,6 +23366,294 @@
           "output_tokens": 0,
           "cost_usd": 0.0,
           "success": false
+        },
+        {
+          "source": "govease",
+          "task": "discover_selectors",
+          "model": "sonnet",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "discover_selectors",
+          "model": "opus",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "extract_listings",
+          "model": "haiku",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "extract_listings",
+          "model": "sonnet",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "discover_selectors",
+          "model": "sonnet",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "discover_selectors",
+          "model": "opus",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "extract_listings",
+          "model": "haiku",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "extract_listings",
+          "model": "sonnet",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "discover_selectors",
+          "model": "sonnet",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "discover_selectors",
+          "model": "opus",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "extract_listings",
+          "model": "haiku",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "extract_listings",
+          "model": "sonnet",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "discover_selectors",
+          "model": "sonnet",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "discover_selectors",
+          "model": "opus",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "extract_listings",
+          "model": "haiku",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "extract_listings",
+          "model": "sonnet",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "discover_selectors",
+          "model": "sonnet",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "discover_selectors",
+          "model": "opus",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "extract_listings",
+          "model": "haiku",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "extract_listings",
+          "model": "sonnet",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "discover_selectors",
+          "model": "sonnet",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "discover_selectors",
+          "model": "opus",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "extract_listings",
+          "model": "haiku",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "extract_listings",
+          "model": "sonnet",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "discover_selectors",
+          "model": "sonnet",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "discover_selectors",
+          "model": "opus",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "extract_listings",
+          "model": "haiku",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "extract_listings",
+          "model": "sonnet",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "discover_selectors",
+          "model": "sonnet",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "discover_selectors",
+          "model": "opus",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "extract_listings",
+          "model": "haiku",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
+        },
+        {
+          "source": "govease",
+          "task": "extract_listings",
+          "model": "sonnet",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cost_usd": 0.0,
+          "success": false
         }
       ],
       "total_cost_usd": 0.0
@@ -23373,24 +23661,24 @@
   },
   "model_stats": {
     "sonnet": {
-      "calls": 1293,
+      "calls": 1309,
       "successes": 0,
       "total_cost": 0.0
     },
     "opus": {
-      "calls": 585,
+      "calls": 593,
       "successes": 0,
       "total_cost": 0.0
     },
     "haiku": {
-      "calls": 708,
+      "calls": 716,
       "successes": 0,
       "total_cost": 0.0
     }
   },
   "source_stats": {
     "govease": {
-      "ai_calls": 2052,
+      "ai_calls": 2084,
       "learned_selector_hits": 0,
       "last_ai_call": "2026-04-29"
     },

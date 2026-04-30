@@ -159,8 +159,15 @@ def _ensure_robots(url: str, state: _DomainState) -> None:
     except Exception as e:  # noqa: BLE001
         # Fail open. Record a sentinel so we don't re-try the robots
         # fetch every single request if the file is missing.
+        #
+        # Subtle: an UNPARSED RobotFileParser returns False from
+        # can_fetch (it has neither rules nor a default-allow flag).
+        # Without forcing allow_all here, every request to a domain
+        # whose robots.txt 403s (Akamai et al.) gets silently
+        # disallowed. LandWatch hit exactly this on the TX pivot.
         log.info(f"[throttle] robots.txt unreachable for {p.hostname}: {e}")
-        state.robots = rp  # empty parser = allow all
+        rp.allow_all = True
+        state.robots = rp
         state.robots_fetched_at = now
 
 
