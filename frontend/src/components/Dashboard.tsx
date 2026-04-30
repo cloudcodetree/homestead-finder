@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState, lazy, Suspense } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { DEFAULT_FILTERS } from '../types/property';
+import { DEFAULT_FILTERS, type FilterState } from '../types/property';
 import { FilterPanel } from './FilterPanel';
 import { TopPicks } from './TopPicks';
 import { HomesteadDeals } from './HomesteadDeals';
@@ -9,7 +9,7 @@ import { ErrorBoundary } from './ErrorBoundary';
 import { ListToolbar } from './browse/ListToolbar';
 import { ListingsGrid } from './browse/ListingsGrid';
 import { QueryResults } from './browse/QueryResults';
-import { useProperties } from '../hooks/useProperties';
+import { applyFilters, useProperties } from '../hooks/useProperties';
 import { useFilters } from '../hooks/useFilters';
 import { useCurated } from '../hooks/useCurated';
 import { useHomesteadDeals } from '../hooks/useHomesteadDeals';
@@ -103,12 +103,13 @@ export const Dashboard = () => {
     // pivot, against a TX-only corpus).
     if (allProperties.length === 0) return;
     const patch = preferencesToFilters(userPrefs);
-    // Validate the seeded `states` filter against the loaded corpus.
-    // If none of the user's preferred states are present, drop the
-    // filter rather than show an empty page that requires "Clear
-    // filters" to recover. Same for `sources`. Other filters
-    // (price, acreage, features) silently keep their values — those
-    // can legitimately produce zero hits and that's the user's call.
+    // Validate the seeded filters against the loaded corpus. If
+    // applying them would zero the result set (typical after a
+    // geography pivot — old prefs reference a different region's
+    // states / a longer features list than any current listing
+    // has), drop everything except the soft preference seeds. The
+    // user sees the corpus instead of an empty page that requires
+    // "Clear filters" to recover.
     if (patch.states && patch.states.length > 0) {
       const corpusStates = new Set(
         allProperties
@@ -121,6 +122,16 @@ export const Dashboard = () => {
       } else if (valid.length !== patch.states.length) {
         patch.states = valid;
       }
+    }
+    // Dry-run the merged filter against the corpus; if it kills
+    // everything, drop the must-have-features list (the next-most-
+    // common offender for over-restrictive prefs after a region
+    // change). Price / acreage stay — those are user's explicit
+    // budget/size requirements and zero hits there is meaningful.
+    const wouldFilters = { ...filters, ...patch } as FilterState;
+    const wouldMatch = applyFilters(allProperties, wouldFilters).length;
+    if (wouldMatch === 0 && patch.features && patch.features.length > 0) {
+      delete patch.features;
     }
     if (Object.keys(patch).length === 0) {
       // User completed onboarding but left everything blank — nothing

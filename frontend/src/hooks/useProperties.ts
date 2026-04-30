@@ -4,7 +4,7 @@ import { pointInPolygon } from '../utils/geometry';
 import { getListingTypeStyle } from '../utils/listingType';
 import { useJsonAsset } from './useJsonAsset';
 
-const applyFilters = (properties: Property[], filters: FilterState): Property[] => {
+export const applyFilters = (properties: Property[], filters: FilterState): Property[] => {
   return properties.filter((p) => {
     if (p.price < filters.minPrice || p.price > filters.maxPrice) return false;
     if (p.acreage < filters.minAcreage || p.acreage > filters.maxAcreage) return false;
