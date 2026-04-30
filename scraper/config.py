@@ -34,11 +34,32 @@ TARGET_STATES: list[str] = os.getenv(
 # Pivot 2026-04-29: Austin–Round Rock MSA (5 counties). Hill Country
 # (Burnet, Blanco, Llano) deferred until inventory needs it.
 TARGET_COUNTIES: list[str] = [
+    # 2026-04-29 expansion: Austin metro + ~1-hour-drive corridor.
+    # Covers the Hill Country wedge (Burnet/Blanco/Llano/Gillespie),
+    # north (Lampasas/Milam), east (Lee/Fayette), and south
+    # (Comal/Guadalupe). Matches the homestead-persona's natural
+    # commute / weekend-getaway radius around Austin without
+    # sliding into Bexar/Bell metro tax-base territory.
+    # Austin-5 (core MSA)
     "TX|travis",
     "TX|williamson",
     "TX|hays",
     "TX|bastrop",
     "TX|caldwell",
+    # Hill Country (west)
+    "TX|burnet",
+    "TX|blanco",
+    "TX|llano",
+    "TX|gillespie",  # Fredericksburg / Harper / Stonewall
+    # North
+    "TX|lampasas",
+    "TX|milam",
+    # East
+    "TX|lee",
+    "TX|fayette",
+    # South
+    "TX|comal",
+    "TX|guadalupe",
 ]
 
 # ── Deal criteria ────────────────────────────────────────────────────────────

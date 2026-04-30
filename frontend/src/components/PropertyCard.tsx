@@ -215,23 +215,38 @@ export const PropertyCard = ({ property, onClick, isSelected = false }: Property
           when the user has actually rated this listing. Click opens
           the detail modal where the full RatingBar lives; we don't
           surface the 5-button picker on the card to avoid clutter. */}
-      {rating !== 0 && (
-        <div
-          className="absolute top-2 left-2 z-10 w-7 h-7 rounded-full bg-white/95 border border-gray-200 backdrop-blur-sm flex items-center justify-center text-sm shadow"
-          title={
-            rating === 2
-              ? '😄 Loved'
-              : rating === 1
-                ? '🙂 Liked'
-                : rating === -1
-                  ? '🙁 Disliked'
-                  : '😡 Hated'
-          }
-          aria-label="Your rating"
-        >
-          {rating === 2 ? '😄' : rating === 1 ? '🙂' : rating === -1 ? '🙁' : '😡'}
+      {/* Top-left of the photo: our Deal Score badge + (optional)
+          user rating, stacked. Deal Score is the headline signal we
+          want users to read first, so it goes on the image (same
+          convention as the Top Picks carousel rank badge).
+          InvestmentScore + Homestead Fit stay in the inline pill row
+          below the title. */}
+      <div className="absolute top-2 left-2 z-10 flex flex-col items-start gap-1.5">
+        <div className="rounded-full bg-white/95 backdrop-blur-sm shadow px-0.5 py-0.5">
+          <ScoreRingChip
+            score={property.dealScore}
+            icon={Star}
+            label="Deal Score"
+          />
         </div>
-      )}
+        {rating !== 0 && (
+          <div
+            className="w-7 h-7 rounded-full bg-white/95 border border-gray-200 backdrop-blur-sm flex items-center justify-center text-sm shadow"
+            title={
+              rating === 2
+                ? '😄 Loved'
+                : rating === 1
+                  ? '🙂 Liked'
+                  : rating === -1
+                    ? '🙁 Disliked'
+                    : '😡 Hated'
+            }
+            aria-label="Your rating"
+          >
+            {rating === 2 ? '😄' : rating === 1 ? '🙂' : rating === -1 ? '🙁' : '😡'}
+          </div>
+        )}
+      </div>
       {/* Listing-type accent stripe — colored bar above the thumbnail
           signals tax sale vs owner-finance vs standard for-sale at a
           glance. Full-width, 4px tall. */}
@@ -258,13 +273,12 @@ export const PropertyCard = ({ property, onClick, isSelected = false }: Property
           </div>
           <div className="flex flex-col items-end gap-1 flex-shrink-0">
             <div className="flex items-center gap-1">
-              {/* Three score pills, all using the same ring-gauge-with-
-                  icon shape (`ScoreRingChip`). Identity comes from the
-                  inner glyph; magnitude from the ring's fill + tier
-                  color (red < 50, amber 50-69, green ≥ 70):
+              {/* Two score pills inline next to the title. Deal Score
+                  was promoted to the photo overlay top-left so it's
+                  the first thing the eye lands on; InvestmentScore +
+                  Homestead Fit stay here as the secondary read.
                     💲 DollarSign → Investment
-                    🏠 Home       → Homestead Fit
-                    ⭐ Star       → Deal Score */}
+                    🏠 Home       → Homestead Fit */}
               {property.investmentScore !== undefined && (
                 <InvestmentScoreBadge score={property.investmentScore} />
               )}
@@ -286,11 +300,6 @@ export const PropertyCard = ({ property, onClick, isSelected = false }: Property
                   <Home className="w-3.5 h-3.5 opacity-60" aria-hidden="true" />
                 </span>
               )}
-              <ScoreRingChip
-                score={property.dealScore}
-                icon={Star}
-                label="Deal Score"
-              />
             </div>
             <ValidationBadge status={property.status} />
           </div>
