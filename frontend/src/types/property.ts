@@ -460,7 +460,12 @@ export const DEFAULT_FILTERS: FilterState = {
   minDealScore: 0,
   sources: [],
   listingVariants: [],
-  sortBy: 'dealScore',
+  // Default sort: cheapest first. Most users opening Browse on a
+  // metro corpus want to see the lower end of the price band before
+  // anything else; "Best Deal" (dealScore) was a holdover from the
+  // MO/AR era when raw rural land prices were so uniform that
+  // dealScore actually moved the order around. Changed 2026-04-29.
+  sortBy: 'priceAsc',
   aiTags: [],
   minHomesteadFit: 0,
   hideWithRedFlags: false,

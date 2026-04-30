@@ -118,8 +118,36 @@ class LandHubScraper(BaseScraper):
         return f"{self.BASE_URL}/property-for-sale/{slug}?page={page}"
 
     def fetch(self, state: str, max_pages: int = 5) -> list[dict[str, Any]]:
+        # Two pull modes:
+        #   - API per-county when `config.TARGET_COUNTIES` includes
+        #     counties in this state. LandHub's React SPA hydrates
+        #     from `/api/property/searchProperty?countyCityTitle=…`
+        #     which returns 50-80 rows/county vs 12 rows/page in SSR.
+        #     Strictly better — richer fields, real filtering — and
+        #     it's the same transport their own UI uses.
+        #   - SSR pagination as fallback when no county filter is
+        #     configured (e.g. a future "scrape entire state" run).
         rows: list[dict[str, Any]] = []
         seen_ids: set[int] = set()
+
+        import config
+
+        target_counties = [
+            c.strip()
+            for c in (config.TARGET_COUNTIES or [])
+            if c.strip().startswith(f"{state.upper()}|")
+        ]
+        if target_counties:
+            for key in target_counties:
+                county_slug = key.split("|", 1)[1]
+                rows.extend(self._fetch_county_api(state, county_slug, seen_ids))
+            log.info(
+                f"[landhub] {state}: {len(rows)} listings via API "
+                f"({len(target_counties)} counties)"
+            )
+            return rows
+
+        # Fallback: SSR pagination (whole state).
         for page in range(1, max(1, max_pages) + 1):
             url = self._page_url(state, page)
             if not url:
@@ -129,9 +157,6 @@ class LandHubScraper(BaseScraper):
             except Exception as e:
                 log.info(f"[landhub] {state} page {page} fetch failed: {e}")
                 break
-            # Archive raw page response BEFORE parsing — durability layer.
-            # Replay-friendly: a future parser change can re-extract from
-            # this gzipped HTML without a live re-scrape.
             raw_archive.archive(
                 "landhub",
                 f"page-{state.lower()}-{page}",
@@ -154,11 +179,85 @@ class LandHubScraper(BaseScraper):
                 rows.append(r)
                 fresh += 1
             if fresh == 0:
-                # Same rows as prior page — pagination has exhausted or
-                # the site is echoing page 1 on out-of-range requests.
                 break
         log.info(f"[landhub] {state}: {len(rows)} listings over {page} pages")
         return rows
+
+    def _fetch_county_api(
+        self,
+        state: str,
+        county_slug: str,
+        seen_ids: set[int],
+    ) -> list[dict[str, Any]]:
+        """Pull per-county results from LandHub's hydration API.
+
+        The endpoint is what their own SPA calls — same payload shape
+        as the SSR-embedded `__NEXT_DATA__.dataFromServer` records, so
+        the existing `parse()` consumer works unchanged. We pass
+        `item=200` to get the entire county in one request (typical
+        county has 50-80 rows). The fuzzy `countyCityTitle` filter
+        sometimes pulls in a stray row from a neighboring county; the
+        post-scrape county filter in `main._county_filter` trims them.
+        """
+        import json
+        import urllib.parse
+        import urllib.request
+
+        # Use curl_cffi when available so we share the same Chrome TLS
+        # impersonation the rest of LandHub fetches use; fall back to
+        # plain urllib otherwise (the API itself isn't WAF-protected
+        # the way the search HTML occasionally is).
+        params = {
+            "page": "0",
+            "item": "200",
+            "countyCityTitle": county_slug,
+        }
+        url = f"{self.BASE_URL}/api/property/searchProperty?{urllib.parse.urlencode(params)}"
+        text: str | None = None
+        try:
+            from curl_cffi import requests as cffi_requests  # type: ignore[import-not-found]
+            r = cffi_requests.get(url, impersonate="chrome131", timeout=20)
+            if r.status_code == 200:
+                text = r.text
+        except Exception:
+            pass
+        if text is None:
+            try:
+                req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
+                with urllib.request.urlopen(req, timeout=15) as r:
+                    text = r.read().decode("utf-8", errors="replace")
+            except Exception as e:
+                log.info(f"[landhub] {state}|{county_slug} API fetch failed: {e}")
+                return []
+
+        try:
+            data = json.loads(text)
+        except json.JSONDecodeError as e:
+            log.info(f"[landhub] {state}|{county_slug} API JSON decode failed: {e}")
+            return []
+        rows = data.get("data") if isinstance(data, dict) else None
+        if not isinstance(rows, list):
+            return []
+        # Archive the raw API response — replay-friendly without a
+        # live re-scrape if the parser changes.
+        raw_archive.archive(
+            "landhub",
+            f"api-{state.lower()}-{county_slug}",
+            text,
+            ext="json",
+        )
+        out: list[dict[str, Any]] = []
+        for r in rows:
+            if not isinstance(r, dict):
+                continue
+            rid = r.get("id")
+            if isinstance(rid, str) and rid.isdigit():
+                rid = int(rid)
+            if not isinstance(rid, int) or rid in seen_ids:
+                continue
+            seen_ids.add(rid)
+            out.append(r)
+        return out
 
     def parse(self, raw: dict[str, Any]) -> RawListing | None:
         try:
