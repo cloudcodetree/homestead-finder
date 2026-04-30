@@ -102,14 +102,29 @@ export const Dashboard = () => {
     // `targetStates: ['MO','AR']` from before the 2026-04-29 Austin
     // pivot, against a TX-only corpus).
     if (allProperties.length === 0) return;
+    // Stale-prefs detection. If the user's `targetStates` doesn't
+    // overlap the loaded corpus at all (typical right after a
+    // geography pivot — old prefs reference MO/AR; the corpus is
+    // now TX-only), the entire prefs row is "from a different era"
+    // and using ANY of it (budget, acreage, features) would
+    // overcrop the new corpus. Skip the whole seed; let defaults
+    // apply. The user can re-pick prefs from Settings → Preferences.
+    if (userPrefs.targetStates && userPrefs.targetStates.length > 0) {
+      const corpusStates = new Set(
+        allProperties
+          .map((p) => p.location?.state)
+          .filter((s): s is string => Boolean(s)),
+      );
+      const validTargets = userPrefs.targetStates.filter((s) =>
+        corpusStates.has(s.includes('|') ? s.split('|')[0] : s),
+      );
+      if (validTargets.length === 0) {
+        prefsAppliedRef.done = true;
+        return;
+      }
+    }
     const patch = preferencesToFilters(userPrefs);
-    // Validate the seeded filters against the loaded corpus. If
-    // applying them would zero the result set (typical after a
-    // geography pivot — old prefs reference a different region's
-    // states / a longer features list than any current listing
-    // has), drop everything except the soft preference seeds. The
-    // user sees the corpus instead of an empty page that requires
-    // "Clear filters" to recover.
+    // Validate the seeded `states` filter against the loaded corpus.
     if (patch.states && patch.states.length > 0) {
       const corpusStates = new Set(
         allProperties
@@ -125,9 +140,7 @@ export const Dashboard = () => {
     }
     // Dry-run the merged filter against the corpus; if it kills
     // everything, drop the must-have-features list (the next-most-
-    // common offender for over-restrictive prefs after a region
-    // change). Price / acreage stay — those are user's explicit
-    // budget/size requirements and zero hits there is meaningful.
+    // common offender for over-restrictive prefs).
     const wouldFilters = { ...filters, ...patch } as FilterState;
     const wouldMatch = applyFilters(allProperties, wouldFilters).length;
     if (wouldMatch === 0 && patch.features && patch.features.length > 0) {

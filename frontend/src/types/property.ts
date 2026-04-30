@@ -448,7 +448,12 @@ export const DEFAULT_FILTERS: FilterState = {
   maxPrice: 2_000_000,
   minAcreage: 0,
   maxAcreage: 10_000,
-  maxPricePerAcre: 10_000,
+  // Default raised 2026-04-29 with the Austin TX pivot. Old MO/AR
+  // rural-land floor was $1-5k/acre so 10k worked; metro Austin is
+  // $30k-450k/acre so 10k filtered the entire corpus by default.
+  // Picking 500k as a permissive cap that still rejects extreme
+  // outliers without blanking the page on a fresh session.
+  maxPricePerAcre: 500_000,
   states: [],
   features: [],
   minDealScore: 0,

@@ -238,16 +238,16 @@ export const FilterPanel = ({
           <input
             type="range"
             min={100}
-            max={10000}
-            step={100}
+            max={500000}
+            step={1000}
             value={filters.maxPricePerAcre}
             onChange={(e) => onUpdateFilter('maxPricePerAcre', Number(e.target.value))}
             className="w-full accent-green-600"
           />
           <div className="flex justify-between text-xs text-gray-400 mt-1">
             <span>$100</span>
-            <span>$5k</span>
-            <span>$10k</span>
+            <span>$50k</span>
+            <span>$500k</span>
           </div>
         </div>
 
