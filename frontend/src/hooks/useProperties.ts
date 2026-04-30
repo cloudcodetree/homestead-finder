@@ -6,9 +6,16 @@ import { useJsonAsset } from './useJsonAsset';
 
 export const applyFilters = (properties: Property[], filters: FilterState): Property[] => {
   return properties.filter((p) => {
-    if (p.price < filters.minPrice || p.price > filters.maxPrice) return false;
-    if (p.acreage < filters.minAcreage || p.acreage > filters.maxAcreage) return false;
-    if (p.pricePerAcre > filters.maxPricePerAcre) return false;
+    // `<= 0` on a max means "no cap" — UI lets the user clear or
+    // set a max input to 0 to disable that side of the range. Same
+    // convention for minPrice / minAcreage where 0 already meant
+    // "no min" (kept for symmetry).
+    if (filters.minPrice > 0 && p.price < filters.minPrice) return false;
+    if (filters.maxPrice > 0 && p.price > filters.maxPrice) return false;
+    if (filters.minAcreage > 0 && p.acreage < filters.minAcreage) return false;
+    if (filters.maxAcreage > 0 && p.acreage > filters.maxAcreage) return false;
+    if (filters.maxPricePerAcre > 0 && p.pricePerAcre > filters.maxPricePerAcre)
+      return false;
     if (p.dealScore < filters.minDealScore) return false;
     if (filters.states.length > 0 && !filters.states.includes(p.location.state)) return false;
     if (filters.listingVariants.length > 0) {

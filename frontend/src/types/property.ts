@@ -444,16 +444,17 @@ export interface FilterState {
 }
 
 export const DEFAULT_FILTERS: FilterState = {
+  // 2026-04-29: every range filter defaults to "no min / no max" so
+  // a fresh session shows the full corpus without the user having to
+  // know what knob is hiding things. `0` is the sentinel for
+  // "unbounded" on every range field — useProperties.applyFilters
+  // skips the comparison when either side is <= 0. The FilterPanel
+  // inputs accept 0 / empty to mean "off" too.
   minPrice: 0,
-  maxPrice: 2_000_000,
+  maxPrice: 0,
   minAcreage: 0,
-  maxAcreage: 10_000,
-  // Default raised 2026-04-29 with the Austin TX pivot. Old MO/AR
-  // rural-land floor was $1-5k/acre so 10k worked; metro Austin is
-  // $30k-450k/acre so 10k filtered the entire corpus by default.
-  // Picking 500k as a permissive cap that still rejects extreme
-  // outliers without blanking the page on a fresh session.
-  maxPricePerAcre: 500_000,
+  maxAcreage: 0,
+  maxPricePerAcre: 0,
   states: [],
   features: [],
   minDealScore: 0,

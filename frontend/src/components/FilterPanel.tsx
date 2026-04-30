@@ -173,6 +173,13 @@ export const FilterPanel = ({
           </div>
         </div>
 
+        {/* Range filter inputs use 0 / empty as the "no min" or
+            "no max" sentinel — applyFilters skips the comparison
+            when either side is <= 0. We render `value=""` instead of
+            `value={0}` so the placeholder ("No min" / "No max")
+            shows through in that state, and we coerce empty input
+            to 0 on change. */}
+
         {/* Price Range */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">Price Range</label>
@@ -182,24 +189,33 @@ export const FilterPanel = ({
               <input
                 type="number"
                 min={0}
-                max={filters.maxPrice}
                 step={10000}
-                value={filters.minPrice}
-                onChange={(e) => onUpdateFilter('minPrice', Number(e.target.value))}
+                value={filters.minPrice > 0 ? filters.minPrice : ''}
+                onChange={(e) =>
+                  onUpdateFilter(
+                    'minPrice',
+                    e.target.value === '' ? 0 : Number(e.target.value),
+                  )
+                }
                 className="w-full border border-gray-300 rounded px-2 py-1 text-sm mt-1 focus:ring-1 focus:ring-green-500 focus:outline-none"
-                placeholder="$0"
+                placeholder="No min"
               />
             </div>
             <div className="flex-1">
               <label className="text-xs text-gray-500">Max</label>
               <input
                 type="number"
-                min={filters.minPrice}
+                min={0}
                 step={10000}
-                value={filters.maxPrice}
-                onChange={(e) => onUpdateFilter('maxPrice', Number(e.target.value))}
+                value={filters.maxPrice > 0 ? filters.maxPrice : ''}
+                onChange={(e) =>
+                  onUpdateFilter(
+                    'maxPrice',
+                    e.target.value === '' ? 0 : Number(e.target.value),
+                  )
+                }
                 className="w-full border border-gray-300 rounded px-2 py-1 text-sm mt-1 focus:ring-1 focus:ring-green-500 focus:outline-none"
-                placeholder="$2M"
+                placeholder="No max"
               />
             </div>
           </div>
@@ -212,19 +228,29 @@ export const FilterPanel = ({
             <input
               type="number"
               min={0}
-              value={filters.minAcreage}
-              onChange={(e) => onUpdateFilter('minAcreage', Number(e.target.value))}
+              value={filters.minAcreage > 0 ? filters.minAcreage : ''}
+              onChange={(e) =>
+                onUpdateFilter(
+                  'minAcreage',
+                  e.target.value === '' ? 0 : Number(e.target.value),
+                )
+              }
               className="w-full border border-gray-300 rounded px-2 py-1 text-sm focus:ring-1 focus:ring-green-500 focus:outline-none"
-              placeholder="Min acres"
+              placeholder="No min"
             />
             <span className="text-gray-400 text-sm">–</span>
             <input
               type="number"
               min={0}
-              value={filters.maxAcreage}
-              onChange={(e) => onUpdateFilter('maxAcreage', Number(e.target.value))}
+              value={filters.maxAcreage > 0 ? filters.maxAcreage : ''}
+              onChange={(e) =>
+                onUpdateFilter(
+                  'maxAcreage',
+                  e.target.value === '' ? 0 : Number(e.target.value),
+                )
+              }
               className="w-full border border-gray-300 rounded px-2 py-1 text-sm focus:ring-1 focus:ring-green-500 focus:outline-none"
-              placeholder="Max acres"
+              placeholder="No max"
             />
           </div>
         </div>
@@ -233,11 +259,24 @@ export const FilterPanel = ({
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
             Max Price/Acre:{' '}
-            <span className="text-green-600">${filters.maxPricePerAcre.toLocaleString()}</span>
+            <span className="text-green-600">
+              {filters.maxPricePerAcre > 0
+                ? `$${filters.maxPricePerAcre.toLocaleString()}`
+                : 'No max'}
+            </span>
+            {filters.maxPricePerAcre > 0 && (
+              <button
+                type="button"
+                onClick={() => onUpdateFilter('maxPricePerAcre', 0)}
+                className="ml-2 text-xs text-gray-500 hover:text-gray-900 underline"
+              >
+                clear
+              </button>
+            )}
           </label>
           <input
             type="range"
-            min={100}
+            min={0}
             max={500000}
             step={1000}
             value={filters.maxPricePerAcre}
@@ -245,7 +284,7 @@ export const FilterPanel = ({
             className="w-full accent-green-600"
           />
           <div className="flex justify-between text-xs text-gray-400 mt-1">
-            <span>$100</span>
+            <span>No max</span>
             <span>$50k</span>
             <span>$500k</span>
           </div>
