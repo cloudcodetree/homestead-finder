@@ -1,5 +1,5 @@
 import { Lock } from 'lucide-react';
-import { useState } from 'react';
+import { lazy, Suspense, useState } from 'react';
 import { Property, FEATURE_LABELS } from '../types/property';
 import { useAccessTier } from '../hooks/useAccessTier';
 import { useAuth } from '../hooks/useAuth';
@@ -8,6 +8,11 @@ import { FreeTierLimitError, useSavedListings } from '../hooks/useSavedListings'
 import { AddToProjectButton } from './AddToProjectButton';
 import { CadRecordPanel } from './CadRecord';
 import { CompBreakdown } from './CompBreakdown';
+// Lazy-load the mini-map: Leaflet + react-leaflet are ~80KB gzip
+// of bundle that the detail page doesn't need until paint settles.
+const PropertyMiniMap = lazy(() =>
+  import('./PropertyMiniMap').then((m) => ({ default: m.PropertyMiniMap })),
+);
 import { DealScoreBreakdown } from './DealScoreBreakdown';
 import { HomesteadFitBreakdown } from './HomesteadFitBreakdown';
 import { InvestmentScorePanel } from './InvestmentScore';
@@ -500,6 +505,20 @@ export const PropertyDetail = ({ property, onClose }: PropertyDetailProps) => {
             geo={property.geoEnrichment}
             links={property.externalLinks}
           />
+
+          {/* Inline map of the parcel + nearest comp listings. Gives
+              the user "where am I actually looking" before they read
+              the comp breakdown. Lazy-loaded so the Leaflet bundle
+              doesn't ship to detail pages that aren't viewed. */}
+          <Suspense
+            fallback={
+              <div className="rounded-xl border border-gray-200 bg-gray-50 h-64 flex items-center justify-center text-xs text-gray-400">
+                Loading map…
+              </div>
+            }
+          >
+            <PropertyMiniMap property={property} />
+          </Suspense>
 
           {/* "How we computed the comp" — surfaces the methodology +
               the actual listings that fed the median, so users can
