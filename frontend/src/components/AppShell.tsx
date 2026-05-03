@@ -308,8 +308,12 @@ export const AppShell = () => {
           <RailNav items={items} collapsed={false} />
         </aside>
 
-        {/* Main content */}
-        <main className="flex-1 overflow-y-auto">
+        {/* Main content. `isolate` creates a CSS stacking context so
+            any GPU-composited descendants (Leaflet's transform layers,
+            backdrop-filter chips, sticky elements) can't escape above
+            the global page header during momentum scroll. Belt and
+            suspenders alongside the header's z-50. */}
+        <main className="flex-1 overflow-y-auto isolate">
           <Outlet />
         </main>
       </div>

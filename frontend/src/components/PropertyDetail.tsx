@@ -35,9 +35,6 @@ import { getDealScoreColor, getDealScoreLabel } from '../utils/scoring';
 
 interface PropertyDetailProps {
   property: Property;
-  /** Called when the user clicks the back arrow. Always navigates
-   * one step back in history at the route level. */
-  onClose: () => void;
 }
 
 const ValidationBadge = ({ status }: { status?: Property['status'] }) => {
@@ -70,7 +67,7 @@ const ValidationBadge = ({ status }: { status?: Property['status'] }) => {
   );
 };
 
-export const PropertyDetail = ({ property, onClose }: PropertyDetailProps) => {
+export const PropertyDetail = ({ property }: PropertyDetailProps) => {
   const scoreColor = getDealScoreColor(property.dealScore);
   const [copied, setCopied] = useState(false);
   const { user, loginWithGoogle } = useAuth();
@@ -111,20 +108,11 @@ export const PropertyDetail = ({ property, onClose }: PropertyDetailProps) => {
     // Renders inline within the AppShell main column at /p/:id.
     <div className="p-0 sm:p-4">
       <div className="relative bg-white w-full sm:max-w-3xl sm:rounded-xl shadow-sm sm:shadow border border-gray-200 mx-auto">
-        {/* Sticky back-button anchor — zero-height sticky container
-            keeps the absolutely-positioned button pinned to the top
-            of the viewport as the user scrolls. Dark-glass backdrop
-            so it stays legible over both the hero image and the
-            white content below. */}
-        <div className="sticky top-0 z-20 h-0">
-          <button
-            onClick={onClose}
-            aria-label="Back"
-            className="absolute top-3 left-3 w-9 h-9 rounded-full bg-black/50 hover:bg-black/70 backdrop-blur-sm text-white text-lg leading-none flex items-center justify-center transition-colors shadow-lg"
-          >
-            ‹
-          </button>
-        </div>
+        {/* Back button removed — browser/system back gesture (Android
+            back, iOS edge-swipe, browser back arrow) gives users the
+            same affordance for free, and the sticky button + its
+            backdrop-blur was contributing to the compositor-layer
+            escape that floated icons over the page header on scroll. */}
         {/* Hero image — full-bleed banner above the sticky header.
             Phase 1 shows the primary image only; Phase 2 will replace
             this with a swipeable carousel when the scraper captures

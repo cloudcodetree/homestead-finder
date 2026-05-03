@@ -1,4 +1,4 @@
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { useProperties } from '../../hooks/useProperties';
 import { DEFAULT_FILTERS } from '../../types/property';
 import { PropertyDetail } from '../PropertyDetail';
@@ -6,13 +6,12 @@ import { PropertyDetail } from '../PropertyDetail';
 /**
  * Page-mode property detail at /p/:id. Looks up the listing in the
  * full corpus (not the filtered set) so a deep-linked URL always
- * resolves regardless of the user's last filter state. Back button
- * in PropertyDetail's header navigates one step back in history,
- * landing the user back where they came from (browse, swipe, map).
+ * resolves regardless of the user's last filter state. Back navigation
+ * is handled by the browser/system (Android back, iOS edge-swipe,
+ * browser back arrow) — no in-page back button.
  */
 export const PropertyDetailPage = () => {
   const { id } = useParams<{ id: string }>();
-  const navigate = useNavigate();
   const { allProperties, loading } = useProperties(DEFAULT_FILTERS);
   const property = id ? allProperties.find((p) => p.id === id) ?? null : null;
 
@@ -38,5 +37,5 @@ export const PropertyDetailPage = () => {
     );
   }
 
-  return <PropertyDetail property={property} onClose={() => navigate(-1)} />;
+  return <PropertyDetail property={property} />;
 };

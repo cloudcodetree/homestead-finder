@@ -605,7 +605,13 @@ export const Dashboard = () => {
               }
             >
               <MapView
-                properties={properties}
+                /* `sortedProperties` is the same array the List view
+                   renders — filtered by the slider/chip state AND by
+                   the user's local hidden/saved/recommended toggles.
+                   Was `properties` (skipped the hidden/saved layer)
+                   so the map showed listings the user had explicitly
+                   hidden, which felt broken. */
+                properties={sortedProperties}
                 selectedId={selectedId}
                 onSelectProperty={openProperty}
                 drawnArea={filters.drawnArea}
