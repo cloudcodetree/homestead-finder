@@ -68,6 +68,7 @@ export const isDefaultFilters = (filters: FilterState): boolean => {
     filters.maxPrice === DEFAULT_FILTERS.maxPrice &&
     filters.minAcreage === DEFAULT_FILTERS.minAcreage &&
     filters.maxAcreage === DEFAULT_FILTERS.maxAcreage &&
+    filters.minPricePerAcre === DEFAULT_FILTERS.minPricePerAcre &&
     filters.maxPricePerAcre === DEFAULT_FILTERS.maxPricePerAcre &&
     filters.states.length === 0 &&
     filters.features.length === 0 &&
@@ -75,7 +76,11 @@ export const isDefaultFilters = (filters: FilterState): boolean => {
     filters.sources.length === 0 &&
     filters.listingVariants.length === 0 &&
     filters.minDealScore === 0 &&
+    filters.maxDealScore === 100 &&
     filters.minHomesteadFit === 0 &&
+    filters.maxHomesteadFit === 100 &&
+    filters.minInvestmentScore === 0 &&
+    filters.maxInvestmentScore === 100 &&
     filters.improvementTier === 'any' &&
     filters.hideWithRedFlags === DEFAULT_FILTERS.hideWithRedFlags &&
     filters.searchText === ''

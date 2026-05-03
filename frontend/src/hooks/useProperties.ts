@@ -11,12 +11,35 @@ export const applyFilters = (properties: Property[], filters: FilterState): Prop
     // convention for minPrice / minAcreage where 0 already meant
     // "no min" (kept for symmetry).
     if (filters.minPrice > 0 && p.price < filters.minPrice) return false;
-    if (filters.maxPrice > 0 && p.price > filters.maxPrice) return false;
+    // maxPrice uses the slider's top stop (250,000) as the "no cap"
+    // sentinel — at that value we skip the upper-bound check.
+    if (
+      filters.maxPrice > 0 &&
+      filters.maxPrice < 250_000 &&
+      p.price > filters.maxPrice
+    )
+      return false;
     if (filters.minAcreage > 0 && p.acreage < filters.minAcreage) return false;
-    if (filters.maxAcreage > 0 && p.acreage > filters.maxAcreage) return false;
-    if (filters.maxPricePerAcre > 0 && p.pricePerAcre > filters.maxPricePerAcre)
+    // maxAcreage uses the slider's top stop (100) as the "no cap"
+    // sentinel — at that value we skip the upper-bound check.
+    if (
+      filters.maxAcreage > 0 &&
+      filters.maxAcreage < 100 &&
+      p.acreage > filters.maxAcreage
+    )
+      return false;
+    if (filters.minPricePerAcre > 0 && p.pricePerAcre < filters.minPricePerAcre)
+      return false;
+    // maxPricePerAcre uses the slider's top stop (10,000) as the
+    // "no cap" sentinel — at that value we skip the upper-bound check.
+    if (
+      filters.maxPricePerAcre > 0 &&
+      filters.maxPricePerAcre < 10_000 &&
+      p.pricePerAcre > filters.maxPricePerAcre
+    )
       return false;
     if (p.dealScore < filters.minDealScore) return false;
+    if (filters.maxDealScore < 100 && p.dealScore > filters.maxDealScore) return false;
     if (filters.states.length > 0 && !filters.states.includes(p.location.state)) return false;
     if (filters.listingVariants.length > 0) {
       const variant = getListingTypeStyle(p).variant;
@@ -29,9 +52,15 @@ export const applyFilters = (properties: Property[], filters: FilterState): Prop
     if (filters.sources.length > 0 && !filters.sources.includes(p.source)) return false;
     // AI-derived filters — skip any listing that hasn't been enriched yet
     // when an AI filter is active, rather than treating missing = passing.
-    if (filters.minHomesteadFit > 0) {
+    if (filters.minHomesteadFit > 0 || filters.maxHomesteadFit < 100) {
       if (p.homesteadFitScore === undefined) return false;
       if (p.homesteadFitScore < filters.minHomesteadFit) return false;
+      if (p.homesteadFitScore > filters.maxHomesteadFit) return false;
+    }
+    if (filters.minInvestmentScore > 0 || filters.maxInvestmentScore < 100) {
+      if (p.investmentScore === undefined) return false;
+      if (p.investmentScore < filters.minInvestmentScore) return false;
+      if (p.investmentScore > filters.maxInvestmentScore) return false;
     }
     if (filters.aiTags.length > 0) {
       const tags = p.aiTags ?? [];

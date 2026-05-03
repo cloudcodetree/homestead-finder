@@ -9,6 +9,7 @@ import {
 } from '../types/property';
 import { formatSourceName } from '../utils/formatters';
 import { ALL_LISTING_VARIANTS } from '../utils/listingType';
+import { DualRangeSlider } from './DualRangeSlider';
 
 interface FilterPanelProps {
   filters: FilterState;
@@ -44,6 +45,28 @@ interface FilterPanelProps {
 // scrape failure). Ordered alphabetically so buttons don't reshuffle as
 // data loads.
 const FALLBACK_STATES = ['AR', 'MO'];
+
+// Compact $/acre display for the Price/Acre slider. The slider's
+// upper bound (10,000) is the "no cap" sentinel — we render it as
+// "$10k+" so users see at a glance that further values aren't being
+// filtered out.
+const formatPricePerAcre = (v: number): string => {
+  if (v >= 10_000) return '$10k+';
+  if (v >= 1_000) return `$${(v / 1000).toFixed(1).replace(/\.0$/, '')}k`;
+  return `$${v}`;
+};
+
+// Compact total-price display for the Price slider. Top stop
+// (250,000) is the "no cap" sentinel rendered as "$250k+".
+const formatPrice = (v: number): string => {
+  if (v >= 250_000) return '$250k+';
+  if (v >= 1_000) return `$${Math.round(v / 1000)}k`;
+  return `$${v}`;
+};
+
+// Acreage display. Top stop (100) is the "no cap" sentinel rendered
+// as "100+".
+const formatAcreage = (v: number): string => (v >= 100 ? '100+' : `${v}`);
 
 export const FilterPanel = ({
   filters,
@@ -152,142 +175,95 @@ export const FilterPanel = ({
           </div>
         </div>
 
-        {/* Deal Score */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            Min Deal Score: <span className="text-green-600 font-bold">{filters.minDealScore}</span>
-          </label>
-          <input
-            type="range"
-            min={0}
-            max={100}
-            step={5}
-            value={filters.minDealScore}
-            onChange={(e) => onUpdateFilter('minDealScore', Number(e.target.value))}
-            className="w-full accent-green-600"
+        {/* Scores & Pricing — all dual-range sliders grouped together so
+            the user has a single place to tune the headline numbers
+            (Deal Score, Investment Score, Homestead Fit, $/acre) without
+            having to scroll past the Price/Acreage inputs and Listing
+            Type pills to find the AI sliders. */}
+        <div className="space-y-5 pt-2 border-t border-gray-100">
+          <div className="text-sm font-semibold text-gray-900">Scores & Pricing</div>
+          <DualRangeSlider
+            label="Deal Score"
+            min={filters.minDealScore}
+            max={filters.maxDealScore}
+            bound={{ min: 0, max: 100 }}
+            accent="green"
+            onChange={(next) => {
+              onUpdateFilter('minDealScore', next.min);
+              onUpdateFilter('maxDealScore', next.max);
+            }}
           />
-          <div className="flex justify-between text-xs text-gray-400 mt-1">
-            <span>0</span>
-            <span>50</span>
-            <span>100</span>
-          </div>
-        </div>
-
-        {/* Range filter inputs use 0 / empty as the "no min" or
-            "no max" sentinel — applyFilters skips the comparison
-            when either side is <= 0. We render `value=""` instead of
-            `value={0}` so the placeholder ("No min" / "No max")
-            shows through in that state, and we coerce empty input
-            to 0 on change. */}
-
-        {/* Price Range */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">Price Range</label>
-          <div className="flex gap-2">
-            <div className="flex-1">
-              <label className="text-xs text-gray-500">Min</label>
-              <input
-                type="number"
-                min={0}
-                step={10000}
-                value={filters.minPrice > 0 ? filters.minPrice : ''}
-                onChange={(e) =>
-                  onUpdateFilter(
-                    'minPrice',
-                    e.target.value === '' ? 0 : Number(e.target.value),
-                  )
-                }
-                className="w-full border border-gray-300 rounded px-2 py-1 text-sm mt-1 focus:ring-1 focus:ring-green-500 focus:outline-none"
-                placeholder="No min"
-              />
-            </div>
-            <div className="flex-1">
-              <label className="text-xs text-gray-500">Max</label>
-              <input
-                type="number"
-                min={0}
-                step={10000}
-                value={filters.maxPrice > 0 ? filters.maxPrice : ''}
-                onChange={(e) =>
-                  onUpdateFilter(
-                    'maxPrice',
-                    e.target.value === '' ? 0 : Number(e.target.value),
-                  )
-                }
-                className="w-full border border-gray-300 rounded px-2 py-1 text-sm mt-1 focus:ring-1 focus:ring-green-500 focus:outline-none"
-                placeholder="No max"
-              />
-            </div>
-          </div>
-        </div>
-
-        {/* Acreage Range */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">Acreage</label>
-          <div className="flex gap-2 items-center">
-            <input
-              type="number"
-              min={0}
-              value={filters.minAcreage > 0 ? filters.minAcreage : ''}
-              onChange={(e) =>
-                onUpdateFilter(
-                  'minAcreage',
-                  e.target.value === '' ? 0 : Number(e.target.value),
-                )
-              }
-              className="w-full border border-gray-300 rounded px-2 py-1 text-sm focus:ring-1 focus:ring-green-500 focus:outline-none"
-              placeholder="No min"
+          <div>
+            <DualRangeSlider
+              label="Investment Score"
+              min={filters.minInvestmentScore}
+              max={filters.maxInvestmentScore}
+              bound={{ min: 0, max: 100 }}
+              accent="emerald"
+              onChange={(next) => {
+                onUpdateFilter('minInvestmentScore', next.min);
+                onUpdateFilter('maxInvestmentScore', next.max);
+              }}
             />
-            <span className="text-gray-400 text-sm">–</span>
-            <input
-              type="number"
-              min={0}
-              value={filters.maxAcreage > 0 ? filters.maxAcreage : ''}
-              onChange={(e) =>
-                onUpdateFilter(
-                  'maxAcreage',
-                  e.target.value === '' ? 0 : Number(e.target.value),
-                )
-              }
-              className="w-full border border-gray-300 rounded px-2 py-1 text-sm focus:ring-1 focus:ring-green-500 focus:outline-none"
-              placeholder="No max"
-            />
-          </div>
-        </div>
-
-        {/* Max Price Per Acre */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            Max Price/Acre:{' '}
-            <span className="text-green-600">
-              {filters.maxPricePerAcre > 0
-                ? `$${filters.maxPricePerAcre.toLocaleString()}`
-                : 'No max'}
-            </span>
-            {filters.maxPricePerAcre > 0 && (
-              <button
-                type="button"
-                onClick={() => onUpdateFilter('maxPricePerAcre', 0)}
-                className="ml-2 text-xs text-gray-500 hover:text-gray-900 underline"
-              >
-                clear
-              </button>
+            {(filters.minInvestmentScore > 0 || filters.maxInvestmentScore < 100) && (
+              <p className="text-xs text-gray-500 mt-1">Hides un-scored listings.</p>
             )}
-          </label>
-          <input
-            type="range"
-            min={0}
-            max={500000}
-            step={1000}
-            value={filters.maxPricePerAcre}
-            onChange={(e) => onUpdateFilter('maxPricePerAcre', Number(e.target.value))}
-            className="w-full accent-green-600"
-          />
-          <div className="flex justify-between text-xs text-gray-400 mt-1">
-            <span>No max</span>
-            <span>$50k</span>
-            <span>$500k</span>
           </div>
+          <div>
+            <DualRangeSlider
+              label="Homestead Fit"
+              min={filters.minHomesteadFit}
+              max={filters.maxHomesteadFit}
+              bound={{ min: 0, max: 100 }}
+              accent="purple"
+              onChange={(next) => {
+                onUpdateFilter('minHomesteadFit', next.min);
+                onUpdateFilter('maxHomesteadFit', next.max);
+              }}
+            />
+            {(filters.minHomesteadFit > 0 || filters.maxHomesteadFit < 100) && (
+              <p className="text-xs text-gray-500 mt-1">Hides un-analyzed listings.</p>
+            )}
+          </div>
+          <DualRangeSlider
+            label="Price"
+            min={filters.minPrice}
+            max={filters.maxPrice}
+            bound={{ min: 0, max: 250_000 }}
+            step={1000}
+            accent="green"
+            formatValue={formatPrice}
+            onChange={(next) => {
+              onUpdateFilter('minPrice', next.min);
+              onUpdateFilter('maxPrice', next.max);
+            }}
+          />
+          <DualRangeSlider
+            label="Price / Acre"
+            min={filters.minPricePerAcre}
+            max={filters.maxPricePerAcre}
+            bound={{ min: 0, max: 10_000 }}
+            step={100}
+            accent="green"
+            formatValue={formatPricePerAcre}
+            onChange={(next) => {
+              onUpdateFilter('minPricePerAcre', next.min);
+              onUpdateFilter('maxPricePerAcre', next.max);
+            }}
+          />
+          <DualRangeSlider
+            label="Acreage"
+            min={filters.minAcreage}
+            max={filters.maxAcreage}
+            bound={{ min: 0, max: 100 }}
+            step={1}
+            accent="green"
+            formatValue={formatAcreage}
+            onChange={(next) => {
+              onUpdateFilter('minAcreage', next.min);
+              onUpdateFilter('maxAcreage', next.max);
+            }}
+          />
         </div>
 
         {/* Listing Type — colored pills matching the card accent stripes
@@ -416,31 +392,6 @@ export const FilterPanel = ({
           <p className="text-xs text-gray-500 mb-4">
             Filters based on Claude&apos;s analysis of listing descriptions.
           </p>
-
-          {/* Min Homestead Fit */}
-          <div className="mb-5">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Min Homestead Fit:{' '}
-              <span className="text-purple-600 font-bold">{filters.minHomesteadFit}</span>
-            </label>
-            <input
-              type="range"
-              min={0}
-              max={100}
-              step={5}
-              value={filters.minHomesteadFit}
-              onChange={(e) => onUpdateFilter('minHomesteadFit', Number(e.target.value))}
-              className="w-full accent-purple-600"
-            />
-            <div className="flex justify-between text-xs text-gray-400 mt-1">
-              <span>0</span>
-              <span>50</span>
-              <span>100</span>
-            </div>
-            {filters.minHomesteadFit > 0 && (
-              <p className="text-xs text-gray-500 mt-1">Hides un-analyzed listings.</p>
-            )}
-          </div>
 
           {/* Hide red flags */}
           <div className="mb-3">

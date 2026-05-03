@@ -72,12 +72,17 @@ export const useFilters = () => {
     filters.listingVariants.length > 0 ||
     filters.sources.length > 0 ||
     filters.minDealScore > 0 ||
+    filters.maxDealScore < 100 ||
     filters.minHomesteadFit > 0 ||
+    filters.maxHomesteadFit < 100 ||
+    filters.minInvestmentScore > 0 ||
+    filters.maxInvestmentScore < 100 ||
     filters.hideWithRedFlags ||
     filters.minPrice > DEFAULT_FILTERS.minPrice ||
-    filters.maxPrice < DEFAULT_FILTERS.maxPrice ||
+    (filters.maxPrice > 0 && filters.maxPrice < DEFAULT_FILTERS.maxPrice) ||
     filters.minAcreage > DEFAULT_FILTERS.minAcreage ||
-    filters.maxAcreage < DEFAULT_FILTERS.maxAcreage ||
+    (filters.maxAcreage > 0 && filters.maxAcreage < DEFAULT_FILTERS.maxAcreage) ||
+    filters.minPricePerAcre > 0 ||
     filters.maxPricePerAcre < DEFAULT_FILTERS.maxPricePerAcre ||
     (filters.drawnArea !== null && filters.drawnArea.length >= 3);
 

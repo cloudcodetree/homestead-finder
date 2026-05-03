@@ -128,6 +128,10 @@ ENABLED_SOURCES: dict[str, bool] = {
     "auction": True,
     "blm": True,
     "govease": True,
+    # Linebarger Goggan Blair & Sampson — TX delinquent-tax aggregator
+    # via clean JSON API. Covers Caldwell + Llano in our TX scope.
+    # Public-records source under TX Public Information Act.
+    "lgbs": True,
 }
 
 # ── Local-only sources (CI safety) ────────────────────────────────────────────
@@ -202,6 +206,10 @@ STRATEGY_CHAINS: dict[str, list[str]] = {
     # LandHub is plain server-rendered Next.js HTML — http works;
     # curl_cffi as a cheap TLS fallback if they ever add Cloudflare.
     "landhub": ["http", "curl_cffi", "selenium"],
+    # LGBS publishes a plain JSON API — no Cloudflare, no JS render.
+    # Only need plain HTTP; curl_cffi as TLS fallback if they ever
+    # tighten the front door.
+    "lgbs": ["http", "curl_cffi"],
     "county_tax": ["http", "curl_cffi", "selenium", "firecrawl"],
     "auction": ["curl_cffi", "selenium", "firecrawl+claude"],
     "blm": ["http", "curl_cffi", "selenium"],

@@ -30,6 +30,7 @@ from sources.homestead_crossing import HomesteadCrossingScraper
 from sources.landhub import LandHubScraper
 from sources.lands_of_america import LandsOfAmericaScraper
 from sources.landwatch import LandWatchScraper
+from sources.lgbs import LGBSScraper
 from sources.mossy_oak import MossyOakScraper
 from sources.ozarkland import OzarkLandScraper
 from sources.united_country import UnitedCountryScraper
@@ -65,6 +66,12 @@ ALL_SCRAPERS = {
     "auction": AuctionScraper,
     "blm": BLMScraper,
     "govease": GovEaseScraper,
+    # Linebarger Goggan Blair & Sampson — TX delinquent-tax law firm.
+    # Covers ~30 TX counties via a clean undocumented JSON API. Of our
+    # 14 Austin-area counties, LGBS covers Caldwell + Llano. Adding
+    # TX delinquent-tax inventory the auction/govease feeds miss. See
+    # scraper/sources/lgbs.py for scope notes.
+    "lgbs": LGBSScraper,
 }
 
 

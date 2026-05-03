@@ -77,3 +77,9 @@ data/_image_placeholders.json
 # Supabase CLI working directory — per-machine state (linked project,
 # pooler URL, version pins). Standard Supabase template ignores this.
 supabase/.temp/
+
+# County Appraisal District bulk downloads — annual rolls are
+# 500MB–4GB raw ZIPs of fixed-width PACS exports. Kept local, parsed
+# into the small per-county JSON the frontend uses (data/cad_*.json),
+# which is the only artifact that gets committed.
+data/cad/

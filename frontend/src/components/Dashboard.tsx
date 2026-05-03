@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useState, lazy, Suspense } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { DEFAULT_FILTERS, type FilterState } from '../types/property';
+import { ActiveFilterChips } from './ActiveFilterChips';
 import { FilterPanel } from './FilterPanel';
 import { TopPicks } from './TopPicks';
 import { HomesteadDeals } from './HomesteadDeals';
@@ -282,9 +283,14 @@ export const Dashboard = () => {
     filters.maxPrice !== DEFAULT_FILTERS.maxPrice ? 1 : 0,
     filters.minAcreage !== DEFAULT_FILTERS.minAcreage ? 1 : 0,
     filters.maxAcreage !== DEFAULT_FILTERS.maxAcreage ? 1 : 0,
+    filters.minPricePerAcre !== DEFAULT_FILTERS.minPricePerAcre ? 1 : 0,
     filters.maxPricePerAcre !== DEFAULT_FILTERS.maxPricePerAcre ? 1 : 0,
     filters.minDealScore !== DEFAULT_FILTERS.minDealScore ? 1 : 0,
+    filters.maxDealScore !== DEFAULT_FILTERS.maxDealScore ? 1 : 0,
     filters.minHomesteadFit !== DEFAULT_FILTERS.minHomesteadFit ? 1 : 0,
+    filters.maxHomesteadFit !== DEFAULT_FILTERS.maxHomesteadFit ? 1 : 0,
+    filters.minInvestmentScore !== DEFAULT_FILTERS.minInvestmentScore ? 1 : 0,
+    filters.maxInvestmentScore !== DEFAULT_FILTERS.maxInvestmentScore ? 1 : 0,
     filters.hideWithRedFlags ? 1 : 0,
     filters.states.length,
     filters.features.length,
@@ -376,6 +382,22 @@ export const Dashboard = () => {
           </svg>
           <span>Filter{activeFilterCount > 0 ? ` (${activeFilterCount})` : ''}</span>
         </button>
+        {/* Active-filter chip strip: each chip clears its own filter
+            so the user can see+edit narrowing without re-opening the
+            panel. Hidden on small screens to keep the toolbar from
+            wrapping; on those, the count in the Filter button is
+            still the truthful affordance. */}
+        <div className="hidden lg:flex flex-1 min-w-0 overflow-x-auto scrollbar-thin">
+          <ActiveFilterChips
+            filters={filters}
+            onUpdateFilter={updateFilter}
+            onToggleState={toggleState}
+            onToggleFeature={toggleFeature}
+            onToggleAITag={toggleAITag}
+            onToggleListingVariant={toggleListingVariant}
+            onToggleSource={toggleSource}
+          />
+        </div>
         <div className="hidden md:flex items-center gap-4">
           <div className="text-xs text-gray-500">
             <span className="font-semibold text-gray-900">{stats.total}</span> listings

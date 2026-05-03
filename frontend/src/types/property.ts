@@ -401,6 +401,8 @@ export interface FilterState {
   maxPrice: number;
   minAcreage: number;
   maxAcreage: number;
+  minPricePerAcre: number;
+  /** Upper bound on $/acre. 1,000,000 = "no cap" (slider tops out at $1M+). */
   maxPricePerAcre: number;
   states: string[];
   features: PropertyFeature[];
@@ -414,6 +416,12 @@ export interface FilterState {
   // AI-derived filters (all optional — default behavior is no filtering)
   aiTags: AITag[];
   minHomesteadFit: number;
+  /** Score-range upper bound. 100 = "no cap" (standard slider extreme). */
+  maxHomesteadFit: number;
+  minInvestmentScore: number;
+  maxInvestmentScore: number;
+  /** Upper bound for dealScore. The lower bound is `minDealScore`. */
+  maxDealScore: number;
   hideWithRedFlags: boolean;
   /** Hide listings whose source marked them sold / pending / under
    * contract. Default true so the List view stays focused on things
@@ -451,10 +459,17 @@ export const DEFAULT_FILTERS: FilterState = {
   // skips the comparison when either side is <= 0. The FilterPanel
   // inputs accept 0 / empty to mean "off" too.
   minPrice: 0,
-  maxPrice: 0,
+  // Slider-bound sentinel: 250,000 (the slider's top stop) means
+  // "no cap". applyFilters skips the comparison at that value.
+  maxPrice: 250_000,
   minAcreage: 0,
-  maxAcreage: 0,
-  maxPricePerAcre: 0,
+  // Slider-bound sentinel: 100 (the slider's top stop) means "no cap".
+  // applyFilters skips the comparison at that value.
+  maxAcreage: 100,
+  minPricePerAcre: 0,
+  // Slider-bound sentinel: 10,000 (the slider's top stop) means
+  // "no cap". applyFilters skips the comparison at that value.
+  maxPricePerAcre: 10_000,
   states: [],
   features: [],
   minDealScore: 0,
@@ -468,6 +483,10 @@ export const DEFAULT_FILTERS: FilterState = {
   sortBy: 'priceAsc',
   aiTags: [],
   minHomesteadFit: 0,
+  maxHomesteadFit: 100,
+  minInvestmentScore: 0,
+  maxInvestmentScore: 100,
+  maxDealScore: 100,
   hideWithRedFlags: false,
   hideInactive: true,
   improvementTier: 'any',

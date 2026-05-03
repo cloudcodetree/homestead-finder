@@ -1,19 +1,15 @@
-import { Brain, Home, Lock } from 'lucide-react';
+import { Lock } from 'lucide-react';
 import { useState } from 'react';
-import {
-  Property,
-  FEATURE_LABELS,
-  AI_TAG_LABELS,
-  AI_TAG_DESCRIPTIONS,
-  RED_FLAG_LABELS,
-  RED_FLAG_DESCRIPTIONS,
-  RED_FLAG_SEVERITY,
-} from '../types/property';
+import { Property, FEATURE_LABELS } from '../types/property';
 import { useAccessTier } from '../hooks/useAccessTier';
 import { useAuth } from '../hooks/useAuth';
 import { useHiddenListings } from '../hooks/useHiddenListings';
 import { FreeTierLimitError, useSavedListings } from '../hooks/useSavedListings';
 import { AddToProjectButton } from './AddToProjectButton';
+import { CadRecordPanel } from './CadRecord';
+import { CompBreakdown } from './CompBreakdown';
+import { DealScoreBreakdown } from './DealScoreBreakdown';
+import { HomesteadFitBreakdown } from './HomesteadFitBreakdown';
 import { InvestmentScorePanel } from './InvestmentScore';
 import { MarketContext } from './MarketContext';
 import { PrivateNote } from './PrivateNote';
@@ -348,6 +344,18 @@ export const PropertyDetail = ({ property, onClose }: PropertyDetailProps) => {
             )}
           </div>
 
+          {/* Three composite scores stacked together so the user sees
+              the headline numbers first, in one visual rhythm. Each
+              panel matches the same Ring + breakdown grammar so the
+              eye groups them.
+                Deal Score      → Star,  4-axis (price/features/dom/source)
+                Investment      → $,     5-axis (value/land/risk/liquidity/macro)
+                Homestead Fit   → Leaf,  AI tags + red flags
+              Color-banded green/amber/red by score so a green Deal
+              and an amber Fit on the same listing read instantly. */}
+          <DealScoreBreakdown property={property} />
+          <InvestmentScorePanel property={property} />
+
           {/* Total-cost-to-homestead — the decision-driver view.
               Sums the asking price + estimated build-out to reach move-
               in-ready. For already-ready listings, buildout=0 and this
@@ -436,101 +444,17 @@ export const PropertyDetail = ({ property, onClose }: PropertyDetailProps) => {
             </div>
           )}
 
-          {/* AI Analysis */}
+          {/* Homestead Fit panel — same visual grammar as Deal Score
+              and Investment Score so all three composite scores read
+              as a unified set. AI-extracted tags + red flags. Falls
+              through to a small "not analyzed yet" block when the
+              AI enrichment pass hasn't run. */}
           {property.enrichedAt ? (
-            <div className="rounded-lg border border-purple-100 bg-purple-50/40 p-4">
-              <div className="flex items-center gap-2 mb-3 flex-wrap">
-                <Brain
-                  className="w-4 h-4 text-purple-700"
-                  aria-hidden="true"
-                />
-                <h3 className="text-sm font-semibold text-purple-900">AI Analysis</h3>
-                {property.homesteadFitScore !== undefined && (
-                  <span
-                    className="inline-flex items-center gap-1 text-xs font-bold text-purple-700 bg-white border border-purple-200 rounded-full px-2 py-0.5"
-                    title={`Homestead Fit: ${property.homesteadFitScore}/100`}
-                  >
-                    <Home className="w-3.5 h-3.5" aria-hidden="true" />
-                    <span className="tabular-nums">
-                      {property.homesteadFitScore}
-                    </span>
-                  </span>
-                )}
-                <span
-                  className="text-[11px] text-purple-600/80"
-                  title={`Full timestamp: ${property.enrichedAt}`}
-                >
-                  analyzed {formatDate(property.enrichedAt)}
-                </span>
-                <span className="ml-auto text-[10px] text-purple-500 tracking-wide uppercase font-medium">
-                  Beta
-                </span>
-              </div>
-              {property.aiSummary ? (
-                <div className="mb-3">
-                  <p className="text-[11px] font-semibold text-purple-800 mb-1 uppercase tracking-wide">
-                    Why it scored this way
-                  </p>
-                  <p className="text-sm text-gray-700 leading-relaxed italic">
-                    &ldquo;{property.aiSummary}&rdquo;
-                  </p>
-                </div>
-              ) : (
-                <p className="text-xs text-gray-500 mb-3">
-                  (No written summary available for this listing.)
-                </p>
-              )}
-              {(property.redFlags?.length ?? 0) > 0 && (
-                <div className="mb-3">
-                  <p className="text-xs font-semibold text-amber-800 mb-1.5">
-                    ⚠ Red Flags
-                    <span className="font-normal text-amber-600/70 ml-1">(hover for details)</span>
-                  </p>
-                  <div className="flex flex-wrap gap-1.5">
-                    {property.redFlags!.map((flag) => {
-                      const severity = RED_FLAG_SEVERITY[flag] ?? 3;
-                      const desc = RED_FLAG_DESCRIPTIONS[flag];
-                      return (
-                        <span
-                          key={flag}
-                          title={desc ? `${desc} (severity ${severity}/5)` : undefined}
-                          className="rounded-full bg-amber-50 border border-amber-200 px-2 py-0.5 text-xs text-amber-700 font-medium cursor-help"
-                        >
-                          {RED_FLAG_LABELS[flag]}
-                          <span className="ml-1 text-amber-500">{'•'.repeat(severity)}</span>
-                        </span>
-                      );
-                    })}
-                  </div>
-                </div>
-              )}
-              {(property.aiTags?.length ?? 0) > 0 && (
-                <div>
-                  <p className="text-xs font-semibold text-purple-800 mb-1.5">
-                    Tags
-                    <span className="font-normal text-purple-600/70 ml-1">(hover for details)</span>
-                  </p>
-                  <div className="flex flex-wrap gap-1.5">
-                    {property.aiTags!.map((tag) => {
-                      const desc = AI_TAG_DESCRIPTIONS[tag];
-                      return (
-                        <span
-                          key={tag}
-                          title={desc || undefined}
-                          className="rounded-full bg-white border border-purple-200 px-2 py-0.5 text-xs text-purple-700 font-medium cursor-help"
-                        >
-                          {AI_TAG_LABELS[tag]}
-                        </span>
-                      );
-                    })}
-                  </div>
-                </div>
-              )}
-            </div>
+            <HomesteadFitBreakdown property={property} />
           ) : (
             <div className="rounded-lg border border-gray-200 bg-gray-50 p-4">
               <div className="flex items-center gap-2 mb-1">
-                <h3 className="text-sm font-semibold text-gray-700">AI Analysis</h3>
+                <h3 className="text-sm font-semibold text-gray-700">Homestead Fit</h3>
                 <span className="text-[10px] px-1.5 py-0.5 bg-gray-200 text-gray-600 rounded font-medium uppercase tracking-wide">
                   Not Yet Analyzed
                 </span>
@@ -577,12 +501,20 @@ export const PropertyDetail = ({ property, onClose }: PropertyDetailProps) => {
             links={property.externalLinks}
           />
 
-          {/* Investment-grade composite (Value / Land / Risk / Liquidity /
-              Macro). Self-gates on `investmentBreakdown` presence. */}
-          <InvestmentScorePanel property={property} />
+          {/* "How we computed the comp" — surfaces the methodology +
+              the actual listings that fed the median, so users can
+              audit the comparison instead of trusting an opaque number. */}
+          <CompBreakdown property={property} />
 
-          {/* Property-as-a-stock — market context (county / state median
-              percentile, similar listings). Self-gates on comp depth. */}
+          {/* Travis CAD record — owner, last deed date, valuations
+              from the public county appraisal roll. Self-gates on
+              `data/cad_joined.json` having a row for this listing
+              (currently Travis-only; other counties as we add them). */}
+          <CadRecordPanel property={property} />
+
+          {/* Property-as-a-stock — county / state percentile + voting
+              chip. Different signal from CompBreakdown (which is just
+              the $/ac comparison). Self-gates on comp depth. */}
           <MarketContext property={property} />
 
           {/* Metadata */}

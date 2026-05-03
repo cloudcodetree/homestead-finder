@@ -15,33 +15,36 @@ import type {
  * "great", because users glancing at a card should only see green
  * for genuinely strong properties.
  */
-const tier = (score: number) => {
+export const tier = (score: number) => {
   if (score >= 70) return 'green';
   if (score >= 50) return 'amber';
   return 'red';
 };
 
-const tierClasses: Record<
+export const tierClasses: Record<
   'green' | 'amber' | 'red',
-  { bar: string; text: string; ring: string; bg: string }
+  { bar: string; text: string; ring: string; bg: string; border: string }
 > = {
   green: {
     bar: 'bg-emerald-500',
     text: 'text-emerald-700',
     ring: 'stroke-emerald-500',
     bg: 'bg-emerald-50',
+    border: 'border-emerald-200',
   },
   amber: {
     bar: 'bg-amber-500',
     text: 'text-amber-700',
     ring: 'stroke-amber-500',
     bg: 'bg-amber-50',
+    border: 'border-amber-200',
   },
   red: {
     bar: 'bg-rose-500',
     text: 'text-rose-700',
     ring: 'stroke-rose-500',
     bg: 'bg-rose-50',
+    border: 'border-rose-200',
   },
 };
 
@@ -71,7 +74,7 @@ interface RingProps {
  * Color follows the same band rules as the per-axis bars so the eye
  * groups them.
  */
-const Ring = ({
+export const Ring = ({
   score,
   size = 80,
   strokeWidth = 8,
@@ -137,6 +140,12 @@ interface ScoreRingChipProps {
   /** Override the chip's accent (used by InvestmentScore so the chip
    * matches the panel's tier colors; Fit / Deal use their own palette). */
   toneOverride?: { bg: string; text: string };
+  /** 'ring' (default) shows the percentage ring + icon + number — used
+   * for the photo overlay where it's the dominant headline read.
+   * 'flat' drops the ring and renders icon + number on a tinted pill —
+   * used for inline secondary scores so the eye can tell a flat pill
+   * from a ringed pill at a glance, instead of seeing three rings. */
+  variant?: 'ring' | 'flat';
 }
 
 /**
@@ -152,9 +161,22 @@ export const ScoreRingChip = ({
   icon: Icon,
   label,
   toneOverride,
+  variant = 'ring',
 }: ScoreRingChipProps) => {
   const klass = tierClasses[tier(score)];
   const tone = toneOverride ?? { bg: klass.bg, text: klass.text };
+  if (variant === 'flat') {
+    return (
+      <span
+        className={`inline-flex items-center gap-0.5 rounded-full border px-1.5 py-0.5 text-xs font-bold ${tone.bg} ${tone.text} border-current/30`}
+        title={`${label}: ${Math.round(score)}/100`}
+        aria-label={`${label} ${Math.round(score)} of 100`}
+      >
+        <Icon className="w-3.5 h-3.5" />
+        <span className="tabular-nums">{Math.round(score)}</span>
+      </span>
+    );
+  }
   return (
     <span
       className={`inline-flex items-center gap-1 rounded-full border px-1 py-0.5 text-xs font-bold ${tone.bg} ${tone.text} border-current/30`}
@@ -321,5 +343,5 @@ export const InvestmentScorePanel = ({ property }: PanelProps) => {
  * DollarSign glyph; magnitude from the ring's stroke fill + tier color.
  */
 export const InvestmentScoreBadge = ({ score }: { score: number }) => (
-  <ScoreRingChip score={score} icon={DollarSign} label="Investment Score" />
+  <ScoreRingChip score={score} icon={DollarSign} label="Investment Score" variant="flat" />
 );

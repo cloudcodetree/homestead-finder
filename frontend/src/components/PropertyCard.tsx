@@ -30,13 +30,13 @@ const computeDaysOnMarket = (isoDate: string): number | null => {
 };
 
 import { useAuth } from '../hooks/useAuth';
-import { useState } from 'react';
-import { getCountyStat, useCountyMedians } from '../hooks/useCountyMedians';
+import { useMemo, useState } from 'react';
+import { useCompsCorpus } from '../hooks/useCountyMedians';
 import { useHiddenListings } from '../hooks/useHiddenListings';
 import { useListingRatings } from '../hooks/useListingRatings';
 import { useSavedListings, FreeTierLimitError } from '../hooks/useSavedListings';
-import { Home, Star } from 'lucide-react';
-import { formatVsMedian } from '../utils/marketStats';
+import { Leaf, Star } from 'lucide-react';
+import { findBestComps, formatVsComp, rawLandPpa } from '../utils/comps';
 import { InvestmentScoreBadge, ScoreRingChip } from './InvestmentScore';
 import { UpgradeModal } from './UpgradeModal';
 import { PropertyThumbnail } from './PropertyThumbnail';
@@ -49,7 +49,7 @@ import {
   formatSourceName,
 } from '../utils/formatters';
 import { getListingTypeStyle } from '../utils/listingType';
-import { getDealScoreLabel, getDealScoreBorderColor } from '../utils/scoring';
+import { getDealScoreBorderColor } from '../utils/scoring';
 
 interface PropertyCardProps {
   property: Property;
@@ -106,24 +106,21 @@ export const PropertyCard = ({ property, onClick, isSelected = false }: Property
   const rating = getRating(property.id);
   const [showUpgrade, setShowUpgrade] = useState(false);
 
-  // County-level "vs median $/acre" cue — small chip near the price.
-  // Self-gates on comp depth: hides for counties with < 5 listings so
-  // we don't quote a median computed off two rows.
-  const countyMedians = useCountyMedians();
-  const countyStat = getCountyStat(
-    countyMedians,
-    property.location?.state,
-    property.location?.county,
+  // "vs comp" cue near the price. Walks a tightest-first fallback
+  // chain so the displayed % reflects similar parcels first
+  // (acreage-band within county → nearby within 25mi → county). The
+  // tooltip explains which pool we used so users can tell a tight
+  // neighborhood number from a county-wide one. Hides when no pool
+  // has ≥ 5 comps (better "no comps" than a 2-row median).
+  const compsCorpus = useCompsCorpus();
+  const comp = useMemo(
+    () => findBestComps(property, compsCorpus),
+    [property, compsCorpus],
   );
-  const vsMedian = countyStat
-    ? formatVsMedian(
-        property.pricePerAcre,
-        countyStat.median,
-        property.location?.county ?? 'county',
-        5,
-        countyStat.count,
-      )
-    : null;
+  // Compare raw-land $/ac (residual minus structures + utilities) on
+  // both sides — the median in `comp` was also computed from raw-land
+  // values, so this is an apples-to-apples comparison.
+  const vsMedian = formatVsComp(rawLandPpa(property), comp);
 
   const onSaveClick = async (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -278,26 +275,27 @@ export const PropertyCard = ({ property, onClick, isSelected = false }: Property
                   the first thing the eye lands on; InvestmentScore +
                   Homestead Fit stay here as the secondary read.
                     💲 DollarSign → Investment
-                    🏠 Home       → Homestead Fit */}
+                    🌱 Leaf     → Homestead Fit */}
               {property.investmentScore !== undefined && (
                 <InvestmentScoreBadge score={property.investmentScore} />
               )}
               {property.homesteadFitScore !== undefined ? (
                 <ScoreRingChip
                   score={property.homesteadFitScore}
-                  icon={Home}
+                  icon={Leaf}
                   label={
                     property.aiSummary
                       ? `Homestead Fit — ${property.aiSummary}`
                       : 'Homestead Fit'
                   }
+                  variant="flat"
                 />
               ) : (
                 <span
                   className="inline-flex items-center gap-1 rounded-full px-1.5 py-1 text-[10px] font-medium bg-gray-100 text-gray-500 border border-gray-200"
                   title="Homestead Fit not yet AI-analyzed"
                 >
-                  <Home className="w-3.5 h-3.5 opacity-60" aria-hidden="true" />
+                  <Leaf className="w-3.5 h-3.5 opacity-60" aria-hidden="true" />
                 </span>
               )}
             </div>
@@ -377,46 +375,54 @@ export const PropertyCard = ({ property, onClick, isSelected = false }: Property
             </>
           ) : (
             <>
+              {/* Price + $/acre as twin headlines — both are the value
+                  signals buyers actually compare across listings. The
+                  acreage and county-comp delta sit underneath as smaller
+                  sublines. The redundant "Hot Deal / Below Avg" label
+                  was dropped because the dealScore ring overlay already
+                  shows the canonical number. */}
               <div>
                 <p className="text-lg font-bold text-gray-900">{formatPrice(property.price)}</p>
+                <p className="text-xs text-gray-500">{formatAcreage(property.acreage)}</p>
+              </div>
+              <div className="text-gray-300">|</div>
+              <div>
                 {/* Residual $/acre when we detected structures worth subtracting
                     — a cabin-on-40ac listing should show the land-only $/ac
-                    alongside the raw number, otherwise buyers can't compare to
-                    bare parcels. Falls back to regular $/ac for bare land. */}
+                    alongside the raw number, otherwise buyers can't compare
+                    to bare parcels. */}
                 {property.residualPricePerAcre &&
                 property.estimatedStructureValueUsd &&
                 property.estimatedStructureValueUsd > 0 ? (
                   <p
-                    className="text-xs text-gray-500"
+                    className="text-base font-semibold text-gray-700"
                     title={`Land-only $/ac after subtracting ~${formatPrice(property.estimatedStructureValueUsd)} estimated structure value`}
                   >
-                    {formatPricePerAcre(property.residualPricePerAcre)}{' '}
-                    <span className="text-gray-400">(land)</span>
+                    {formatPricePerAcre(property.residualPricePerAcre)}
+                    <span className="text-[10px] text-gray-400 font-medium ml-1">/ac (land)</span>
                   </p>
                 ) : (
-                  <p className="text-xs text-gray-500">{formatPricePerAcre(property.pricePerAcre)}</p>
+                  <p className="text-base font-semibold text-gray-700">
+                    {formatPricePerAcre(property.pricePerAcre)}
+                    <span className="text-[10px] text-gray-400 font-medium ml-1">/ac</span>
+                  </p>
                 )}
-                {vsMedian && (
+                {vsMedian ? (
                   <p
-                    className={`text-[11px] mt-0.5 font-medium ${
+                    className={`text-xs mt-0.5 font-medium ${
                       vsMedian.startsWith('at')
                         ? 'text-gray-500'
                         : vsMedian.includes('below')
                           ? 'text-emerald-700'
                           : 'text-orange-700'
                     }`}
-                    title={`County median $/acre: ${formatPricePerAcre(countyStat?.median ?? 0)} (${countyStat?.count ?? 0} comps)`}
+                    title={`Median $/ac: ${formatPricePerAcre(comp?.median ?? 0)} — ${comp?.poolLabel ?? ''}`}
                   >
                     {vsMedian}
                   </p>
+                ) : (
+                  <p className="text-xs text-gray-400">no comps</p>
                 )}
-              </div>
-              <div className="text-gray-300">|</div>
-              <div>
-                <p className="text-base font-semibold text-gray-700">
-                  {formatAcreage(property.acreage)}
-                </p>
-                <p className="text-xs text-gray-500">{getDealScoreLabel(property.dealScore)}</p>
               </div>
             </>
           )}

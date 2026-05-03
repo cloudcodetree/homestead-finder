@@ -65,3 +65,17 @@ export const getCountyStat = (
   state: string | undefined,
   county: string | undefined,
 ): CountyStat | null => medians.get(stripeKey(state, county)) ?? null;
+
+/**
+ * Hook that gives cards a `findCompsFor(p)` callback over the loaded
+ * corpus. Centralizes the corpus read so each card doesn't re-import
+ * it; the corpus itself is already memoized in `useProperties` /
+ * `useJsonAsset` so this is just an indirection, not an extra fetch.
+ *
+ * Lives next to `useCountyMedians` because both are derived
+ * comparisons against the loaded inventory.
+ */
+export const useCompsCorpus = (): readonly Property[] => {
+  const { allProperties } = useProperties(DEFAULT_FILTERS);
+  return allProperties as Property[];
+};
