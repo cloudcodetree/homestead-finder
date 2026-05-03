@@ -160,10 +160,10 @@ export const PropertyCard = ({ property, onClick, isSelected = false }: Property
               : 'Save this listing'
             : 'Sign in to save listings'
         }
-        className={`absolute top-2 right-2 z-10 w-8 h-8 rounded-full backdrop-blur-sm flex items-center justify-center transition-colors shadow ${
+        className={`absolute top-2 right-2 z-10 w-8 h-8 rounded-full flex items-center justify-center transition-colors shadow ${
           saved
-            ? 'bg-amber-400/90 hover:bg-amber-500 text-white'
-            : 'bg-black/40 hover:bg-black/60 text-white'
+            ? 'bg-amber-400 hover:bg-amber-500 text-white'
+            : 'bg-black/60 hover:bg-black/75 text-white'
         }`}
       >
         <svg viewBox="0 0 24 24" className="w-4 h-4" fill={saved ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -182,10 +182,10 @@ export const PropertyCard = ({ property, onClick, isSelected = false }: Property
           }}
           aria-label={hidden ? 'Un-hide listing' : 'Not interested'}
           title={hidden ? 'Hidden — click to restore' : 'Not interested'}
-          className={`absolute top-2 right-11 z-10 w-8 h-8 rounded-full backdrop-blur-sm flex items-center justify-center transition-colors shadow ${
+          className={`absolute top-2 right-11 z-10 w-8 h-8 rounded-full flex items-center justify-center transition-colors shadow ${
             hidden
-              ? 'bg-red-500/90 hover:bg-red-600 text-white'
-              : 'bg-black/40 hover:bg-black/60 text-white'
+              ? 'bg-red-500 hover:bg-red-600 text-white'
+              : 'bg-black/60 hover:bg-black/75 text-white'
           }`}
         >
           <svg viewBox="0 0 24 24" className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -218,8 +218,13 @@ export const PropertyCard = ({ property, onClick, isSelected = false }: Property
           convention as the Top Picks carousel rank badge).
           InvestmentScore + Homestead Fit stay in the inline pill row
           below the title. */}
+      {/* iOS Safari: avoid `backdrop-blur` on these overlay chips —
+          it forces them onto a compositor layer that escapes the
+          parent scroll container's clipping during momentum-scroll,
+          so the chip visually floats over the page header. Solid
+          `bg-white` is fine over a photo and fixes the bug. */}
       <div className="absolute top-2 left-2 z-10 flex flex-col items-start gap-1.5">
-        <div className="rounded-full bg-white/95 backdrop-blur-sm shadow px-0.5 py-0.5">
+        <div className="rounded-full bg-white shadow px-0.5 py-0.5">
           <ScoreRingChip
             score={property.dealScore}
             icon={Star}
@@ -228,7 +233,7 @@ export const PropertyCard = ({ property, onClick, isSelected = false }: Property
         </div>
         {rating !== 0 && (
           <div
-            className="w-7 h-7 rounded-full bg-white/95 border border-gray-200 backdrop-blur-sm flex items-center justify-center text-sm shadow"
+            className="w-7 h-7 rounded-full bg-white border border-gray-200 flex items-center justify-center text-sm shadow"
             title={
               rating === 2
                 ? '😄 Loved'

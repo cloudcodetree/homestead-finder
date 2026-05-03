@@ -147,7 +147,7 @@ export const AppShell = () => {
   return (
     <div className="flex flex-col h-screen bg-gray-50">
       {/* Top bar */}
-      <header className="z-30 flex-shrink-0 flex items-center gap-2 sm:gap-3 bg-white border-b border-gray-200 px-2 sm:px-4 h-14">
+      <header className="relative z-50 flex-shrink-0 flex items-center gap-2 sm:gap-3 bg-white border-b border-gray-200 px-2 sm:px-4 h-14">
         {/* Hamburger is always present at every breakpoint. On mobile
             it opens the drawer; on desktop it toggles the rail
             visibility (open ↔ hidden). The rail's own footer button
