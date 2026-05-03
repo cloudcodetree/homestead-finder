@@ -1,19 +1,16 @@
 import { Navigate } from 'react-router-dom';
-import { useAuth } from '../hooks/useAuth';
 
 /**
- * Anonymous users hitting `/` get the marketing page; signed-in
- * users get their personalized feed. Mounts at the literal root so
- * we never render the bare Dashboard as the landing experience.
+ * Everyone — anonymous or signed in — lands on /browse. The Browse
+ * page is the product's headline view (the actual listings + filters
+ * + map), and forcing returning users through /landing or /home was
+ * adding a click for no reason. Signed-in users still have direct
+ * links to /home, /swipe, /projects, etc. via the account menu.
  *
- * While auth status is loading we render nothing — better than
- * flashing the landing page and immediately redirecting away.
+ * Kept as a thin Navigate wrapper (rather than mounting Browse at
+ * "/" directly) so a future cold-start state — e.g. a "what's new
+ * since you last visited" banner — has a single mount point.
  */
 export const RootRedirect = () => {
-  const { user, loading, configured } = useAuth();
-  if (loading) return null;
-  // When Supabase isn't configured at all, treat as anonymous so
-  // local dev still has somewhere to land.
-  const target = configured && user ? '/home' : '/landing';
-  return <Navigate to={target} replace />;
+  return <Navigate to="/browse" replace />;
 };

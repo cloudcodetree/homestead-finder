@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
+import { SignInSheet } from './SignInSheet';
 import { UpgradeModal } from './UpgradeModal';
 
 /** Stash key for the post-OAuth redirect target. The Supabase redirect
@@ -25,8 +26,9 @@ const NEXT_AFTER_AUTH_KEY = 'hf:auth-next';
  * none until users exist). Honest > polished at this stage.
  */
 export const Landing = () => {
-  const { user, loginWithGoogle } = useAuth();
+  const { user, loginWithGoogle, loginWithEmail } = useAuth();
   const [showPricing, setShowPricing] = useState(false);
+  const [showSignIn, setShowSignIn] = useState(false);
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   // `?next=` is set by AppShell's auth gate when an anonymous user
@@ -34,6 +36,10 @@ export const Landing = () => {
   // access" banner and stash the path so OAuth redirects them back.
   const nextPath = searchParams.get('next');
 
+  // Open the same SignInSheet modal AppShell uses (magic-link primary,
+  // Google secondary). Forcing Google OAuth straight from a click is
+  // brittle on mobile — iOS Safari blocks third-party cookies and the
+  // OAuth pop-up silently fails. Magic-link works on every device.
   const startSignup = () => {
     if (nextPath) {
       try {
@@ -42,7 +48,7 @@ export const Landing = () => {
         // ignore — non-critical, we'll just send them to /home
       }
     }
-    void loginWithGoogle();
+    setShowSignIn(true);
   };
 
   // Auto-bounce signed-in visitors into the shell. Honors a
@@ -132,7 +138,7 @@ export const Landing = () => {
             </Link>
           ) : (
             <button
-              onClick={() => void loginWithGoogle()}
+              onClick={startSignup}
               className="bg-green-600 hover:bg-green-700 text-white font-semibold px-6 py-3 rounded-lg"
             >
               Start free — no credit card
@@ -234,7 +240,7 @@ export const Landing = () => {
                   onClick={() => {
                     if (t.cta === 'free') {
                       if (user) window.location.href = '/';
-                      else void loginWithGoogle();
+                      else startSignup();
                     } else {
                       setShowPricing(true);
                     }
@@ -273,7 +279,7 @@ export const Landing = () => {
           </Link>
         ) : (
           <button
-            onClick={() => void loginWithGoogle()}
+            onClick={startSignup}
             className="bg-green-600 hover:bg-green-700 text-white font-semibold px-6 py-3 rounded-lg"
           >
             Start free
@@ -293,6 +299,14 @@ export const Landing = () => {
         onClose={() => setShowPricing(false)}
         reason="generic"
       />
+      {showSignIn && (
+        <SignInSheet
+          onClose={() => setShowSignIn(false)}
+          onGoogle={loginWithGoogle}
+          onEmail={loginWithEmail}
+          blurb="Free to start. Save listings, get alerts, and pin notes on the parcels you're researching."
+        />
+      )}
     </div>
   );
 };

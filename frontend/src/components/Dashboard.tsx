@@ -358,8 +358,11 @@ export const Dashboard = () => {
   return (
     <div className="flex flex-col h-full">
       {/* Page sub-header — stats + view-mode tabs. The global chrome
-          (logo, search, account menu) lives in AppShell. */}
-      <div className="bg-white border-b border-gray-200 px-3 sm:px-4 py-2 flex items-center gap-2 sm:gap-3 flex-shrink-0">
+          (logo, search, account menu) lives in AppShell.
+          z-20 keeps it above the photo-overlay chips on PropertyCards
+          (those are z-10) — without it, scrolling on mobile lets the
+          Deal Score ring float over the toolbar as cards slide up. */}
+      <div className="relative z-20 bg-white border-b border-gray-200 px-3 sm:px-4 py-2 flex items-center gap-2 sm:gap-3 flex-shrink-0">
         <button
           onClick={() => setShowFilters(true)}
           className="flex-shrink-0 flex items-center gap-1.5 border border-gray-300 hover:border-green-500 hover:text-green-700 text-gray-700 text-sm font-medium px-2.5 sm:px-3 py-1 rounded-md bg-white transition-colors"

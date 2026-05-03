@@ -8,6 +8,7 @@ on:
       - 'data/listings.json'
       - 'data/curated.json'
       - 'data/homestead_deals.json'
+      - 'data/cad_joined.json'
   workflow_dispatch:
 
 permissions:
@@ -61,6 +62,11 @@ jobs:
           fi
           if [ -f data/homestead_deals.json ]; then
             cp data/homestead_deals.json frontend/dist/data/homestead_deals.json
+          fi
+          # Travis CAD per-listing record map produced by cad_join.py;
+          # powers the "County records" panel on PropertyDetail.
+          if [ -f data/cad_joined.json ]; then
+            cp data/cad_joined.json frontend/dist/data/cad_joined.json
           fi
 
       # SPA fallback for GitHub Pages: serve index.html for unknown paths.
