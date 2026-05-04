@@ -117,7 +117,74 @@ export const CadRecordPanel = ({ property }: CadRecordPanelProps) => {
           sometimes long-term investor parking. Check the deed date below.
         </p>
       )}
+
+      <SourceLinks property={property} geoId={rec.geoId} />
     </section>
+  );
+};
+
+/**
+ * "Sources" row — outbound links so the user can verify any number
+ * we display by checking the original public record. TCAD's PACS
+ * search session-locks against direct deep-links, so we send users
+ * to the search landing page where they can paste the geo_id
+ * (which we copy to clipboard on click for convenience).
+ */
+const SourceLinks = ({
+  property,
+  geoId,
+}: {
+  property: Property;
+  geoId: string;
+}) => {
+  const lat = property.location?.lat ?? 0;
+  const lng = property.location?.lng ?? 0;
+  const copyAndOpen = (href: string) => () => {
+    if (geoId && navigator.clipboard) {
+      // TCAD's search is session-based; we can't deep-link to a
+      // specific parcel. Copy the geo_id so the user can paste it
+      // into the search box without bouncing back here.
+      navigator.clipboard.writeText(geoId).catch(() => {});
+    }
+    window.open(href, '_blank', 'noopener,noreferrer');
+  };
+
+  return (
+    <div className="mt-3 pt-3 border-t border-slate-200">
+      <p className="text-[11px] font-medium text-gray-500 uppercase tracking-wide mb-1.5">
+        Sources
+      </p>
+      <div className="flex flex-wrap gap-x-3 gap-y-1 text-xs">
+        <button
+          type="button"
+          onClick={copyAndOpen('https://traviscad.org/property-search/')}
+          className="text-blue-600 hover:text-blue-800 hover:underline"
+          title={`Opens Travis CAD's search. Parcel ID ${geoId} copied to clipboard — paste into the search box.`}
+        >
+          Travis CAD record →
+        </button>
+        <a
+          href="https://countyclerk.traviscountytx.gov/online-services/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-blue-600 hover:text-blue-800 hover:underline"
+          title="Travis County Clerk public records search — full deed history"
+        >
+          County clerk deeds →
+        </a>
+        {lat !== 0 && lng !== 0 && (
+          <a
+            href={`https://www.google.com/maps/place/${lat},${lng}/@${lat},${lng},18z/data=!3m1!1e3`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-blue-600 hover:text-blue-800 hover:underline"
+            title="Google Maps satellite view at the parcel's lat/lng"
+          >
+            Satellite →
+          </a>
+        )}
+      </div>
+    </div>
   );
 };
 

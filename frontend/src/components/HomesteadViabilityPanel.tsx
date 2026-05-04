@@ -70,6 +70,7 @@ export const HomesteadViabilityPanel = ({ property }: HomesteadViabilityPanelPro
         acreage, and existing features — not engineering quotes. Always
         confirm with local installers and your county extension office.
       </p>
+      <ViabilitySources property={property} />
 
       {/* Growing + Livestock side-by-side score band */}
       <div className="grid sm:grid-cols-2 gap-3">
@@ -103,6 +104,70 @@ export const HomesteadViabilityPanel = ({ property }: HomesteadViabilityPanelPro
         </div>
       </div>
     </section>
+  );
+};
+
+// ── Sources ──────────────────────────────────────────────────────────
+
+/**
+ * Outbound links to the public datasets and policy databases this
+ * panel's heuristics are calibrated against. Lets the user verify
+ * any specific number against the source-of-truth — soil class on
+ * USDA Web Soil Survey, hardiness zone on USDA, NREL for solar,
+ * DSIRE for state-level energy incentives.
+ */
+const ViabilitySources = ({ property }: { property: Property }) => {
+  const lat = property.location?.lat ?? 0;
+  const lng = property.location?.lng ?? 0;
+  const state = (property.location?.state ?? '').toLowerCase();
+  return (
+    <div className="flex flex-wrap gap-x-3 gap-y-1 text-[11px] -mt-1">
+      <span className="text-gray-400 uppercase tracking-wide font-medium">
+        Sources:
+      </span>
+      {lat !== 0 && lng !== 0 && (
+        <>
+          <a
+            href={`https://websoilsurvey.sc.egov.usda.gov/App/WebSoilSurvey.aspx?lat=${lat}&lon=${lng}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-blue-600 hover:text-blue-800 hover:underline"
+            title="USDA Web Soil Survey — verify the capability class + drainage class for this parcel"
+          >
+            USDA soil survey →
+          </a>
+          <a
+            href={`https://planthardiness.ars.usda.gov/`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-blue-600 hover:text-blue-800 hover:underline"
+            title="USDA Plant Hardiness Zone Map — frost-free range for crop planning"
+          >
+            Hardiness zone →
+          </a>
+          <a
+            href={`https://pvwatts.nrel.gov/pvwatts.php?lat=${lat}&lon=${lng}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-blue-600 hover:text-blue-800 hover:underline"
+            title="NREL PVWatts — parcel-specific solar production estimate"
+          >
+            NREL PVWatts →
+          </a>
+        </>
+      )}
+      {state && (
+        <a
+          href={`https://programs.dsireusa.org/system/program?state=${state.toUpperCase()}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-blue-600 hover:text-blue-800 hover:underline"
+          title={`DSIRE — ${state.toUpperCase()} state energy incentives, rebates, and tax credits`}
+        >
+          DSIRE incentives →
+        </a>
+      )}
+    </div>
   );
 };
 
