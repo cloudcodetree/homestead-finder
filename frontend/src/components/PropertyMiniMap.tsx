@@ -67,7 +67,13 @@ export const PropertyMiniMap = ({ property }: PropertyMiniMapProps) => {
     .slice(0, 10);
 
   return (
-    <section className="rounded-xl border border-gray-200 bg-white overflow-hidden">
+    // `relative isolate z-0` creates a fresh stacking-context floor
+    // around the map. Leaflet uses high internal z-indexes on its
+    // tile/marker/popup panes (up to 700) and transforms tile layers,
+    // which without containment lets the map paint over the sticky
+    // listing header (z-20) and even the AppShell page header.
+    // Isolating here keeps Leaflet's z-stack confined to this section.
+    <section className="relative isolate z-0 rounded-xl border border-gray-200 bg-white overflow-hidden">
       <div className="flex items-baseline justify-between gap-2 px-4 pt-3 pb-2">
         <h3 className="text-base font-semibold text-gray-900">Location</h3>
         <span className="text-[11px] uppercase tracking-wide text-gray-400">
