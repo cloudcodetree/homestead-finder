@@ -119,8 +119,12 @@ export const PropertyDetail = ({ property }: PropertyDetailProps) => {
             this with a swipeable carousel when the scraper captures
             galleries during detail-page fetch. */}
         <PropertyThumbnail property={property} width={768} className="w-full h-48 sm:h-56" />
-        {/* Header */}
-        <div className="sticky top-0 bg-white border-b border-gray-100 p-4 flex items-start gap-3">
+        {/* Header. `sticky top-0` pins it as the user scrolls past
+            the hero image; needs an explicit z-index because later
+            DOM siblings (the score panels with Ring SVG meters) would
+            otherwise paint over it during scroll — sticky alone
+            doesn't lift it in the stacking order. */}
+        <div className="sticky top-0 z-20 bg-white border-b border-gray-100 p-4 flex items-start gap-3">
           <div className="flex-1 min-w-0">
             <h2 className="font-bold text-gray-900 text-base leading-tight">{property.title}</h2>
             <p className="text-sm text-gray-500 mt-0.5">
