@@ -8,6 +8,7 @@ import { FreeTierLimitError, useSavedListings } from '../hooks/useSavedListings'
 import { AddToProjectButton } from './AddToProjectButton';
 import { CadRecordPanel } from './CadRecord';
 import { CompBreakdown } from './CompBreakdown';
+import { HomesteadViabilityPanel } from './HomesteadViabilityPanel';
 // Lazy-load the mini-map: Leaflet + react-leaflet are ~80KB gzip
 // of bundle that the detail page doesn't need until paint settles.
 const PropertyMiniMap = lazy(() =>
@@ -507,6 +508,13 @@ export const PropertyDetail = ({ property }: PropertyDetailProps) => {
           >
             <PropertyMiniMap property={property} />
           </Suspense>
+
+          {/* Homesteading viability — what this land can actually grow,
+              raise, or produce, and rough buildout costs for greenhouse,
+              aquaponics, solar, wind, hydro, geothermal, well, cistern,
+              pond. Heuristic estimates derived from the geoEnrichment
+              fields already on the listing — no extra fetches. */}
+          <HomesteadViabilityPanel property={property} />
 
           {/* "How we computed the comp" — surfaces the methodology +
               the actual listings that fed the median, so users can
