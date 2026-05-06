@@ -7,7 +7,6 @@ import {
   ChevronRight,
   Compass,
   Folder,
-  Home,
   LayoutGrid,
   Menu,
   PanelLeftClose,
@@ -64,7 +63,9 @@ interface NavLinkSpec {
 }
 
 const NAV_ITEMS: NavLinkSpec[] = [
-  { to: '/home', label: 'For you', icon: Home, authOnly: true },
+  // "For you" / /home hidden 2026-05-06 — autonomy-first reframe puts
+  // /browse as the universal landing surface. /home route still
+  // exists (deep links + auth fallback) but is removed from nav.
   { to: '/browse', label: 'Browse', icon: LayoutGrid },
   { to: '/swipe', label: 'Swipe', icon: Compass, authOnly: true },
   { to: '/browse?saved=1', label: 'Saved', icon: Bookmark, authOnly: true },
@@ -141,7 +142,7 @@ export const AppShell = () => {
     return <Navigate to="/landing" replace />;
   }
 
-  const logoTarget = user ? '/home' : '/landing';
+  const logoTarget = '/browse';
   const items = NAV_ITEMS.filter((item) => !item.authOnly || user);
 
   return (

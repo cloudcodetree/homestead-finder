@@ -241,11 +241,17 @@ export const FilterPanel = ({
 
         {/* Financial lens — the legacy buyer-side scores. Demoted to a
             collapsible section so they're available when comparing
-            shortlisted parcels but don't crowd the autonomy headline. */}
-        <details className="space-y-4 pt-2 border-t border-gray-100">
-          <summary className="text-sm font-semibold text-gray-900 cursor-pointer">
-            Financial lens
+            shortlisted parcels but don't crowd the autonomy headline.
+            `[&::-webkit-details-marker]:hidden` + `marker:hidden` strip
+            the default disclosure triangle so it doesn't eat the first
+            character of the summary text in narrow drawers. We add an
+            inline chevron in the summary instead. */}
+        <details className="pt-2 border-t border-gray-100 group/lens">
+          <summary className="text-sm font-semibold text-gray-900 cursor-pointer flex items-center justify-between gap-2 list-none [&::-webkit-details-marker]:hidden marker:hidden py-1">
+            <span>Financial lens</span>
+            <span className="text-gray-400 text-xs group-open/lens:rotate-180 transition-transform">▾</span>
           </summary>
+          <div className="space-y-4 mt-3">
           <p className="text-xs text-gray-500">
             Buyer-side scores. Use these to compare parcels you&rsquo;ve already shortlisted.
           </p>
@@ -291,6 +297,7 @@ export const FilterPanel = ({
             {(filters.minHomesteadFit > 0 || filters.maxHomesteadFit < 100) && (
               <p className="text-xs text-gray-500 mt-1">Hides un-analyzed listings.</p>
             )}
+          </div>
           </div>
         </details>
 

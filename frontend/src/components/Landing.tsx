@@ -57,7 +57,7 @@ export const Landing = () => {
   // to /home for the cold-start case.
   useEffect(() => {
     if (!user) return;
-    let target = '/home';
+    let target = '/browse';
     try {
       const stashed = sessionStorage.getItem(NEXT_AFTER_AUTH_KEY);
       if (stashed && stashed.startsWith('/') && !stashed.startsWith('//')) {
@@ -102,7 +102,7 @@ export const Landing = () => {
                   Sign in
                 </button>
                 <Link
-                  to="/home"
+                  to="/browse"
                   className="bg-green-600 hover:bg-green-700 text-white text-sm font-semibold px-3.5 py-1.5 rounded-lg shadow-sm"
                 >
                   Try it out →

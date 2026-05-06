@@ -105,19 +105,9 @@ export const AuthButton = () => {
               </div>
             </div>
 
-            {/* Actions */}
-            <MenuItem
-              onClick={() => {
-                closeMenu();
-                navigate('/home');
-              }}
-              icon={
-                <svg viewBox="0 0 24 24" className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M3 12l2-2 7-7 7 7 2 2v9a2 2 0 01-2 2h-4v-7H10v7H6a2 2 0 01-2-2v-9z" />
-                </svg>
-              }
-              label="For you"
-            />
+            {/* Actions. "For you" / /home is hidden as of 2026-05-06
+                — autonomy-first reframe makes /browse the universal
+                landing surface. Route still exists for deep links. */}
             <MenuItem
               onClick={() => {
                 closeMenu();
