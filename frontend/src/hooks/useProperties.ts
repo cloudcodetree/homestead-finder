@@ -2,6 +2,7 @@ import { useCallback, useMemo } from 'react';
 import { Property, FilterState } from '../types/property';
 import { pointInPolygon } from '../utils/geometry';
 import { getListingTypeStyle } from '../utils/listingType';
+import { computeSelfSufficiency } from '../utils/selfSufficiency';
 import { useJsonAsset } from './useJsonAsset';
 
 export const applyFilters = (properties: Property[], filters: FilterState): Property[] => {
@@ -39,6 +40,31 @@ export const applyFilters = (properties: Property[], filters: FilterState): Prop
     )
       return false;
     if (p.dealScore < filters.minDealScore) return false;
+    // Self-Sufficiency — the autonomy-first composite + per-axis
+    // minimums. Computed lazily: only when at least one SS filter is
+    // active, since every other filter check is much cheaper. With 712
+    // listings and SS engaged this adds ~5ms per filter run.
+    const ssActive =
+      filters.minSelfSufficiency > 0 ||
+      filters.minSsFood > 0 ||
+      filters.minSsWater > 0 ||
+      filters.minSsEnergy > 0 ||
+      filters.minSsShelter > 0 ||
+      filters.minSsResilience > 0;
+    if (ssActive) {
+      const ss = computeSelfSufficiency(p);
+      if (ss.composite < filters.minSelfSufficiency) return false;
+      const axisMins: Record<string, number> = {
+        food: filters.minSsFood,
+        water: filters.minSsWater,
+        energy: filters.minSsEnergy,
+        shelter: filters.minSsShelter,
+        resilience: filters.minSsResilience,
+      };
+      for (const axis of ss.axes) {
+        if (axis.score < (axisMins[axis.key] ?? 0)) return false;
+      }
+    }
     if (filters.maxDealScore < 100 && p.dealScore > filters.maxDealScore) return false;
     if (filters.states.length > 0 && !filters.states.includes(p.location.state)) return false;
     if (filters.listingVariants.length > 0) {
@@ -191,6 +217,13 @@ export const useProperties = (filters: FilterState) => {
     () =>
       [...filtered].sort((a: Property, b: Property) => {
         switch (filters.sortBy) {
+          case 'selfSufficiency': {
+            // Composite descending. Tie-break by price asc so two
+            // equally autonomous parcels surface the cheaper one first.
+            const aSs = computeSelfSufficiency(a).composite;
+            const bSs = computeSelfSufficiency(b).composite;
+            return bSs - aSs || a.price - b.price;
+          }
           case 'priceAsc':
             return a.price - b.price;
           case 'priceDesc':

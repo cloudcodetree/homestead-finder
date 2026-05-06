@@ -28,6 +28,40 @@ import {
 } from '../../utils/selfSufficiency';
 import { Ring, tier, tierClasses } from '../InvestmentScore';
 
+// ── Filter state shape for the preview ───────────────────────────────
+//
+// Single-handle sliders throughout — matches the original "Max Price"
+// feel. The headline-extreme value (top of each slider's range) acts
+// as the "no cap" sentinel: 100 for scores, $250k for price, $10k for
+// $/ac, 100ac for acreage. applyFilters skips the comparison there.
+interface PreviewFilters {
+  ssMin: number;
+  axisMin: Record<AxisKey, number>;
+  priceMax: number;
+  ppaMax: number;
+  acresMax: number;
+}
+
+const DEFAULT_PREVIEW_FILTERS: PreviewFilters = {
+  ssMin: 0,
+  axisMin: { food: 0, water: 0, energy: 0, shelter: 0, resilience: 0 },
+  priceMax: 250_000,
+  ppaMax: 10_000,
+  acresMax: 100,
+};
+
+const fmtPriceK = (v: number): string => {
+  if (v >= 250_000) return '$250k+';
+  if (v >= 1_000) return `$${Math.round(v / 1000)}k`;
+  return `$${v}`;
+};
+const fmtPpa = (v: number): string => {
+  if (v >= 10_000) return '$10k+';
+  if (v >= 1_000) return `$${(v / 1000).toFixed(1).replace(/\.0$/, '')}k`;
+  return `$${v}`;
+};
+const fmtAcres = (v: number): string => (v >= 100 ? '100+' : `${v}`);
+
 /**
  * Redesigned Browse preview at /preview/redesigned-browse.
  *
@@ -62,20 +96,33 @@ export const RedesignedBrowsePreview = () => {
   }, [allProperties]);
 
   // Filter state — local to the preview. Production would route
-  // through useFilters but this is mockup-grade.
-  const [minSS, setMinSS] = useState(0);
-  const [maxPrice, setMaxPrice] = useState(0);
+  // through useFilters; this is preview-only with the same dual-ended
+  // grammar as the production FilterPanel so all the existing range
+  // controls (Price, $/ac, Acreage) feel the same.
+  const [filters, setFilters] = useState<PreviewFilters>(DEFAULT_PREVIEW_FILTERS);
+  const updateFilter = <K extends keyof PreviewFilters>(
+    key: K,
+    value: PreviewFilters[K],
+  ) => setFilters((f) => ({ ...f, [key]: value }));
 
   const filtered = useMemo(
     () =>
       allProperties.filter((p) => {
         const ss = ssReports.get(p.id);
         if (!ss) return false;
-        if (ss.composite < minSS) return false;
-        if (maxPrice > 0 && p.price > maxPrice) return false;
+        // Self-Sufficiency: minimum
+        if (ss.composite < filters.ssMin) return false;
+        // Per-axis minimums
+        for (const axis of ss.axes) {
+          if (axis.score < filters.axisMin[axis.key]) return false;
+        }
+        // Hard ranges — top-of-bound = "no cap" (skip comparison).
+        if (filters.priceMax < 250_000 && p.price > filters.priceMax) return false;
+        if (filters.ppaMax < 10_000 && p.pricePerAcre > filters.ppaMax) return false;
+        if (filters.acresMax < 100 && p.acreage > filters.acresMax) return false;
         return true;
       }),
-    [allProperties, ssReports, minSS, maxPrice],
+    [allProperties, ssReports, filters],
   );
 
   // Sort by Self-Sufficiency descending — headline first.
@@ -122,12 +169,7 @@ export const RedesignedBrowsePreview = () => {
 
           <div className="grid lg:grid-cols-[280px_1fr] gap-5">
             {/* Filters */}
-            <RedesignedFilterPanel
-              minSS={minSS}
-              setMinSS={setMinSS}
-              maxPrice={maxPrice}
-              setMaxPrice={setMaxPrice}
-            />
+            <RedesignedFilterPanel filters={filters} updateFilter={updateFilter} />
 
             {/* Card grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
@@ -209,87 +251,126 @@ const RedesignedNav = () => (
 
 // ── Redesigned filter panel ──────────────────────────────────────────
 
+const AXIS_LABEL: Record<AxisKey, string> = {
+  food: 'Food',
+  water: 'Water',
+  energy: 'Energy',
+  shelter: 'Shelter',
+  resilience: 'Resilience',
+};
+const AXIS_NAV_ICON: Record<AxisKey, React.ComponentType<{ className?: string }>> = {
+  food: Wheat,
+  water: Droplet,
+  energy: Zap,
+  shelter: Home,
+  resilience: Shield,
+};
+
 const RedesignedFilterPanel = ({
-  minSS,
-  setMinSS,
-  maxPrice,
-  setMaxPrice,
+  filters,
+  updateFilter,
 }: {
-  minSS: number;
-  setMinSS: (v: number) => void;
-  maxPrice: number;
-  setMaxPrice: (v: number) => void;
+  filters: PreviewFilters;
+  updateFilter: <K extends keyof PreviewFilters>(key: K, v: PreviewFilters[K]) => void;
 }) => {
   const [showFinancial, setShowFinancial] = useState(false);
+  const reset = () => {
+    (Object.keys(DEFAULT_PREVIEW_FILTERS) as Array<keyof PreviewFilters>).forEach((k) =>
+      updateFilter(k, DEFAULT_PREVIEW_FILTERS[k] as never),
+    );
+  };
   return (
     <aside className="bg-white border border-gray-200 rounded-xl p-4 space-y-5 self-start lg:sticky lg:top-4">
-      <h3 className="text-sm font-semibold text-gray-900">Filters</h3>
-
-      {/* Headline filter */}
-      <div>
-        <label className="block text-xs font-medium text-gray-700 mb-1">
-          Min Self-Sufficiency:{' '}
-          <span className="text-emerald-700 font-bold">{minSS}</span>
-        </label>
-        <input
-          type="range"
-          min={0}
-          max={100}
-          step={5}
-          value={minSS}
-          onChange={(e) => setMinSS(Number(e.target.value))}
-          className="w-full accent-emerald-600"
-        />
+      <div className="flex items-center justify-between">
+        <h3 className="text-sm font-semibold text-gray-900">Filters</h3>
+        <button
+          type="button"
+          onClick={reset}
+          className="text-[11px] text-emerald-700 hover:text-emerald-900 font-medium"
+        >
+          Reset
+        </button>
       </div>
 
-      {/* Per-axis sliders — placeholder static UI; production would
-          wire these to filter logic. */}
+      {/* Headline: Min Self-Sufficiency — single handle. Same UI feel
+          as the Max Price / Max $/ac / Max Acreage sliders below for
+          a consistent one-thumb pattern. */}
+      <SingleSlider
+        label="Min Self-Sufficiency"
+        value={filters.ssMin}
+        min={0}
+        max={100}
+        step={5}
+        format={(v) => (v === 0 ? 'no min' : `${v}`)}
+        onChange={(v) => updateFilter('ssMin', v)}
+      />
+
+      {/* Per-axis minimums — single-ended (just minimums) since
+          a "max axis score" filter is rarely useful. The headline
+          dual covers the upper bound implicitly. */}
       <div>
         <p className="text-[10px] uppercase tracking-wide font-semibold text-gray-400 mb-1.5">
-          By axis
+          By autonomy axis (minimum)
         </p>
-        <div className="space-y-2">
-          {([
-            ['Food', Wheat],
-            ['Water', Droplet],
-            ['Energy', Zap],
-            ['Shelter', Home],
-            ['Resilience', Shield],
-          ] as const).map(([label, Icon]) => (
-            <div key={label} className="flex items-center gap-2">
-              <Icon className="w-3.5 h-3.5 text-gray-400 flex-shrink-0" />
-              <span className="text-xs text-gray-600 w-16 flex-shrink-0">{label}</span>
-              <input
-                type="range"
-                min={0}
-                max={100}
-                step={5}
-                defaultValue={0}
-                className="flex-1 accent-emerald-600"
-              />
-            </div>
-          ))}
+        <div className="space-y-2.5">
+          {(Object.keys(AXIS_LABEL) as AxisKey[]).map((key) => {
+            const Icon = AXIS_NAV_ICON[key];
+            const v = filters.axisMin[key];
+            return (
+              <div key={key}>
+                <div className="flex items-center justify-between gap-2 mb-0.5">
+                  <span className="flex items-center gap-1.5 text-xs text-gray-700 font-medium">
+                    <Icon className="w-3.5 h-3.5 text-gray-400" />
+                    {AXIS_LABEL[key]}
+                  </span>
+                  <span className="text-xs font-bold text-emerald-700 tabular-nums">{v}</span>
+                </div>
+                <input
+                  type="range"
+                  min={0}
+                  max={100}
+                  step={5}
+                  value={v}
+                  onChange={(e) =>
+                    updateFilter('axisMin', { ...filters.axisMin, [key]: Number(e.target.value) })
+                  }
+                  className="w-full accent-emerald-600"
+                />
+              </div>
+            );
+          })}
         </div>
       </div>
 
-      {/* Price */}
-      <div>
-        <label className="block text-xs font-medium text-gray-700 mb-1">
-          Max price{' '}
-          <span className="text-emerald-700 font-bold">
-            {maxPrice > 0 ? formatPrice(maxPrice) : 'no max'}
-          </span>
-        </label>
-        <input
-          type="range"
-          min={0}
-          max={500_000}
-          step={10_000}
-          value={maxPrice}
-          onChange={(e) => setMaxPrice(Number(e.target.value))}
-          className="w-full accent-emerald-600"
-        />
-      </div>
+      {/* Hard constraints — single Max sliders matching the original
+          "Max Price" UI feel. Top-of-bound value = "no cap". */}
+      <SingleSlider
+        label="Max price"
+        value={filters.priceMax}
+        min={0}
+        max={250_000}
+        step={1000}
+        format={(v) => (v >= 250_000 ? 'no max' : fmtPriceK(v))}
+        onChange={(v) => updateFilter('priceMax', v)}
+      />
+      <SingleSlider
+        label="Max $/acre"
+        value={filters.ppaMax}
+        min={0}
+        max={10_000}
+        step={100}
+        format={(v) => (v >= 10_000 ? 'no max' : fmtPpa(v))}
+        onChange={(v) => updateFilter('ppaMax', v)}
+      />
+      <SingleSlider
+        label="Max acreage"
+        value={filters.acresMax}
+        min={0}
+        max={100}
+        step={1}
+        format={(v) => (v >= 100 ? 'no max' : fmtAcres(v))}
+        onChange={(v) => updateFilter('acresMax', v)}
+      />
 
       {/* Financial lens — collapsed */}
       <div className="pt-3 border-t border-gray-100">
@@ -306,9 +387,8 @@ const RedesignedFilterPanel = ({
         {showFinancial && (
           <div className="mt-2 space-y-2">
             <p className="text-[11px] text-gray-500 italic">
-              Buyer-side scores (Deal / Investment / Fit) — secondary
-              to autonomy. Use these when you&rsquo;re comparing
-              already-shortlisted parcels.
+              Buyer-side scores. Use these when comparing parcels
+              you&rsquo;ve already shortlisted. (Preview: not wired.)
             </p>
             {['Deal Score', 'Investment Score', 'Homestead Fit'].map((l) => (
               <div key={l} className="flex items-center gap-2">
@@ -397,6 +477,45 @@ const RedesignedCard = ({
     </Link>
   );
 };
+
+// ── SingleSlider — one-handle range with header value ────────────────
+
+const SingleSlider = ({
+  label,
+  value,
+  min,
+  max,
+  step,
+  format,
+  onChange,
+}: {
+  label: string;
+  value: number;
+  min: number;
+  max: number;
+  step: number;
+  format: (v: number) => string;
+  onChange: (v: number) => void;
+}) => (
+  <div>
+    <label className="block text-xs font-medium text-gray-700 mb-1">
+      {label}: <span className="text-emerald-700 font-bold">{format(value)}</span>
+    </label>
+    <input
+      type="range"
+      min={min}
+      max={max}
+      step={step}
+      value={value}
+      onChange={(e) => onChange(Number(e.target.value))}
+      className="w-full accent-emerald-600"
+    />
+    <div className="flex justify-between text-[10px] text-gray-400 mt-0.5">
+      <span>{format(min)}</span>
+      <span>{format(max)}</span>
+    </div>
+  </div>
+);
 
 const MiniAxisBar = ({ axis }: { axis: Axis }) => {
   const klass = tierClasses[tier(axis.score)];

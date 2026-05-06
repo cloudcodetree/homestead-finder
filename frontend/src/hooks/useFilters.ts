@@ -71,6 +71,12 @@ export const useFilters = () => {
     filters.aiTags.length > 0 ||
     filters.listingVariants.length > 0 ||
     filters.sources.length > 0 ||
+    filters.minSelfSufficiency > 0 ||
+    filters.minSsFood > 0 ||
+    filters.minSsWater > 0 ||
+    filters.minSsEnergy > 0 ||
+    filters.minSsShelter > 0 ||
+    filters.minSsResilience > 0 ||
     filters.minDealScore > 0 ||
     filters.maxDealScore < 100 ||
     filters.minHomesteadFit > 0 ||

@@ -364,6 +364,7 @@ export interface Property {
 }
 
 export type SortBy =
+  | 'selfSufficiency'
   | 'dealScore'
   | 'investmentScore'
   | 'homesteadFit'
@@ -377,6 +378,7 @@ export type SortBy =
   | 'title';
 
 export const SORT_LABELS: Record<SortBy, string> = {
+  selfSufficiency: 'Self-Sufficiency',
   dealScore: 'Best Deal',
   investmentScore: 'Investment Score (AI)',
   homesteadFit: 'Homestead Fit (AI)',
@@ -413,6 +415,17 @@ export interface FilterState {
    * derived per-row by `getListingTypeStyle` in utils/listingType.ts. */
   listingVariants: string[];
   sortBy: SortBy;
+  // Self-Sufficiency — the autonomy-first composite + per-axis
+  // minimums. Composite is a 0-100 weighted average of five axes;
+  // per-axis fields let users gate on a specific dimension
+  // ("must score ≥ 70 on Water") without bringing along the whole
+  // composite.
+  minSelfSufficiency: number;
+  minSsFood: number;
+  minSsWater: number;
+  minSsEnergy: number;
+  minSsShelter: number;
+  minSsResilience: number;
   // AI-derived filters (all optional — default behavior is no filtering)
   aiTags: AITag[];
   minHomesteadFit: number;
@@ -475,12 +488,18 @@ export const DEFAULT_FILTERS: FilterState = {
   minDealScore: 0,
   sources: [],
   listingVariants: [],
-  // Default sort: cheapest first. Most users opening Browse on a
-  // metro corpus want to see the lower end of the price band before
-  // anything else; "Best Deal" (dealScore) was a holdover from the
-  // MO/AR era when raw rural land prices were so uniform that
-  // dealScore actually moved the order around. Changed 2026-04-29.
-  sortBy: 'priceAsc',
+  // Default sort: Self-Sufficiency descending. Autonomy-first framing
+  // is the product's North Star — leading with the parcels that
+  // require the least buildout to reach off-grid steady state.
+  // Changed from 'priceAsc' on 2026-05-06.
+  sortBy: 'selfSufficiency',
+  // Self-Sufficiency filters — all default to 0 ("no minimum").
+  minSelfSufficiency: 0,
+  minSsFood: 0,
+  minSsWater: 0,
+  minSsEnergy: 0,
+  minSsShelter: 0,
+  minSsResilience: 0,
   aiTags: [],
   minHomesteadFit: 0,
   maxHomesteadFit: 100,

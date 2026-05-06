@@ -35,9 +35,10 @@ import { useCompsCorpus } from '../hooks/useCountyMedians';
 import { useHiddenListings } from '../hooks/useHiddenListings';
 import { useListingRatings } from '../hooks/useListingRatings';
 import { useSavedListings, FreeTierLimitError } from '../hooks/useSavedListings';
-import { Leaf, Star } from 'lucide-react';
+import { Droplet, Home, Leaf, Shield, Wheat, Zap } from 'lucide-react';
 import { findBestComps, formatVsComp, rawLandPpa } from '../utils/comps';
-import { InvestmentScoreBadge, ScoreRingChip } from './InvestmentScore';
+import { computeSelfSufficiency, AxisKey } from '../utils/selfSufficiency';
+import { InvestmentScoreBadge, Ring, ScoreRingChip, tier, tierClasses } from './InvestmentScore';
 import { UpgradeModal } from './UpgradeModal';
 import { PropertyThumbnail } from './PropertyThumbnail';
 import {
@@ -105,6 +106,10 @@ export const PropertyCard = ({ property, onClick, isSelected = false }: Property
   const hidden = isHidden(property.id);
   const rating = getRating(property.id);
   const [showUpgrade, setShowUpgrade] = useState(false);
+
+  // Self-Sufficiency report — the new headline. Memoized per card so
+  // the 5-axis breakdown only computes once per Property mount.
+  const ssReport = useMemo(() => computeSelfSufficiency(property), [property]);
 
   // "vs comp" cue near the price. Walks a tightest-first fallback
   // chain so the displayed % reflects similar parcels first
@@ -224,12 +229,19 @@ export const PropertyCard = ({ property, onClick, isSelected = false }: Property
           so the chip visually floats over the page header. Solid
           `bg-white` is fine over a photo and fixes the bug. */}
       <div className="absolute top-2 left-2 z-10 flex flex-col items-start gap-1.5">
-        <div className="rounded-full bg-white shadow px-0.5 py-0.5">
-          <ScoreRingChip
-            score={property.dealScore}
-            icon={Star}
-            label="Deal Score"
-          />
+        {/* Self-Sufficiency ring — autonomy-first headline replacing
+            the old Deal Score ring. Number-only inside the ring so
+            the score reads at a glance; tier color follows the same
+            green/amber/rose bands as the InvestmentScore palette. */}
+        <div
+          className="rounded-full bg-white shadow p-1"
+          title={`Self-Sufficiency: ${ssReport.composite}/100 — ${ssReport.weakest.label} is the bottleneck (${ssReport.weakest.score})`}
+        >
+          <Ring score={ssReport.composite} size={36} strokeWidth={4}>
+            <span className="text-[11px] font-bold tabular-nums">
+              {ssReport.composite}
+            </span>
+          </Ring>
         </div>
         {rating !== 0 && (
           <div
@@ -306,6 +318,17 @@ export const PropertyCard = ({ property, onClick, isSelected = false }: Property
             </div>
             <ValidationBadge status={property.status} />
           </div>
+        </div>
+
+        {/* Self-Sufficiency axis strip — Food / Water / Energy / Shelter
+            / Resilience as 5 mini bars. Makes the autonomy profile
+            glanceable at card scale. The bottleneck axis is also the
+            tooltip on the photo's SS ring so users can mouse-over for
+            "what's holding this back". */}
+        <div className="mt-2 space-y-0.5">
+          {ssReport.axes.map((axis) => (
+            <SsAxisBar key={axis.key} axisKey={axis.key} score={axis.score} label={axis.label} />
+          ))}
         </div>
 
         {(property.redFlags?.length ?? 0) > 0 && (
@@ -527,6 +550,46 @@ export const PropertyCard = ({ property, onClick, isSelected = false }: Property
         onClose={() => setShowUpgrade(false)}
         reason="saved_listings_limit"
       />
+    </div>
+  );
+};
+
+// ── SS axis mini-bar (per-card autonomy strip) ───────────────────────
+
+const AXIS_ICON: Record<AxisKey, React.ComponentType<{ className?: string }>> = {
+  food: Wheat,
+  water: Droplet,
+  energy: Zap,
+  shelter: Home,
+  resilience: Shield,
+};
+
+const SsAxisBar = ({
+  axisKey,
+  score,
+  label,
+}: {
+  axisKey: AxisKey;
+  score: number;
+  label: string;
+}) => {
+  const klass = tierClasses[tier(score)];
+  const Icon = AXIS_ICON[axisKey];
+  return (
+    <div
+      className="flex items-center gap-1.5"
+      title={`${label}: ${score}/100`}
+    >
+      <Icon className={`w-3 h-3 flex-shrink-0 ${klass.text}`} />
+      <div className="flex-1 h-1 bg-gray-100 rounded-full overflow-hidden">
+        <div
+          className={`h-full ${klass.bar}`}
+          style={{ width: `${score}%` }}
+        />
+      </div>
+      <span className={`text-[10px] font-bold tabular-nums w-5 text-right ${klass.text}`}>
+        {score}
+      </span>
     </div>
   );
 };

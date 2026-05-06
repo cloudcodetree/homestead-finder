@@ -175,13 +175,80 @@ export const FilterPanel = ({
           </div>
         </div>
 
-        {/* Scores & Pricing — all dual-range sliders grouped together so
-            the user has a single place to tune the headline numbers
-            (Deal Score, Investment Score, Homestead Fit, $/acre) without
-            having to scroll past the Price/Acreage inputs and Listing
-            Type pills to find the AI sliders. */}
-        <div className="space-y-5 pt-2 border-t border-gray-100">
-          <div className="text-sm font-semibold text-gray-900">Scores & Pricing</div>
+        {/* Scores & Pricing — autonomy-first ordering. Self-Sufficiency
+            (composite + per-axis) is the headline; Deal/Investment/Fit
+            move into the "Financial lens" section below. Range sliders
+            for Price/$/ac/Acreage stay in their original position
+            since those are real constraints, not score opinions. */}
+        <div className="space-y-4 pt-2 border-t border-gray-100">
+          <div className="text-sm font-semibold text-gray-900">Self-Sufficiency</div>
+          <p className="text-xs text-gray-500 -mt-2">
+            How close is the parcel to fully autonomous living? Five-axis
+            composite — Food, Water, Energy, Shelter, Resilience.
+          </p>
+          {/* Composite minimum */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Min Self-Sufficiency:{' '}
+              <span className="text-emerald-700 font-bold">
+                {filters.minSelfSufficiency || 'no min'}
+              </span>
+            </label>
+            <input
+              type="range"
+              min={0}
+              max={100}
+              step={5}
+              value={filters.minSelfSufficiency}
+              onChange={(e) => onUpdateFilter('minSelfSufficiency', Number(e.target.value))}
+              className="w-full accent-emerald-600"
+            />
+          </div>
+          {/* Per-axis minimums */}
+          <div className="space-y-2">
+            <p className="text-[11px] uppercase tracking-wide font-semibold text-gray-400">
+              By autonomy axis (minimum)
+            </p>
+            {(
+              [
+                ['Food', 'minSsFood'],
+                ['Water', 'minSsWater'],
+                ['Energy', 'minSsEnergy'],
+                ['Shelter', 'minSsShelter'],
+                ['Resilience', 'minSsResilience'],
+              ] as const
+            ).map(([label, key]) => (
+              <div key={key}>
+                <div className="flex items-center justify-between text-xs text-gray-700 mb-0.5">
+                  <span className="font-medium">{label}</span>
+                  <span className="text-emerald-700 font-bold tabular-nums">
+                    {filters[key]}
+                  </span>
+                </div>
+                <input
+                  type="range"
+                  min={0}
+                  max={100}
+                  step={5}
+                  value={filters[key]}
+                  onChange={(e) => onUpdateFilter(key, Number(e.target.value))}
+                  className="w-full accent-emerald-600"
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Financial lens — the legacy buyer-side scores. Demoted to a
+            collapsible section so they're available when comparing
+            shortlisted parcels but don't crowd the autonomy headline. */}
+        <details className="space-y-4 pt-2 border-t border-gray-100">
+          <summary className="text-sm font-semibold text-gray-900 cursor-pointer">
+            Financial lens
+          </summary>
+          <p className="text-xs text-gray-500">
+            Buyer-side scores. Use these to compare parcels you&rsquo;ve already shortlisted.
+          </p>
           <DualRangeSlider
             label="Deal Score"
             min={filters.minDealScore}
@@ -225,6 +292,11 @@ export const FilterPanel = ({
               <p className="text-xs text-gray-500 mt-1">Hides un-analyzed listings.</p>
             )}
           </div>
+        </details>
+
+        {/* Pricing & size — hard constraints, always visible. */}
+        <div className="space-y-4 pt-2 border-t border-gray-100">
+          <div className="text-sm font-semibold text-gray-900">Pricing & size</div>
           <DualRangeSlider
             label="Price"
             min={filters.minPrice}
