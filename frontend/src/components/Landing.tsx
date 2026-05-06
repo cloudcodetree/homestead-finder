@@ -116,17 +116,17 @@ export const Landing = () => {
       {/* Hero */}
       <section className="max-w-4xl mx-auto px-6 pt-16 pb-12 text-center">
         <p className="text-sm font-semibold text-green-700 tracking-wide uppercase mb-3">
-          Buyer-side intelligence for homestead land
+          Find the most self-sustaining property
         </p>
         <h1 className="text-4xl md:text-5xl font-bold text-gray-900 leading-tight">
-          Research rural land the way you&apos;d{' '}
-          <span className="text-green-700">research a stock</span>.
+          Land that can{' '}
+          <span className="text-green-700">feed, water, power, and shelter you</span>.
         </h1>
         <p className="text-lg text-gray-600 mt-4 max-w-2xl mx-auto">
-          Every other land site is a seller-funded listing dump. We aggregate
-          listings from sources the big aggregators miss, score them as
-          homesteading deals, and rank them based on what you actually want
-          to buy.
+          Every other land site shows you asking prices. We score every parcel
+          on five autonomy axes — Food, Water, Energy, Shelter, Resilience —
+          using public soil, climate, and county-records data, and tell you
+          what it would cost to close the gap to fully off-grid.
         </p>
         <div className="mt-8 flex items-center justify-center gap-3">
           {user ? (

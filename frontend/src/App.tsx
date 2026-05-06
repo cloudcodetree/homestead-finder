@@ -52,6 +52,20 @@ const RedesignedDetailPreview = lazy(() =>
     default: m.RedesignedDetailPreview,
   })),
 );
+// Preview: site-wide redesign — Browse with Self-Sufficiency-led
+// cards + redesigned filter panel + redesigned nav grouping.
+const RedesignedBrowsePreview = lazy(() =>
+  import('./components/preview/RedesignedBrowsePreview').then((m) => ({
+    default: m.RedesignedBrowsePreview,
+  })),
+);
+// Preview: side-by-side comparison table — closes the "no compare"
+// gap from the persona critique.
+const ComparePreview = lazy(() =>
+  import('./components/preview/ComparePreview').then((m) => ({
+    default: m.ComparePreview,
+  })),
+);
 
 // First-time-user onboarding self-gates on auth + completion-stamp.
 // Lazy because anonymous visitors and returning users both never
@@ -103,6 +117,11 @@ const App = () => {
               path="/preview/redesigned-detail/:id?"
               element={<RedesignedDetailPreview />}
             />
+            <Route
+              path="/preview/redesigned-browse"
+              element={<RedesignedBrowsePreview />}
+            />
+            <Route path="/preview/compare" element={<ComparePreview />} />
             <Route path="/upgrade" element={<UpgradePage />} />
             <Route path="/saved-searches" element={<SavedSearchesPage />} />
             <Route path="/settings/notifications" element={<NotificationsPage />} />
