@@ -1,774 +1,1184 @@
-import { Lock } from 'lucide-react';
-import { lazy, Suspense, useEffect, useRef, useState } from 'react';
-import { Property, FEATURE_LABELS } from '../types/property';
-import { useAccessTier } from '../hooks/useAccessTier';
+import { lazy, Suspense, useMemo, useState } from 'react';
+import { useParams, useSearchParams } from 'react-router-dom';
+import {
+  Wheat,
+  Droplet,
+  Zap,
+  Home,
+  Shield,
+  AlertTriangle,
+  ChevronDown,
+  ChevronUp,
+  ThumbsUp,
+  ThumbsDown,
+  ExternalLink,
+} from 'lucide-react';
+import { useProperties } from '../hooks/useProperties';
+import { useCadRecord } from '../hooks/useCadRecord';
 import { useAuth } from '../hooks/useAuth';
+import { useAccessTier } from '../hooks/useAccessTier';
+import { useSavedListings } from '../hooks/useSavedListings';
 import { useHiddenListings } from '../hooks/useHiddenListings';
-import { FreeTierLimitError, useSavedListings } from '../hooks/useSavedListings';
-import { AddToProjectButton } from './AddToProjectButton';
-import { CadRecordPanel } from './CadRecord';
-import { CompBreakdown } from './CompBreakdown';
-import { HomesteadViabilityPanel } from './HomesteadViabilityPanel';
-// Lazy-load the mini-map: Leaflet + react-leaflet are ~80KB gzip
-// of bundle that the detail page doesn't need until paint settles.
-const PropertyMiniMap = lazy(() =>
-  import('./PropertyMiniMap').then((m) => ({ default: m.PropertyMiniMap })),
-);
-
-/**
- * IntersectionObserver-gated wrapper around the lazy mini-map. The
- * Leaflet bundle (~80KB gzipped) only downloads when the user
- * scrolls within 400px of where the map will render. For users who
- * never reach the map, that's pure savings. For users who do, the
- * 400px rootMargin gives the chunk time to load before the
- * placeholder is in view.
- */
-const DeferredMap = ({ property }: { property: Property }) => {
-  const ref = useRef<HTMLDivElement | null>(null);
-  const [shouldMount, setShouldMount] = useState(false);
-  useEffect(() => {
-    if (!ref.current) return;
-    if (typeof IntersectionObserver === 'undefined') {
-      // SSR / very old browsers — skip the gating, mount immediately.
-      setShouldMount(true);
-      return;
-    }
-    const obs = new IntersectionObserver(
-      (entries) => {
-        if (entries.some((e) => e.isIntersecting)) {
-          setShouldMount(true);
-          obs.disconnect();
-        }
-      },
-      { rootMargin: '400px' },
-    );
-    obs.observe(ref.current);
-    return () => obs.disconnect();
-  }, []);
-  return (
-    <div ref={ref}>
-      {shouldMount ? (
-        <Suspense
-          fallback={
-            <div className="rounded-xl border border-gray-200 bg-gray-50 h-64 flex items-center justify-center text-xs text-gray-400">
-              Loading map…
-            </div>
-          }
-        >
-          <PropertyMiniMap property={property} />
-        </Suspense>
-      ) : (
-        <div className="rounded-xl border border-gray-200 bg-gray-50 h-64" />
-      )}
-    </div>
-  );
-};
-import { DealScoreBreakdown } from './DealScoreBreakdown';
-import { HomesteadFitBreakdown } from './HomesteadFitBreakdown';
-import { InvestmentScorePanel } from './InvestmentScore';
-import { MarketContext } from './MarketContext';
-import { PrivateNote } from './PrivateNote';
-import { PropertyThumbnail } from './PropertyThumbnail';
-import { RatingBar } from './RatingBar';
-import { ResearchPanel } from './ResearchPanel';
-import { UpgradeModal } from './UpgradeModal';
+import { useListingRatings } from '../hooks/useListingRatings';
+import {
+  AI_TAG_DESCRIPTIONS,
+  AI_TAG_LABELS,
+  DEFAULT_FILTERS,
+  Property,
+  RED_FLAG_DESCRIPTIONS,
+  RED_FLAG_LABELS,
+  RED_FLAG_SEVERITY,
+} from '../types/property';
 import {
   formatAcreage,
   formatCountyState,
   formatDate,
   formatPrice,
-  formatPricePerAcre,
   formatSourceName,
 } from '../utils/formatters';
 import { safeUrl } from '../utils/safeUrl';
-import { getDealScoreColor, getDealScoreLabel } from '../utils/scoring';
+import { getListingTypeStyle } from '../utils/listingType';
+import { Ring, tier, tierClasses } from './InvestmentScore';
+import { CompBreakdown } from './CompBreakdown';
+import { MarketContext } from './MarketContext';
+import { PropertyThumbnail } from './PropertyThumbnail';
+import { AddToProjectButton } from './AddToProjectButton';
+import { PrivateNote } from './PrivateNote';
+import {
+  Axis,
+  AxisKey,
+  computeSelfSufficiency,
+  Gap,
+} from '../utils/selfSufficiency';
 
-interface PropertyDetailProps {
-  property: Property;
-}
+// Real Leaflet mini-map — lazy so the preview chunk stays small.
+const PropertyMiniMap = lazy(() =>
+  import('./PropertyMiniMap').then((m) => ({ default: m.PropertyMiniMap })),
+);
 
+// ── ValidationBadge — small status pill (active / expired / pending /
+//    tax_sale / unverified). Same set the production PropertyDetail
+//    surfaces top-right of the listing header.
 const ValidationBadge = ({ status }: { status?: Property['status'] }) => {
   const s = status ?? 'unverified';
-  if (s === 'active') {
-    return (
-      <span className="inline-flex items-center gap-1 rounded-full bg-green-50 border border-green-200 px-2 py-0.5 text-xs font-medium text-green-700">
-        ✓ Verified
-      </span>
-    );
-  }
-  if (s === 'expired') {
-    return (
-      <span className="inline-flex items-center gap-1 rounded-full bg-red-50 border border-red-200 px-2 py-0.5 text-xs font-medium text-red-600">
-        ✗ Sold
-      </span>
-    );
-  }
-  if (s === 'pending') {
-    return (
-      <span className="inline-flex items-center gap-1 rounded-full bg-blue-50 border border-blue-200 px-2 py-0.5 text-xs font-medium text-blue-700">
-        ⟳ Pending / Under Contract
-      </span>
-    );
-  }
+  const map: Record<string, { bg: string; text: string; label: string }> = {
+    active:    { bg: 'bg-emerald-50 border-emerald-200', text: 'text-emerald-700', label: '✓ Verified' },
+    expired:   { bg: 'bg-rose-50 border-rose-200',       text: 'text-rose-700',    label: '✗ Sold' },
+    pending:   { bg: 'bg-blue-50 border-blue-200',       text: 'text-blue-700',    label: '⟳ Pending' },
+    tax_sale:  { bg: 'bg-orange-50 border-orange-300',   text: 'text-orange-700',  label: '⚖ Tax sale' },
+    unverified:{ bg: 'bg-amber-50 border-amber-200',     text: 'text-amber-700',   label: '⚠ Unverified' },
+  };
+  const t = map[s] ?? map.unverified;
   return (
-    <span className="inline-flex items-center gap-1 rounded-full bg-yellow-50 border border-yellow-200 px-2 py-0.5 text-xs font-medium text-yellow-700">
-      ⚠ Unverified
+    <span className={`inline-flex items-center rounded-full border px-2 py-0.5 text-[11px] font-medium ${t.bg} ${t.text}`}>
+      {t.label}
     </span>
   );
 };
 
-export const PropertyDetail = ({ property }: PropertyDetailProps) => {
-  const scoreColor = getDealScoreColor(property.dealScore);
-  const [copied, setCopied] = useState(false);
-  const { user, loginWithGoogle } = useAuth();
-  const { canSeeSourceLinks } = useAccessTier();
-  const { isSaved, toggle: toggleSaved } = useSavedListings();
-  const { isHidden, toggle: toggleHidden } = useHiddenListings();
-  const saved = isSaved(property.id);
-  const hidden = isHidden(property.id);
-  const [showUpgrade, setShowUpgrade] = useState(false);
+/**
+ * Redesigned property-detail page with **Self-Sufficiency** as the
+ * spine. Replaces the multi-score "researcher" framing with one
+ * question: how close is this parcel to fully autonomous living?
+ *
+ * Axes (all derived from existing geoEnrichment + features):
+ *   Food · Water · Energy · Shelter · Resilience
+ *
+ * The buildout calculator answers "what does it cost to close every
+ * gap" — not "how long does my retirement money last."
+ *
+ * Mounts at /preview/redesigned-detail/:id? alongside production
+ * /p/:id so the two can be compared side-by-side.
+ */
+export const PropertyDetail = () => {
+  const { id: idParam } = useParams<{ id: string }>();
+  const [searchParams] = useSearchParams();
+  const id = idParam ?? searchParams.get('id') ?? 'landhub_75707376';
+  const { allProperties, loading } = useProperties(DEFAULT_FILTERS);
+  const property = useMemo(
+    () => allProperties.find((p) => p.id === id) ?? null,
+    [allProperties, id],
+  );
 
-  /** Save click handler — same pattern as PropertyCard. Anonymous
-   * users get Google OAuth; free-tier users at the 5-save limit
-   * see the upgrade modal instead of a silent failure. */
-  const onSaveClick = async () => {
+  if (loading && !property) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <div className="w-8 h-8 border-4 border-emerald-200 border-t-emerald-600 rounded-full animate-spin" />
+      </div>
+    );
+  }
+  if (!property) {
+    return (
+      <div className="p-10 text-center text-sm text-gray-500">
+        Listing <code>{id}</code> not in corpus.
+      </div>
+    );
+  }
+
+  return <PreviewBody property={property} />;
+};
+
+const PreviewBody = ({ property }: { property: Property }) => {
+  const report = useMemo(() => computeSelfSufficiency(property), [property]);
+  const cad = useCadRecord(property.id);
+  const [showFinancialLens, setShowFinancialLens] = useState(false);
+  const { user } = useAuth();
+
+  return (
+    <div className="max-w-3xl mx-auto p-3 sm:p-6 pb-32 space-y-4">
+      <StickyHeader property={property} />
+      <Hero property={property} report={report} />
+      <BuildoutToAutonomy property={property} report={report} />
+      <AboutListing property={property} />
+
+      {/* Five autonomy axes */}
+      <FoodPanel property={property} axis={report.axes.find((a) => a.key === 'food')!} />
+      <WaterPanel property={property} axis={report.axes.find((a) => a.key === 'water')!} />
+      <EnergyPanel axis={report.axes.find((a) => a.key === 'energy')!} />
+      <ShelterPanel property={property} axis={report.axes.find((a) => a.key === 'shelter')!} />
+      <ResilienceAndRegulatory property={property} axis={report.axes.find((a) => a.key === 'resilience')!} />
+
+      {/* Real Leaflet map (subject + nearest comps) */}
+      <Suspense
+        fallback={
+          <div className="rounded-xl border border-gray-200 bg-gray-50 h-64 flex items-center justify-center text-xs text-gray-400">
+            Loading map…
+          </div>
+        }
+      >
+        <PropertyMiniMap property={property} />
+      </Suspense>
+
+      {/* Restored: comp breakdown — the investment thesis engine */}
+      <CompBreakdown property={property} />
+
+      <HomesteadCommunity />
+      <CountyRecords cad={cad} />
+
+      {/* Restored: state percentile + county voting chip */}
+      <MarketContext property={property} />
+
+      {/* All outbound research/data links in one sources panel */}
+      <ResearchLinks property={property} />
+
+      {/* Financial lens hides Deal/Investment/Fit by default */}
+      <FinancialLens
+        property={property}
+        open={showFinancialLens}
+        onToggle={() => setShowFinancialLens((v) => !v)}
+      />
+
+      {/* Private note (paid-tier feature; component self-gates) */}
+      {user && <PrivateNote listingId={property.id} />}
+
+      {/* Provenance footer */}
+      <ListingProvenance property={property} />
+
+      <ActionBar property={property} />
+    </div>
+  );
+};
+
+// ── Tax-sale subtitle ─────────────────────────────────────────────────
+
+const REDEMPTION_BLURB: Record<NonNullable<Property['taxSale']>['stateType'] & string, string> = {
+  lien: 'Lien certificate auction · winning bidder collects redemption interest',
+  deed: 'Title at auction · NO right of redemption',
+  redeemable_deed: 'Title at auction · 180-day redemption (2 yr if homestead)',
+  hybrid: 'Hybrid sale · early offerings lien-style, later convert to deed',
+};
+
+const SALE_MONTH = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+const TaxSaleSubtitle = ({ property }: { property: Property }) => {
+  const ts = property.taxSale!;
+  const minBid = ts.amountOwedUsd ?? 0;
+  const apprUsd = ts.estimatedValueUsd ?? 0;
+  const multiple = ts.investmentMultiple;
+  return (
+    <div className="mt-1 space-y-1">
+      <p className="text-sm text-gray-500">
+        {formatCountyState(property.location.county, property.location.state)}{' '}
+        {property.acreage > 0 && <>· {formatAcreage(property.acreage)}</>}
+      </p>
+      <div className="flex items-baseline gap-3 flex-wrap">
+        <span className="text-base font-bold text-orange-700 tabular-nums">
+          {formatPrice(minBid)}
+        </span>
+        <span className="text-xs text-gray-500">min bid (back taxes owed)</span>
+        {apprUsd > 0 && (
+          <>
+            <span className="text-gray-300">·</span>
+            <span className="text-xs text-gray-600">
+              county-appraised{' '}
+              <span className="font-semibold tabular-nums">{formatPrice(apprUsd)}</span>
+            </span>
+          </>
+        )}
+        {multiple != null && multiple > 1 && (
+          <span className="rounded-full bg-emerald-50 border border-emerald-200 px-1.5 py-0 text-[10px] font-bold text-emerald-700 tabular-nums">
+            {multiple.toFixed(1)}× upside
+          </span>
+        )}
+      </div>
+      <p className="text-[11px] text-orange-700">
+        {ts.stateType ? REDEMPTION_BLURB[ts.stateType] : 'Tax sale — redemption rules vary by state'}
+        {ts.saleMonth && (
+          <>
+            {' · '}
+            sale typically held in{' '}
+            <span className="font-semibold">{SALE_MONTH[ts.saleMonth - 1] ?? '—'}</span>
+          </>
+        )}
+      </p>
+    </div>
+  );
+};
+
+// ── Sticky scroll header ─────────────────────────────────────────────
+
+/**
+ * Pinned title strip that appears as the user scrolls past the hero.
+ * Mirrors the production sticky header on /p/<id>. z-20 keeps it
+ * above the autonomy axis cards but below the AppShell global header.
+ */
+const StickyHeader = ({ property }: { property: Property }) => (
+  <div className="sticky top-0 z-20 -mx-3 sm:-mx-6 mb-2 px-3 sm:px-6 py-2 bg-white/90 backdrop-blur-sm border-b border-gray-100">
+    <div className="flex items-center justify-between gap-2 max-w-3xl mx-auto">
+      <p className="text-sm font-semibold text-gray-900 truncate">
+        {property.title}
+      </p>
+      <p className="text-sm font-bold text-gray-700 flex-shrink-0 tabular-nums">
+        {formatPrice(property.price)} · {formatAcreage(property.acreage)}
+      </p>
+    </div>
+  </div>
+);
+
+// ── Hero with composite + 5 axis bars ─────────────────────────────────
+
+const AXIS_ICON: Record<AxisKey, React.ReactNode> = {
+  food: <Wheat className="w-3.5 h-3.5" />,
+  water: <Droplet className="w-3.5 h-3.5" />,
+  energy: <Zap className="w-3.5 h-3.5" />,
+  shelter: <Home className="w-3.5 h-3.5" />,
+  resilience: <Shield className="w-3.5 h-3.5" />,
+};
+
+const Hero = ({
+  property,
+  report,
+}: {
+  property: Property;
+  report: ReturnType<typeof computeSelfSufficiency>;
+}) => {
+  const klass = tierClasses[tier(report.composite)];
+  const { user, loginWithGoogle } = useAuth();
+  const { getRating, setRating } = useListingRatings();
+  const rating = getRating(property.id);
+  const typeStyle = getListingTypeStyle(property);
+
+  // Thumbs map onto the existing 5-emoji rating scale
+  // (-2/-1/0/1/2). Up = +1 ("liked"), Down = -1 ("disliked"). One tap
+  // toggles, second tap clears (matches the emoji bar pattern).
+  const onThumb = (kind: 'up' | 'down') => async () => {
     if (!user) {
       void loginWithGoogle();
       return;
     }
-    try {
-      await toggleSaved(property.id);
-    } catch (err) {
-      if (err instanceof FreeTierLimitError) {
-        setShowUpgrade(true);
-        return;
-      }
-      throw err;
-    }
-  };
-
-  const copyUrl = () => {
-    navigator.clipboard.writeText(property.url).then(() => {
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    });
+    const target = kind === 'up' ? 1 : -1;
+    await setRating(property.id, rating === target ? null : target);
   };
 
   return (
-    // Renders inline within the AppShell main column at /p/:id.
-    <div className="p-0 sm:p-4">
-      <div className="relative bg-white w-full sm:max-w-3xl sm:rounded-xl shadow-sm sm:shadow border border-gray-200 mx-auto">
-        {/* Back button removed — browser/system back gesture (Android
-            back, iOS edge-swipe, browser back arrow) gives users the
-            same affordance for free, and the sticky button + its
-            backdrop-blur was contributing to the compositor-layer
-            escape that floated icons over the page header on scroll. */}
-        {/* Hero image — full-bleed banner above the sticky header.
-            Phase 1 shows the primary image only; Phase 2 will replace
-            this with a swipeable carousel when the scraper captures
-            galleries during detail-page fetch. */}
-        <PropertyThumbnail property={property} width={768} className="w-full h-48 sm:h-56" />
-        {/* Header. `sticky top-0` pins it as the user scrolls past
-            the hero image; needs an explicit z-index because later
-            DOM siblings (the score panels with Ring SVG meters) would
-            otherwise paint over it during scroll — sticky alone
-            doesn't lift it in the stacking order. */}
-        <div className="sticky top-0 z-20 bg-white border-b border-gray-100 p-4 flex items-start gap-3">
+    <section className={`rounded-xl border ${klass.border} ${klass.bg} overflow-hidden`}>
+      {/* Listing-type accent stripe (color bar above photo) — same
+          signal as PropertyCard. Tax-sale orange, owner-finance blue,
+          standard for-sale green, etc. */}
+      <div className={`h-1 ${typeStyle.accentBar}`} aria-hidden="true" />
+
+      {/* Real photo banner via PropertyThumbnail (gallery support).
+          Thumbs overlay top-right, wired to useListingRatings so the
+          signal trains rank_fit per ADR-012. */}
+      <div className="relative">
+        <PropertyThumbnail
+          property={property}
+          width={768}
+          className="w-full h-44 sm:h-56"
+        />
+        <div className="absolute top-3 right-3 flex items-center gap-1.5">
+          <button
+            type="button"
+            aria-label="Like"
+            title={user ? (rating === 1 ? 'Liked — click to clear' : 'Like') : 'Sign in to rate'}
+            onClick={onThumb('up')}
+            className={`w-10 h-10 rounded-full flex items-center justify-center shadow transition-colors ${
+              rating === 1
+                ? 'bg-emerald-500 text-white'
+                : 'bg-white/95 text-gray-700 hover:bg-white'
+            }`}
+          >
+            <ThumbsUp className="w-4 h-4" fill={rating === 1 ? 'currentColor' : 'none'} />
+          </button>
+          <button
+            type="button"
+            aria-label="Dislike"
+            title={user ? (rating === -1 ? 'Disliked — click to clear' : 'Dislike') : 'Sign in to rate'}
+            onClick={onThumb('down')}
+            className={`w-10 h-10 rounded-full flex items-center justify-center shadow transition-colors ${
+              rating === -1
+                ? 'bg-rose-500 text-white'
+                : 'bg-white/95 text-gray-700 hover:bg-white'
+            }`}
+          >
+            <ThumbsDown className="w-4 h-4" fill={rating === -1 ? 'currentColor' : 'none'} />
+          </button>
+        </div>
+      </div>
+
+      <div className="p-4">
+        <div className="flex items-start gap-4 flex-wrap sm:flex-nowrap">
           <div className="flex-1 min-w-0">
-            <h2 className="font-bold text-gray-900 text-base leading-tight">{property.title}</h2>
-            <p className="text-sm text-gray-500 mt-0.5">
-              {formatCountyState(property.location.county, property.location.state)}
-            </p>
-          </div>
-          <div className="flex items-center gap-2 flex-shrink-0">
-            <ValidationBadge status={property.status} />
-            <div className={`rounded-full px-3 py-1 text-sm font-bold ${scoreColor}`}>
-              {property.dealScore} — {getDealScoreLabel(property.dealScore)}
+            <div className="flex items-start gap-2 flex-wrap">
+              <h1 className="text-lg sm:text-xl font-bold text-gray-900 leading-tight flex-1 min-w-0">
+                {property.title}
+              </h1>
+              <ValidationBadge status={property.status} />
             </div>
+            {property.status === 'tax_sale' && property.taxSale ? (
+              <TaxSaleSubtitle property={property} />
+            ) : (
+              <p className="text-sm text-gray-500 mt-0.5">
+                {formatCountyState(property.location.county, property.location.state)} ·{' '}
+                {formatAcreage(property.acreage)} · {formatPrice(property.price)}
+              </p>
+            )}
+            {property.moveInReady && (
+              <span className="inline-flex items-center gap-1 mt-1.5 rounded-full bg-emerald-100 border border-emerald-200 px-2 py-0.5 text-[11px] font-medium text-emerald-800">
+                🏠 Move-in ready
+              </span>
+            )}
+          </div>
+          <div className="flex flex-col items-center flex-shrink-0">
+            <Ring score={report.composite} size={84} strokeWidth={9}>
+              <span className="text-base font-bold">{report.composite}</span>
+            </Ring>
+            <p className="mt-1 text-xs font-semibold text-gray-700 whitespace-nowrap">
+              Self-Sufficiency
+            </p>
           </div>
         </div>
 
-        <div className="p-4 space-y-5">
-          {/* Tax-sale banner (shown first when this is a delinquent-tax listing) */}
-          {property.status === 'tax_sale' && property.taxSale && (
-            <div className="rounded-lg border-2 border-orange-300 bg-orange-50/60 p-4">
-              <div className="flex items-center gap-2 mb-2">
-                <span className="text-lg">⚖</span>
-                <h3 className="font-bold text-orange-900">Delinquent County Tax Sale</h3>
-                <span className="ml-auto text-[10px] px-1.5 py-0.5 bg-orange-200 text-orange-800 rounded font-medium uppercase tracking-wide">
-                  {property.taxSale.stateType === 'deed' ? 'Deed' : 'Lien'} State
+        {/* Five axis bars */}
+        <div className="mt-3 space-y-1.5">
+          {report.axes.map((axis) => (
+            <AxisBar key={axis.key} axis={axis} />
+          ))}
+        </div>
+
+        {/* The thing to worry about */}
+        <div className="mt-3 rounded-md bg-white border border-gray-200 px-3 py-2 flex items-start gap-2">
+          <AlertTriangle className="w-4 h-4 text-amber-600 flex-shrink-0 mt-0.5" />
+          <p className="text-xs text-gray-700">
+            <span className="font-semibold">{report.weakest.label} is the bottleneck</span> —{' '}
+            {report.weakest.verdict}
+          </p>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+const AxisBar = ({ axis }: { axis: Axis }) => {
+  const klass = tierClasses[tier(axis.score)];
+  return (
+    <div className="flex items-center gap-2">
+      <span className={`flex-shrink-0 ${klass.text}`}>{AXIS_ICON[axis.key]}</span>
+      <span className="text-xs font-medium text-gray-700 w-20 flex-shrink-0">
+        {axis.label}
+      </span>
+      <div className="flex-1 h-2 bg-white/60 rounded-full overflow-hidden">
+        <div
+          className={`h-full ${klass.bar} transition-[width] duration-500`}
+          style={{ width: `${axis.score}%` }}
+        />
+      </div>
+      <span className={`text-sm font-bold tabular-nums w-9 text-right ${klass.text}`}>
+        {axis.score}
+      </span>
+    </div>
+  );
+};
+
+// ── Buildout-to-Autonomy ──────────────────────────────────────────────
+
+const BuildoutToAutonomy = ({
+  property,
+  report,
+}: {
+  property: Property;
+  report: ReturnType<typeof computeSelfSufficiency>;
+}) => {
+  // Tax-sale rows use the min bid (back taxes owed) as the
+  // acquisition cost, not the asking-price field. Buildout still
+  // closes the same axis gaps regardless of how the parcel was
+  // bought.
+  const isTaxSale = property.status === 'tax_sale' && property.taxSale;
+  const totalAsking = isTaxSale
+    ? property.taxSale?.amountOwedUsd ?? 0
+    : property.price ?? 0;
+  const cost = (report.costToFullLowUsd + report.costToFullHighUsd) / 2;
+  return (
+    <section className="rounded-xl border border-emerald-200 bg-emerald-50 p-4">
+      <header className="flex items-baseline justify-between mb-2">
+        <h3 className="text-base font-semibold text-gray-900">Buildout to autonomy</h3>
+        <span className="text-[11px] uppercase tracking-wide text-gray-400">
+          Closing the gap
+        </span>
+      </header>
+      <p className="text-xs text-gray-600 mb-3">
+        What it would cost to bring every axis to ≥85 (full self-sufficient
+        steady state). Numbers are ±50% rules-of-thumb.
+      </p>
+
+      <div className="flex flex-wrap items-center gap-2 text-sm mb-3">
+        <Stat label="Today" value={`${report.composite}`} tone="amber" />
+        <span className="text-gray-400">→</span>
+        <Stat label="After buildout" value={`${report.potentialComposite}`} tone="emerald" />
+        <span className="text-gray-400 mx-2">·</span>
+        <Stat
+          label={isTaxSale ? 'Min bid + buildout' : 'Buy + buildout'}
+          value={formatPrice(totalAsking + cost)}
+          tone="emerald"
+        />
+        <span className="text-gray-400 mx-2">·</span>
+        <Stat
+          label="Range"
+          value={`${formatPrice(report.costToFullLowUsd)} – ${formatPrice(report.costToFullHighUsd)}`}
+          tone="emerald"
+        />
+      </div>
+
+      {/* Per-axis gap rows */}
+      <div className="space-y-2">
+        {report.axes
+          .filter((a) => a.score < 85 && a.gaps.length > 0)
+          .map((axis) => (
+            <div
+              key={axis.key}
+              className="rounded-md border border-emerald-100 bg-white p-2.5"
+            >
+              <div className="flex items-center gap-2 mb-1.5">
+                <span className="text-emerald-700">{AXIS_ICON[axis.key]}</span>
+                <span className="text-sm font-semibold text-gray-900">{axis.label}</span>
+                <span className="text-xs text-gray-400 tabular-nums">
+                  {axis.score} → ≥85
                 </span>
               </div>
-              <p className="text-sm text-gray-700 mb-3">
-                This is a <strong>tax-sale listing</strong>, not a traditional for-sale property.{' '}
-                {property.taxSale.stateType === 'deed'
-                  ? 'Winning bidder gets the deed outright.'
-                  : 'Winning bidder gets a lien certificate; deed may be obtainable after the redemption period.'}{' '}
-                Do full title/quiet-title diligence before paying.
-              </p>
-              <dl className="grid grid-cols-2 gap-x-4 gap-y-2 text-xs">
-                <div>
-                  <dt className="text-gray-500">Minimum bid (owed)</dt>
-                  <dd className="text-lg font-bold text-orange-700">
-                    {formatPrice(property.taxSale.amountOwedUsd)}
-                  </dd>
-                </div>
-                <div>
-                  <dt className="text-gray-500">Tax year</dt>
-                  <dd className="font-semibold text-gray-800">{property.taxSale.taxYear ?? '—'}</dd>
-                </div>
-                <div className="col-span-2">
-                  <dt className="text-gray-500">Parcel ID</dt>
-                  <dd className="font-mono text-gray-800">{property.taxSale.parcelId}</dd>
-                </div>
-                {property.taxSale.owner && (
-                  <div className="col-span-2">
-                    <dt className="text-gray-500">Owner of record</dt>
-                    <dd className="text-gray-800">{property.taxSale.owner}</dd>
-                  </div>
-                )}
-                {property.taxSale.legalDescription && (
-                  <div className="col-span-2">
-                    <dt className="text-gray-500">Legal description</dt>
-                    <dd className="text-gray-800 italic text-[11px]">
-                      {property.taxSale.legalDescription}
-                    </dd>
-                  </div>
-                )}
-                {(property.taxSale.houseNumber || property.taxSale.street) && (
-                  <div className="col-span-2">
-                    <dt className="text-gray-500">Situs address</dt>
-                    <dd className="text-gray-800">
-                      {[property.taxSale.houseNumber, property.taxSale.street]
-                        .filter(Boolean)
-                        .join(' ')}
-                    </dd>
-                  </div>
-                )}
-                {property.taxSale.saleMonth && (
-                  <div>
-                    <dt className="text-gray-500">Typical sale month</dt>
-                    <dd className="text-gray-800">
-                      {new Date(2000, property.taxSale.saleMonth - 1).toLocaleString(undefined, {
-                        month: 'long',
-                      })}
-                    </dd>
-                  </div>
-                )}
-                {property.taxSale.listUrl && (
-                  <div className="col-span-2">
-                    <a
-                      href={safeUrl(property.taxSale.listUrl)}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-orange-700 hover:text-orange-900 font-medium text-xs"
-                    >
-                      Open original county tax-sale list (PDF) →
-                    </a>
-                  </div>
-                )}
-              </dl>
-
-              {/* Investment analysis (from scraper/sources/tax_sale_analytics.py) */}
-              {(property.taxSale.investmentMultiple != null ||
-                property.taxSale.expectedReturnPct != null ||
-                (property.taxSale.analyticsNotes ?? []).length > 0) && (
-                <div className="mt-4 pt-4 border-t border-orange-200">
-                  <h4 className="text-xs font-bold text-orange-900 uppercase tracking-wide mb-2">
-                    Investment analysis
-                  </h4>
-                  <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-xs">
-                    {property.taxSale.parcelType && (
-                      <div>
-                        <dt className="text-gray-500">Parcel type</dt>
-                        <dd className="font-semibold text-gray-800 capitalize">
-                          {property.taxSale.parcelType.replace('_', ' ')}
-                        </dd>
-                      </div>
-                    )}
-                    {property.taxSale.estimatedAcres != null && (
-                      <div>
-                        <dt className="text-gray-500">Estimated acres</dt>
-                        <dd className="font-semibold text-gray-800">
-                          {property.taxSale.estimatedAcres.toFixed(2)}
-                        </dd>
-                      </div>
-                    )}
-                    {property.taxSale.estimatedValueUsd != null && (
-                      <div>
-                        <dt className="text-gray-500">Est. market value</dt>
-                        <dd className="font-semibold text-gray-800">
-                          {formatPrice(property.taxSale.estimatedValueUsd)}
-                        </dd>
-                      </div>
-                    )}
-                    {property.taxSale.investmentMultiple != null && (
-                      <div>
-                        <dt className="text-gray-500">Upside multiple</dt>
-                        <dd
-                          className={`font-bold ${
-                            property.taxSale.investmentMultiple >= 3
-                              ? 'text-green-700'
-                              : property.taxSale.investmentMultiple >= 1
-                                ? 'text-amber-700'
-                                : 'text-red-700'
-                          }`}
-                        >
-                          {property.taxSale.investmentMultiple.toFixed(1)}× min bid
-                        </dd>
-                      </div>
-                    )}
-                    {property.taxSale.expectedReturnPct != null && (
-                      <div>
-                        <dt className="text-gray-500">Expected annual return</dt>
-                        <dd
-                          className={`font-bold ${
-                            property.taxSale.expectedReturnPct >= 15
-                              ? 'text-green-700'
-                              : property.taxSale.expectedReturnPct >= 10
-                                ? 'text-amber-700'
-                                : 'text-gray-700'
-                          }`}
-                        >
-                          {property.taxSale.expectedReturnPct.toFixed(1)}% /yr
-                        </dd>
-                      </div>
-                    )}
-                  </div>
-                  {(property.taxSale.analyticsNotes ?? []).length > 0 && (
-                    <ul className="mt-3 list-disc pl-4 text-[11px] text-gray-700 space-y-0.5">
-                      {property.taxSale.analyticsNotes!.map((note, i) => (
-                        <li key={i}>{note}</li>
-                      ))}
-                    </ul>
-                  )}
-                  <p className="mt-3 text-[10px] text-gray-500 italic">
-                    Estimates use county median $/acre from LandWatch comps minus a ~$5,000 pad for
-                    title/legal/quiet-title costs. Lien returns weight a {85}% redemption
-                    probability at the state statutory interest rate. Do your own diligence — these
-                    are rough triage numbers, not investment advice.
-                  </p>
-                </div>
-              )}
+              <ul className="space-y-1">
+                {axis.gaps.map((gap) => (
+                  <GapRow key={gap.label} gap={gap} />
+                ))}
+              </ul>
             </div>
-          )}
+          ))}
+      </div>
+    </section>
+  );
+};
 
-          {/* Key Stats */}
-          <div className={`grid gap-3 ${property.acreage > 0 ? 'grid-cols-3' : 'grid-cols-1'}`}>
-            <div className="bg-gray-50 rounded-lg p-3 text-center">
-              <p className="text-xl font-bold text-gray-900">{formatPrice(property.price)}</p>
-              <p className="text-xs text-gray-500 mt-0.5">
-                {property.acreage > 0 ? 'Asking Price' : 'Face Value'}
-              </p>
-            </div>
-            {property.acreage > 0 && (
-              <>
-                <div className="bg-gray-50 rounded-lg p-3 text-center">
-                  <p className="text-xl font-bold text-gray-900">
-                    {formatAcreage(property.acreage)}
-                  </p>
-                  <p className="text-xs text-gray-500 mt-0.5">Total Acreage</p>
-                </div>
-                <div className="bg-gray-50 rounded-lg p-3 text-center">
-                  <p className="text-xl font-bold text-gray-900">
-                    {formatPricePerAcre(property.pricePerAcre)}
-                  </p>
-                  <p className="text-xs text-gray-500 mt-0.5">
-                    Price / Acre
-                    {property.residualPricePerAcre &&
-                    property.estimatedStructureValueUsd &&
-                    property.estimatedStructureValueUsd > 0 ? (
-                      <span
-                        className="ml-1 text-[10px] text-gray-400"
-                        title={`Land-only $/ac after subtracting ~${formatPrice(property.estimatedStructureValueUsd)} estimated structure value`}
-                      >
-                        &nbsp;({formatPricePerAcre(property.residualPricePerAcre)} land)
-                      </span>
-                    ) : null}
-                  </p>
-                </div>
-              </>
-            )}
-          </div>
+const Stat = ({
+  label,
+  value,
+  tone,
+}: {
+  label: string;
+  value: string;
+  tone: 'emerald' | 'amber';
+}) => {
+  const cls =
+    tone === 'amber'
+      ? 'bg-amber-50 border-amber-200 text-amber-800'
+      : 'bg-emerald-100 border-emerald-300 text-emerald-900';
+  return (
+    <span className={`inline-flex flex-col rounded-md border px-2 py-1 ${cls}`}>
+      <span className="text-[10px] uppercase tracking-wide opacity-70">{label}</span>
+      <span className="text-sm font-bold tabular-nums">{value}</span>
+    </span>
+  );
+};
 
-          {/* Three composite scores stacked together so the user sees
-              the headline numbers first, in one visual rhythm. Each
-              panel matches the same Ring + breakdown grammar so the
-              eye groups them.
-                Deal Score      → Star,  4-axis (price/features/dom/source)
-                Investment      → $,     5-axis (value/land/risk/liquidity/macro)
-                Homestead Fit   → Leaf,  AI tags + red flags
-              Color-banded green/amber/red by score so a green Deal
-              and an amber Fit on the same listing read instantly. */}
-          <DealScoreBreakdown property={property} />
-          <InvestmentScorePanel property={property} />
+const GapRow = ({ gap }: { gap: Gap }) => {
+  const fmt = (v: number) =>
+    v === 0 ? '$0' : v >= 1000 ? `$${Math.round(v / 1000)}k` : `$${v}`;
+  return (
+    <li className="flex items-baseline justify-between gap-2 text-xs">
+      <span className="text-gray-700 flex-1">
+        <span className="text-emerald-600 font-medium">+{gap.liftPoints}pt</span>{' '}
+        {gap.label}
+      </span>
+      <span className="text-gray-700 font-semibold tabular-nums whitespace-nowrap">
+        {fmt(gap.costLowUsd)}–{fmt(gap.costHighUsd)}
+      </span>
+    </li>
+  );
+};
 
-          {/* Total-cost-to-homestead — the decision-driver view.
-              Sums the asking price + estimated build-out to reach move-
-              in-ready. For already-ready listings, buildout=0 and this
-              just echoes the asking price. Honest: we can't know a
-              buyer's finishing standards, so the number is a floor. */}
-          {property.acreage > 0 && (
-            <div className="rounded-lg border border-emerald-200 bg-emerald-50/50 p-4">
-              <div className="flex items-center gap-2 mb-2 flex-wrap">
-                <h3 className="text-sm font-semibold text-emerald-900">
-                  Total cost to live here
-                </h3>
-                {property.moveInReady && (
-                  <span className="text-xs font-bold text-emerald-700 bg-white border border-emerald-200 rounded-full px-2 py-0.5">
-                    🏠 Move-in ready
-                  </span>
-                )}
-              </div>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-sm">
-                <div>
-                  <p className="text-xs text-gray-500">Asking</p>
-                  <p className="font-semibold text-gray-800">{formatPrice(property.price)}</p>
-                </div>
-                <div>
-                  <p className="text-xs text-gray-500">
-                    {property.moveInReady ? 'Build-out needed' : 'Est. build-out to ready'}
-                  </p>
-                  <p
-                    className={`font-semibold ${
-                      (property.estimatedBuildoutUsd ?? 0) === 0
-                        ? 'text-emerald-700'
-                        : 'text-gray-800'
-                    }`}
-                  >
-                    {formatPrice(property.estimatedBuildoutUsd ?? 0)}
-                  </p>
-                </div>
-                <div>
-                  <p className="text-xs text-gray-500">Total to homestead</p>
-                  <p className="text-xl font-bold text-emerald-800">
-                    {formatPrice(property.price + (property.estimatedBuildoutUsd ?? 0))}
-                  </p>
-                </div>
-              </div>
-              <p className="text-[11px] text-gray-500 mt-3">
-                Estimate assumes a modest cabin/modular build if no dwelling,
-                basic well + septic, off-grid solar if no utility service.
-                Add your own finishes / acreage improvements on top.
-                {property.estimatedStructureValueUsd &&
-                property.estimatedStructureValueUsd > 0 ? (
-                  <>
-                    {' '}
-                    Detected structures: ~{formatPrice(property.estimatedStructureValueUsd)}{' '}
-                    already in place.
-                  </>
-                ) : null}
-              </p>
-            </div>
-          )}
+// ── Per-axis panels (Food / Water / Energy / Shelter) ─────────────────
 
-          {/* Nearest-town proximity — surfaces geoEnrichment.proximity
-              with context that helps a buyer underwrite access costs
-              (hospital, internet, grocery). */}
-          {property.geoEnrichment?.proximity?.nearestTownName && (
-            <div className="rounded-lg border border-sky-100 bg-sky-50/40 p-3">
-              <div className="flex items-start gap-3">
-                <span className="text-lg leading-none mt-0.5">📍</span>
-                <div className="flex-1 text-sm">
-                  <p className="font-medium text-sky-900">
-                    {property.geoEnrichment.proximity.nearestTownDistanceMiles?.toFixed(1)} mi to{' '}
-                    {property.geoEnrichment.proximity.nearestTownName}
-                    {property.geoEnrichment.proximity.nearestTownPopulation &&
-                      ` (pop ${property.geoEnrichment.proximity.nearestTownPopulation.toLocaleString()})`}
-                  </p>
-                  <p className="text-xs text-sky-700/80 mt-0.5">
-                    Nearest named town ≥5k. Drive time is roughly 1.5×
-                    linear miles on rural back roads.
-                    {(property.geoEnrichment.proximity.namedWaterFeatures ?? []).length > 0 && (
-                      <>
-                        {' '}
-                        Nearby water: {property.geoEnrichment.proximity.namedWaterFeatures!.slice(0, 2).join(', ')}.
-                      </>
-                    )}
-                  </p>
-                </div>
-              </div>
-            </div>
-          )}
+const FoodPanel = ({ property, axis }: { property: Property; axis: Axis }) => (
+  <AxisPanel
+    axis={axis}
+    title="Food production"
+    subtitle="Can you grow + raise enough to feed yourself?"
+  >
+    <DetailGrid>
+      <DetailItem label="Soil class" value={property.geoEnrichment?.soil?.capabilityClass ?? '—'} />
+      <DetailItem label="Drainage" value={property.geoEnrichment?.soil?.drainageClass ?? '—'} />
+      <DetailItem label="Slope" value={`${(property.geoEnrichment?.soil?.slopePercent ?? 0).toFixed(1)}%`} />
+      <DetailItem
+        label="Tillable est."
+        value={`${(property.acreage * 0.6).toFixed(1)} ac`}
+        hint="60% of total acres typically tillable"
+      />
+    </DetailGrid>
+  </AxisPanel>
+);
 
-          {/* Homestead Fit panel — same visual grammar as Deal Score
-              and Investment Score so all three composite scores read
-              as a unified set. AI-extracted tags + red flags. Falls
-              through to a small "not analyzed yet" block when the
-              AI enrichment pass hasn't run. */}
-          {property.enrichedAt ? (
-            <HomesteadFitBreakdown property={property} />
-          ) : (
-            <div className="rounded-lg border border-gray-200 bg-gray-50 p-4">
-              <div className="flex items-center gap-2 mb-1">
-                <h3 className="text-sm font-semibold text-gray-700">Homestead Fit</h3>
-                <span className="text-[10px] px-1.5 py-0.5 bg-gray-200 text-gray-600 rounded font-medium uppercase tracking-wide">
-                  Not Yet Analyzed
-                </span>
-              </div>
-              <p className="text-xs text-gray-500">
-                This listing hasn&apos;t been through the AI enrichment pass yet. Run{' '}
-                <code className="px-1 py-0.5 bg-white border border-gray-200 rounded">
-                  ./scripts/refresh_ai.sh
-                </code>{' '}
-                locally to generate tags, a fit score, red flags, and a plain- language summary.
-              </p>
-            </div>
-          )}
+const WaterPanel = ({ property, axis }: { property: Property; axis: Axis }) => {
+  const features = new Set(property.features ?? []);
+  return (
+    <AxisPanel
+      axis={axis}
+      title="Water security"
+      subtitle="Can you cover all water needs without a municipal hookup?"
+    >
+      <DetailGrid>
+        <DetailItem
+          label="Well"
+          value={features.has('water_well') ? '✓ on parcel' : 'none'}
+        />
+        <DetailItem
+          label="Surface water"
+          value={
+            features.has('water_creek')
+              ? '✓ creek'
+              : features.has('water_pond')
+                ? '✓ pond'
+                : 'none'
+          }
+        />
+        <DetailItem
+          label="Watershed"
+          value={property.geoEnrichment?.watershed?.watershedName ?? '—'}
+        />
+        <DetailItem
+          label="Rainwater catchment"
+          value="Legal in TX (tax-exempt)"
+        />
+      </DetailGrid>
+    </AxisPanel>
+  );
+};
 
-          {/* Description */}
-          {property.description && (
-            <div>
-              <h3 className="text-sm font-semibold text-gray-700 mb-1.5">Description</h3>
-              <p className="text-sm text-gray-600 leading-relaxed">{property.description}</p>
-            </div>
-          )}
+const EnergyPanel = ({ axis }: { axis: Axis }) => (
+  <AxisPanel
+    axis={axis}
+    title="Energy autonomy"
+    subtitle="Can you generate every kWh on-site?"
+  >
+    <DetailGrid>
+      <DetailItem label="Solar" value="Strong fit · ~$22–55k for 10 kW" />
+      <DetailItem label="Wind" value="Skip · TX avg 6–8 mph" />
+      <DetailItem label="Hydro" value="Marginal · stream-dependent" />
+      <DetailItem label="Geothermal" value="Workable · 1.5+ ac available" />
+    </DetailGrid>
+  </AxisPanel>
+);
 
-          {/* Features */}
-          {property.features.length > 0 && (
-            <div>
-              <h3 className="text-sm font-semibold text-gray-700 mb-2">Features</h3>
-              <div className="flex flex-wrap gap-2">
-                {property.features.map((feature) => (
+const ShelterPanel = ({
+  property,
+  axis,
+}: {
+  property: Property;
+  axis: Axis;
+}) => {
+  const improvements = property.improvements ?? {};
+  return (
+    <AxisPanel
+      axis={axis}
+      title="Shelter & on-site materials"
+      subtitle="What's already built or buildable from this land?"
+    >
+      <DetailGrid>
+        <DetailItem
+          label="Existing dwelling"
+          value={
+            improvements.home
+              ? '✓ home'
+              : improvements.cabin
+                ? '✓ cabin'
+                : 'none'
+          }
+        />
+        <DetailItem
+          label="Outbuildings"
+          value={improvements.barn || improvements.outbuilding ? '✓ present' : 'none'}
+        />
+        <DetailItem
+          label="Septic"
+          value={improvements.septic ? '✓ installed' : 'none — $6–14k to add'}
+        />
+        <DetailItem
+          label="Move-in ready"
+          value={property.moveInReady ? '✓ yes' : 'no — buildout required'}
+        />
+      </DetailGrid>
+    </AxisPanel>
+  );
+};
+
+// ── Resilience + Regulatory ───────────────────────────────────────────
+
+const ResilienceAndRegulatory = ({
+  property,
+  axis,
+}: {
+  property: Property;
+  axis: Axis;
+}) => {
+  const flood = property.geoEnrichment?.flood;
+  const acres = property.acreage ?? 0;
+  return (
+    <AxisPanel
+      axis={axis}
+      title="Resilience & regulatory"
+      subtitle="What gets in the way of staying off-grid?"
+    >
+      <DetailGrid>
+        <DetailItem
+          label="FEMA flood zone"
+          value={flood?.floodZone ?? '—'}
+          hint={flood?.isSFHA ? '⚠ Special Flood Hazard Area' : undefined}
+        />
+        <DetailItem
+          label="Ag exemption"
+          value={acres >= 10 ? 'Eligible (≥10ac)' : 'Below threshold'}
+          hint={acres >= 10 ? '~80% TX property-tax cut once filed' : undefined}
+        />
+        <DetailItem
+          label="Water rights"
+          value="TX rule of capture"
+          hint="Groundwater belongs to the surface owner"
+        />
+        <DetailItem
+          label="HOA"
+          value={(property.features ?? []).includes('no_hoa') ? '✓ none' : 'check deed'}
+        />
+        <DetailItem
+          label="Right-to-farm"
+          value="TX statute protects ag operations"
+        />
+        <DetailItem
+          label="Wildfire risk"
+          value={(property.geoEnrichment?.soil?.slopePercent ?? 0) > 12 ? 'Elevated (steep slope)' : 'Average'}
+        />
+      </DetailGrid>
+    </AxisPanel>
+  );
+};
+
+// ── Generic axis panel scaffold ───────────────────────────────────────
+
+const AxisPanel = ({
+  axis,
+  title,
+  subtitle,
+  children,
+}: {
+  axis: Axis;
+  title: string;
+  subtitle: string;
+  children: React.ReactNode;
+}) => {
+  const klass = tierClasses[tier(axis.score)];
+  return (
+    <section className="rounded-xl border border-gray-200 bg-white p-4">
+      <header className="flex items-start gap-3 mb-2">
+        <Ring score={axis.score} size={48} strokeWidth={5}>
+          <span className={klass.text}>{AXIS_ICON[axis.key]}</span>
+        </Ring>
+        <div className="flex-1 min-w-0">
+          <h3 className="text-base font-semibold text-gray-900">{title}</h3>
+          <p className="text-xs text-gray-500">{subtitle}</p>
+        </div>
+      </header>
+      <p className={`text-sm font-medium ${klass.text} mb-3`}>{axis.verdict}</p>
+      {children}
+    </section>
+  );
+};
+
+const DetailGrid = ({ children }: { children: React.ReactNode }) => (
+  <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 text-sm">{children}</div>
+);
+
+const DetailItem = ({
+  label,
+  value,
+  hint,
+}: {
+  label: string;
+  value: string;
+  hint?: string;
+}) => (
+  <div>
+    <p className="text-[11px] uppercase tracking-wide text-gray-500">{label}</p>
+    <p className="text-sm font-medium text-gray-900">{value}</p>
+    {hint && <p className="text-[11px] text-gray-500 mt-0.5">{hint}</p>}
+  </div>
+);
+
+// ── About this listing (description + AI insights) ────────────────────
+
+/**
+ * Combined "what does the source say + what did Claude pull out" panel.
+ * Description is collapsible because some scraper-pulled descriptions
+ * are 2k+ char walls of HTML; AI summary stays open as the headline
+ * digest. Tags + red flags surface as small chip rows.
+ */
+const AboutListing = ({ property }: { property: Property }) => {
+  const [openDesc, setOpenDesc] = useState(false);
+  const tags = property.aiTags ?? [];
+  const flags = property.redFlags ?? [];
+  const summary = property.aiSummary;
+  const description = property.description;
+  const hasAnything = !!summary || !!description || tags.length > 0 || flags.length > 0;
+  if (!hasAnything) return null;
+
+  return (
+    <section className="rounded-xl border border-gray-200 bg-white p-4 space-y-3">
+      <h3 className="text-base font-semibold text-gray-900">About this listing</h3>
+
+      {summary && (
+        <div className="rounded-md bg-gray-50 border border-gray-200 px-3 py-2.5">
+          <p className="text-[11px] uppercase tracking-wide text-gray-500 mb-1">
+            Claude&rsquo;s read
+          </p>
+          <p className="text-sm text-gray-700 italic leading-relaxed">
+            &ldquo;{summary}&rdquo;
+          </p>
+        </div>
+      )}
+
+      {(tags.length > 0 || flags.length > 0) && (
+        <div className="grid sm:grid-cols-2 gap-3">
+          <div>
+            <p className="text-[11px] uppercase tracking-wide text-emerald-700 font-semibold mb-1">
+              Strengths ({tags.length})
+            </p>
+            {tags.length > 0 ? (
+              <div className="flex flex-wrap gap-1">
+                {tags.map((t) => (
                   <span
-                    key={feature}
-                    className="rounded-full bg-green-50 border border-green-200 px-3 py-1 text-sm text-green-700 font-medium"
+                    key={t}
+                    title={AI_TAG_DESCRIPTIONS[t]}
+                    className="rounded-full bg-emerald-50 border border-emerald-200 px-2 py-0.5 text-xs text-emerald-700 font-medium cursor-help"
                   >
-                    {FEATURE_LABELS[feature]}
+                    {AI_TAG_LABELS[t]}
                   </span>
                 ))}
               </div>
-            </div>
-          )}
-
-          {/* Parcel research — govt enrichment + external links */}
-          <ResearchPanel
-            location={property.location}
-            geo={property.geoEnrichment}
-            links={property.externalLinks}
-          />
-
-          {/* Inline map of the parcel + nearest comp listings. Gives
-              the user "where am I actually looking" before they read
-              the comp breakdown. Two-stage lazy: React.lazy for the
-              code chunk, plus IntersectionObserver-gated mount so the
-              Leaflet bundle only downloads when the user scrolls
-              within 400px of the map. Saves ~80KB gzip on first paint
-              for users who don't reach the map. */}
-          <DeferredMap property={property} />
-
-          {/* Homesteading viability — what this land can actually grow,
-              raise, or produce, and rough buildout costs for greenhouse,
-              aquaponics, solar, wind, hydro, geothermal, well, cistern,
-              pond. Heuristic estimates derived from the geoEnrichment
-              fields already on the listing — no extra fetches. */}
-          <HomesteadViabilityPanel property={property} />
-
-          {/* "How we computed the comp" — surfaces the methodology +
-              the actual listings that fed the median, so users can
-              audit the comparison instead of trusting an opaque number. */}
-          <CompBreakdown property={property} />
-
-          {/* Travis CAD record — owner, last deed date, valuations
-              from the public county appraisal roll. Self-gates on
-              `data/cad_joined.json` having a row for this listing
-              (currently Travis-only; other counties as we add them). */}
-          <CadRecordPanel property={property} />
-
-          {/* Property-as-a-stock — county / state percentile + voting
-              chip. Different signal from CompBreakdown (which is just
-              the $/ac comparison). Self-gates on comp depth. */}
-          <MarketContext property={property} />
-
-          {/* Metadata */}
-          <div className="border-t border-gray-100 pt-4 grid grid-cols-2 gap-3 text-sm">
-            <div>
-              <p className="text-gray-500 text-xs">Source</p>
-              <p className="text-gray-800 font-medium">{formatSourceName(property.source)}</p>
-            </div>
-            <div>
-              <p className="text-gray-500 text-xs">Found</p>
-              <p className="text-gray-800 font-medium">{formatDate(property.dateFound)}</p>
-            </div>
-            {property.daysOnMarket != null && (
-              <div>
-                <p className="text-gray-500 text-xs">Days on Market</p>
-                <p className="text-gray-800 font-medium">{property.daysOnMarket} days</p>
-              </div>
-            )}
-            {(property.location.lat !== 0 || property.location.lng !== 0) && (
-              <div>
-                <p className="text-gray-500 text-xs">Location</p>
-                <p className="text-gray-800 font-medium">
-                  {property.location.lat.toFixed(4)}, {property.location.lng.toFixed(4)}
-                </p>
-              </div>
-            )}
-          </div>
-
-          {/* Listing URL — gated for anonymous viewers. We deliberately
-              do NOT expose the source URL or its host name when the
-              user isn't signed in: combined with title + county +
-              acreage already on the page, it would be enough to
-              re-find the listing on the source site and bypass the
-              signup funnel entirely. */}
-          <div className="border-t border-gray-100 pt-4">
-            <p className="text-gray-500 text-xs mb-1">Listing URL</p>
-            {canSeeSourceLinks ? (
-              <div className="flex items-center gap-2 min-w-0">
-                <a
-                  href={safeUrl(property.url)}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  title={property.url}
-                  className="text-blue-600 hover:underline text-sm truncate min-w-0 flex-1"
-                >
-                  {property.url}
-                </a>
-                <button
-                  onClick={copyUrl}
-                  title="Copy URL"
-                  className="flex-shrink-0 text-gray-400 hover:text-gray-600 transition-colors"
-                >
-                  {copied ? (
-                    <span className="text-xs text-green-600 font-medium whitespace-nowrap">
-                      Copied!
-                    </span>
-                  ) : (
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-4 w-4"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
-                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
-                    </svg>
-                  )}
-                </button>
-              </div>
             ) : (
-              <button
-                type="button"
-                onClick={() => void loginWithGoogle()}
-                className="inline-flex items-center gap-2 rounded-lg border border-emerald-200 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 text-sm font-medium px-3 py-2 w-full"
-              >
-                <Lock className="w-3.5 h-3.5" aria-hidden="true" />
-                Sign up free to view the source listing
-              </button>
+              <p className="text-xs text-gray-400">No positive tags extracted.</p>
             )}
           </div>
-
-          {/* Reaction row + Add-to-project sit above the Save/Hide bar.
-              Three preference axes from light to heavy commitment:
-              rating (lightest, just preference signal), bookmark+hide
-              (action), project (work-tracking). */}
-          {user && (
-            <div className="border-t border-gray-100 pt-4 space-y-2">
-              <RatingBar listingId={property.id} />
-              <div className="flex items-center justify-end">
-                <AddToProjectButton itemType="listing" itemId={property.id} />
-              </div>
-            </div>
-          )}
-          <div className="border-t border-gray-100 pt-4 flex items-center gap-2">
-            <button
-              onClick={() => void onSaveClick()}
-              className={`flex-1 inline-flex items-center justify-center gap-1.5 rounded-lg border px-3 py-2 text-sm font-medium transition-colors ${
-                saved
-                  ? 'bg-amber-400 border-amber-500 text-white hover:bg-amber-500'
-                  : 'bg-white border-gray-300 text-gray-700 hover:bg-gray-50'
-              }`}
-            >
-              <svg viewBox="0 0 24 24" className="w-4 h-4" fill={saved ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z" />
-              </svg>
-              {saved ? 'Saved' : 'Save'}
-            </button>
-            {user && (
-              <button
-                onClick={() => void toggleHidden(property.id)}
-                className={`flex-1 inline-flex items-center justify-center gap-1.5 rounded-lg border px-3 py-2 text-sm font-medium transition-colors ${
-                  hidden
-                    ? 'bg-red-500 border-red-600 text-white hover:bg-red-600'
-                    : 'bg-white border-gray-300 text-gray-700 hover:bg-gray-50'
-                }`}
-                title={hidden ? 'Hidden — click to restore' : 'Not interested'}
-              >
-                {hidden ? (
-                  <>
-                    {/* Eye-off — reflects CURRENT state: this listing is
-                        hidden from the default list. Clicking restores. */}
-                    <svg viewBox="0 0 24 24" className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24" />
-                      <line x1="1" y1="1" x2="23" y2="23" />
-                    </svg>
-                    Hidden — show again
-                  </>
-                ) : (
-                  <>
-                    {/* Open eye — listing is visible. Clicking hides. */}
-                    <svg viewBox="0 0 24 24" className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
-                      <circle cx="12" cy="12" r="3" />
-                    </svg>
-                    Not interested
-                  </>
-                )}
-              </button>
-            )}
-          </div>
-
-          {/* Private note (renders only when saved) */}
-          <PrivateNote listingId={property.id} />
-
-          {/* CTA */}
           <div>
-            {property.status === 'unverified' && (
-              <p className="text-xs text-yellow-700 text-center mb-2">
-                ⚠ Sample listing — link may not work
-              </p>
-            )}
-            {property.status === 'expired' && (
-              <p className="text-xs text-red-600 text-center mb-2">
-                ✗ This listing has expired or is no longer available
-              </p>
-            )}
-            {canSeeSourceLinks ? (
-              <a
-                href={safeUrl(property.url)}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={`block w-full text-center font-semibold py-3 rounded-lg transition-colors ${
-                  property.status === 'expired'
-                    ? 'bg-gray-200 text-gray-500'
-                    : 'bg-green-600 hover:bg-green-700 text-white'
-                }`}
-              >
-                View Full Listing →
-              </a>
+            <p className="text-[11px] uppercase tracking-wide text-amber-700 font-semibold mb-1">
+              Red flags ({flags.length})
+            </p>
+            {flags.length > 0 ? (
+              <div className="flex flex-wrap gap-1">
+                {flags.map((f) => {
+                  const sev = RED_FLAG_SEVERITY[f] ?? 3;
+                  return (
+                    <span
+                      key={f}
+                      title={`${RED_FLAG_DESCRIPTIONS[f] ?? ''} (severity ${sev}/5)`}
+                      className="rounded-full bg-amber-50 border border-amber-200 px-2 py-0.5 text-xs text-amber-700 font-medium cursor-help"
+                    >
+                      {RED_FLAG_LABELS[f]}
+                      <span className="ml-1 text-amber-500">{'•'.repeat(sev)}</span>
+                    </span>
+                  );
+                })}
+              </div>
             ) : (
-              <button
-                type="button"
-                onClick={() => void loginWithGoogle()}
-                className="flex w-full items-center justify-center gap-2 rounded-lg bg-green-600 hover:bg-green-700 text-white font-semibold py-3"
-              >
-                <Lock className="w-4 h-4" aria-hidden="true" />
-                Sign up free to view this listing
-              </button>
+              <p className="text-xs text-gray-400">None raised.</p>
             )}
           </div>
         </div>
+      )}
+
+      {description && (
+        <div>
+          <button
+            type="button"
+            onClick={() => setOpenDesc((v) => !v)}
+            className="text-xs text-gray-500 hover:text-gray-800 inline-flex items-center gap-0.5"
+          >
+            {openDesc ? (
+              <ChevronUp className="w-3 h-3" />
+            ) : (
+              <ChevronDown className="w-3 h-3" />
+            )}
+            Source description
+          </button>
+          {openDesc && (
+            <p className="mt-2 text-sm text-gray-700 whitespace-pre-line leading-relaxed">
+              {description}
+            </p>
+          )}
+        </div>
+      )}
+    </section>
+  );
+};
+
+// ── Research links (consolidated) ─────────────────────────────────────
+
+/**
+ * Single panel collecting every outbound link to the public datasets
+ * the page's heuristics + records reference. Replaces the scattered
+ * "Sources" rows on individual panels with one place to verify the
+ * underlying data.
+ */
+const ResearchLinks = ({ property }: { property: Property }) => {
+  const lat = property.location?.lat ?? 0;
+  const lng = property.location?.lng ?? 0;
+  const state = (property.location?.state ?? '').toUpperCase();
+  if (!lat || !lng) return null;
+
+  const links: Array<{ href: string; label: string; group: string }> = [
+    // Soil / climate / water
+    { group: 'Land', href: `https://websoilsurvey.sc.egov.usda.gov/App/WebSoilSurvey.aspx?lat=${lat}&lon=${lng}`, label: 'USDA Web Soil Survey' },
+    { group: 'Land', href: 'https://planthardiness.ars.usda.gov/', label: 'USDA Hardiness Zone Map' },
+    { group: 'Land', href: `https://msc.fema.gov/portal/search?AddressQuery=${lat},${lng}`, label: 'FEMA Flood Map' },
+    { group: 'Land', href: `https://firststreet.org/`, label: 'First Street climate risk' },
+    // Energy
+    { group: 'Energy', href: `https://pvwatts.nrel.gov/pvwatts.php?lat=${lat}&lon=${lng}`, label: 'NREL PVWatts' },
+    { group: 'Energy', href: `https://programs.dsireusa.org/system/program?state=${state}`, label: `DSIRE — ${state} incentives` },
+    // Parcel research
+    { group: 'Parcel', href: 'https://traviscad.org/property-search/', label: 'Travis CAD record' },
+    { group: 'Parcel', href: 'https://countyclerk.traviscountytx.gov/online-services/', label: 'County clerk deeds' },
+    { group: 'Parcel', href: `https://www.google.com/maps/place/${lat},${lng}/@${lat},${lng},18z/data=!3m1!1e3`, label: 'Google satellite view' },
+  ];
+
+  const groups = ['Land', 'Energy', 'Parcel'];
+
+  return (
+    <section className="rounded-xl border border-gray-200 bg-white p-4">
+      <h3 className="text-base font-semibold text-gray-900 mb-2">Research & verify</h3>
+      <p className="text-xs text-gray-500 mb-3">
+        Every score above is a heuristic. These are the public sources we
+        calibrated against — click through to verify any specific number.
+      </p>
+      <div className="space-y-2">
+        {groups.map((g) => (
+          <div key={g}>
+            <p className="text-[11px] uppercase tracking-wide text-gray-400 font-semibold mb-0.5">
+              {g}
+            </p>
+            <div className="flex flex-wrap gap-x-3 gap-y-1 text-xs">
+              {links
+                .filter((l) => l.group === g)
+                .map((l) => (
+                  <a
+                    key={l.label}
+                    href={l.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-600 hover:text-blue-800 hover:underline inline-flex items-center gap-0.5"
+                  >
+                    {l.label}
+                    <ExternalLink className="w-3 h-3" />
+                  </a>
+                ))}
+            </div>
+          </div>
+        ))}
       </div>
-      <UpgradeModal
-        open={showUpgrade}
-        onClose={() => setShowUpgrade(false)}
-        reason="saved_listings_limit"
-      />
+    </section>
+  );
+};
+
+// ── Provenance footer ─────────────────────────────────────────────────
+
+const ListingProvenance = ({ property }: { property: Property }) => {
+  const { canSeeSourceLinks } = useAccessTier();
+  return (
+    <section className="rounded-xl border border-gray-200 bg-gray-50 p-4">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-sm">
+        <DetailItem label="Source" value={formatSourceName(property.source)} />
+        <DetailItem label="Found" value={formatDate(property.dateFound)} />
+        {property.daysOnMarket != null && (
+          <DetailItem label="Days on market" value={`${property.daysOnMarket}`} />
+        )}
+        {property.validatedAt && (
+          <DetailItem label="Last verified" value={formatDate(property.validatedAt)} />
+        )}
+        {property.location.lat !== 0 && (
+          <DetailItem
+            label="Lat / lng"
+            value={`${property.location.lat.toFixed(4)}, ${property.location.lng.toFixed(4)}`}
+          />
+        )}
+      </div>
+      <div className="mt-3 pt-3 border-t border-gray-200">
+        <p className="text-[11px] text-gray-500 mb-1">Original listing URL</p>
+        {canSeeSourceLinks ? (
+          <a
+            href={safeUrl(property.url)}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-blue-600 hover:underline text-sm break-all"
+          >
+            {property.url}
+          </a>
+        ) : (
+          <p className="text-xs text-gray-500 italic">
+            Sign in to see the source listing URL.
+          </p>
+        )}
+      </div>
+    </section>
+  );
+};
+
+// ── Homestead community (smaller, supporting role) ────────────────────
+
+const HomesteadCommunity = () => (
+  <section className="rounded-xl border border-gray-200 bg-white p-4">
+    <header className="mb-2">
+      <h3 className="text-base font-semibold text-gray-900">Homestead community</h3>
+      <p className="text-xs text-gray-500 mt-0.5">
+        Like-minded support within reach (preview data — Phase 3 enrichment).
+      </p>
+    </header>
+    <div className="grid sm:grid-cols-2 gap-x-3 gap-y-1.5 text-sm">
+      <CommunityRow label="Feed store / co-op" detail="Tractor Supply · 12 min" />
+      <CommunityRow label="Farmers' market" detail="Wimberley Square · Sat" />
+      <CommunityRow label="Extension office" detail="Travis Co AgriLife · 22 min" />
+      <CommunityRow label="Livestock auction" detail="Lockhart · 38 min" />
+      <CommunityRow label="Hardware / TS" detail="Atwoods Dripping Springs · 9 min" />
+      <CommunityRow label="Intentional community" detail="Pecan Springs Cohousing · 12 mi" />
+      <CommunityRow label="Hospital (emergency)" detail="St David's North · 18 min" />
+      <CommunityRow label="Internet" detail="Starlink ✓ · AT&T fiber ✓" />
+    </div>
+  </section>
+);
+
+const CommunityRow = ({ label, detail }: { label: string; detail: string }) => (
+  <div className="flex items-baseline justify-between gap-2 border-b border-gray-50 py-0.5">
+    <span className="text-xs text-gray-500">{label}</span>
+    <span className="text-xs font-medium text-gray-900 truncate">{detail}</span>
+  </div>
+);
+
+// ── County records ────────────────────────────────────────────────────
+
+const CountyRecords = ({ cad }: { cad: ReturnType<typeof useCadRecord> }) => {
+  if (!cad) {
+    return (
+      <section className="rounded-xl border border-slate-200 bg-slate-50 p-4">
+        <h3 className="text-base font-semibold text-gray-900 mb-1">County records</h3>
+        <p className="text-xs text-gray-500">No CAD record matched.</p>
+      </section>
+    );
+  }
+  const yrs = cad.lastDeedDate
+    ? (Date.now() - new Date(cad.lastDeedDate).getTime()) /
+      (365.25 * 24 * 3600 * 1000)
+    : null;
+  return (
+    <section className="rounded-xl border border-slate-200 bg-slate-50 p-4">
+      <header className="flex items-baseline justify-between mb-2">
+        <h3 className="text-base font-semibold text-gray-900">County records</h3>
+        <span className="text-[11px] uppercase tracking-wide text-gray-400">
+          Travis CAD {cad.valYear ?? ''}
+        </span>
+      </header>
+      <DetailGrid>
+        <DetailItem label="Parcel ID" value={cad.geoId} />
+        <DetailItem label="Owner" value={cad.owner ?? '—'} />
+        <DetailItem
+          label="Last deed"
+          value={cad.lastDeedDate ?? '—'}
+          hint={yrs ? `${yrs.toFixed(0)} yrs ago` : undefined}
+        />
+        <DetailItem label="CAD acreage" value={`${cad.acreage?.toFixed(2) ?? '—'} ac`} />
+        <DetailItem label="Appraised" value={formatPrice(cad.appraisedValue ?? 0)} />
+        <DetailItem label="Assessed" value={formatPrice(cad.assessedValue ?? 0)} />
+      </DetailGrid>
+      <div className="mt-3 pt-3 border-t border-slate-200 flex flex-wrap gap-3 text-xs">
+        <a href="https://traviscad.org/property-search/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
+          Travis CAD record →
+        </a>
+        <a href="https://countyclerk.traviscountytx.gov/online-services/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
+          County clerk deeds →
+        </a>
+        <a href="https://www.google.com/maps" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
+          Satellite view →
+        </a>
+      </div>
+    </section>
+  );
+};
+
+// ── Financial lens (collapsed by default) ─────────────────────────────
+
+const FinancialLens = ({
+  property,
+  open,
+  onToggle,
+}: {
+  property: Property;
+  open: boolean;
+  onToggle: () => void;
+}) => (
+  <section className="rounded-xl border border-gray-200 bg-white">
+    <button
+      type="button"
+      onClick={onToggle}
+      className="w-full flex items-center justify-between p-4 text-left"
+    >
+      <div>
+        <h3 className="text-base font-semibold text-gray-900">Financial lens</h3>
+        <p className="text-xs text-gray-500 mt-0.5">
+          Buyer-side scores — is this deal-priced fairly?
+        </p>
+      </div>
+      {open ? (
+        <ChevronUp className="w-4 h-4 text-gray-500" />
+      ) : (
+        <ChevronDown className="w-4 h-4 text-gray-500" />
+      )}
+    </button>
+    {open && (
+      <div className="px-4 pb-4 space-y-3 border-t border-gray-100">
+        <SubScoreRow label="Deal Score" score={property.dealScore ?? 0} />
+        <SubScoreRow label="Investment Score" score={property.investmentScore ?? 0} />
+        <SubScoreRow label="Homestead Fit (legacy)" score={property.homesteadFitScore ?? 0} />
+      </div>
+    )}
+  </section>
+);
+
+const SubScoreRow = ({ label, score }: { label: string; score: number }) => {
+  const klass = tierClasses[tier(score)];
+  return (
+    <div className="flex items-center gap-3 pt-3">
+      <Ring score={score} size={36} strokeWidth={4}>
+        <span className="text-[11px] font-bold">{Math.round(score)}</span>
+      </Ring>
+      <div className="flex-1 min-w-0">
+        <p className="text-sm font-medium text-gray-900">{label}</p>
+        <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden mt-1">
+          <div
+            className={`h-full ${klass.bar}`}
+            style={{ width: `${Math.max(0, Math.min(100, score))}%` }}
+          />
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// ── Action bar ────────────────────────────────────────────────────────
+
+const ActionBar = ({ property }: { property: Property }) => {
+  const { user, loginWithGoogle } = useAuth();
+  const { isSaved, toggle: toggleSaved } = useSavedListings();
+  const { isHidden, toggle: toggleHidden } = useHiddenListings();
+  const saved = isSaved(property.id);
+  const hidden = isHidden(property.id);
+
+  const onSave = async () => {
+    if (!user) return void loginWithGoogle();
+    try {
+      await toggleSaved(property.id);
+    } catch {
+      // Free-tier limit etc — fail silently for the preview.
+    }
+  };
+  const onHide = async () => {
+    if (!user) return void loginWithGoogle();
+    await toggleHidden(property.id);
+  };
+
+  return (
+    <div className="fixed bottom-0 inset-x-0 z-40 bg-white border-t border-gray-200 p-3 shadow-lg sm:max-w-3xl sm:mx-auto sm:rounded-t-xl sm:border sm:border-b-0">
+      <p className="text-[11px] text-gray-500 mb-2 px-1">
+        Listing live 30 days · 5 similar parcels in this market sold within 60
+        days last quarter.
+      </p>
+      <div className="flex items-center gap-2">
+        <button
+          onClick={onSave}
+          title={user ? (saved ? 'Saved — click to remove' : 'Save listing') : 'Sign in to save'}
+          className={`flex-1 rounded-md border text-sm font-medium py-2 transition-colors ${
+            saved
+              ? 'bg-amber-50 border-amber-300 text-amber-800 hover:bg-amber-100'
+              : 'border-gray-300 text-gray-700 hover:bg-gray-50'
+          }`}
+        >
+          {saved ? '★ Saved' : '☆ Save'}
+        </button>
+        {user && (
+          <button
+            onClick={onHide}
+            title={hidden ? 'Hidden — click to restore' : 'Not interested'}
+            className={`flex-1 rounded-md border text-sm font-medium py-2 transition-colors ${
+              hidden
+                ? 'bg-rose-50 border-rose-300 text-rose-700 hover:bg-rose-100'
+                : 'border-gray-300 text-gray-700 hover:bg-gray-50'
+            }`}
+          >
+            {hidden ? '🚫 Hidden' : '⊘ Hide'}
+          </button>
+        )}
+        {user && (
+          <div className="flex-1">
+            <AddToProjectButton itemType="listing" itemId={property.id} />
+          </div>
+        )}
+        {/* Primary action — opens the original source. For tax-sale
+            rows we point at the county sale list (the actual auction
+            page); for everything else, the listing's source URL.
+            We aren't a brokerage so the CTA is "go look" not
+            "contact seller". */}
+        {(() => {
+          const isTaxSale = property.status === 'tax_sale' && property.taxSale;
+          const target = isTaxSale && property.taxSale?.listUrl
+            ? property.taxSale.listUrl
+            : property.url;
+          const label = isTaxSale ? 'View Auction' : 'View Listing';
+          return (
+            <a
+              href={safeUrl(target)}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={`flex-1 text-center rounded-md text-white text-sm font-semibold py-2 shadow-sm ${
+                isTaxSale
+                  ? 'bg-orange-600 hover:bg-orange-700'
+                  : 'bg-emerald-600 hover:bg-emerald-700'
+              }`}
+            >
+              {label}
+            </a>
+          );
+        })()}
+      </div>
     </div>
   );
 };

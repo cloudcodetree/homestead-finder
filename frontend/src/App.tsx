@@ -35,8 +35,11 @@ const NotificationsPage = lazy(() =>
 const OnboardingPage = lazy(() =>
   import('./components/pages/OnboardingPage').then((m) => ({ default: m.OnboardingPage })),
 );
-const PropertyDetailPage = lazy(() =>
-  import('./components/pages/PropertyDetailPage').then((m) => ({ default: m.PropertyDetailPage })),
+// PropertyDetail does its own listing lookup via useParams + useProperties,
+// so the slim PropertyDetailPage wrapper is no longer needed. /p/:id
+// routes directly to PropertyDetail.
+const PropertyDetail = lazy(() =>
+  import('./components/PropertyDetail').then((m) => ({ default: m.PropertyDetail })),
 );
 const SavedSearchesPage = lazy(() =>
   import('./components/pages/SavedSearchesPage').then((m) => ({ default: m.SavedSearchesPage })),
@@ -44,24 +47,11 @@ const SavedSearchesPage = lazy(() =>
 const UpgradePage = lazy(() =>
   import('./components/pages/UpgradePage').then((m) => ({ default: m.UpgradePage })),
 );
-// Preview: persona-targeted redesign of the property-detail page.
-// Mounted at /preview/redesigned-detail/:id? for visual review before
-// rolling phases of the redesign into the production /p/:id route.
-const RedesignedDetailPreview = lazy(() =>
-  import('./components/preview/RedesignedDetailPreview').then((m) => ({
-    default: m.RedesignedDetailPreview,
-  })),
-);
-// Preview: site-wide redesign — Browse with Self-Sufficiency-led
-// cards + redesigned filter panel + redesigned nav grouping.
-const RedesignedBrowsePreview = lazy(() =>
-  import('./components/preview/RedesignedBrowsePreview').then((m) => ({
-    default: m.RedesignedBrowsePreview,
-  })),
-);
-// Preview: side-by-side comparison table — closes the "no compare"
-// gap from the persona critique.
-const ComparePreview = lazy(() =>
+// Side-by-side comparison page. The "redesigned-browse" and
+// "redesigned-detail" preview routes were promoted to production —
+// the redesigned detail page is now /p/:id; the redesigned-browse
+// nav grouping ships under /browse.
+const ComparePage = lazy(() =>
   import('./components/preview/ComparePreview').then((m) => ({
     default: m.ComparePreview,
   })),
@@ -112,16 +102,8 @@ const App = () => {
             <Route path="/swipe" element={<SwipeView />} />
             <Route path="/projects" element={<ProjectsIndex />} />
             <Route path="/project/:id" element={<ProjectDetail />} />
-            <Route path="/p/:id" element={<PropertyDetailPage />} />
-            <Route
-              path="/preview/redesigned-detail/:id?"
-              element={<RedesignedDetailPreview />}
-            />
-            <Route
-              path="/preview/redesigned-browse"
-              element={<RedesignedBrowsePreview />}
-            />
-            <Route path="/preview/compare" element={<ComparePreview />} />
+            <Route path="/p/:id" element={<PropertyDetail />} />
+            <Route path="/compare" element={<ComparePage />} />
             <Route path="/upgrade" element={<UpgradePage />} />
             <Route path="/saved-searches" element={<SavedSearchesPage />} />
             <Route path="/settings/notifications" element={<NotificationsPage />} />

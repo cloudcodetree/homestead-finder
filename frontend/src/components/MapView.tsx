@@ -17,6 +17,7 @@ import { formatPrice, formatAcreage, formatPricePerAcre } from '../utils/formatt
 import { getListingTypeStyle } from '../utils/listingType';
 import { safeUrl } from '../utils/safeUrl';
 import { getDealScoreLabel } from '../utils/scoring';
+import { computeSelfSufficiency } from '../utils/selfSufficiency';
 
 // Fix Leaflet default marker icons broken by Vite
 delete (L.Icon.Default.prototype as unknown as Record<string, unknown>)._getIconUrl;
@@ -28,16 +29,17 @@ L.Icon.Default.mergeOptions({
 
 /**
  * Marker icon composition:
- *   - Outer fill = deal-score color (green/yellow/orange/gray). Keeps
- *     the at-a-glance "hot deal" cue.
+ *   - Outer fill = Self-Sufficiency tier color (green ≥70, amber ≥50,
+ *     rose otherwise). Same banding as the InvestmentScore palette.
+ *     Switched from Deal Score 2026-05-06 — autonomy-first reframe.
  *   - Inner ring = listing-type color (tax-sale variants, owner-finance,
  *     standard). Tells the user whether they're looking at a marketplace
  *     listing, an owner-finance parcel, or a tax-sale parcel.
- *   - Center text = the deal score number.
+ *   - Center text = the Self-Sufficiency composite (0–100).
  */
 const createScoreIcon = (property: Property) => {
-  const s = property.dealScore;
-  const scoreColor = s >= 80 ? '#22c55e' : s >= 65 ? '#eab308' : s >= 50 ? '#f97316' : '#9ca3af';
+  const s = computeSelfSufficiency(property).composite;
+  const scoreColor = s >= 70 ? '#10b981' : s >= 50 ? '#f59e0b' : '#f43f5e';
   const typeColor = getListingTypeStyle(property).markerHex;
   return L.divIcon({
     className: '',

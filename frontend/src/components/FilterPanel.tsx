@@ -301,47 +301,40 @@ export const FilterPanel = ({
           </div>
         </details>
 
-        {/* Pricing & size — hard constraints, always visible. */}
+        {/* Pricing & size — single-handle Max sliders. The bound-top
+            value acts as the "no max" sentinel: 250k for price, 10k
+            for $/ac, 100 for acreage. applyFilters skips the upper-
+            bound check at those values so users don't accidentally
+            rule out everything. Min counterparts dropped from the UI
+            (state still in FilterState as a no-op default). */}
         <div className="space-y-4 pt-2 border-t border-gray-100">
           <div className="text-sm font-semibold text-gray-900">Pricing & size</div>
-          <DualRangeSlider
-            label="Price"
-            min={filters.minPrice}
-            max={filters.maxPrice}
-            bound={{ min: 0, max: 250_000 }}
+          <SingleMaxSlider
+            label="Max price"
+            value={filters.maxPrice}
+            min={0}
+            max={250_000}
             step={1000}
-            accent="green"
-            formatValue={formatPrice}
-            onChange={(next) => {
-              onUpdateFilter('minPrice', next.min);
-              onUpdateFilter('maxPrice', next.max);
-            }}
+            format={(v) => (v >= 250_000 ? 'no max' : formatPrice(v))}
+            onChange={(v) => onUpdateFilter('maxPrice', v)}
           />
-          <DualRangeSlider
-            label="Price / Acre"
-            min={filters.minPricePerAcre}
-            max={filters.maxPricePerAcre}
-            bound={{ min: 0, max: 10_000 }}
+          <SingleMaxSlider
+            label="Max $/acre"
+            value={filters.maxPricePerAcre}
+            min={0}
+            max={10_000}
             step={100}
-            accent="green"
-            formatValue={formatPricePerAcre}
-            onChange={(next) => {
-              onUpdateFilter('minPricePerAcre', next.min);
-              onUpdateFilter('maxPricePerAcre', next.max);
-            }}
+            format={(v) => (v >= 10_000 ? 'no max' : formatPricePerAcre(v))}
+            onChange={(v) => onUpdateFilter('maxPricePerAcre', v)}
           />
-          <DualRangeSlider
-            label="Acreage"
-            min={filters.minAcreage}
-            max={filters.maxAcreage}
-            bound={{ min: 0, max: 100 }}
+          <SingleMaxSlider
+            label="Max acreage"
+            value={filters.maxAcreage}
+            min={0}
+            max={100}
             step={1}
-            accent="green"
-            formatValue={formatAcreage}
-            onChange={(next) => {
-              onUpdateFilter('minAcreage', next.min);
-              onUpdateFilter('maxAcreage', next.max);
-            }}
+            format={(v) => (v >= 100 ? 'no max' : formatAcreage(v))}
+            onChange={(v) => onUpdateFilter('maxAcreage', v)}
           />
         </div>
 
@@ -526,3 +519,42 @@ export const FilterPanel = ({
     </div>
   );
 };
+
+// ── SingleMaxSlider — one-handle range with header value ─────────────
+
+const SingleMaxSlider = ({
+  label,
+  value,
+  min,
+  max,
+  step,
+  format,
+  onChange,
+}: {
+  label: string;
+  value: number;
+  min: number;
+  max: number;
+  step: number;
+  format: (v: number) => string;
+  onChange: (v: number) => void;
+}) => (
+  <div>
+    <label className="block text-sm font-medium text-gray-700 mb-1">
+      {label}: <span className="text-emerald-700 font-bold">{format(value)}</span>
+    </label>
+    <input
+      type="range"
+      min={min}
+      max={max}
+      step={step}
+      value={value}
+      onChange={(e) => onChange(Number(e.target.value))}
+      className="w-full accent-emerald-600"
+    />
+    <div className="flex justify-between text-[10px] text-gray-400 mt-0.5">
+      <span>{format(min)}</span>
+      <span>{format(max)}</span>
+    </div>
+  </div>
+);
