@@ -327,14 +327,17 @@ export const FilterPanel = ({
             format={(v) => (v >= 10_000 ? 'no max' : formatPricePerAcre(v))}
             onChange={(v) => onUpdateFilter('maxPricePerAcre', v)}
           />
+          {/* Min acreage — "at least N acres" is the natural buyer
+              framing for a self-sufficient parcel; max is rarely the
+              constraint. 0 = "no min". */}
           <SingleMaxSlider
-            label="Max acreage"
-            value={filters.maxAcreage}
+            label="Min acreage"
+            value={filters.minAcreage}
             min={0}
             max={100}
             step={1}
-            format={(v) => (v >= 100 ? 'no max' : formatAcreage(v))}
-            onChange={(v) => onUpdateFilter('maxAcreage', v)}
+            format={(v) => (v === 0 ? 'no min' : formatAcreage(v))}
+            onChange={(v) => onUpdateFilter('minAcreage', v)}
           />
         </div>
 
