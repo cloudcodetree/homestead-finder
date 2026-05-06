@@ -309,12 +309,14 @@ export const AppShell = () => {
           <RailNav items={items} collapsed={false} />
         </aside>
 
-        {/* Main content. `isolate` creates a CSS stacking context so
-            any GPU-composited descendants (Leaflet's transform layers,
-            backdrop-filter chips, sticky elements) can't escape above
-            the global page header during momentum scroll. Belt and
-            suspenders alongside the header's z-50. */}
-        <main className="flex-1 overflow-y-auto isolate">
+        {/* Main content. We previously had `isolate` here to contain
+            Leaflet's compositor layers, but that traps z-50 children
+            (the filter drawer) inside <main>'s stacking context, so
+            the AppShell rail (z-20, outside main) renders above the
+            drawer. Leaflet's mini-map now self-isolates via its own
+            wrapper section (`relative isolate z-0`), so removing the
+            main-level isolate is safe. */}
+        <main className="flex-1 overflow-y-auto">
           <Outlet />
         </main>
       </div>
