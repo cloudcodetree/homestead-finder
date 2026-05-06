@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { idbGet, idbSet } from '../utils/idbCache';
 
 /**
  * Fetch a JSON asset from the deployed site (relative to BASE_URL), with a
@@ -46,6 +47,13 @@ interface CacheEntry<T> {
 
 const cache = new Map<string, CacheEntry<unknown>>();
 
+// IndexedDB cache window — entries fresher than this skip the network
+// entirely on the next visit. Currently 1 hour, which works because
+// our scraper publishes once per day (post-deploy bytes are stable
+// for at least an hour) and any in-tab navigation reuses the
+// module-level Promise cache regardless of TTL.
+const FRESH_MS = 60 * 60 * 1000;
+
 const fetchOnce = <T>(
   assetPath: string,
   loadFallback: () => Promise<{ default: T }>,
@@ -54,13 +62,31 @@ const fetchOnce = <T>(
   const existing = cache.get(assetPath) as CacheEntry<T> | undefined;
   if (existing) return existing;
   const promise = (async () => {
+    // 1) Try IDB first — instant render on repeat visits while we
+    //    revalidate in the background. SWR-style.
+    const cached = await idbGet<T>(assetPath);
+    const fresh = cached && Date.now() - cached.cachedAt < FRESH_MS;
+    if (fresh && cached) {
+      // Cached entry is fresh — kick off a background refetch but
+      // resolve immediately with the cached value so the UI doesn't
+      // wait. Background fetch updates IDB for the next visit.
+      void backgroundRefresh<T>(assetPath, isEmpty);
+      return { data: cached.value, isSample: false };
+    }
+    // 2) Stale or missing — go to network.
     try {
       const response = await fetch(`${import.meta.env.BASE_URL}${assetPath}`);
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
       const fetched = (await response.json()) as T;
       if (isEmpty?.(fetched)) throw new Error('empty');
+      // Persist to IDB for next visit. Fire-and-forget; failures
+      // (private mode, quota, etc.) don't block the render.
+      void idbSet(assetPath, fetched);
       return { data: fetched, isSample: false };
     } catch {
+      // 3) Network failed — if we had a stale cache, prefer that
+      //    over the bundled sample so users still see real data.
+      if (cached) return { data: cached.value, isSample: false };
       const fallback = await loadFallback();
       return { data: fallback.default, isSample: true };
     }
@@ -79,6 +105,25 @@ const fetchOnce = <T>(
   );
   cache.set(assetPath, entry as CacheEntry<unknown>);
   return entry;
+};
+
+/** Fire-and-forget background refresh when a cached entry was served.
+ *  Updates IDB for the next visit but does not affect the current
+ *  resolved Promise — consumers already rendered with the cached
+ *  value. */
+const backgroundRefresh = async <T>(
+  assetPath: string,
+  isEmpty: ((data: T) => boolean) | undefined,
+): Promise<void> => {
+  try {
+    const response = await fetch(`${import.meta.env.BASE_URL}${assetPath}`);
+    if (!response.ok) return;
+    const fetched = (await response.json()) as T;
+    if (isEmpty?.(fetched)) return;
+    await idbSet(assetPath, fetched);
+  } catch {
+    // Swallow — background refresh failures are non-fatal.
+  }
 };
 
 export const useJsonAsset = <T>({ assetPath, loadFallback, isEmpty }: Options<T>): Result<T> => {

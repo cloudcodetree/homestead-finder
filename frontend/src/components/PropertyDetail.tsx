@@ -1,5 +1,5 @@
 import { Lock } from 'lucide-react';
-import { lazy, Suspense, useState } from 'react';
+import { lazy, Suspense, useEffect, useRef, useState } from 'react';
 import { Property, FEATURE_LABELS } from '../types/property';
 import { useAccessTier } from '../hooks/useAccessTier';
 import { useAuth } from '../hooks/useAuth';
@@ -14,6 +14,55 @@ import { HomesteadViabilityPanel } from './HomesteadViabilityPanel';
 const PropertyMiniMap = lazy(() =>
   import('./PropertyMiniMap').then((m) => ({ default: m.PropertyMiniMap })),
 );
+
+/**
+ * IntersectionObserver-gated wrapper around the lazy mini-map. The
+ * Leaflet bundle (~80KB gzipped) only downloads when the user
+ * scrolls within 400px of where the map will render. For users who
+ * never reach the map, that's pure savings. For users who do, the
+ * 400px rootMargin gives the chunk time to load before the
+ * placeholder is in view.
+ */
+const DeferredMap = ({ property }: { property: Property }) => {
+  const ref = useRef<HTMLDivElement | null>(null);
+  const [shouldMount, setShouldMount] = useState(false);
+  useEffect(() => {
+    if (!ref.current) return;
+    if (typeof IntersectionObserver === 'undefined') {
+      // SSR / very old browsers — skip the gating, mount immediately.
+      setShouldMount(true);
+      return;
+    }
+    const obs = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((e) => e.isIntersecting)) {
+          setShouldMount(true);
+          obs.disconnect();
+        }
+      },
+      { rootMargin: '400px' },
+    );
+    obs.observe(ref.current);
+    return () => obs.disconnect();
+  }, []);
+  return (
+    <div ref={ref}>
+      {shouldMount ? (
+        <Suspense
+          fallback={
+            <div className="rounded-xl border border-gray-200 bg-gray-50 h-64 flex items-center justify-center text-xs text-gray-400">
+              Loading map…
+            </div>
+          }
+        >
+          <PropertyMiniMap property={property} />
+        </Suspense>
+      ) : (
+        <div className="rounded-xl border border-gray-200 bg-gray-50 h-64" />
+      )}
+    </div>
+  );
+};
 import { DealScoreBreakdown } from './DealScoreBreakdown';
 import { HomesteadFitBreakdown } from './HomesteadFitBreakdown';
 import { InvestmentScorePanel } from './InvestmentScore';
@@ -501,17 +550,12 @@ export const PropertyDetail = ({ property }: PropertyDetailProps) => {
 
           {/* Inline map of the parcel + nearest comp listings. Gives
               the user "where am I actually looking" before they read
-              the comp breakdown. Lazy-loaded so the Leaflet bundle
-              doesn't ship to detail pages that aren't viewed. */}
-          <Suspense
-            fallback={
-              <div className="rounded-xl border border-gray-200 bg-gray-50 h-64 flex items-center justify-center text-xs text-gray-400">
-                Loading map…
-              </div>
-            }
-          >
-            <PropertyMiniMap property={property} />
-          </Suspense>
+              the comp breakdown. Two-stage lazy: React.lazy for the
+              code chunk, plus IntersectionObserver-gated mount so the
+              Leaflet bundle only downloads when the user scrolls
+              within 400px of the map. Saves ~80KB gzip on first paint
+              for users who don't reach the map. */}
+          <DeferredMap property={property} />
 
           {/* Homesteading viability — what this land can actually grow,
               raise, or produce, and rough buildout costs for greenhouse,
