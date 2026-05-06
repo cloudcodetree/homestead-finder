@@ -107,9 +107,30 @@ export const PropertyCard = ({ property, onClick, isSelected = false }: Property
   const rating = getRating(property.id);
   const [showUpgrade, setShowUpgrade] = useState(false);
 
-  // Self-Sufficiency report — the new headline. Memoized per card so
-  // the 5-axis breakdown only computes once per Property mount.
-  const ssReport = useMemo(() => computeSelfSufficiency(property), [property]);
+  // Self-Sufficiency report — the new headline. Prefer the pre-
+  // computed payload from the slim index (saves the per-card
+  // recomputation cost). Falls back to client-side compute for
+  // legacy rows that predate `scraper/shard_listings.py`. Card-level
+  // memoization either way so the 5-axis read is one operation per
+  // Property mount.
+  const ssReport = useMemo(() => {
+    if (property.selfSufficiency) {
+      // Slim payload only carries composite + axes (no gaps/verdicts);
+      // the card doesn't render those fields anyway. Wrap to match
+      // the SsAxisBar consumer shape (key/score/label).
+      const axes = property.selfSufficiency.axes.map((a) => ({
+        key: a.key,
+        score: a.score,
+        label: a.key.charAt(0).toUpperCase() + a.key.slice(1),
+      }));
+      return {
+        composite: property.selfSufficiency.composite,
+        axes,
+        weakest: [...axes].sort((a, b) => a.score - b.score)[0],
+      };
+    }
+    return computeSelfSufficiency(property);
+  }, [property]);
 
   // "vs comp" cue near the price. Walks a tightest-first fallback
   // chain so the displayed % reflects similar parcels first

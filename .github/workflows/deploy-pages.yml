@@ -6,6 +6,7 @@ on:
     paths:
       - 'frontend/**'
       - 'data/listings.json'
+      - 'data/listings_index.json'
       - 'data/curated.json'
       - 'data/homestead_deals.json'
       - 'data/cad_joined.json'
@@ -38,6 +39,28 @@ jobs:
         run: npm ci
         working-directory: frontend
 
+      # Regenerate the slim listings index + per-id detail files from
+      # listings.json. Per-id files are gitignored to avoid 700-file
+      # churn per scrape; the index IS committed for local-dev offline
+      # browse but we re-shard at deploy time so the two never drift.
+      # Idempotent — safe to re-run on every deploy.
+      - name: Setup Python (for shard_listings)
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Shard listings.json into slim index + per-id detail files
+        run: |
+          if [ -f data/listings.json ]; then
+            cd scraper
+            python -m shard_listings \
+              --src ../data/listings.json \
+              --index-out ../data/listings_index.json \
+              --detail-dir ../data/listings
+          else
+            echo "no data/listings.json — skipping shard step"
+          fi
+
       - name: Build
         env:
           GITHUB_PAGES: 'true'
@@ -54,6 +77,17 @@ jobs:
       - name: Copy data to dist
         run: |
           mkdir -p frontend/dist/data
+          # Slim index + per-id detail files (sharded above). Browse
+          # fetches listings_index.json; PropertyDetail fetches
+          # listings/<id>.json on demand. Original listings.json is
+          # kept for backwards-compat fallback.
+          if [ -f data/listings_index.json ]; then
+            cp data/listings_index.json frontend/dist/data/listings_index.json
+          fi
+          if [ -d data/listings ]; then
+            mkdir -p frontend/dist/data/listings
+            cp -r data/listings/. frontend/dist/data/listings/
+          fi
           if [ -f data/listings.json ]; then
             cp data/listings.json frontend/dist/data/listings.json
           fi

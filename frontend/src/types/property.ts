@@ -318,6 +318,25 @@ export interface Property {
   votingPattern?: VotingPattern;
 
   /**
+   * Self-Sufficiency composite + per-axis breakdown. Pre-computed at
+   * scrape time by `scraper/shard_listings.py` and stamped onto the
+   * slim index so PropertyCard can render the SS ring + 5 axis bars
+   * without shipping the full `geoEnrichment` subtree through the
+   * Browse fetch. The detail page recomputes the full report
+   * (including gaps + verdicts) client-side from the per-id full
+   * record. Optional because rows scraped before this field was
+   * introduced won't have it; in that case the frontend falls back to
+   * `computeSelfSufficiency(p)` from utils/selfSufficiency.ts.
+   */
+  selfSufficiency?: {
+    composite: number;
+    axes: Array<{
+      key: 'food' | 'water' | 'energy' | 'shelter' | 'resilience';
+      score: number;
+      weight: number;
+    }>;
+  };
+  /**
    * Composite 0-100 InvestmentScore. Stamped by scraper/investment_score.py.
    * Sortable + headline number for the property-as-stock view.
    */

@@ -83,3 +83,12 @@ supabase/.temp/
 # into the small per-county JSON the frontend uses (data/cad_*.json),
 # which is the only artifact that gets committed.
 data/cad/
+
+# Per-listing detail JSONs produced by `scraper/shard_listings.py`
+# (one file per id, ~4KB each, ~700 files for our corpus). Committing
+# would create gratuitous git churn on every scrape. The deploy
+# workflow regenerates them from listings.json before copying into
+# dist; local dev can run `cd scraper && python -m shard_listings`.
+# The slim listings_index.json IS committed (single file, useful for
+# local-dev offline browse).
+data/listings/

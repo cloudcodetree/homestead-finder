@@ -52,8 +52,12 @@ export const applyFilters = (properties: Property[], filters: FilterState): Prop
       filters.minSsShelter > 0 ||
       filters.minSsResilience > 0;
     if (ssActive) {
-      const ss = computeSelfSufficiency(p);
-      if (ss.composite < filters.minSelfSufficiency) return false;
+      // Prefer pre-computed SS from the slim index — saves the
+      // per-row recomputation. Falls back to client-side compute for
+      // legacy rows that predate the shard pass (no `selfSufficiency`
+      // field stamped at scrape time).
+      const composite = p.selfSufficiency?.composite ?? computeSelfSufficiency(p).composite;
+      if (composite < filters.minSelfSufficiency) return false;
       const axisMins: Record<string, number> = {
         food: filters.minSsFood,
         water: filters.minSsWater,
@@ -61,7 +65,8 @@ export const applyFilters = (properties: Property[], filters: FilterState): Prop
         shelter: filters.minSsShelter,
         resilience: filters.minSsResilience,
       };
-      for (const axis of ss.axes) {
+      const axes = p.selfSufficiency?.axes ?? computeSelfSufficiency(p).axes;
+      for (const axis of axes) {
         if (axis.score < (axisMins[axis.key] ?? 0)) return false;
       }
     }
@@ -205,7 +210,15 @@ export const dedupeListings = (rows: Property[]): Property[] => {
 
 export const useProperties = (filters: FilterState) => {
   const { data, loading, error, isSample } = useJsonAsset<Property[]>({
-    assetPath: 'data/listings.json',
+    // Slim listings index — produced by `scraper/shard_listings.py`,
+    // ~50% smaller than the legacy combined file. Has all fields
+    // Browse cards + filters need plus pre-computed Self-Sufficiency.
+    assetPath: 'data/listings_index.json',
+    // Fallback to the legacy combined file when the slim index
+    // isn't deployed yet (fresh GitHub Pages branch, local dev that
+    // hasn't run the shard step). Keeps the site functional on every
+    // historical state of the data folder.
+    fallbackAssetPath: 'data/listings.json',
     loadFallback: useCallback(loadSample, []),
     isEmpty: isEmptyArray,
   });
@@ -220,8 +233,10 @@ export const useProperties = (filters: FilterState) => {
           case 'selfSufficiency': {
             // Composite descending. Tie-break by price asc so two
             // equally autonomous parcels surface the cheaper one first.
-            const aSs = computeSelfSufficiency(a).composite;
-            const bSs = computeSelfSufficiency(b).composite;
+            // Pre-computed SS from the slim index when present;
+            // fall back to client-side compute otherwise.
+            const aSs = a.selfSufficiency?.composite ?? computeSelfSufficiency(a).composite;
+            const bSs = b.selfSufficiency?.composite ?? computeSelfSufficiency(b).composite;
             return bSs - aSs || a.price - b.price;
           }
           case 'priceAsc':

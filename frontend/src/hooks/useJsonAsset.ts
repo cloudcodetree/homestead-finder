@@ -24,7 +24,13 @@ import { idbGet, idbSet } from '../utils/idbCache';
 interface Options<T> {
   /** Path under `import.meta.env.BASE_URL` to fetch. */
   assetPath: string;
-  /** Dynamic import of the bundled sample — called only if the live fetch fails or returns empty. */
+  /** Optional remote fallback path tried before the bundled sample.
+   *  Used by useProperties to fall through from the slim index
+   *  (data/listings_index.json) to the legacy combined file
+   *  (data/listings.json) when the index hasn't been generated yet. */
+  fallbackAssetPath?: string;
+  /** Dynamic import of the bundled sample — called only if both the
+   *  primary and remote-fallback paths fail or return empty. */
   loadFallback: () => Promise<{ default: T }>;
   /** Treat a successful response as "no data yet" if this returns true. */
   isEmpty?: (data: T) => boolean;
@@ -54,10 +60,26 @@ const cache = new Map<string, CacheEntry<unknown>>();
 // module-level Promise cache regardless of TTL.
 const FRESH_MS = 60 * 60 * 1000;
 
+const tryFetch = async <T>(
+  path: string,
+  isEmpty: ((data: T) => boolean) | undefined,
+): Promise<T | null> => {
+  try {
+    const response = await fetch(`${import.meta.env.BASE_URL}${path}`);
+    if (!response.ok) return null;
+    const fetched = (await response.json()) as T;
+    if (isEmpty?.(fetched)) return null;
+    return fetched;
+  } catch {
+    return null;
+  }
+};
+
 const fetchOnce = <T>(
   assetPath: string,
   loadFallback: () => Promise<{ default: T }>,
   isEmpty: ((data: T) => boolean) | undefined,
+  fallbackAssetPath?: string,
 ): CacheEntry<T> => {
   const existing = cache.get(assetPath) as CacheEntry<T> | undefined;
   if (existing) return existing;
@@ -73,23 +95,27 @@ const fetchOnce = <T>(
       void backgroundRefresh<T>(assetPath, isEmpty);
       return { data: cached.value, isSample: false };
     }
-    // 2) Stale or missing — go to network.
-    try {
-      const response = await fetch(`${import.meta.env.BASE_URL}${assetPath}`);
-      if (!response.ok) throw new Error(`HTTP ${response.status}`);
-      const fetched = (await response.json()) as T;
-      if (isEmpty?.(fetched)) throw new Error('empty');
-      // Persist to IDB for next visit. Fire-and-forget; failures
-      // (private mode, quota, etc.) don't block the render.
-      void idbSet(assetPath, fetched);
-      return { data: fetched, isSample: false };
-    } catch {
-      // 3) Network failed — if we had a stale cache, prefer that
-      //    over the bundled sample so users still see real data.
-      if (cached) return { data: cached.value, isSample: false };
-      const fallback = await loadFallback();
-      return { data: fallback.default, isSample: true };
+    // 2) Stale or missing — primary network path.
+    const primary = await tryFetch<T>(assetPath, isEmpty);
+    if (primary !== null) {
+      void idbSet(assetPath, primary);
+      return { data: primary, isSample: false };
     }
+    // 3) Primary failed — try the remote fallback path (e.g. legacy
+    //    listings.json when the slim index isn't deployed yet).
+    if (fallbackAssetPath) {
+      const fb = await tryFetch<T>(fallbackAssetPath, isEmpty);
+      if (fb !== null) {
+        // Don't write to the primary's IDB key — keep its slot empty
+        // so a future deploy of the primary populates it cleanly.
+        return { data: fb, isSample: false };
+      }
+    }
+    // 4) Both network paths failed — prefer stale cache over the
+    //    bundled sample so users still see real data when offline.
+    if (cached) return { data: cached.value, isSample: false };
+    const bundled = await loadFallback();
+    return { data: bundled.default, isSample: true };
   })();
   const entry: CacheEntry<T> = { promise };
   // Stamp the resolved snapshot onto the entry so later consumers
@@ -126,10 +152,15 @@ const backgroundRefresh = async <T>(
   }
 };
 
-export const useJsonAsset = <T>({ assetPath, loadFallback, isEmpty }: Options<T>): Result<T> => {
+export const useJsonAsset = <T>({
+  assetPath,
+  fallbackAssetPath,
+  loadFallback,
+  isEmpty,
+}: Options<T>): Result<T> => {
   // Eagerly hydrate from the cached snapshot if the fetch already
   // resolved before this consumer mounted. Avoids one tick of `loading=true`.
-  const entry = fetchOnce<T>(assetPath, loadFallback, isEmpty);
+  const entry = fetchOnce<T>(assetPath, loadFallback, isEmpty, fallbackAssetPath);
   const initial = entry.resolved;
   const [data, setData] = useState<T | null>(initial ? initial.data : null);
   const [loading, setLoading] = useState(!initial);

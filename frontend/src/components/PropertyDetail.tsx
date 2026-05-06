@@ -13,7 +13,7 @@ import {
   ThumbsDown,
   ExternalLink,
 } from 'lucide-react';
-import { useProperties } from '../hooks/useProperties';
+import { usePropertyDetail } from '../hooks/usePropertyDetail';
 import { useCadRecord } from '../hooks/useCadRecord';
 import { useAuth } from '../hooks/useAuth';
 import { useAccessTier } from '../hooks/useAccessTier';
@@ -23,7 +23,6 @@ import { useListingRatings } from '../hooks/useListingRatings';
 import {
   AI_TAG_DESCRIPTIONS,
   AI_TAG_LABELS,
-  DEFAULT_FILTERS,
   Property,
   RED_FLAG_DESCRIPTIONS,
   RED_FLAG_LABELS,
@@ -94,13 +93,15 @@ export const PropertyDetail = () => {
   const { id: idParam } = useParams<{ id: string }>();
   const [searchParams] = useSearchParams();
   const id = idParam ?? searchParams.get('id') ?? 'landhub_75707376';
-  const { allProperties, loading } = useProperties(DEFAULT_FILTERS);
-  const property = useMemo(
-    () => allProperties.find((p) => p.id === id) ?? null,
-    [allProperties, id],
-  );
+  // Two-tier load: slim index gives us SOMETHING immediately so the
+  // page doesn't flash a spinner; per-id detail file (`data/listings/
+  // <id>.json` from `scraper/shard_listings.py`) hydrates the heavy
+  // detail-only fields (geoEnrichment, full description, AI summary,
+  // investmentBreakdown axes, votingPattern, full taxSale) when the
+  // chunk lands.
+  const { property, loading } = usePropertyDetail(id);
 
-  if (loading && !property) {
+  if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
         <div className="w-8 h-8 border-4 border-emerald-200 border-t-emerald-600 rounded-full animate-spin" />
