@@ -44,6 +44,14 @@ const SavedSearchesPage = lazy(() =>
 const UpgradePage = lazy(() =>
   import('./components/pages/UpgradePage').then((m) => ({ default: m.UpgradePage })),
 );
+// Preview: persona-targeted redesign of the property-detail page.
+// Mounted at /preview/redesigned-detail/:id? for visual review before
+// rolling phases of the redesign into the production /p/:id route.
+const RedesignedDetailPreview = lazy(() =>
+  import('./components/preview/RedesignedDetailPreview').then((m) => ({
+    default: m.RedesignedDetailPreview,
+  })),
+);
 
 // First-time-user onboarding self-gates on auth + completion-stamp.
 // Lazy because anonymous visitors and returning users both never
@@ -91,6 +99,10 @@ const App = () => {
             <Route path="/projects" element={<ProjectsIndex />} />
             <Route path="/project/:id" element={<ProjectDetail />} />
             <Route path="/p/:id" element={<PropertyDetailPage />} />
+            <Route
+              path="/preview/redesigned-detail/:id?"
+              element={<RedesignedDetailPreview />}
+            />
             <Route path="/upgrade" element={<UpgradePage />} />
             <Route path="/saved-searches" element={<SavedSearchesPage />} />
             <Route path="/settings/notifications" element={<NotificationsPage />} />
