@@ -78357,5 +78357,97 @@
     "aiSummary": "199-acre farm/ranch with water rights near New Braunfels offers solid agricultural and grazing potential for homesteading. The development potential and proximity to services are favorable, but $10,000/acre is premium for rural Texas. Limited detail on existing improvements and utilities suggests need for thorough inspection.",
     "enrichedAt": "2026-04-30T03:48:52.153766+00:00",
     "_enrichHash": "327f1abaad5fa4d4"
+  },
+  {
+    "id": "lgbs_1001830281",
+    "title": "Tax sale \u2014 Llano Co, TX \u00b7 HYACINTH",
+    "price": 2000.0,
+    "acreage": 0.0,
+    "pricePerAcre": 0,
+    "location": {
+      "lat": 30.68816,
+      "lng": -98.41919,
+      "state": "TX",
+      "county": "Llano"
+    },
+    "features": [],
+    "source": "lgbs",
+    "url": "https://taxsales.lgbs.com/api/property_sales/",
+    "dateFound": "2026-05-06",
+    "dealScore": 38,
+    "description": "Delinquent tax-sale parcel in Llano County, TX. Cause #20877. Sale . Minimum bid $2,000. County-appraised value $2,000. Address: HYACINTH, KINGSLAND, 78639. Account #R000035143.",
+    "daysOnMarket": null,
+    "status": "tax_sale",
+    "taxSale": {
+      "owner": "",
+      "parcelId": "R000035143",
+      "legalDescription": "",
+      "houseNumber": "",
+      "street": "HYACINTH",
+      "propertyType": "",
+      "taxYear": null,
+      "amountOwedUsd": 2000.0,
+      "saleMonth": null,
+      "stateType": "redeemable_deed",
+      "state": "TX",
+      "county": "Llano",
+      "listUrl": "",
+      "parcelType": "unknown",
+      "estimatedAcres": null,
+      "estimatedValueUsd": null,
+      "investmentMultiple": null,
+      "expectedReturnPct": 14.9,
+      "analyticsNotes": [
+        "Lien state: ~14.9%/yr expected return (weighted for 85% redemption probability; capped at 500%)"
+      ]
+    },
+    "_schemaVersion": 1,
+    "images": []
+  },
+  {
+    "id": "lgbs_1001709899",
+    "title": "Tax sale \u2014 Llano Co, TX \u00b7 CARDINAL RD",
+    "price": 6529.8,
+    "acreage": 0.0,
+    "pricePerAcre": 0,
+    "location": {
+      "lat": 30.54297,
+      "lng": -98.36482,
+      "state": "TX",
+      "county": "Llano"
+    },
+    "features": [],
+    "source": "lgbs",
+    "url": "https://llano.texas.sheriffsaleauctions.com/index.cfm?RDR=C1000330365",
+    "dateFound": "2026-05-06",
+    "dealScore": 28,
+    "description": "Delinquent tax-sale parcel in Llano County, TX. Cause #21579. Sale 2026-06-02. Minimum bid $6,530. County-appraised value $52,500. Address: CARDINAL RD, HORSESHOE BAY, 78643. Account #R000023252.",
+    "daysOnMarket": null,
+    "status": "tax_sale",
+    "taxSale": {
+      "owner": "",
+      "parcelId": "R000023252",
+      "legalDescription": "",
+      "houseNumber": "",
+      "street": "CARDINAL RD",
+      "propertyType": "",
+      "taxYear": null,
+      "amountOwedUsd": 6529.8,
+      "saleMonth": 6,
+      "stateType": "redeemable_deed",
+      "state": "TX",
+      "county": "Llano",
+      "listUrl": "https://taxsalesib.lgbs.com/images/lit_ps_images/ib-emails/County_Sale_list_LLANO_COUNTY_20260602",
+      "parcelType": "unknown",
+      "estimatedAcres": null,
+      "estimatedValueUsd": null,
+      "investmentMultiple": null,
+      "expectedReturnPct": 14.9,
+      "analyticsNotes": [
+        "Lien state: ~14.9%/yr expected return (weighted for 85% redemption probability; capped at 500%)"
+      ]
+    },
+    "_schemaVersion": 1,
+    "images": []
   }
 ]
